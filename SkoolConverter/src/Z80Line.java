@@ -6,6 +6,7 @@ public class Z80Line {
     public enum Type {
         Empty,
         Directive,
+        Label,
         Comment,
         ContinuationComment,
         Data,
@@ -20,6 +21,7 @@ public class Z80Line {
     private String instruction;
     private String directive;
     private String comment;
+    private String label;
 
     public Z80Line(String line) {
         parseLine(line);
@@ -36,7 +38,12 @@ public class Z80Line {
             typeChar = line.charAt(0);
             if (typeChar == '@') {
                 directive = line.length() > 1 ? line.substring(1) : "";
-                type = Type.Directive;
+                if (directive.startsWith("label=")) {
+                    label = directive.substring(6);
+                    type = Type.Label;
+                } else {
+                    type = Type.Directive;
+                }
             } else if (typeChar == ';') {
                 comment = line.length() > 1 ? line.substring( 1).trim() : "";
                 type = Type.Comment;
@@ -93,5 +100,9 @@ public class Z80Line {
 
     public String getComment() {
         return comment;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

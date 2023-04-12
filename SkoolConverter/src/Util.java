@@ -1,9 +1,5 @@
 public class Util {
 
-    public static String getLabel(int address, boolean hex) {
-        return "_" + (hex ? hexString(address, 4) : address);
-    }
-
     public static String hexString(int i, int length) {
         StringBuilder hex = new StringBuilder(Integer.toHexString(i));
         while (hex.length() < length) {

@@ -82,7 +82,8 @@ public class TMS9900Line {
             case Empty:
                 return "";
             case Label:
-                return label + (label.equals("!") ? "" : ":");
+                String labelWithColon = label + (label.equals("!") ? "" : ":");
+                return labelWithColon + (comment != null ? Util.space(39 - labelWithColon.length()) + "; " + comment : "");
             case Directive:
                 return Util.space(7) + directive;
             case Comment:

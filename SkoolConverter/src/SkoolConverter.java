@@ -8,9 +8,9 @@ public class SkoolConverter {
     private final static Pattern commentReferencePattern = Pattern.compile("#R([0-9]{4,5}|\\$[0-9a-fA-F]{4})");
     private final static Pattern lsbRegisterPattern = Pattern.compile("[cel]");
 
-    private boolean hexOutput;
+    private final boolean hexOutput;
     private Set<Integer> references;
-    private List<Integer> labels;
+    private List<Label> labels;
 
     public SkoolConverter(boolean hexOutput) {
         this.hexOutput = hexOutput;
@@ -66,13 +66,19 @@ public class SkoolConverter {
         return references;
     }
 
-    private List<Integer> findLabels(List<Z80Line> z80Lines) {
-        List<Integer> labels = new ArrayList<>();
+    private List<Label> findLabels(List<Z80Line> z80Lines) {
+        List<Label> labels = new ArrayList<>();
+        String labelText = null;
         for (Z80Line z80Line : z80Lines) {
-            if (z80Line.getType() == Z80Line.Type.Data || z80Line.getType() == Z80Line.Type.Instruction) {
-                if (references.contains(z80Line.getAddress())) {
-                    labels.add(z80Line.getAddress());
+            if (z80Line.getType() == Z80Line.Type.Label) {
+                labelText = z80Line.getLabel();
+            } else {
+                if (z80Line.getType() == Z80Line.Type.Data || z80Line.getType() == Z80Line.Type.Instruction) {
+                    if (references.contains(z80Line.getAddress())) {
+                        labels.add(new Label(z80Line.getAddress(), labelText));
+                    }
                 }
+                labelText = null;
             }
         }
         return labels;
@@ -107,7 +113,11 @@ public class SkoolConverter {
                         if (references.contains(z80Line.getAddress())) {
                             boolean lastLineWasALabel = lastLineWasALabel(tms9900Lines);
                             TMS9900Line label = new TMS9900Line(TMS9900Line.Type.Label);
-                            label.setLabel(Util.getLabel(z80Line.getAddress(), hexOutput));
+                            label.setLabel(getValidLabel(z80Line.getAddress()));
+                            String addressString = hexOutput ? Util.hexString(z80Line.getAddress(), 4) : Integer.toString(z80Line.getAddress());
+                            if (!label.getLabel().contains(addressString)) {
+                                label.setComment(addressString);
+                            }
                             tms9900Lines.add(label);
                             if (lastLineWasALabel) {
                                 TMS9900Line directive = new TMS9900Line(TMS9900Line.Type.Directive);
@@ -160,7 +170,8 @@ public class SkoolConverter {
                         int msb = address / 256;
                         int lsb = address % 256;
                         String z80Bytes = lsb + "," + msb;
-                        String tms9900Bytes = Util.getLabel(address, hexOutput) + "%%256," + Util.getLabel(address, hexOutput) + "//256";
+                        String label = getValidLabel(address);
+                        String tms9900Bytes = label + "%%256," + label + "//256";
                         instruction = instruction.replace(z80Bytes, tms9900Bytes);
                     }
                 }
@@ -473,14 +484,16 @@ public class SkoolConverter {
 
     private String getValidLabel(int address) {
         for (int i = 0; i < labels.size(); i++) {
-            int addr = labels.get(i);
+            Label label = labels.get(i);
+            int addr = label.getAddress();
             if (addr == address) {
-                return Util.getLabel(address, hexOutput);
+                return label.toString(hexOutput);
             }
             if (addr > address) {
                 if (i > 0) {
-                    int previousAddr = labels.get(i - 1);
-                    return Util.getLabel(previousAddr, hexOutput) + "+" + (address - previousAddr);
+                    Label previousLabel = labels.get(i - 1);
+                    int previousAddr = previousLabel.getAddress();
+                    return previousLabel.toString(hexOutput) + "+" + (address - previousAddr);
                 } else {
                     return Integer.toString(address);
                 }
