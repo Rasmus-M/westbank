@@ -1,0 +1,88 @@
+**
+* Memory mapped addresses
+*
+vdpwd:                                 ; VDP write data
+       equ  >8c00
+vdpwa:                                 ; VDP set read/write address
+       equ  >8c02
+vdprd:                                 ; VDP read data
+       equ  >8800
+vdpsta:                                ; VDP status
+       equ  >8802
+sound:                                 ; Sound
+       equ  >8400
+spchwt:
+       equ  >9400
+spchrd:
+       equ  >9000
+rndsd:
+       equ  >83c0                      ; Random number seed
+
+**
+* Scratch pad
+*
+wrksp:
+       equ  >8300
+r0lb:
+       equ  wrksp+1
+r1lb:
+       equ  wrksp+3
+sndws:
+       equ  wrksp+>20
+bits:
+       equ  sndws+>0a
+stack:
+       equ  bits+8
+b255:
+       equ  stack+>20
+b254:
+       equ  b255+1
+pad_max:
+       equ  b254+>1
+
+**
+* Z80 register mapping
+*
+tmp0   requ 0
+tmp1   requ 1
+tmp2   requ 2
+one    requ 3                          ; >0100
+zero   equ  wrksp+7
+af     requ 4
+a      requ 4
+bc     requ 5
+b      requ 5
+c      equ wrksp+11
+de     requ 6
+d      requ 6
+e      equ wrksp+13
+hl     requ 7
+h      requ 7
+l      equ wrksp+15
+ix     requ 8
+iy     requ 9
+sp     requ 10
+af_    requ 12
+bc_    requ 13
+de_    requ 14
+hl_    requ 15
+
+**
+* VDP memory map
+*
+pattern_table:                         ; Pattern table
+       equ  >0000
+sprite_pattern_table:                  ; Sprite pattern table
+       equ  >1800
+color_table:                           ; Color table
+       equ  >2000
+name_table:                            ; Name table x 2
+       equ  >3800
+sprite_attr_table:                     ; Sprite attribute table
+       equ  >3b00
+
+**
+* Misc
+*
+zx_attributes:
+       equ  22528
