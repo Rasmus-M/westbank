@@ -1416,6 +1416,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 1 (floor | $02)
+character_02:                          ; 6c20
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-02*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -1515,6 +1516,7 @@ character_01:                          ; 6a10
 * .
 * 
 * Green Jordan (depositing | $03)
+character_03:                          ; 6e30
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-03*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -1604,6 +1606,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Green Jordan (hands up | $04)
+character_04:                          ; 7040
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-04*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -1693,6 +1696,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Green Jordan (uncover | $05)
+character_05:                          ; 7250
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-05*)
        byte >00,>00,>02,>00,>00,>00                                  ; 
        byte >00,>00,>0D,>80,>00,>00                                  ; 
@@ -1782,6 +1786,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Green Jordan (shot | $06)
+character_06:                          ; 7460
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-06*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -1871,6 +1876,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Green Jordan (floor | $07)
+character_07:                          ; 7670
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-07*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -1970,6 +1976,7 @@ character_01:                          ; 6a10
 * .
 * 
 * Bandit 2 (draw | $08)
+character_08:                          ; 7880
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-08*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2059,6 +2066,7 @@ character_01:                          ; 6a10
        byte >00,>01,>55,>50,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 2 (shot | $09)
+character_09:                          ; 7a90
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-09*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2157,6 +2165,7 @@ character_01:                          ; 6a10
 * .
 * 
 * Normal 2 (depositing | $0A)
+character_0a:                          ; 7ca0
        byte >00,>06,>0C,>38,>1C,>00                                  ; {#CHARACTERS(character-0A*)
        byte >00,>09,>92,>44,>62,>00                                  ; 
        byte >00,>08,>69,>44,>81,>00                                  ; 
@@ -2246,6 +2255,7 @@ character_01:                          ; 6a10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Normal 2 (hands up | $0B)
+character_0b:                          ; 7eb0
        byte >00,>06,>0C,>38,>1C,>00                                  ; {#CHARACTERS(character-0B*)
        byte >00,>09,>92,>44,>62,>00                                  ; 
        byte >00,>08,>69,>44,>81,>00                                  ; 
@@ -2336,6 +2346,7 @@ _8000:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Normal 2 (uncover | $0C)
+character_0c:                          ; 80c0
        byte >00,>00,>00,>00,>01,>80                                  ; {#CHARACTERS(character-0C*)
        byte >00,>00,>02,>00,>0E,>70                                  ; 
        byte >00,>00,>0D,>80,>31,>88                                  ; 
@@ -2426,6 +2437,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Normal 2 (shot | $0D)
+character_0d:                          ; 82d0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-0D*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2515,6 +2527,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Normal 2 (floor | $0E)
+character_0e:                          ; 84e0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-0E*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2614,6 +2627,7 @@ _80f0:
 * .
 * 
 * Bandit 3 (draw | $0F)
+character_0f:                          ; 86f0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-0F*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2703,6 +2717,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 3 (stand off | $10)
+character_10:                          ; 8900
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-10*)
        byte >00,>00,>02,>00,>00,>00                                  ; 
        byte >00,>00,>0F,>80,>00,>00                                  ; 
@@ -2792,6 +2807,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 3 (shot | $11)
+character_11:                          ; 8b10
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-11*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -2891,6 +2907,7 @@ _80f0:
 * .
 * 
 * Bandit 4 (stand off | $12)
+character_12:                          ; 8d20
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-12*)
        byte >00,>00,>02,>00,>00,>00                                  ; 
        byte >00,>00,>0F,>80,>00,>00                                  ; 
@@ -2980,6 +2997,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 4 (draw | $13)
+character_13:                          ; 8f30
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-13*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3069,6 +3087,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 4 (shot | $14)
+character_14:                          ; 9140
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-14*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3165,6 +3184,7 @@ _80f0:
 * .
 * 
 * Bandit 5 (stand off | $15)
+character_15:                          ; 9350
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-15*)
        byte >00,>00,>07,>E0,>00,>00                                  ; 
        byte >00,>00,>0F,>F0,>00,>00                                  ; 
@@ -3254,6 +3274,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 5 (draw | $16)
+character_16:                          ; 9560
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-16*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3343,6 +3364,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 5 (shot | $17)
+character_17:                          ; 9770
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-17*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3439,6 +3461,7 @@ _80f0:
 * .
 * 
 * Bandit 6 (stand off | $18)
+character_18:                          ; 9980
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-18*)
        byte >00,>00,>07,>E0,>00,>00                                  ; 
        byte >00,>00,>0F,>F0,>00,>00                                  ; 
@@ -3528,6 +3551,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 6 (draw | $19)
+character_19:                          ; 9b90
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-19*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3617,6 +3641,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 6 (shot | $1A)
+character_1a:                          ; 9da0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1A*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3717,6 +3742,7 @@ _80f0:
 * .
 * 
 * Bowie (7 hats | $1B)
+character_1b:                          ; 9fb0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1B*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3806,6 +3832,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (6 hats | $1C)
+character_1c:                          ; a1c0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1C*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3895,6 +3922,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (5 hats | $1D)
+character_1d:                          ; a3d0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1D*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -3984,6 +4012,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (4 hats | $1E)
+character_1e:                          ; a5e0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1E*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4073,6 +4102,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (3 hats | $1F)
+character_1f:                          ; a7f0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1F*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4162,6 +4192,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (2 hats | $20)
+character_20:                          ; aa00
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-20*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4251,6 +4282,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (1 hat | $21)
+character_21:                          ; ac10
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-21*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4340,6 +4372,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (bomb | $22)
+character_22:                          ; ae20
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-22*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4429,6 +4462,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bowie (cash | $23)
+character_23:                          ; b030
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-23*)
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
@@ -4529,6 +4563,7 @@ _80f0:
 * .
 * 
 * Bandit 7 (stand off | $24)
+character_24:                          ; b240
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-24*)
        byte >00,>00,>03,>E0,>00,>00                                  ; 
        byte >00,>00,>0F,>EC,>00,>00                                  ; 
@@ -4618,6 +4653,7 @@ _80f0:
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
 * Bandit 7 (draw | $25)
+character_25:                          ; b450
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-25*)
        byte >00,>00,>03,>E0,>00,>00                                  ; 
        byte >00,>00,>0F,>EC,>00,>00                                  ; 
@@ -5356,77 +5392,113 @@ bang_next_line:                        ; c085
 * .
 * 
 * Lettering.
+char_a:                                ; c0a0
        byte >00,>00,>28,>6C,>AA,>C6,>82,>44                          ; {#CHARACTERSET,7(char-A) Letter
        byte >FE,>FE,>C6,>EE,>AA,>EE,>00,>00                          ; "A".}
+char_b:                                ; c0b0
        byte >00,>00,>E8,>AC,>EA,>E6,>62,>6C                          ; {#CHARACTERSET,7(char-B) Letter
        byte >6C,>62,>E6,>EA,>AC,>E8,>00,>00                          ; "B".}
+char_c:                                ; c0c0
        byte >00,>00,>28,>6C,>AA,>E6,>E2,>E0                          ; {#CHARACTERSET,7(char-C) Letter
        byte >E0,>E2,>E6,>AA,>6C,>28,>00,>00                          ; "C".}
+char_d:                                ; c0d0
        byte >00,>00,>E8,>AC,>EA,>E6,>66,>66                          ; {#CHARACTERSET,7(char-D) Letter
        byte >66,>66,>E6,>EA,>AC,>E8,>00,>00                          ; "D".}
+char_e:                                ; c0e0
        byte >00,>00,>EC,>AA,>E6,>E2,>60,>6C                          ; {#CHARACTERSET,7(char-E) Letter
        byte >6C,>60,>E2,>E6,>AA,>EC,>00,>00                          ; "E".}
+char_f:                                ; c0f0
        byte >00,>00,>EC,>AA,>E6,>E2,>60,>60                          ; {#CHARACTERSET,7(char-F) Letter
        byte >6C,>6C,>E0,>E0,>A0,>E0,>00,>00                          ; "F".}
+char_g:                                ; c100
        byte >00,>00,>28,>6C,>AA,>E6,>E2,>E0                          ; {#CHARACTERSET,7(char-G) Letter
        byte >EE,>E6,>E6,>AA,>6C,>28,>00,>00                          ; "G".}
+char_h:                                ; c110
        byte >00,>00,>EE,>AA,>EE,>EE,>6C,>7C                          ; {#CHARACTERSET,7(char-H) Letter
        byte >7C,>6C,>EE,>EE,>AA,>EE,>00,>00                          ; "H".}
+char_i:                                ; c120
        byte >00,>00,>38,>28,>38,>38,>10,>10                          ; {#CHARACTERSET,7(char-I) Letter
        byte >10,>10,>38,>38,>28,>38,>00,>00                          ; "I".}
+char_j:                                ; c130
        byte >00,>00,>0E,>0A,>0E,>0E,>04,>04                          ; {#CHARACTERSET,7(char-J) Letter
        byte >04,>8E,>CE,>AA,>6C,>28,>00,>00                          ; "J".}
+char_k:                                ; c140
        byte >00,>00,>E2,>A6,>EA,>EC,>68,>60                          ; {#CHARACTERSET,7(char-K) Letter
        byte >60,>68,>EC,>EA,>A6,>E2,>00,>00                          ; "K".}
+char_l:                                ; c150
        byte >00,>00,>E0,>A0,>E0,>E0,>40,>40                          ; {#CHARACTERSET,7(char-L) Letter
        byte >40,>40,>E6,>E6,>BE,>FE,>00,>00                          ; "L".}
+char_m:                                ; c160
        byte >00,>00,>C6,>EE,>BA,>FE,>54,>54                          ; {#CHARACTERSET,7(char-M) Letter
        byte >44,>44,>EE,>EE,>AA,>EE,>00,>00                          ; "M".}
+char_n:                                ; c170
        byte >00,>00,>EE,>AA,>EE,>EE,>64,>74                          ; {#CHARACTERSET,7(char-N) Letter
        byte >5C,>4C,>EE,>EE,>AA,>EE,>00,>00                          ; "N".}
+char_o:                                ; c180
        byte >00,>00,>28,>6C,>AA,>C6,>C6,>C6                          ; {#CHARACTERSET,7(char-O) Letter
        byte >C6,>C6,>C6,>AA,>6C,>28,>00,>00                          ; "O".}
+char_p:                                ; c190
        byte >00,>00,>E8,>AC,>EA,>E6,>46,>4E                          ; {#CHARACTERSET,7(char-P) Letter
        byte >54,>58,>E0,>E0,>A0,>E0,>00,>00                          ; "P".}
+char_q:                                ; c1a0
        byte >00,>00,>28,>6C,>AA,>C6,>C6,>C6                          ; {#CHARACTERSET,7(char-Q) Letter
        byte >D6,>DA,>CA,>AC,>66,>2A,>00,>00                          ; "Q".}
+char_r:                                ; c1b0
        byte >00,>00,>E8,>AC,>EA,>E6,>46,>4E                          ; {#CHARACTERSET,7(char-R) Letter
        byte >54,>58,>E4,>EA,>A6,>E2,>00,>00                          ; "R".}
+char_s:                                ; c1c0
        byte >00,>00,>2E,>6E,>AA,>CE,>C0,>FC                          ; {#CHARACTERSET,7(char-S) Letter
        byte >7A,>06,>E6,>A6,>EC,>E8,>00,>00                          ; "S".}
+char_t:                                ; c1d0
        byte >00,>00,>FE,>BA,>FE,>D6,>10,>10                          ; {#CHARACTERSET,7(char-T) Letter
        byte >10,>10,>38,>38,>28,>38,>00,>00                          ; "T".}
+char_u:                                ; c1e0
        byte >00,>00,>EE,>AA,>EE,>C6,>C6,>C6                          ; {#CHARACTERSET,7(char-U) Letter
        byte >44,>82,>C6,>AA,>6C,>28,>00,>00                          ; "U".}
+char_v:                                ; c1f0
        byte >00,>00,>EE,>AA,>EE,>C6,>C6,>44                          ; {#CHARACTERSET,7(char-V) Letter
        byte >82,>C6,>6C,>6C,>38,>10,>00,>00                          ; "V".}
+char_w:                                ; c200
        byte >00,>00,>EE,>AA,>EE,>EE,>44,>44                          ; {#CHARACTERSET,7(char-W) Letter
        byte >44,>54,>D6,>FE,>EE,>C6,>00,>00                          ; "W".}
+char_x:                                ; c210
        byte >00,>00,>82,>C6,>AA,>6C,>38,>10                          ; {#CHARACTERSET,7(char-X) Letter
        byte >10,>38,>6C,>AA,>C6,>82,>00,>00                          ; "X".}
+char_y:                                ; c220
        byte >00,>00,>0E,>8A,>CE,>AE,>74,>34                          ; {#CHARACTERSET,7(char-Y) Letter
        byte >04,>0C,>94,>F8,>50,>20,>00,>00                          ; "Y".}
+char_z:                                ; c230
        byte >00,>00,>EE,>BA,>FE,>00,>0E,>1C                          ; {#CHARACTERSET,7(char-Z) Letter
        byte >28,>70,>00,>EE,>BA,>EE,>00,>00                          ; "Z".}
 * Numbering.
+char_1:                                ; c240
        byte >00,>00,>0E,>0A,>1E,>2E,>34,>24                          ; {#CHARACTERSET,7(char-1) Number
        byte >04,>04,>0E,>0E,>0A,>0E,>00,>00                          ; "1".}
+char_2:                                ; c250
        byte >00,>00,>3C,>5A,>E6,>0E,>1C,>38                          ; {#CHARACTERSET,7(char-2) Number
        byte >70,>A0,>CE,>CA,>FE,>FE,>00,>00                          ; "2".}
+char_3:                                ; c260
        byte >00,>00,>FE,>BE,>E6,>0A,>1C,>38                          ; {#CHARACTERSET,7(char-3) Number
        byte >3C,>0A,>E6,>A6,>FC,>78,>00,>00                          ; "3".}
+char_4:                                ; c270
        byte >00,>00,>0E,>1A,>3E,>5E,>EE,>CE                          ; {#CHARACTERSET,7(char-4) Number
        byte >BE,>FE,>04,>0E,>0A,>0E,>00,>00                          ; "4".}
+char_5:                                ; c280
        byte >00,>00,>FE,>FA,>CE,>C0,>C0,>B8                          ; {#CHARACTERSET,7(char-5) Number
        byte >7C,>06,>C6,>EE,>74,>38,>00,>00                          ; "5".}
+char_6:                                ; c290
        byte >00,>00,>7C,>FE,>EA,>C6,>C0,>F8                          ; {#CHARACTERSET,7(char-6) Number
        byte >F4,>CE,>C6,>AA,>7C,>38,>00,>00                          ; "6".}
+char_7:                                ; c2a0
        byte >00,>00,>FE,>FE,>A6,>E6,>0E,>14                          ; {#CHARACTERSET,7(char-7) Number
        byte >18,>30,>30,>30,>30,>30,>00,>00                          ; "7".}
+char_8:                                ; c2b0
        byte >00,>00,>38,>7C,>AA,>C6,>6C,>38                          ; {#CHARACTERSET,7(char-8) Number
        byte >38,>6C,>C6,>AA,>7C,>38,>00,>00                          ; "8".}
+char_9:                                ; c2c0
        byte >00,>00,>38,>74,>AE,>C6,>E6,>5E                          ; {#CHARACTERSET,7(char-9) Number
        byte >3E,>06,>C6,>EE,>BE,>7C,>00,>00                          ; "9".}
+char_0:                                ; c2d0
        byte >00,>00,>38,>7C,>AA,>C6,>C6,>C6                          ; {#CHARACTERSET,7(char-0) Number
        byte >C6,>C6,>C6,>AA,>7C,>38,>00,>00                          ; "0".}
 
@@ -5448,7 +5520,7 @@ bang_next_line:                        ; c085
        movb @_c8fd,a                   ; LD A,($C8FD)      ; 
        movb a,@l                       ; LD L,A            ; 
        sb   h,h                        ; LD H,$00          ; 
-       li   de,bang_next_line+602      ; LD DE,$C2DF       ; 
+       li   de,char_0+15               ; LD DE,$C2DF       ; 
        a    de,hl                      ; ADD HL,DE         ; 
        li   ix,duel_print_lives+1      ; LD IX,$C6A8       ; 
        movb @8(ix),a                   ; LD A,(IX+$08)     ; 
@@ -5712,6 +5784,7 @@ duel_clear_screen:                     ; c463
        movb @10(ix),a                  ; LD A,(IX+$0A)     ; 
        .call @duel_draw_bandit_prep    ; CALL $C661        ; }
 * Count down 5-4-3-2-1...0!
+countdown_initialise:                  ; c4c5
        movb @bytes+53,a                ; LD A,$35          ; {Initialise countdown to "5" seconds ($35 in ASCII),
 countdown_loop:                        ; c4c7
        .push af                        ; PUSH AF           ; hold this at #R$C6E0.
@@ -6252,6 +6325,7 @@ set_control_alias:                     ; c7f9
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; }
+starting_lives:                        ; c809
        movb @bytes+3,a                 ; LD A,$03          ; {Initialise #R$CC59 to $03.
        movb a,@lives                   ; LD ($CC59),A      ; }
        li   hl,>0101                   ; LD HL,$0101       ; {Initialise #R$D45C to $0101.
@@ -6931,20 +7005,31 @@ door_deposited_01:                     ; cc8d
        byte >00
 door_deposited_02:                     ; cc8e
        byte >00
+door_deposited_03:                     ; cc8f
        byte >00
+door_deposited_04:                     ; cc90
        byte >00
+door_deposited_05:                     ; cc91
        byte >00
+door_deposited_06:                     ; cc92
        byte >00
+door_deposited_07:                     ; cc93
        byte >00
+door_deposited_08:                     ; cc94
        byte >00
+door_deposited_09:                     ; cc95
        byte >00
+door_deposited_10:                     ; cc96
        byte >00
+door_deposited_11:                     ; cc97
        byte >00
+door_deposited_12:                     ; cc98
        byte >00
 
 * Probably represents each block of six deposit flags.
 door_deposited_01_06:                  ; cc99
        byte >00
+door_deposited_07_12:                  ; cc9a
        byte >00
 
 * Draws Deposit Cashboxes.
@@ -6981,6 +7066,7 @@ _cc9b:
        socb *hl,a                      ; OR (HL)           ; Run a logical OR against the contents of #REGhl.
        movb a,*hl                      ; LD (HL),A         ; Writes this back into #REGhl (setting the flag).
        .call @game_cashboxes           ; CALL $CCFB        ; 
+cashboxes_complete:                    ; ccd3
        li   de,door_deposited_01       ; LD DE,$CC8D       ; Points to the cashbox flags (beginning at #R$CC8D).
        li   hl,cashboxes_completed_flag ; LD HL,$CA80       ; {Write $00 to #R$CA80.
        sb   *hl,*hl                    ; LD (HL),$00       ; }
@@ -7142,7 +7228,9 @@ score_digit_5:                         ; cd87
        byte >00
 score_digit_4:                         ; cd88
        byte >00
+score_digit_3:                         ; cd89
        byte >00
+score_digit_2:                         ; cd8a
        byte >00
 score_digit_1:                         ; cd8b
        byte >00
@@ -7338,6 +7426,8 @@ character_chooser:                     ; ce21
        .ret                            ;                   
 !
 * f
+chooser:                               ; ce34
+       equ  $
        .call @random_number            ; CALL $D8B0        ; Call #R$D8B0.
        andi a,31*256                   ; AND $1F           ; Keep bits 0-4 (so 0-31).
        socb @bytes+8,a                 ; OR $08            ; {Set bit 3 and write the resulting value to;
@@ -7796,10 +7886,13 @@ _d153:
 * Door 1 Flags.
 door_1_flags:                          ; d165
        data door_1_routine
+door_1_source:                         ; d167
        data _d12f
+door_1_bowie_action:                   ; d169
        data bowie_bomb_action
 door_1_scoring:                        ; d16b
        data 0
+door_1_cash_action:                    ; d16d
        byte >00
 _d16e:
        byte >08
@@ -7813,8 +7906,11 @@ door_2_flags:                          ; d173
        data door_2_routine
 door_2_source:                         ; d175
        data _d141
+door_2_bowie_action:                   ; d177
        data bowie_bomb_action
+door_2_scoring:                        ; d179
        data 0
+door_2_cash_action:                    ; d17b
        byte >00
 _d17c:
        byte >06
@@ -7828,8 +7924,11 @@ door_3_flags:                          ; d181
        data door_3_routine
 door_3_source:                         ; d183
        data _d153
+door_3_bowie_action:                   ; d185
        data bowie_bomb_action
+door_3_scoring:                        ; d187
        data 0
+door_3_cash_action:                    ; d189
        byte >00
 _d18a:
        byte >1D
@@ -8189,6 +8288,7 @@ controls:                              ; d307
        andi tmp0,2*256                 ;                   
        jne  shot_one                   ; JR NZ,$D360       ; bit 1 is set).}
 * Handles settings flags and shot drawing location for door 2.
+shot_two:                              ; d317
        movb @two,a                     ; LD A,($D303)      ; {If #R$D303 is not zero then return.
        ; AND A                         ; AND A             ; 
        jeq  !                          ; RET NZ            ; }
@@ -8277,6 +8377,7 @@ controls_joystick:                     ; d392
 controls_keyboard:                     ; d39b
        movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1-2-3-4-5.
        ; IN A,($FE)                    ; IN A,($FE)        ; }
+controls_input_1:                      ; d39f
        movb a,tmp0                     ; BIT 0,A           ; {If "1" isn't being pressed then jump to #R$D3A6.
        andi tmp0,1*256                 ;                   
        jne  controls_input_2           ; JR NZ,$D3A6       ; }
@@ -8850,6 +8951,7 @@ character_door_frame_2:                ; d61e
        .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
        .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
                                                            ; }
+door_frame_2_copy:                     ; d624
        li   hl,door_frame_2            ; LD HL,$BCE8       ; {Copies #R$BCE8 into the #R$EA90 (+2 bytes ~ $EA92).
        li   de,door_buffer+2           ; LD DE,$EA92       ; 
        movb @bytes+88,b                ; LD B,$58          ; 
@@ -8868,6 +8970,7 @@ character_door_frame_3:                ; d638
        .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
        .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
                                                            ; }
+door_frame_3_copy:                     ; d63e
        li   hl,door_frame_3            ; LD HL,$BEA0       ; {Copies #R$BEA0 into the #R$EA90 (+4 bytes ~ $EA94).
        li   de,door_buffer+4           ; LD DE,$EA94       ; 
        movb @bytes+88,b                ; LD B,$58          ; 
@@ -9347,7 +9450,7 @@ reset___:                              ; d8a1
 
 * Game status buffer entry at D8AC
 _d8ac:
-       data _80f0+4606
+       data character_14+430
 
 * Game status buffer entry at D8AE
 _d8ae:
@@ -11551,7 +11654,7 @@ title_screen_input:                    ; fe58
        movb @controller,a              ; LD A,($5CB0)      ; {If #R$5CB0 is zero (joystick) then #REGde=$0787 else #REGde=$8707. Then call the subroutine at #R$FE95.
        ; AND A                         ; AND A             ; The $07/ $87 correspond to white INK and white INK flashing for the selected control method.
        jeq  ts_select_kempston         ; JR Z,$FE63        ; #TABLE(default,centre,centre,centre,centre,centre)
-       li   de,_80f0+1559              ; LD DE,$8707       ; { =h Value | =h Ink | =h Paper | =h Bright | =h Flash }
+       li   de,character_0f+23         ; LD DE,$8707       ; { =h Value | =h Ink | =h Paper | =h Bright | =h Flash }
        jmp  ts_call_flash              ; JR $FE66          ; { $07 | $07 | $00 | $00 | $00 }
 ts_select_kempston:                    ; fe63
        li   de,>0787                   ; LD DE,$0787       ; { $87 | $07 | $00 | $00 | $01 }

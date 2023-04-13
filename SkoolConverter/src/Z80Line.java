@@ -28,10 +28,6 @@ public class Z80Line {
     }
 
     private void parseLine(String line) {
-        if (line.equals("c$5B80 JP $CBD2      ;")) {
-            System.out.println();
-        }
-
         if (line.isEmpty()) {
             type = Type.Empty;
         } else {

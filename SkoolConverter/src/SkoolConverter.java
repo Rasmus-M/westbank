@@ -74,11 +74,12 @@ public class SkoolConverter {
                 labelText = z80Line.getLabel();
             } else {
                 if (z80Line.getType() == Z80Line.Type.Data || z80Line.getType() == Z80Line.Type.Instruction) {
-                    if (references.contains(z80Line.getAddress())) {
+                    if (references.contains(z80Line.getAddress()) || labelText != null) {
                         labels.add(new Label(z80Line.getAddress(), labelText));
+                        references.add(z80Line.getAddress());
+                        labelText = null;
                     }
                 }
-                labelText = null;
             }
         }
         return labels;
