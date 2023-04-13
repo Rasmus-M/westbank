@@ -22,10 +22,11 @@ public class TMS9900Line {
         parseLine(line);
     }
 
-    public TMS9900Line(int[] bytes) {
+    public TMS9900Line(int[] bytes, String comment) {
         this.type = Type.Data;
         this.instruction = "byte";
         this.bytes = bytes;
+        this.comment = comment;
     }
 
     private void parseLine(String line) {
@@ -47,7 +48,7 @@ public class TMS9900Line {
             line = line.trim();
             if (line.endsWith(":")) {
                 type = Type.Label;
-                label = line.substring(0, line.length() - 2);
+                label = line.substring(0, line.length() - 1);
             } else if (line.startsWith("byte")) {
                 type = Type.Data;
                 instruction = "byte";

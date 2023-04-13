@@ -46,8 +46,8 @@ public class GraphicsConverter {
                 transposedGrid[x][y] = pixelRow.getBytes()[x];
             }
         }
-        for (int[] bytes : transposedGrid) {
-            outputLines.add(new TMS9900Line(bytes));
+        for (int i = 0; i < transposedGrid.length; i++) {
+            outputLines.add(new TMS9900Line(transposedGrid[i], i == 0 ? width + " columns" : null));
         }
     }
 

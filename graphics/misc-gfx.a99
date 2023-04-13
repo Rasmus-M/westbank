@@ -1,0 +1,584 @@
+* Slot Numbering
+gfx_slot_numbers_left:                     ; dfa0
+       byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; {#UDGARRAY12,attr=56,scale=4,step=12;(#PC)-(#PC+$20)-$01-$60(numbering-01-06)
+       byte >FF,>3F,>FC,>3F,>F8,>7F,>FE,>7F,>F8,>1F,>FC,>3F          ;
+       byte >FE,>3F,>FB,>9F,>FF,>BF,>FD,>7F,>FB,>FF,>FB,>FF          ;
+       byte >FF,>3F,>FF,>3F,>FE,>3F,>FB,>7F,>FC,>3F,>F8,>3F          ;
+       byte >FF,>3F,>FE,>7F,>FF,>BF,>F8,>1F,>FF,>9F,>F9,>DF          ;
+       byte >FF,>3F,>FC,>FF,>FB,>BF,>FE,>7F,>FB,>9F,>F9,>DF          ;
+       byte >FC,>1F,>F8,>1F,>FC,>7F,>FE,>7F,>FC,>3F,>FC,>3F          ;
+       byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; }
+gfx_slot_numbers_right:                    ; e000
+       byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; {#UDGARRAY12,attr=56,scale=4,step=12;(#PC)-(#PC+$20)-$01-$60(numbering-07-12)
+       byte >F8,>3F,>FC,>3F,>FC,>3F,>FB,>8F,>FB,>EF,>FB,>C7          ;
+       byte >FF,>BF,>FB,>DF,>FB,>DF,>F3,>77,>F3,>CF,>F3,>BB          ;
+       byte >FF,>BF,>FC,>3F,>FC,>1F,>FB,>77,>FB,>EF,>FB,>F7          ;
+       byte >FE,>7F,>FB,>DF,>FF,>DF,>FB,>77,>FB,>EF,>FB,>CF          ;
+       byte >FF,>7F,>FB,>DF,>FF,>DF,>FB,>77,>FB,>EF,>FB,>BF          ;
+       byte >FF,>7F,>FC,>3F,>FC,>3F,>F1,>8F,>F1,>C7,>F1,>83          ;
+       byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; }
+
+* Centrepiece
+gfx_centrepiece:                           ; e060
+       byte >E1,>00,>00,>07                                          ; {#UDGARRAY#(4,scale=4,step=4#FOR0,$40,$20||n|;(#PC+n)-(#PC+n)-$01-$08,#PEEK(#EVAL($ED0E+n*2));(#PC+n+$01)-(#PC+n+$02)-$01-$10,#PEEK(#EVAL($ED0F+n*2));(#PC+n+$03)-(#PC+n+$03)-$01-$08,#PEEK(#EVAL($ED11+n*2))||)(centrepiece)
+       byte >E1,>03,>C0,>07                                          ;
+       byte >E0,>07,>E1,>07                                          ;
+       byte >E0,>8F,>F3,>07                                          ;
+       byte >E0,>FF,>FF,>07                                          ;
+       byte >E0,>FF,>FF,>07                                          ;
+       byte >E0,>FF,>FF,>07                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ;
+       byte >E1,>00,>00,>87                                          ; }
+
+* Top Door Frames
+*
+* #UDGARRAY32,attr=4,scale=4,step=32;(#PC)-(#PC)-$01-$100;(#PC+$01)-(#PC+$09)-$01-$100,attr=24;(#PC+$0A)-(#PC+$0B)-$01-$100;(#PC+$0C)-(#PC+$14)-$01-$100,attr=24;(#PC+$15)-(#PC+$16)-$01-$100;(#PC+$17)-(#PC+$1F)-$01-$100,attr=24(doors-top)
+gfx_doors_top:                             ; e0c0
+       byte >00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>00,>00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>00,>00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+       byte >63,>F0,>00,>00,>00,>00,>00,>00,>00,>07,>63,>C3,>F0,>00,>00,>00,>00,>00,>00,>00,>07,>63,>C3,>F0,>00,>00,>00,>00,>00,>00,>00,>07
+       byte >36,>F8,>00,>00,>00,>00,>00,>00,>00,>0F,>36,>66,>F8,>00,>00,>00,>00,>00,>00,>00,>0F,>36,>66,>F8,>00,>00,>00,>00,>00,>00,>00,>0F
+       byte >1C,>DC,>00,>00,>00,>00,>00,>00,>00,>1F,>1C,>3C,>DC,>00,>00,>00,>00,>00,>00,>00,>1F,>1C,>3C,>DC,>00,>00,>00,>00,>00,>00,>00,>1F
+       byte >1C,>CE,>00,>00,>00,>00,>00,>00,>00,>3B,>1C,>18,>CE,>00,>00,>00,>00,>00,>00,>00,>3B,>1C,>18,>CE,>00,>00,>00,>00,>00,>00,>00,>3B
+       byte >36,>C7,>00,>00,>00,>00,>00,>00,>00,>73,>36,>3C,>C7,>00,>00,>00,>00,>00,>00,>00,>73,>36,>3C,>C7,>00,>00,>00,>00,>00,>00,>00,>73
+       byte >63,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3,>63,>66,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3,>63,>66,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3
+       byte >C1,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3,>C1,>C3,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3,>C1,>C3,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3
+
+* Left Side Wall
+gfx_wall_left:                             ; e1c0
+       byte >C1,>C3                                                  ; {#UDGARRAY#(2,scale=4,step=2#FOR0,$A0,$10||n|;(#PC+n)-(#PC+n)-$01-$08,#PEEK(#EVAL($ED80+n*2));(#PC+n+$01)-(#PC+n+$01)-$08-$10,#PEEK(#EVAL($ED81+n*2))||)(wall-left)
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >1C,>C3                                                  ;
+       byte >36,>C3                                                  ;
+       byte >63,>C3                                                  ;
+       byte >C1,>C3                                                  ;
+       byte >FF,>C3                                                  ;
+       byte >FF,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ;
+       byte >18,>C3                                                  ; }
+
+* Middle Wall Section
+gfx_wall_middle:                           ; e270
+       byte >C3,>C1,>C3,>C3                                          ; {#UDGARRAY#(4,attr=7,scale=4,step=4#FOR#(#PC),$E330,$20||n|;n-n-$01-$20,attr=24;(n+$01)-(n+$02)-$01-$20,attr=4;(n+$03)-(n+$03)-$01-$20,attr=24||#FOR$E350,$E3B0,$20||n|;n-n-$01-$20,attr=24;(n+$01)-(n+$02)-$01-$20,attr=16;(n+$03)-(n+$03)-$01-$20,attr=24||(wall-middle))
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>C1,>C3,>C3                                          ;
+       byte >C3,>63,>66,>C3                                          ;
+       byte >C3,>36,>3C,>C3                                          ;
+       byte >C3,>1C,>18,>C3                                          ;
+       byte >C3,>1C,>3C,>C3                                          ;
+       byte >C3,>36,>66,>C3                                          ;
+       byte >C3,>63,>C3,>C3                                          ;
+       byte >C3,>C1,>81,>C3                                          ;
+       byte >C3,>FF,>FF,>C3                                          ;
+       byte >C3,>FF,>FF,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ;
+       byte >C3,>18,>18,>C3                                          ; }
+
+* Door Frame Right Side
+gfx_door_frame_side:                       ; e3d0
+       byte >C3                                                      ; {#UDGARRAY1,attr=24,scale=4,step=1;(#PC)-(#PC+$50)-$01-$08(door-side)
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ;
+       byte >C3                                                      ; }
+
+* Bottom Door Frames
+*
+* #UDGARRAY32,attr=56,scale=4,step=32;(#PC)-(#PC)-$01-$100,attr=16;(#PC+$01)-(#PC+$09)-$01-$100;(#PC+$0A)-(#PC+$0B)-$01-$100,attr=16;(#PC+$0C)-(#PC+$14)-$01-$100;(#PC+$15)-(#PC+$16)-$01-$100,attr=16;(#PC+$17)-(#PC+$1F)-$01-$100(doors-bottom)
+gfx_door_bottom:                           ; e428
+       byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+       byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+       byte >18,>FC,>00,>00,>00,>00,>00,>00,>00,>3F,>18,>18,>FC,>00,>00,>00,>00,>00,>00,>00,>3F,>18,>18,>FC,>00,>00,>00,>00,>00,>00,>00,>3F
+       byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+       byte >18,>F0,>00,>00,>00,>00,>00,>00,>00,>0F,>18,>18,>F0,>00,>00,>00,>00,>00,>00,>00,>0F,>18,>18,>F0,>00,>00,>00,>00,>00,>00,>00,>0F
+       byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+       byte >FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03,>FF,>FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03,>FF,>FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03
+       byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
+
+* Score Image (text)
+gfx_score_text_image:                      ; e928
+       byte >00,>00,>00,>00,>00,>00                                  ; {#UDGARRAY6,attr=7,scale=4,step=6;(#PC)-(#PC+$2A)-$01-$30;(#PC+$30)-(#PC+$5A)-$01-$30,attr=2(score-text)
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >2E,>28,>28,>E8,>EC,>00                                  ;
+       byte >6E,>6C,>6C,>AC,>AA,>00                                  ;
+       byte >AA,>AA,>AA,>EA,>E6,>00                                  ;
+       byte >CE,>E6,>C6,>E6,>E2,>00                                  ;
+       byte >C0,>E2,>C6,>46,>60,>00                                  ;
+       byte >FC,>E0,>C6,>4E,>6C,>00                                  ;
+       byte >7A,>E0,>C6,>54,>6C,>00                                  ;
+       byte >06,>E2,>C6,>58,>60,>00                                  ;
+       byte >E6,>E6,>C6,>E4,>E2,>00                                  ;
+       byte >A6,>AA,>AA,>EA,>E6,>00                                  ;
+       byte >EC,>6C,>6C,>A6,>AA,>00                                  ;
+       byte >E8,>28,>28,>E2,>EC,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ; }
+
+* Lives Image (text)
+gfx_lives_text_image:                      ; e988
+       byte >00,>00,>00,>00,>00,>00                                  ; {#UDGARRAY6,attr=7,scale=4,step=6;(#PC)-(#PC+$42)-$01-$30;(#PC+$60)-(#PC+$84)-$01-$30,attr=3(lives-text)
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >00,>00,>00,>00,>00,>00                                  ;
+       byte >E0,>38,>EE,>EC,>2E,>00                                  ;
+       byte >A0,>28,>AA,>AA,>6E,>00                                  ;
+       byte >E0,>38,>EE,>E6,>AA,>00                                  ;
+       byte >E0,>38,>C6,>E2,>CE,>00                                  ;
+       byte >40,>10,>C6,>60,>C0,>00                                  ;
+       byte >40,>10,>44,>6C,>FC,>00                                  ;
+       byte >40,>10,>82,>6C,>7A,>00                                  ;
+       byte >40,>10,>C6,>60,>06,>00                                  ;
+       byte >E6,>38,>6C,>E2,>E6,>00                                  ;
+       byte >E6,>38,>6C,>E6,>A6,>00                                  ;
+       byte >BE,>28,>38,>AA,>EC,>00                                  ;
+       byte >FE,>38,>10,>EC,>E8,>00                                  ; }
+       byte >00,>00,>00,>00,>00,>00                                  ; added 2 lines
+       byte >00,>00,>00,>00,>00,>00
+
+* Sheriffs Badge
+*
+gfx_badge_image:                           ; f600
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ; {#UDGARRAY8,attr=6,scale=4,step=8;(#PC)-(#PC+$247)-$01-$40(badge)
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>03,>C0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>05,>A0,>00,>00,>00                          ;
+       byte >00,>00,>00,>02,>40,>00,>00,>00                          ;
+       byte >00,>00,>00,>03,>C0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>0F,>F0,>00,>00,>00                          ;
+       byte >00,>00,>00,>0F,>F0,>00,>00,>00                          ;
+       byte >00,>00,>00,>1F,>F8,>00,>00,>00                          ;
+       byte >00,>00,>00,>0F,>F8,>00,>00,>00                          ;
+       byte >00,>00,>00,>15,>F0,>00,>00,>00                          ;
+       byte >00,>00,>00,>2A,>E8,>00,>00,>00                          ;
+       byte >00,>00,>00,>15,>54,>00,>00,>00                          ;
+       byte >00,>00,>00,>20,>04,>00,>00,>00                          ;
+       byte >1C,>00,>00,>1F,>F8,>00,>00,>38                          ;
+       byte >3E,>00,>00,>7F,>FE,>00,>00,>7C                          ;
+       byte >3E,>00,>01,>FF,>FF,>80,>00,>7C                          ;
+       byte >2A,>F8,>07,>FF,>FF,>E0,>1F,>54                          ;
+       byte >15,>FF,>EF,>FF,>FF,>F7,>FF,>A8                          ;
+       byte >03,>7F,>DF,>FF,>FF,>FB,>FE,>C0                          ;
+       byte >00,>FF,>BF,>FF,>FF,>FD,>FF,>00                          ;
+       byte >00,>7F,>7F,>FF,>FF,>FE,>FE,>00                          ;
+       byte >00,>BE,>FF,>FF,>FF,>FF,>7D,>00                          ;
+       byte >00,>56,>FF,>FF,>FF,>FF,>6A,>00                          ;
+       byte >00,>29,>FF,>FF,>FF,>FF,>94,>00                          ;
+       byte >00,>15,>FF,>FF,>FF,>FF,>A8,>00                          ;
+       byte >00,>0B,>FF,>FF,>FF,>FF,>D0,>00                          ;
+       byte >00,>0B,>FF,>FF,>FF,>FF,>D0,>00                          ;
+       byte >00,>07,>AA,>AA,>AA,>AA,>E0,>00                          ;
+       byte >00,>07,>FF,>FF,>FF,>FF,>E0,>00                          ;
+       byte >00,>07,>E6,>D1,>8D,>11,>E0,>00                          ;
+       byte >00,>07,>DA,>D7,>B5,>77,>E0,>00                          ;
+       byte >00,>07,>5E,>D7,>B5,>76,>E0,>00                          ;
+       byte >00,>07,>EE,>13,>B5,>33,>E0,>00                          ;
+       byte >00,>07,>76,>D7,>8D,>76,>E0,>00                          ;
+       byte >00,>16,>FA,>D7,>AD,>77,>68,>00                          ;
+       byte >00,>17,>5A,>D7,>B5,>76,>E8,>00                          ;
+       byte >00,>36,>E6,>D0,>B5,>77,>6C,>00                          ;
+       byte >00,>33,>7F,>FF,>FF,>FE,>EC,>00                          ;
+       byte >00,>7B,>00,>00,>00,>00,>DE,>00                          ;
+       byte >00,>7B,>AA,>AA,>AA,>AB,>9E,>00                          ;
+       byte >00,>FD,>FF,>55,>55,>FF,>BF,>00                          ;
+       byte >01,>FD,>FF,>FF,>FF,>FF,>BF,>80                          ;
+       byte >01,>FE,>FF,>FF,>FF,>FF,>7F,>80                          ;
+       byte >03,>FE,>FF,>FF,>FF,>FF,>7F,>C0                          ;
+       byte >07,>FF,>7F,>FF,>FF,>FE,>FF,>E0                          ;
+       byte >07,>FE,>BF,>FF,>FF,>FD,>7F,>E0                          ;
+       byte >3F,>D5,>5F,>FF,>FF,>FA,>AB,>FC                          ;
+       byte >7E,>AA,>0F,>FF,>FF,>F0,>55,>7E                          ;
+       byte >7D,>40,>07,>FF,>FF,>E0,>02,>BE                          ;
+       byte >28,>00,>01,>FF,>FF,>C0,>00,>1E                          ;
+       byte >54,>00,>00,>7F,>FF,>00,>00,>2A                          ;
+       byte >28,>00,>00,>0F,>FD,>80,>00,>14                          ;
+       byte >00,>00,>00,>60,>02,>00,>00,>00                          ;
+       byte >00,>00,>00,>5F,>FC,>00,>00,>00                          ;
+       byte >00,>00,>00,>2F,>F8,>00,>00,>00                          ;
+       byte >00,>00,>00,>1F,>F4,>00,>00,>00                          ;
+       byte >00,>00,>00,>0F,>E8,>00,>00,>00                          ;
+       byte >00,>00,>00,>17,>F0,>00,>00,>00                          ;
+       byte >00,>00,>00,>0F,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>D0,>00,>00,>00                          ;
+       byte >00,>00,>00,>0B,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>C0,>00,>00,>00                          ;
+       byte >00,>00,>00,>02,>A0,>00,>00,>00                          ;
+       byte >00,>00,>00,>01,>40,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>03,>C0,>00,>00,>00                          ;
+       byte >00,>00,>00,>07,>E0,>00,>00,>00                          ;
+       byte >00,>00,>00,>03,>A0,>00,>00,>00                          ;
+       byte >00,>00,>00,>05,>40,>00,>00,>00                          ;
+       byte >00,>00,>00,>02,>80,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
+       byte >00,>00,>00,>00,>00,>00,>00,>00                          ; }
+
+* Dollar Sign
+*
+* These are the scrolling dollar signs in the centre of the header.
+gfx_dollar_image:                          ; f900
+       byte >00,>00                                                  ; {#UDGARRAY2,attr=48,scale=4,step=2;(#PC)-(#PC+$4F)-$01-$10(dollars)
+       byte >02,>80                                                  ;
+       byte >0F,>C0                                                  ;
+       byte >1F,>F0                                                  ;
+       byte >1A,>B0                                                  ;
+       byte >1A,>80                                                  ;
+       byte >1A,>80                                                  ;
+       byte >1F,>E0                                                  ;
+       byte >0F,>F0                                                  ;
+       byte >02,>B0                                                  ;
+       byte >02,>B0                                                  ;
+       byte >1A,>B0                                                  ;
+       byte >1F,>F0                                                  ;
+       byte >0F,>E0                                                  ;
+       byte >02,>80                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >00,>00                                                  ;
+       byte >02,>80                                                  ;
+       byte >0F,>C0                                                  ;
+       byte >1F,>F0                                                  ;
+       byte >1A,>B0                                                  ;
+       byte >1A,>80                                                  ;
+       byte >1A,>80                                                  ;
+       byte >1F,>E0                                                  ;
+       byte >0F,>F0                                                  ;
+       byte >02,>B0                                                  ;
+       byte >02,>B0                                                  ;
+       byte >1A,>B0                                                  ;
+       byte >1F,>F0                                                  ;
+       byte >0F,>E0                                                  ;
+       byte >02,>80                                                  ;
+       byte >00,>00                                                  ; }
+
+* Cash Box.
+gfx_empty_box_image:                       ; ff78
+       byte >FF,>FF                                                  ; {#UDGARRAY2,attr=13,scale=4,step=2;(#PC)-(#PC+$11)-$01-$10(empty)
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >FF,>FF                                                  ; }
+
+gfx_dollar_box_image:                      ; ff98
+       byte >FF,>FF                                                  ; {#UDGARRAY2,attr=13,scale=4,step=2;(#PC)-(#PC+$11)-$01-$10(dollar)
+       byte >80,>01                                                  ;
+       byte >81,>01                                                  ;
+       byte >81,>41                                                  ;
+       byte >83,>E1                                                  ;
+       byte >85,>41                                                  ;
+       byte >85,>41                                                  ;
+       byte >83,>E1                                                  ;
+       byte >81,>51                                                  ;
+       byte >81,>51                                                  ;
+       byte >83,>E1                                                  ;
+       byte >81,>41                                                  ;
+       byte >80,>41                                                  ;
+       byte >80,>01                                                  ;
+       byte >80,>01                                                  ;
+       byte >FF,>FF                                                  ; }
+
+* Lives Graphic
+gfx_lives_image:                           ; ffb8
+       byte >00,>00                                                  ; {#UDGARRAY#(2,scale=4,step=2#FOR0,$20,$10||n|;(#PC+n)-(#PC+n+$02)-$01-$10,#PEEK(#EVAL($EFBF+n*2))||)(lives)
+       byte >03,>40                                                  ;
+       byte >03,>C0                                                  ;
+       byte >0C,>70                                                  ;
+       byte >04,>E0                                                  ;
+       byte >05,>C0                                                  ;
+       byte >03,>C0                                                  ;
+       byte >05,>A0                                                  ;
+       byte >0C,>30                                                  ;
+       byte >0F,>78                                                  ;
+       byte >0B,>68                                                  ;
+       byte >0B,>E8                                                  ;
+       byte >0B,>E8                                                  ;
+       byte >0B,>E8                                                  ;
+       byte >08,>08                                                  ;
+       byte >0B,>E8                                                  ;
+       byte >05,>D0                                                  ;
+       byte >01,>40                                                  ;
+       byte >01,>40                                                  ;
+       byte >01,>40                                                  ;
+       byte >03,>60                                                  ;
+       byte >03,>60                                                  ;
+       byte >03,>60                                                  ;
+       byte >07,>78                                                  ; }
