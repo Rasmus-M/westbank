@@ -1,4 +1,7 @@
-gfx_tellers:                           ; e528
+* 
+* Tellers
+* 
+gfx_tellers:
        byte >00,>00,>00,>00,>f8,>f8,>f8,>ff                          ; 32 columns
        byte >00,>00,>00,>00,>00,>00,>00,>ff
        byte >00,>00,>00,>00,>00,>00,>00,>ff

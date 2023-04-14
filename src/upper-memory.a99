@@ -1,0 +1,4 @@
+       aorg >a000
+       copy "test.a99"
+       copy "ti-routines.a99"
+       copy "data.a99"

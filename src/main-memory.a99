@@ -1,0 +1,10 @@
+       copy "equates.a99"
+       copy "macros.a99"
+
+       copy "lower-memory.a99"
+       copy "character-bank-1.a99"
+       copy "character-bank-2.a99"
+       copy "character-bank-3.a99"
+
+       save >a000,
+       copy "upper-memory.a99"

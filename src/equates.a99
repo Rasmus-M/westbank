@@ -84,5 +84,7 @@ sprite_attr_table:                     ; Sprite attribute table
 **
 * Misc
 *
+zx_screen:
+       equ  >4000
 zx_attributes:
-       equ  22528
+       equ  >5800

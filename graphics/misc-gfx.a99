@@ -1,4 +1,5 @@
 * Slot Numbering
+*
 gfx_slot_numbers_left:                     ; dfa0
        byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; {#UDGARRAY12,attr=56,scale=4,step=12;(#PC)-(#PC+$20)-$01-$60(numbering-01-06)
        byte >FF,>3F,>FC,>3F,>F8,>7F,>FE,>7F,>F8,>1F,>FC,>3F          ;
@@ -17,8 +18,9 @@ gfx_slot_numbers_right:                    ; e000
        byte >FF,>7F,>FB,>DF,>FF,>DF,>FB,>77,>FB,>EF,>FB,>BF          ;
        byte >FF,>7F,>FC,>3F,>FC,>3F,>F1,>8F,>F1,>C7,>F1,>83          ;
        byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF          ; }
-
+*
 * Centrepiece
+*
 gfx_centrepiece:                           ; e060
        byte >E1,>00,>00,>07                                          ; {#UDGARRAY#(4,scale=4,step=4#FOR0,$40,$20||n|;(#PC+n)-(#PC+n)-$01-$08,#PEEK(#EVAL($ED0E+n*2));(#PC+n+$01)-(#PC+n+$02)-$01-$10,#PEEK(#EVAL($ED0F+n*2));(#PC+n+$03)-(#PC+n+$03)-$01-$08,#PEEK(#EVAL($ED11+n*2))||)(centrepiece)
        byte >E1,>03,>C0,>07                                          ;
@@ -44,10 +46,9 @@ gfx_centrepiece:                           ; e060
        byte >E1,>00,>00,>87                                          ;
        byte >E1,>00,>00,>87                                          ;
        byte >E1,>00,>00,>87                                          ; }
-
+*
 * Top Door Frames
 *
-* #UDGARRAY32,attr=4,scale=4,step=32;(#PC)-(#PC)-$01-$100;(#PC+$01)-(#PC+$09)-$01-$100,attr=24;(#PC+$0A)-(#PC+$0B)-$01-$100;(#PC+$0C)-(#PC+$14)-$01-$100,attr=24;(#PC+$15)-(#PC+$16)-$01-$100;(#PC+$17)-(#PC+$1F)-$01-$100,attr=24(doors-top)
 gfx_doors_top:                             ; e0c0
        byte >00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>00,>00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>00,>00,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
        byte >63,>F0,>00,>00,>00,>00,>00,>00,>00,>07,>63,>C3,>F0,>00,>00,>00,>00,>00,>00,>00,>07,>63,>C3,>F0,>00,>00,>00,>00,>00,>00,>00,>07
@@ -57,8 +58,9 @@ gfx_doors_top:                             ; e0c0
        byte >36,>C7,>00,>00,>00,>00,>00,>00,>00,>73,>36,>3C,>C7,>00,>00,>00,>00,>00,>00,>00,>73,>36,>3C,>C7,>00,>00,>00,>00,>00,>00,>00,>73
        byte >63,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3,>63,>66,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3,>63,>66,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>E3
        byte >C1,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3,>C1,>C3,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3,>C1,>C3,>C3,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>C3
-
+*
 * Left Side Wall
+*
 gfx_wall_left:                             ; e1c0
        byte >C1,>C3                                                  ; {#UDGARRAY#(2,scale=4,step=2#FOR0,$A0,$10||n|;(#PC+n)-(#PC+n)-$01-$08,#PEEK(#EVAL($ED80+n*2));(#PC+n+$01)-(#PC+n+$01)-$08-$10,#PEEK(#EVAL($ED81+n*2))||)(wall-left)
        byte >63,>C3                                                  ;
@@ -148,8 +150,9 @@ gfx_wall_left:                             ; e1c0
        byte >18,>C3                                                  ;
        byte >18,>C3                                                  ;
        byte >18,>C3                                                  ; }
-
+*
 * Middle Wall Section
+*
 gfx_wall_middle:                           ; e270
        byte >C3,>C1,>C3,>C3                                          ; {#UDGARRAY#(4,attr=7,scale=4,step=4#FOR#(#PC),$E330,$20||n|;n-n-$01-$20,attr=24;(n+$01)-(n+$02)-$01-$20,attr=4;(n+$03)-(n+$03)-$01-$20,attr=24||#FOR$E350,$E3B0,$20||n|;n-n-$01-$20,attr=24;(n+$01)-(n+$02)-$01-$20,attr=16;(n+$03)-(n+$03)-$01-$20,attr=24||(wall-middle))
        byte >C3,>63,>66,>C3                                          ;
@@ -239,8 +242,9 @@ gfx_wall_middle:                           ; e270
        byte >C3,>18,>18,>C3                                          ;
        byte >C3,>18,>18,>C3                                          ;
        byte >C3,>18,>18,>C3                                          ; }
-
+*
 * Door Frame Right Side
+*
 gfx_door_frame_side:                       ; e3d0
        byte >C3                                                      ; {#UDGARRAY1,attr=24,scale=4,step=1;(#PC)-(#PC+$50)-$01-$08(door-side)
        byte >C3                                                      ;
@@ -330,10 +334,9 @@ gfx_door_frame_side:                       ; e3d0
        byte >C3                                                      ;
        byte >C3                                                      ;
        byte >C3                                                      ; }
-
+*
 * Bottom Door Frames
 *
-* #UDGARRAY32,attr=56,scale=4,step=32;(#PC)-(#PC)-$01-$100,attr=16;(#PC+$01)-(#PC+$09)-$01-$100;(#PC+$0A)-(#PC+$0B)-$01-$100,attr=16;(#PC+$0C)-(#PC+$14)-$01-$100;(#PC+$15)-(#PC+$16)-$01-$100,attr=16;(#PC+$17)-(#PC+$1F)-$01-$100(doors-bottom)
 gfx_door_bottom:                           ; e428
        byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
        byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
@@ -343,8 +346,9 @@ gfx_door_bottom:                           ; e428
        byte >18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>18,>18,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
        byte >FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03,>FF,>FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03,>FF,>FF,>C0,>00,>00,>00,>00,>00,>00,>00,>03
        byte >FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF,>FF
-
+*
 * Score Image (text)
+*
 gfx_score_text_image:                      ; e928
        byte >00,>00,>00,>00,>00,>00                                  ; {#UDGARRAY6,attr=7,scale=4,step=6;(#PC)-(#PC+$2A)-$01-$30;(#PC+$30)-(#PC+$5A)-$01-$30,attr=2(score-text)
        byte >00,>00,>00,>00,>00,>00                                  ;
@@ -362,8 +366,9 @@ gfx_score_text_image:                      ; e928
        byte >E8,>28,>28,>E2,>EC,>00                                  ;
        byte >00,>00,>00,>00,>00,>00                                  ;
        byte >00,>00,>00,>00,>00,>00                                  ; }
-
+*
 * Lives Image (text)
+*
 gfx_lives_text_image:                      ; e988
        byte >00,>00,>00,>00,>00,>00                                  ; {#UDGARRAY6,attr=7,scale=4,step=6;(#PC)-(#PC+$42)-$01-$30;(#PC+$60)-(#PC+$84)-$01-$30,attr=3(lives-text)
        byte >00,>00,>00,>00,>00,>00                                  ;
@@ -389,7 +394,7 @@ gfx_lives_text_image:                      ; e988
        byte >FE,>38,>10,>EC,>E8,>00                                  ; }
        byte >00,>00,>00,>00,>00,>00                                  ; added 2 lines
        byte >00,>00,>00,>00,>00,>00
-
+*
 * Sheriffs Badge
 *
 gfx_badge_image:                           ; f600
@@ -473,10 +478,11 @@ gfx_badge_image:                           ; f600
        byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
        byte >00,>00,>00,>00,>00,>00,>00,>00                          ;
        byte >00,>00,>00,>00,>00,>00,>00,>00                          ; }
-
+*
 * Dollar Sign
 *
 * These are the scrolling dollar signs in the centre of the header.
+*
 gfx_dollar_image:                          ; f900
        byte >00,>00                                                  ; {#UDGARRAY2,attr=48,scale=4,step=2;(#PC)-(#PC+$4F)-$01-$10(dollars)
        byte >02,>80                                                  ;
@@ -518,8 +524,9 @@ gfx_dollar_image:                          ; f900
        byte >0F,>E0                                                  ;
        byte >02,>80                                                  ;
        byte >00,>00                                                  ; }
-
+*
 * Cash Box.
+*
 gfx_empty_box_image:                       ; ff78
        byte >FF,>FF                                                  ; {#UDGARRAY2,attr=13,scale=4,step=2;(#PC)-(#PC+$11)-$01-$10(empty)
        byte >80,>01                                                  ;
@@ -555,8 +562,9 @@ gfx_dollar_box_image:                      ; ff98
        byte >80,>01                                                  ;
        byte >80,>01                                                  ;
        byte >FF,>FF                                                  ; }
-
+*
 * Lives Graphic
+*
 gfx_lives_image:                           ; ffb8
        byte >00,>00                                                  ; {#UDGARRAY#(2,scale=4,step=2#FOR0,$20,$10||n|;(#PC+n)-(#PC+n+$02)-$01-$10,#PEEK(#EVAL($EFBF+n*2))||)(lives)
        byte >03,>40                                                  ;

@@ -2,9 +2,7 @@
 * 
 * JACK VISCIOUS - The sponging swindler of the WEST. Don't hesitate
 * - shoot whenever you see his face.
-* 
-* .
-* 
+*
 * Bandit 1 (draw | $00)
 gfx_character_00:                          ; 6800
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-00*)
@@ -275,16 +273,13 @@ gfx_character_02:                          ; 6c20
        byte >00,>0A,>A0,>00,>0A,>80                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-00,100;character-01;character-02;(jack-frames)
-
+*
 * Green Jordan (customer)
 * 
 * GREEN JORDAN - The farmer. The untiring worker who goes to the
 * bank to put in his savings. You should not shoot
 * him.
-* 
-* .
-* 
+*
 * Green Jordan (depositing | $03)
 gfx_character_03:                          ; 6e30
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-03*)
@@ -735,15 +730,11 @@ gfx_character_07:                          ; 7670
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-03,50;character-04;character-05;character-00(green-jordan-uncover-frames)
-* #UDGARRAY*character-03,50;character-04;character-06;character-07(green-jordan-shot-frames)
-
+*
 * Bandit 2
 * 
 * ALFRED DALTON - A real baddie. Shoot as soon as he takes out his
 * gun!
-* 
-* .
 * 
 * Bandit 2 (draw | $08)
 gfx_character_08:                          ; 7880
@@ -925,14 +916,11 @@ gfx_character_09:                          ; 7a90
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-08,100;character-09;character-07;(bandit-2-frames)
-
+*
 * Daisy (customer)
 * 
 * DAISY - The beautiful daughter of the City Jeweller.
 * Always loaded with money - never hurt her.
-* 
-* .
 * 
 * Normal 2 (depositing | $0A)
 gfx_character_0a:                          ; 7ca0
@@ -1384,16 +1372,12 @@ gfx_character_0e:                          ; 84e0
        byte >02,>AA,>AA,>AA,>AA,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-0A,50;character-0B;character-0C;character-00(daisy-uncover-frames)
-* #UDGARRAY*character-0A,50;character-0B;character-0D;character-0E(daisy-shot-frames)
-
+*
 * Bandit 3
 * 
 * JOE DALTON - Alfred Dalton's brother. It runs in the family.
 * Shoot as soon as he takes out his gun.
-* 
-* .
-* 
+*
 * Bandit 3 (draw | $0F)
 gfx_character_0f:                          ; 86f0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-0F*)
@@ -1664,15 +1648,12 @@ gfx_character_11:                          ; 8b10
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-10,100;character-0F;character-11;character-07;(bandit-3-frames)
-
+*
 * Bandit 4
 * 
 * MACKEYHAM - The bloodthirsty villain. Everyone trembles when
 * they come up against him. Don't hesitate or it
 * might be too late. Shoot as quickly as you can.
-* 
-* .
 * 
 * Bandit 4 (stand off | $12)
 gfx_character_12:                          ; 8d20
@@ -1944,13 +1925,9 @@ gfx_character_14:                          ; 9140
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-12,100;character-13;character-14;character-07;(bandit-4-frames)
-
+*
 * Bandit 5
-* 
-* 
-* .
-* 
+*
 * Bandit 5 (stand off | $15)
 gfx_character_15:                          ; 9350
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-15*)
@@ -2221,13 +2198,9 @@ gfx_character_17:                          ; 9770
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-15,100;character-16;character-17;character-07;(bandit-5-frames)
-
+*
 * Bandit 6
-* 
-* 
-* .
-* 
+*
 * Bandit 6 (stand off | $18)
 gfx_character_18:                          ; 9980
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-18*)
@@ -2498,17 +2471,14 @@ gfx_character_1a:                          ; 9da0
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-18,100;character-19;character-1A;character-07;(bandit-6-frames)
-
+*
 * Bowie (special)
 * 
 * BOWIE - The dwarf. He is a constant practical joker. Make
 * holes in his hats but take care that the bottom
 * hat doesn't conceal a bomb or you will lose a
 * life.
-* 
-* .
-* 
+*
 * Bowie (7 hats | $1B)
 gfx_character_1b:                          ; 9fb0
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-1B*)
@@ -3319,17 +3289,13 @@ gfx_character_23:                          ; b030
        byte >00,>00,>AA,>AA,>80,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-1B,50;character-1C;character-1D;character-1E;character-1F;character-20;character-21;character-22(bowie-bomb-frames)
-* #UDGARRAY*character-1B,50;character-1C;character-1D;character-1E;character-1F;character-20;character-21;character-23(bowie-cash-frames)
-
+*
 * Julius (special)
 * 
 * JULIUS - The dandy. He is a box of surprises. He may give
 * you a bag of gold or he might shoot you. Take
 * things very carefully with this one.
-* 
-* .
-* 
+*
 * Bandit 7 (stand off | $24)
 gfx_character_24:                          ; b240
        byte >00,>00,>00,>00,>00,>00                                  ; {#CHARACTERS(character-24*)
@@ -3690,4 +3656,3 @@ gfx_character_27:                          ; b870
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; 
        byte >00,>00,>00,>00,>00,>00                                  ; }
-* #UDGARRAY*character-24,100;character-25;character-26;character-27(julius-frames)

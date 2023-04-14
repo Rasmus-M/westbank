@@ -1,0 +1,9 @@
+       bank 1
+       copy "character-bank-1.a99"
+
+       bank 2
+       copy "character-bank-2.a99"
+
+       bank 3
+       copy "character-bank-3.a99"
+

@@ -90,7 +90,7 @@ gfx_door_frame_1:                          ; ba80
        byte >00,>00,>00,>00,>00,>00,>00                              ;
        byte >00,>00,>00,>00,>00,>00,>00                              ;
        byte >00,>00,>00,>00,>00,>00,>00                              ; }
-
+*
 * Door Frame 2
 *
 * The door is only slightly open.
@@ -183,7 +183,7 @@ gfx_door_frame_2:                          ; bce8
        byte >88,>00,>00,>3F,>FF                                      ;
        byte >88,>00,>3F,>FF,>FF                                      ;
        byte >FF,>FF,>FF,>FF,>FF                                      ; }
-
+*
 * Door Frame 3
 *
 * The door is nearly fully open.
@@ -276,7 +276,7 @@ gfx_door_frame_3:                          ; bea0
        byte >84,>03,>FF                                              ;
        byte >84,>3F,>FF                                              ;
        byte >FF,>FF,>FF                                              ; }
-
+*
 * Door Frame 4
 *
 * The door is fully open.

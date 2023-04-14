@@ -1,4 +1,7 @@
-gfx_door_frame_1:                      ; ba80
+* Door Frame 1
+* 
+* The door is shut.
+gfx_door_frame_1:
        byte >00,>00,>00,>00,>00,>00,>00,>00                          ; 7 columns
        byte >00,>00,>00,>00,>00,>00,>3f,>20
        byte >00,>00,>00,>00,>00,>00,>ff,>00
@@ -76,7 +79,11 @@ gfx_door_frame_1:                      ; ba80
        byte >ff,>ff,>ff,>ff,>00,>00,>00,>00
        byte >f8,>fc,>fe,>ff,>00,>00,>00,>00
        byte >80,>80,>80,>80,>00,>00,>00,>00
-gfx_door_frame_2:                      ; bce8
+* 
+* Door Frame 2
+* 
+* The door is only slightly open.
+gfx_door_frame_2:
        byte >ff,>88,>88,>88,>88,>88,>88,>88                          ; 5 columns
        byte >ff,>0f,>00,>00,>00,>00,>00,>01
        byte >ff,>ff,>0f,>00,>00,>00,>00,>f8
@@ -132,7 +139,11 @@ gfx_door_frame_2:                      ; bce8
        byte >ff,>fc,>00,>00,>00,>00,>3f,>ff
        byte >e0,>00,>00,>00,>00,>3f,>ff,>ff
        byte >00,>00,>00,>07,>ff,>ff,>ff,>ff
-gfx_door_frame_3:                      ; bea0
+* 
+* Door Frame 3
+* 
+* The door is nearly fully open.
+gfx_door_frame_3:
        byte >ff,>84,>84,>84,>84,>84,>84,>84                          ; 3 columns
        byte >ff,>7f,>03,>00,>00,>08,>0e,>15
        byte >ff,>ff,>ff,>7f,>0f,>01,>00,>80
@@ -166,7 +177,11 @@ gfx_door_frame_3:                      ; bea0
        byte >84,>84,>84,>84,>84,>84,>84,>ff                          ; 3 columns
        byte >57,>2f,>78,>00,>00,>03,>3f,>ff
        byte >e0,>00,>00,>0f,>7f,>ff,>ff,>ff
-gfx_door_frame_4:                      ; bfa8
+* 
+* Door Frame 4
+* 
+* The door is fully open.
+gfx_door_frame_4:
        byte >7e,>40,>40,>40,>40,>40,>40,>40                          ; 1 columns
        byte >40,>40,>40,>40,>40,>40,>40,>40                          ; 1 columns
        byte >40,>40,>40,>40,>40,>40,>40,>40                          ; 1 columns

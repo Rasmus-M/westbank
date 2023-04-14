@@ -17,8 +17,10 @@ public class GraphicsConverter {
             TMS9900Line inputLine = inputLines.get(i);
             switch (inputLine.getType()) {
                 case Comment:
+                    outputLines.add(inputLine);
                     break;
                 case Label:
+                    inputLine.setComment(null);
                     outputLines.add(inputLine);
                     break;
                 case Data:
