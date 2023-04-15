@@ -1,3 +1,6 @@
+       bank 0
+       copy "graphics-bank-0.a99"
+
        bank 1
        copy "character-bank-1.a99"
 

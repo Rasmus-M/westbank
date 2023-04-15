@@ -21,24 +21,30 @@ rndsd:
 **
 * Scratch pad
 *
-wrksp:
+ti_wrksp:
        equ  >8300
+ti_r0lb:
+       equ  ti_wrksp+1
+ti_r1lb:
+       equ  ti_wrksp+3
+wrksp:
+       equ  ti_wrksp+>1A               ; tmp0-tmp2 overlaps ti_wrksp r13-r15
 r0lb:
        equ  wrksp+1
 r1lb:
        equ  wrksp+3
-sndws:
-       equ  wrksp+>20
 bits:
-       equ  sndws+>0a
+       equ  wrksp+>20
 stack:
        equ  bits+8
 b255:
        equ  stack+>20
 b254:
        equ  b255+1
-pad_max:
+rnd_seed:
        equ  b254+>1
+pad_max:
+       equ  rnd_seed+>1
 
 **
 * Z80 register mapping
@@ -88,3 +94,11 @@ zx_screen:
        equ  >4000
 zx_attributes:
        equ  >5800
+graphics_bank_select:
+       equ  >6008
+char_bank_1_select:
+       equ  >600A
+char_bank_2_select:
+       equ  >600C
+char_bank_3_select:
+       equ  >600E

@@ -1,5 +1,50 @@
-rnd_seed:
-       data 0
+character_table:
+       data char_bank_1_select,gfx_character_00
+       data char_bank_1_select,gfx_character_01
+       data char_bank_1_select,gfx_character_02
+       data char_bank_1_select,gfx_character_03
+       data char_bank_1_select,gfx_character_04
+       data char_bank_1_select,gfx_character_05
+       data char_bank_1_select,gfx_character_06
+       data char_bank_1_select,gfx_character_07
+       data char_bank_1_select,gfx_character_08
+       data char_bank_1_select,gfx_character_09
+       data char_bank_1_select,gfx_character_0a
+       data char_bank_1_select,gfx_character_0b
+       data char_bank_1_select,gfx_character_0c
+       data char_bank_1_select,gfx_character_0d
+       data char_bank_1_select,gfx_character_0e
+       data char_bank_2_select,gfx_character_0f
+       data char_bank_2_select,gfx_character_10
+       data char_bank_2_select,gfx_character_11
+       data char_bank_2_select,gfx_character_12
+       data char_bank_2_select,gfx_character_13
+       data char_bank_2_select,gfx_character_14
+       data char_bank_2_select,gfx_character_15
+       data char_bank_2_select,gfx_character_16
+       data char_bank_2_select,gfx_character_17
+       data char_bank_2_select,gfx_character_18
+       data char_bank_2_select,gfx_character_19
+       data char_bank_2_select,gfx_character_1a
+       data char_bank_3_select,gfx_character_1b
+       data char_bank_3_select,gfx_character_1c
+       data char_bank_3_select,gfx_character_1d
+       data char_bank_3_select,gfx_character_1e
+       data char_bank_3_select,gfx_character_1f
+       data char_bank_3_select,gfx_character_20
+       data char_bank_3_select,gfx_character_21
+       data char_bank_3_select,gfx_character_22
+       data char_bank_3_select,gfx_character_23
+       data char_bank_3_select,gfx_character_24
+       data char_bank_3_select,gfx_character_25
+       data char_bank_3_select,gfx_character_26
+       data char_bank_3_select,gfx_character_27
+
+door_frame_table:
+       data gfx_door_frame_1
+       data gfx_door_frame_2
+       data gfx_door_frame_3
+       data gfx_door_frame_4
 
 bytes:
        byte >00,>01,>02,>03,>04,>05,>06,>07,>08,>09,>0a,>0b,>0c,>0d,>0e,>0f
@@ -18,3 +63,22 @@ bytes:
        byte >d0,>d1,>d2,>d3,>d4,>d5,>d6,>d7,>d8,>d9,>da,>db,>dc,>dd,>de,>df
        byte >e0,>e1,>e2,>e3,>e4,>e5,>e6,>e7,>e8,>e9,>ea,>eb,>ec,>ed,>ee,>ef
        byte >f0,>f1,>f2,>f3,>f4,>f5,>f6,>f7,>f8,>f9,>fa,>fb,>fc,>fd,>fe,>ff
+
+ti_colors:
+       byte >11,>41,>61,>d1,>c1,>71,>a1,>e1,>14,>44,>64,>d4,>c4,>74,>a4,>e4
+       byte >16,>46,>66,>d6,>c6,>76,>a6,>e6,>1d,>4d,>6d,>dd,>cd,>7d,>ad,>ed
+       byte >1c,>4c,>6c,>dc,>cc,>7c,>ac,>ec,>17,>47,>67,>d7,>c7,>77,>a7,>e7
+       byte >1a,>4a,>6a,>da,>ca,>7a,>aa,>ea,>1e,>4e,>6e,>de,>ce,>7e,>ae,>ee
+       byte >11,>51,>81,>d1,>21,>71,>b1,>f1,>15,>55,>85,>d5,>25,>75,>b5,>f5
+       byte >18,>58,>88,>d8,>28,>78,>b8,>f8,>1d,>5d,>8d,>dd,>2d,>7d,>bd,>fd
+       byte >12,>52,>82,>d2,>22,>72,>b2,>f2,>17,>57,>87,>d7,>27,>77,>b7,>f7
+       byte >1b,>5b,>8b,>db,>2b,>7b,>bb,>fb,>1f,>5f,>8f,>df,>2f,>7f,>bf,>ff
+       byte >11,>41,>61,>d1,>c1,>71,>a1,>e1,>14,>44,>64,>d4,>c4,>74,>a4,>e4
+       byte >16,>46,>66,>d6,>c6,>76,>a6,>e6,>1d,>4d,>6d,>dd,>cd,>7d,>ad,>ed
+       byte >1c,>4c,>6c,>dc,>cc,>7c,>ac,>ec,>17,>47,>67,>d7,>c7,>77,>a7,>e7
+       byte >1a,>4a,>6a,>da,>ca,>7a,>aa,>ea,>1e,>4e,>6e,>de,>ce,>7e,>ae,>ee
+       byte >11,>51,>81,>d1,>21,>71,>b1,>f1,>15,>55,>85,>d5,>25,>75,>b5,>f5
+       byte >18,>58,>88,>d8,>28,>78,>b8,>f8,>1d,>5d,>8d,>dd,>2d,>7d,>bd,>fd
+       byte >12,>52,>82,>d2,>22,>72,>b2,>f2,>17,>57,>87,>d7,>27,>77,>b7,>f7
+       byte >1b,>5b,>8b,>db,>2b,>7b,>bb,>fb,>1f,>5f,>8f,>df,>2f,>7f,>bf,>ff
+
