@@ -168,6 +168,8 @@ ti_draw_door:
        sla  tmp2,8                     ; Width to MSB
        ori  tmp2,>000b                 ; Set height
        bl   @ti_draw_graphics          ; Draw graphics
+       li   tmp1,>1a00
+       bl   @ti_draw_color_area
        .endproc
 *// ti_draw_door
 
@@ -190,17 +192,6 @@ ti_draw_character_and_door:
        .pop tmp0                       ; Restore screen position
 ti_draw_character_and_door_1:
        .pop tmp1                       ; Move door frame to tmp1
-       seto @graphics_bank_select
-       sla  tmp1,1                     ; X offset in characters
-       a    tmp1,tmp0                  ; Add offset to screen position
-       li   tmp2,7                     ; Full door width
-       s    tmp1,tmp2                  ; Subtract offset
-       mov   @door_frame_table(tmp1),tmp1 ; Source address
-       sla  tmp0,3                     ; VDP address
-       sla  tmp2,8                     ; Width to MSB
-       ori  tmp2,>000b                 ; Set height
-       bl   @ti_draw_graphics          ; Draw graphics
-       li   tmp1,>1a00
-       bl   @ti_draw_color_area
+       bl   @ti_draw_door
        .endproc
 *// ti_draw_character_and_door
