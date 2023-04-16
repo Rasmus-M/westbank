@@ -316,6 +316,9 @@ public class SkoolConverter {
                     }
                 }
                 break;
+            case "lddr":
+                tms9900Line.setInstruction(".lddr");
+                break;
             case "ldir":
                 tms9900Line.setInstruction(".ldir");
                 break;

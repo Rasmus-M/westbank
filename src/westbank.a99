@@ -980,7 +980,7 @@ _668e:
        .push bc                        ; PUSH BC           ; 
        li   bc,>001f                   ; LD BC,$001F       ; 
        movb *ix,a                      ; LD A,(IX+$00)     ; 
-       ; LDDR                          ; LDDR              ; 
+       .lddr                           ; LDDR              ; 
        movb a,*de                      ; LD (DE),A         ; 
        inc  ix                         ; INC IX            ; 
        dec  hl                         ; DEC HL            ; 
@@ -1016,7 +1016,7 @@ _66ba:
        li   bc,>001f                   ; LD BC,$001F       ; 
        movb *ix,a                      ; LD A,(IX+$00)     ; 
        inc  ix                         ; INC IX            ; 
-       ; LDDR                          ; LDDR              ; 
+       .lddr                           ; LDDR              ; 
        movb a,*de                      ; LD (DE),A         ; 
        .pop de                         ; POP DE            ; 
        .pop hl                         ; POP HL            ; 
@@ -11254,7 +11254,7 @@ high_score:                            ; fa06
        .pop hl                         ; POP HL            ; 
        li   de,highscore_table+511     ; LD DE,$61FF       ; 
        inc  bc                         ; INC BC            ; 
-       ; LDDR                          ; LDDR              ; 
+       .lddr                           ; LDDR              ; 
        movb @_fb57,a                   ; LD A,($FB57)      ; 
        sb   one,a                      ; DEC A             ; 
        .call @_fbff                    ; CALL $FBFF        ; 
@@ -11268,7 +11268,7 @@ high_score:                            ; fa06
        .pop hl                         ; POP HL            ; 
        li   de,highscore_table+767     ; LD DE,$62FF       ; 
        inc  bc                         ; INC BC            ; 
-       ; LDDR                          ; LDDR              ; 
+       .lddr                           ; LDDR              ; 
        movb @_fb57,a                   ; LD A,($FB57)      ; 
        .call @_fbff                    ; CALL $FBFF        ; 
        dec  hl                         ; DEC HL            ; 

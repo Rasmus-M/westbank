@@ -42,6 +42,14 @@
        jne  -!
        .endm
 
+       .defm lddr
+!      movb *hl,*de
+       dec  hl
+       dec  de
+       dec  bc
+       jne  -!
+       .endm
+
        .defm exx
        mov  bc,tmp0
        mov  bc_,bc
