@@ -14,22 +14,20 @@ loop:
        bl   @vsync
        bl   @vsync
 
-       li   tmp0,4*32+2
        mov  bc,tmp1
-       bl   @ti_draw_character
+       li   tmp2,3
+       bl   @draw_door_1
 
-       li   tmp0,4*32+13
        clr  tmp1
        mov  bc,tmp2
        andi tmp2,15
        sla  tmp2,1
        mov  @door_frames(tmp2),tmp2
-       bl   @ti_draw_character_and_door
+       bl   @draw_door_2
 
-       li   tmp0,4*32+24
        mov  bc,tmp1
        li   tmp2,2
-       bl   @ti_draw_character_and_door
+       bl   @draw_door_3
 
        inc  bc
        ci   bc,>28
@@ -53,7 +51,7 @@ door_frames:
 
 *********************************************************************
 *
-* Draw bank
+* Draw playfield
 *
 ti_draw_playfield:
        .proc
@@ -111,6 +109,71 @@ playfield_data:
        data (1*32+29)*8,gfx_dollar_box_image,>0202
        data 0
 *// ti_draw_playfield
+
+*********************************************************************
+*
+* Draw door 1
+*
+* tmp1: character index to draw
+* tmp2: door frame 0-3
+*
+draw_door_1:
+       .proc
+       li   tmp0,4*32+2
+       bl   @ti_draw_character_and_door
+       .endproc
+*// draw_door_1
+
+*********************************************************************
+*
+* Draw door 2
+*
+* tmp1: character index to draw
+* tmp2: door frame 0-3
+*
+draw_door_2:
+       .proc
+       li   tmp0,4*32+13
+       bl   @ti_draw_character_and_door
+       .endproc
+*// draw_door_2
+
+*********************************************************************
+*
+* Draw door 3
+*
+* tmp1: character index to draw
+* tmp2: door frame 0-3
+*
+draw_door_3:
+       .proc
+       li   tmp0,4*32+24
+       bl   @ti_draw_character_and_door
+       .endproc
+*// draw_door_3
+
+*********************************************************************
+*
+* Draw a character behind a door
+*
+* tmp0: screen position in characters
+* tmp1: character index to draw
+* tmp2: door frame 0-3
+*
+ti_draw_character_and_door:
+       .proc
+       .push tmp2                      ; Save door frame
+       mov  tmp2,tmp2                  ; Check door frame
+       jeq  ti_draw_character_and_door_1 ; If door frame is 0 then don't draw any character
+       .push tmp0                      ; Save screen position
+       sla tmp2,1                      ; Columns to drawn = door frame * 2
+       bl   @ti_draw_partical_character
+       .pop tmp0                       ; Restore screen position
+ti_draw_character_and_door_1:
+       .pop tmp1                       ; Move door frame to tmp1
+       bl   @ti_draw_door
+       .endproc
+*// ti_draw_character_and_door
 
 *********************************************************************
 *
@@ -186,29 +249,6 @@ ti_draw_door:
        bl   @ti_draw_color_area
        .endproc
 *// ti_draw_door
-
-*********************************************************************
-*
-* Draw a character behind a door
-*
-* tmp0: screen position in characters
-* tmp1: character index to draw
-* tmp2: door frame 0-3
-*
-ti_draw_character_and_door:
-       .proc
-       .push tmp2                      ; Save door frame
-       mov  tmp2,tmp2                  ; Check door frame
-       jeq  ti_draw_character_and_door_1 ; If door frame is 0 then don't draw any character
-       .push tmp0                      ; Save screen position
-       sla tmp2,1                      ; Columns to drawn = door frame * 2
-       bl   @ti_draw_partical_character
-       .pop tmp0                       ; Restore screen position
-ti_draw_character_and_door_1:
-       .pop tmp1                       ; Move door frame to tmp1
-       bl   @ti_draw_door
-       .endproc
-*// ti_draw_character_and_door
 
 *********************************************************************
 *
