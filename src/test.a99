@@ -33,6 +33,14 @@ loop:
        inc  bc
        ci   bc,>28
        jne  loop
+
+       li   tmp0,1
+scroll_loop:
+       bl   @scroll_screen
+       inc  tmp0
+       ci   tmp0,33
+       jlt  scroll_loop
+
        clr  bc
        jmp  loop
 
@@ -195,3 +203,26 @@ ti_draw_character_and_door_1:
        bl   @ti_draw_door
        .endproc
 *// ti_draw_character_and_door
+
+*********************************************************************
+*
+* Scroll screen
+*
+* tmp0: offset in characters
+*
+scroll_screen:
+       .proc
+       .push tmp0
+       andi tmp0,31
+       bl   @ti_scroll_screen
+       bl   @vsync
+       andi tmp0,1
+       jne  scroll_screen_1
+       bl   @ti_select_name_table_1
+       jmp  scroll_screen_2
+scroll_screen_1:
+       bl   @ti_select_name_table_2
+scroll_screen_2:
+       .pop tmp0
+       .endproc
+*// scroll_screen

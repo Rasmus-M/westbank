@@ -51,7 +51,6 @@ copy_to_pad:
 * Set graphics mode
 *
 graphics_mode:
-       .proc
        lwpi ti_wrksp
        clr  r0
        li   r1,vdp_registers
@@ -76,18 +75,15 @@ graphics_mode_1:
        li   r1,>1700
        li   r2,>1800
        bl   @vsmw
-*      Init name table
+*      Init name table2
        li   r0,name_table
        bl   @vwad
-       clr  r1
-       li   r2,768
-graphics_mode_2:
-       movb r1,@vdpwd
-       ai   r1,>0100
-       dec  r2
-       jne  graphics_mode_2
+       bl   @ti_init_name_table
+       li   r0,name_table_2
+       bl   @vwad
+       bl   @ti_init_name_table
        lwpi wrksp
-       .endproc
+       rt
 *      VDP registers
 vdp_registers:
        byte >02                        ; Graphics II mode
@@ -99,6 +95,44 @@ vdp_registers:
        byte sprite_pattern_table/>800  ; Sprite pattern table
        byte >00                        ; Backdrop color
 *// graphics_mode
+
+*********************************************************************************
+*
+* Initialize name table for bitmap drawing
+*
+ti_init_name_table:
+       clr  r1
+       li   r2,768
+ti_init_name_table_1:
+       movb r1,@vdpwd
+       ai   r1,>0100
+       dec  r2
+       jne  ti_init_name_table_1
+       rt
+*// ti_init_name_table
+
+
+*********************************************************************************
+*
+* Select name table 1
+*
+ti_select_name_table_1:
+       lwpi ti_wrksp
+       li   r0,>020e
+       bl   @vwtr
+       lwpi wrksp
+       rt
+
+*********************************************************************************
+*
+* Select name table 2
+*
+ti_select_name_table_2:
+       lwpi ti_wrksp
+       li   r0,>020f
+       bl   @vwtr
+       lwpi wrksp
+       rt
 
 *********************************************************************************
 *
@@ -285,6 +319,44 @@ tipal  byte 1,4,6,13,12,7,10,14,1,5,8,13,2,7,11,15
 
 *********************************************************************
 *
+* Scroll screen left by the given offset
+*
+* tmp0 (r13): offset in characters (0-31)
+*
+ti_scroll_screen:
+       lwpi ti_wrksp
+       mov  r13,r0                     ; Offset
+       andi r0,1                       ; Odd or even
+       sla  r0,10                      ; 0 or >400
+       ai   r0,3*32+name_table+>4000   ; VDP address + write bit
+       movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
+       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
+       li   r0,vdpwd
+       li   r5,3*32*256                ; Base name for row in MSB
+       mov  r13,r6                     ; Offset
+       swpb r6                         ; Offset to MSB
+       li   r7,>0100                   ; One
+       li   r8,>e0ff                   ; Mask (keep 0-31 in MSB)
+       li   r4,18                      ; Row counter
+ti_scroll_screen_1:
+       li   r3,32                      ; Column counter
+ti_scroll_screen_2:
+       movb r6,r1                      ; Offset
+       socb r5,r1                      ; Add base name
+       movb r1,*r0                     ; Write to name table
+       ab   r7,r6                      ; Increment offset
+       szcb r8,r6                      ; Apply mask
+       dec  r3
+       jne  ti_scroll_screen_2
+       ai   r5,>2000                   ; Update base name
+       dec  r4
+       jne  ti_scroll_screen_1
+       lwpi wrksp
+       rt
+*// ti_scroll_screen
+
+*********************************************************************
+*
 * VDP Write To Register
 *
 * R0 MSB: VDP register to write to
@@ -331,24 +403,27 @@ vsbw:
        rt
 *// vsbw
 
-;*********************************************************************
-;*
-;* VDP multiple Byte Write
-;*
-;* R0: Write address in VDP RAM
-;* R1: Starting read address in CPU RAM
-;* R2: Number of bytes to send
-;*
-;vmbw:
-;       movb  @r0lb,@vdpwa              ; Send low byte of VDP RAM write address
-;       ori  r0,>4000                   ; Set read/write bits 14 and 15 to write (01)
-;       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
-;vmbw_1:
-;       movb *r1+,@vdpwd                ; Write byte to VDP RAM
-;       dec  r2
-;       jne  vmbw_1
-;       rt
-;*// vmbw
+*********************************************************************
+*
+* VDP multiple Byte Write
+*
+* R0: Write address in VDP RAM
+* R1: Starting read address in CPU RAM
+* R2: Number of bytes to send
+*
+vmbw:
+       swpb r0
+       movb r0,@vdpwa                  ; Send low byte of VDP RAM write address
+       swpb r0
+       ori  r0,>4000                   ; Set read/write bits 14 and 15 to write (01)
+       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
+       li   r0,vdpwd
+vmbw_1:
+       movb *r1+,*r0                   ; Write byte to VDP RAM
+       dec  r2
+       jne  vmbw_1
+       rt
+*// vmbw
 
 *********************************************************************
 *
@@ -359,11 +434,14 @@ vsbw:
 * R2: Number of bytes to write to VDP RAM
 *
 vsmw:
-       movb  @ti_r0lb,@vdpwa              ; Send low byte of VDP RAM write address
+       swpb r0
+       movb  r0,@vdpwa                 ; Send low byte of VDP RAM write address
+       swpb r0
        ori  r0,>4000                   ; Set read/write bits 14 and 15 to write (01)
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
+       li   r0,vdpwd
 vsmw_1:
-       movb r1,@vdpwd                  ; Write byte to VDP RAM
+       movb r1,*r0                     ; Write byte to VDP RAM
        dec  r2                         ; Byte counter
        jne  vsmw_1
        rt
@@ -399,28 +477,30 @@ vsmw_1:
 ;       movb @vdprd,r1                  ; Read byte from VDP RAM
 ;       rt
 ;*// vsbr
-;
-;*********************************************************************
-;*
-;* VDP Multiple Byte Read
-;*
-;* R0: Starting read address in VDP RAM
-;* R1: Starting write address in CPU RAM
-;* R2: Number of bytes to read from VDP RAM
-;*
-;* Modifies R0-R2
-;*
-;vmbr:
-;       movb  @r0lb,@vdpwa              ; Send low byte of VDP RAM read address
-;       andi r0,>3fff                   ; Set read/write bits 14 and 15 to read (00)
-;       movb r0,@vdpwa                  ; Send high byte of VDP RAM read address
-;       li   r0,vdprd
-;vmbr_1:
-;       movb *r0,*r1+                   ; Read byte from VDP RAM
-;       dec  r2                         ; Byte counter
-;       jne  vmbr_1                     ; Check if finished
-;       rt
-;*// vmbr
+
+*********************************************************************
+*
+* VDP Multiple Byte Read
+*
+* R0: Starting read address in VDP RAM
+* R1: Starting write address in CPU RAM
+* R2: Number of bytes to read from VDP RAM
+*
+* Modifies R0-R2
+*
+vmbr:
+       swpb r0
+       movb  r0,@vdpwa                 ; Send low byte of VDP RAM read address
+       swpb r0
+       andi r0,>3fff                   ; Set read/write bits 14 and 15 to read (00)
+       movb r0,@vdpwa                  ; Send high byte of VDP RAM read address
+       li   r0,vdprd
+vmbr_1:
+       movb *r0,*r1+                   ; Read byte from VDP RAM
+       dec  r2                         ; Byte counter
+       jne  vmbr_1                     ; Check if finished
+       rt
+*// vmbr
 
 *********************************************************************
 *
