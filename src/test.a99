@@ -1,8 +1,9 @@
        limi 0
        lwpi wrksp
        bl   @setup_environment
-       bl   @ti_draw_bank
+       bl   @ti_draw_playfield
        clr  bc
+       clr  hl
 loop:
        bl   @vsync
        bl   @vsync
@@ -34,12 +35,15 @@ loop:
        ci   bc,>28
        jne  loop
 
-       li   tmp0,1
-scroll_loop:
-       bl   @scroll_screen
-       inc  tmp0
-       ci   tmp0,33
-       jlt  scroll_loop
+       mov  hl,tmp0
+       andi tmp0,1
+       jne  main1
+       bl   @scroll_left
+       jmp  main2
+main1:
+       bl   @scroll_right
+main2:
+       inc  hl
 
        clr  bc
        jmp  loop
@@ -51,30 +55,30 @@ door_frames:
 *
 * Draw bank
 *
-ti_draw_bank:
+ti_draw_playfield:
        .proc
        seto @graphics_bank_select
-       li   hl,bank_data
-ti_draw_bank_1:
+       li   hl,playfield_data
+ti_draw_playfield_1:
        mov  *hl+,tmp0
-       jeq  ti_draw_bank_2
+       jeq  ti_draw_playfield_2
        mov  *hl+,tmp1
        mov  *hl+,tmp2
        bl   @ti_draw_graphics
-       jmp  ti_draw_bank_1
-ti_draw_bank_2:
+       jmp  ti_draw_playfield_1
+ti_draw_playfield_2:
        li   hl,attributes
        li   de,zx_attributes
        li   bc,768
-ti_draw_bank_3:
+ti_draw_playfield_3:
        movb *hl+,a
        mov  de,tmp1
        bl   @ti_draw_attribute
        inc  de
        dec  bc
-       jne  ti_draw_bank_3
+       jne  ti_draw_playfield_3
        .endproc
-bank_data:
+playfield_data:
        data (0*32+1)*8,gfx_slot_numbers_left,>0c01
        data (0*32+14)*8,gfx_centrepiece,>0403
        data (0*32+19)*8,gfx_slot_numbers_right,>0c01
@@ -106,7 +110,7 @@ bank_data:
        data (1*32+15)*8,gfx_dollar_image,>0202
        data (1*32+29)*8,gfx_dollar_box_image,>0202
        data 0
-*// ti_draw_bank
+*// ti_draw_playfield
 
 *********************************************************************
 *
@@ -203,6 +207,36 @@ ti_draw_character_and_door_1:
        bl   @ti_draw_door
        .endproc
 *// ti_draw_character_and_door
+
+*********************************************************************
+*
+* Scroll screen left
+*
+scroll_left:
+       .proc
+       li   tmp0,1
+scroll_left_1:
+       bl   @scroll_screen
+       inc  tmp0
+       ci   tmp0,33
+       jlt  scroll_left_1
+       .endproc
+*// scroll_left
+
+*********************************************************************
+*
+* Scroll screen right
+*
+scroll_right:
+       .proc
+       li   tmp0,31
+scroll_right_1:
+       bl   @scroll_screen
+       dec  tmp0
+       ci   tmp0,-1
+       jgt  scroll_right_1
+       .endproc
+*// scroll_right
 
 *********************************************************************
 *
