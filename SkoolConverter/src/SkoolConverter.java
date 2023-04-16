@@ -365,6 +365,13 @@ public class SkoolConverter {
                     tms9900Line.setInstruction((isWord ? "s    " : "sb   ") + getTMS9900Equivalent(opr2) + "," + getTMS9900Equivalent(opr1));
                 }
                 break;
+            case "sra":
+                if (!lsbRegisterPattern.matcher(opr1.getRegister()).matches()) {
+                    tms9900Line.setInstruction("sra  " + getTMS9900Equivalent(opr1) + ",1");
+                } else {
+                    tms9900Line.setInstruction("; " + instruction);
+                }
+                break;
             case "srl":
                 if (!lsbRegisterPattern.matcher(opr1.getRegister()).matches()) {
                     tms9900Line.setInstruction("srl  " + getTMS9900Equivalent(opr1) + ",1");

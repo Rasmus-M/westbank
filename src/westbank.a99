@@ -6918,9 +6918,9 @@ _cc1d:
 _cc2b:
        movb h,a                        ; LD A,H            ; 
        andi a,24*256                   ; AND $18           ; 
-       ; SRA A                         ; SRA A             ; 
-       ; SRA A                         ; SRA A             ; 
-       ; SRA A                         ; SRA A             ; 
+       sra  a,1                        ; SRA A             ; 
+       sra  a,1                        ; SRA A             ; 
+       sra  a,1                        ; SRA A             ; 
        ab   @bytes+88,a                ; ADD A,$58         ; 
        movb a,h                        ; LD H,A            ; 
        .ret                            ; RET               ; Return.
