@@ -36,10 +36,10 @@ loop:
        mov  hl,tmp0
        andi tmp0,1
        jne  main1
-       bl   @scroll_left
+       bl   @ti_scroll_left
        jmp  main2
 main1:
-       bl   @scroll_right
+       bl   @ti_scroll_right
 main2:
        inc  hl
 
@@ -254,31 +254,31 @@ ti_draw_door:
 *
 * Scroll screen left
 *
-scroll_left:
+ti_scroll_left:
        .proc
        li   tmp0,1
-scroll_left_1:
+ti_scroll_left_1:
        bl   @scroll_screen
        inc  tmp0
        ci   tmp0,33
-       jlt  scroll_left_1
+       jlt  ti_scroll_left_1
        .endproc
-*// scroll_left
+*// ti_scroll_left
 
 *********************************************************************
 *
 * Scroll screen right
 *
-scroll_right:
+ti_scroll_right:
        .proc
        li   tmp0,31
-scroll_right_1:
+ti_scroll_right_1:
        bl   @scroll_screen
        dec  tmp0
        ci   tmp0,-1
-       jgt  scroll_right_1
+       jgt  ti_scroll_right_1
        .endproc
-*// scroll_right
+*// ti_scroll_right
 
 *********************************************************************
 *

@@ -486,16 +486,16 @@ _6579:
 * Routine at 6600
 * 
 * Used by the routine at #R$D3EA.
-_6600:
+scroll_right:
        movb @bytes+11,b                ; LD B,$0B          ; 
-_6602:
+scroll_right_loop:
        .push bc                        ; PUSH BC           ; 
        .call @_6610                    ; CALL $6610        ; 
        .call @_6647                    ; CALL $6647        ; 
        .call @_6647                    ; CALL $6647        ; 
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $6602        ; 
-       jne  _6602                      ;                   
+       jne  scroll_right_loop                      ;
        .ret                            ; RET               ; 
 _6610:
        li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
@@ -620,16 +620,16 @@ _66d2:
        .ret                            ; RET               ; 
 
 * This entry point is used by the routine at #R$D3EA.
-_6700:
+scroll_left:
        movb @bytes+11,b                ; LD B,$0B          ; 
-_6702:
+scroll_left_loop:
        .push bc                        ; PUSH BC           ; 
        .call @_6710                    ; CALL $6710        ; 
        .call @_6747                    ; CALL $6747        ; 
        .call @_6747                    ; CALL $6747        ; 
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $6702        ; 
-       jne  _6702                      ;                   
+       jne  scroll_left_loop                      ;
        .ret                            ; RET               ; 
 _6710:
        li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
@@ -1573,7 +1573,7 @@ sheriff_star:                          ; c720
                                                            ; { $06 | $06 | $00 | $00 }
                                                            ; TABLE#}
        li   hl,zx_screen+>008b         ; LD HL,$408B       ; {Points to #R$F600 and prints it to the screen using
-       li   de,badge_image             ; LD DE,$F600       ; #R$5B92.
+       li   de,gfx_badge_image         ; LD DE,$F600       ; #R$5B92.
        li   bc,>5008                   ; LD BC,$5008       ;
        .call @draw_character           ; CALL $5B92        ; }
        li   hl,header_1                ; LD HL,$C765       ; {Points to #R$C765 and prints it to the screen using #R$5B80.
@@ -2204,7 +2204,7 @@ _cbe0:
 print_tt_text_space_check:             ; cbfc
        cb   a,@bytes+32                ; CP $20            ; {If the character is a space then jump forward to
        jne  _cc0e                      ; JR NZ,$CC0E       ; #R$CC0E.}
-       li   hl,buffer_at_5b00                   ; LD HL,$5B00       ;
+       li   hl,buffer_at_5b00          ; LD HL,$5B00       ;
        li   bc,>1001                   ; LD BC,$1001       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push hl                        ; PUSH HL           ; 
@@ -2307,7 +2307,7 @@ draw_life_images_loop:                 ; cc77
        jne  draw_life_images_loop      ;                   
        .ret                            ; RET               ; Return.
 draw_life_images:                      ; cc81
-       li   de,lives_image             ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
+       li   de,gfx_lives_image         ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
 copy_routine_loop:                     ; cc84
        .push hl                        ; PUSH HL           ; 
        li   bc,>1802                   ; LD BC,$1802       ; 
@@ -3599,7 +3599,7 @@ shot_two:                              ; d317
        movb a,*hl                      ; LD (HL),A         ; }
        li   hl,_d8ac                   ; LD HL,$D8AC       ; {Increase #R$D8AC by one.
        ab   one,*hl                    ; INC (HL)          ; }
-       li   hl,_4080+1967              ; LD HL,$482F       ; {Sets the screen location for this shot to $482F and
+       li   hl,zx_screen+>082f         ; LD HL,$482F       ; {Sets the screen location for this shot to $482F and
        .push hl                        ; PUSH HL           ; stash it.}
        .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
        .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
@@ -3798,7 +3798,7 @@ _d414:
 !
        jmp  _d414                      ; JR $D414          ; 
 _d42d:
-       .call @_6600                    ; CALL $6600        ; 
+       .call @scroll_right             ; CALL $6600        ;
        li   de,>0400                   ; LD DE,$0400       ; 
        li   hl,_d45d                   ; LD HL,$D45D       ; 
        movb *hl,a                      ; LD A,(HL)         ; 
@@ -3813,7 +3813,7 @@ _d43f:
        movb a,@cashbox_ref             ; LD ($D45C),A      ; 
        .ret                            ; RET               ; 
 _d449:
-       .call @_6700                    ; CALL $6700        ; 
+       .call @scroll_left              ; CALL $6700        ;
        li   de,>0400                   ; LD DE,$0400       ; 
        li   hl,_d45d                   ; LD HL,$D45D       ; 
        movb *hl,a                      ; LD A,(HL)         ; 
@@ -3860,9 +3860,9 @@ _d47b:
        .ret                            ; RET               ; 
 _d47e:
        cb   a,@bytes+7                 ; CP $07            ; 
-       li   hl,_5800+5                 ; LD HL,$5805       ; 
+       li   hl,zx_attributes+>0005     ; LD HL,$5805       ;
        jnc  _d488                      ; JR NC,$D488       ; TODO: check code. 
-       li   hl,_58a0+95                ; LD HL,$58FF       ; 
+       li   hl,zx_attributes+>00ff     ; LD HL,$58FF       ;
 _d488:
        ab   a,a                        ; ADD A,A           ; 
        ab   @l,a                       ; ADD A,L           ; 
