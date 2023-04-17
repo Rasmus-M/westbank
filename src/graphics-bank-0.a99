@@ -466,8 +466,10 @@ gfx_centrepiece:
 gfx_dollar_image:
        byte >00,>02,>0f,>1f,>1a,>1a,>1a,>1f                          ; 2 columns
        byte >00,>80,>c0,>f0,>b0,>80,>80,>e0
+gfx_dollar_image_1:
        byte >0f,>02,>02,>1a,>1f,>0f,>02,>00                          ; 2 columns
        byte >f0,>b0,>b0,>b0,>f0,>e0,>80,>00
+gfx_dollar_image_2:
        byte >00,>00,>00,>00,>00,>00,>00,>00                          ; 2 columns
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >00,>02,>0f,>1f,>1a,>1a,>1a,>1f                          ; 2 columns

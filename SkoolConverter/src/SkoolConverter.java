@@ -226,6 +226,9 @@ public class SkoolConverter {
             case "cp":
                 tms9900Line.setInstruction("cb   a," + getTMS9900Equivalent(opr1));
                 break;
+            case "cpl":
+                tms9900Line.setInstruction("inv  a");
+                break;
             case "dec":
                 if (opr1 != null) {
                     boolean isWord = opr1.isWordOperand();
