@@ -1698,49 +1698,49 @@ set_control_alias:                     ; c7f9
 level_1:                               ; c878
        li   hl,choose_default_set      ; LD HL,$CE42       ; {Writes #R$CE42 to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_bandit_3         ; LD HL,$CE6F       ; {Writes #R$CE6F to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  level_2                    ; RET C             ; TODO: check code.
        .ret                            ;
 level_2:
        li   hl,choose_bandit_2         ; LD HL,$CE5F       ; {Writes #R$CE5F to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_julius           ; LD HL,$CE55       ; {Writes #R$CE55 to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_bandit_4         ; LD HL,$CE7E       ; {Writes #R$CE7E to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  level_3                    ; RET C             ; TODO: check code.
        .ret                            ;
 level_3:
        li   hl,choose_bandit_5         ; LD HL,$CE8D       ; {Writes #R$CE8D to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
@@ -1748,7 +1748,7 @@ level_3:
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_dusk_attr            ; CALL $C95E        ; 
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
@@ -1756,7 +1756,7 @@ level_3:
        mov  hl,@chooser_routine_buffer ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_night_attr           ; CALL $C963        ; 
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  level_3_1                  ; RET C             ; TODO: check code.
        .ret                            ;                   
 level_3_1:                             ; c8f0
@@ -1765,7 +1765,7 @@ level_3_1:                             ; c8f0
        movb @bytes+7,b                 ; LD B,$07          ; 
 level_3_2:                             ; c8f8
        .push bc                        ; PUSH BC           ; 
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        .pop bc                         ; POP BC            ; 
        jnc  !                          ; RET C             ; TODO: check code.
        .ret                            ;                   
@@ -1776,12 +1776,12 @@ level_3_2:                             ; c8f8
        sb   one,b                      ; DJNZ $C8F8        ; 
        jne  level_3_2                  ;                   ; Do 7 times
        .call @set_dusk_attr            ; CALL $C95E        ; 
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        .call @set_night_attr           ; CALL $C963        ; 
-       .call @run_phase      ; CALL $CA81        ;
+       .call @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
@@ -1872,8 +1872,8 @@ prep_display_phase:                    ; c9b7
 * This routine has the ability to write any value across the screen buffer, however it's only ever called with
 * #REGa=$00 (clear screen).
 clear_screen:                          ; c9d0
-       li   hl,zx_screen                 ; LD HL,$4000       ; {Clears the screen buffer by
-       li   de,zx_screen+1               ; LD DE,$4001       ; writing $00 to all 6912 memory
+       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
+       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
        li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
        movb a,*hl                      ; LD (HL),A         ; 
        .ldir                           ; LDIR              ; 
