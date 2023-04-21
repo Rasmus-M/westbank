@@ -5874,23 +5874,34 @@ ts_select_kempston:                    ; fe63
 ts_call_flash:                         ; fe66
        .call @ts_flash_text            ; CALL $FE95        ; TABLE#}
        li   hl,controller              ; LD HL,$5CB0       ; Point #REGhl=#R$5CB0.
-       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1, 2, 3, 4, 5.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       ; RRA                           ; RRA               ; {Jump to #R$FE86 if "1" is pressed.
-       jnc  ts_set_keyboard            ; JR NC,$FE86       ; TODO: check code. }
-       ; RRA                           ; RRA               ; {Jump to #R$FE8B if "2" is pressed.
-       jnc  ts_set_kempston            ; JR NC,$FE8B       ; TODO: check code. }
-       movb @bytes+127,a               ; LD A,$7F          ; {Read keys SPACE, FULL-STOP, M, N, & B.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       movb a,tmp0                     ; BIT 3,A           ; {Jump to #R$FE8F if "N" is pressed.
-       andi tmp0,8*256                 ;                   
-       jeq  ts_select_level            ; JR Z,$FE8F        ; }
-       movb @bytes+239,a               ; LD A,$EF          ; {Read keys 0, 9, 8, 7, 6.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       ; RRA                           ; RRA               ; {Return if "0" is pressed, else loop back around to
-       joc  !                          ; RET NC            ; TODO: check code. #R$FE58.
-       .ret                            ;                   
-!
+
+       li   tmp0,KEY_0
+       bl   @ti_check_key
+       jeq  !
+       .ret
+!      li   tmp0,KEY_1
+       bl   @ti_check_key
+       jne  ts_set_keyboard
+       li   tmp0,KEY_2
+       bl   @ti_check_key
+       jne  ts_set_kempston
+;       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1, 2, 3, 4, 5.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       ; RRA                           ; RRA               ; {Jump to #R$FE86 if "1" is pressed.
+;       jnc  ts_set_keyboard            ; JR NC,$FE86       ; TODO: check code. }
+;       ; RRA                           ; RRA               ; {Jump to #R$FE8B if "2" is pressed.
+;       jnc  ts_set_kempston            ; JR NC,$FE8B       ; TODO: check code. }
+;       movb @bytes+127,a               ; LD A,$7F          ; {Read keys SPACE, FULL-STOP, M, N, & B.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       movb a,tmp0                     ; BIT 3,A           ; {Jump to #R$FE8F if "N" is pressed.
+;       andi tmp0,8*256                 ;
+;       jeq  ts_select_level            ; JR Z,$FE8F        ; }
+;       movb @bytes+239,a               ; LD A,$EF          ; {Read keys 0, 9, 8, 7, 6.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       ; RRA                           ; RRA               ; {Return if "0" is pressed, else loop back around to
+;       joc  !                          ; RET NC            ; TODO: check code. #R$FE58.
+;       .ret                            ;
+;!
        jmp  title_screen_input         ; JR $FE58          ; }
 *
 ts_set_keyboard:                       ; fe86

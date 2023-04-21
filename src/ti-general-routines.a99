@@ -553,34 +553,34 @@ JOY_RT EQU  >060A
 JOY_DN EQU  >060C
 JOY_UP EQU  >060E
 *
-check_key:
+ti_check_key:
        li   r12,>0024                  ; CRU address of the column decoder
        ldcr r0,3                       ; Select column
        andi r0,>00ff
        mov  r0,r12                     ; Select row
        tb   0                          ; Test key, EQ if not pressed
        rt
-*// check_key
+*// ti_check_key
 
 ***************************************************************************
 *
 * Check quit
 *
-check_quit:
+ti_check_quit:
        clr  r1                         ; Test column 0
        li   r12,>0024                  ; Address for column selection
        ldcr r1,3                       ; Select column
        li   r12,>0006                  ; Address to read rows
        stcr r1,8
        andi r1,>1100
-       jeq  quit
+       jeq  ti_quit
 *      Return
        rt
 *      Quit
-quit   clr  @>83c4                     ; Reset user ISR address
+ti_quit   clr  @>83c4                     ; Reset user ISR address
        seto @>6000                     ; Select first ROM bank
        blwp @>0000
-*// check_quit
+*// ti_check_quit
 
 *********************************************************************
 *
@@ -590,9 +590,9 @@ quit   clr  @>83c4                     ; Reset user ISR address
 *
 * On return a contains the number [0; a[
 *
-randl:
+ti_rnd_range:
        .proc                           ; Push return address onto the stack
-       bl   @rand                      ; Generate a random number in tmp0
+       bl   @ti_rnd                    ; Generate a random number in tmp0
        andi tmp0,>00ff                 ; Clear MSB: [0-255]
        mov  af,tmp1                    ; range in MSB
        srl  tmp1,8                     ; range in LSB
@@ -601,7 +601,7 @@ randl:
        mov  tmp1,a                     ; Copy result back
        swpb a                          ; to MSB
        .endproc                        ; Pop return address off the stack
-*// randl
+*// ti_rnd_range
 
 *********************************************************************
 *
@@ -611,7 +611,7 @@ randl:
 *
 * tmp1 and tmp2 are modified
 *
-rand:
+ti_rnd:
        li   tmp1,28643                 ; A prime number to multiply by
        mpy  @rnd_seed,tmp1             ; Multiply by last random number
        ai   tmp2,31873                 ; Add a prime number
@@ -619,7 +619,7 @@ rand:
        mov  tmp2,@rnd_seed             ; Save this number for next time
        mov  tmp2,tmp0
        rt
-*// rand
+*// ti_rnd
 
 *********************************************************************
 *
