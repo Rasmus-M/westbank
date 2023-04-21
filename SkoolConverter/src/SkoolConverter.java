@@ -141,7 +141,9 @@ public class SkoolConverter {
 
     private int convertData(Z80Line z80Line, List<TMS9900Line> tms9900Lines) {
         String instruction;
-        if (z80Line.getInstruction().startsWith("DEFM")) {
+        if (z80Line.getInstruction().startsWith("DEFS")) {
+            instruction = "bss " + Util.parseInt(z80Line.getInstruction().substring(4).trim());
+        } else if (z80Line.getInstruction().startsWith("DEFM")) {
             String[] messageParts = z80Line.getInstruction().substring(4).trim().split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
             for (int i = 0; i < messageParts.length; i++) {
                 String messagePart = messageParts[i];

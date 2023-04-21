@@ -64,7 +64,7 @@ public class Z80Line {
                 }
                 if (type == null) {
                     instruction = line.length() >= 8 ? line.substring(7).trim() : "";
-                    if (instruction.startsWith("DEFB") || instruction.startsWith("DEFW") || instruction.startsWith("DEFM")) {
+                    if (instruction.startsWith("DEFB") || instruction.startsWith("DEFW") || instruction.startsWith("DEFM") || instruction.startsWith("DEFS")) {
                         type = Type.Data;
                     } else {
                         type = Type.Instruction;

@@ -1,5 +1,8 @@
 buffer_at_5b00:
-       byte >00                                                      ; @start=$6000
+       bss  >80                        ; @start=$6000
+
+buffer_at_5b80:
+       bss  >80
 
 * Draw Text (alias).
 * 
@@ -17,7 +20,6 @@ draw_life_images_alias:                ; 5b83
 lives_addr:                            ; 5b86
        data lives                                                    ; The 16 bit memory location for the address that holds
                                                                      ; how many lives the player has remaining.
-
 * Jump Controls.
 * 
 * Loads the 16 bit address stored at #R$CE12 into #REGhl and jumps to it.
@@ -136,10 +138,6 @@ controller:                            ; 5cb0
 level:                                 ; 5cb1
        byte >00
 
-*      Buffer space
-;      TODO
-       bss (>6000->5b00)-($-buffer_at_5b00)
-
 * High Score Table
 highscore_table:                       ; 6000
        text 'LUCKY LUCKE     '
@@ -172,7 +170,7 @@ highscore_table:                       ; 6000
        text 'THE CHICKEN MAN '
        text 'THE BLONDE GIRL '
        text 'TOM SMITH       '
-       ; DEFS $20                      ; DEFS $20          
+       bss  >20                      ; DEFS $20
        text '275430'
        text '265980'
        text '263230'
@@ -221,7 +219,7 @@ highscore_table:                       ; 6000
 * 
 * Used by the routine at #R$FE00.
 level_select:                          ; 6380
-       li   de,print_two_tone_text_alias ; LD DE,$5B80       ; {#REGhl points to $5B80 on entry as #REGde is also $5B80
+       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {#REGhl points to $5B80 on entry as #REGde is also $5B80
        li   bc,>0040                   ; LD BC,$0040       ; - this does nothing, it just creates a very short pause.
        .ldir                           ; LDIR              ; }
        li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen bufffer
@@ -966,7 +964,7 @@ _c3d8:
 init_duel:                             ; c3dd
        .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGde.
        .push de                        ; PUSH DE           ; }
-       li   de,print_two_tone_text_alias ; LD DE,$5B80       ; {Copies $1B of data from #REGhl to #R$5B80.
+       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $1B of data from #REGhl to #R$5B80.
        li   bc,>001b                   ; LD BC,$001B       ; 
        .ldir                           ; LDIR              ; }
        b    @duel_prep                 ; JP $C422          ; Jump to #R$C422.
@@ -1791,7 +1789,7 @@ level_3_2:                             ; c8f8
        ; AND A                         ; AND A             ; 
        jeq  level_3_1                  ; JR Z,$C8F0        ;
        li   hl,copied_5b80             ; LD HL,$CBB4       ; 
-       li   de,print_two_tone_text_alias ; LD DE,$5B80       ; 
+       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
        li   bc,>0040                   ; LD BC,$0040       ; 
        .ldir                           ; LDIR              ; 
        .call @sheriff_star             ; CALL $C720        ; Call #R$C720.
@@ -2063,7 +2061,7 @@ game_loop_1:                           ; cae7
        ; RRA                           ; RRA               ; 
        joc  read_keys_1                ; JR C,$CAFB        ; Jump if shift not pressed TODO: check code.
        li   hl,copied_5b80             ; LD HL,$CBB4       ; Space and shift pressed
-       .call @>fd80                    ; CALL $FD80        ; TODO leave game and return to title screen
+       .call @_fd80                    ; CALL $FD80        ; TODO leave game and return to title screen
 read_keys_1:                           ; cafb
        movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
        ; IN A,($FE)                    ; IN A,($FE)        ; }
@@ -2299,7 +2297,7 @@ life_images:                           ; cc5a
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ; }
 life_images_loop:                      ; cc5f
        .push bc                        ; PUSH BC           ; {jjjss
-       li   de,buffer_at_5b00                   ; LD DE,$5B00       ;
+       li   de,buffer_at_5b00          ; LD DE,$5B00       ;
        .call @copy_routine_loop        ; CALL $CC84        ; 
        inc  hl                         ; INC HL            ; 
        inc  hl                         ; INC HL            ; 
@@ -3527,7 +3525,7 @@ check_right_and_left_1:                ; d2d7
        movb a,tmp0                     ; BIT 4,A           ; 
        andi tmp0,16*256                ;                   
        jne  controls                   ; JR NZ,$D307       ; 
-       li   hl,two                     ; LD HL,$D303       ; 
+       li   hl,two_pressed             ; LD HL,$D303       ;
        sb   *hl,*hl                    ; LD (HL),$00       ; clear two
        inc  hl                         ; INC HL            ; 
        sb   *hl,*hl                    ; LD (HL),$00       ; clear three
@@ -3564,21 +3562,21 @@ hit:                                   ; d300
 *
 * These flags don't control left/ right movement they just indicate whether
 * keys are being pressed/ joystick used.
-right:                                 ; d301
+right_pressed:                         ; d301
        byte >00                                                      ; Defaults to $00, holds $01 when the player is pressing
                                                                      ; "right".
-left:                                  ; d302
+left_pressed:                          ; d302
        byte >00                                                      ; Defaults to $00, holds $01 when the player is pressing
                                                                      ; "left".
 
 * Player Shooting.
-two:                                   ; d303
+two_pressed:                           ; d303
        byte >00                                                      ; Defaults to $00, holds $01 when the player is pressing
                                                                      ; "2".
-three:                                 ; d304
+three_pressed:                         ; d304
        byte >00                                                      ; Defaults to $00, holds $01 when the player is pressing
                                                                      ; "3".
-one:                                   ; d305
+one_pressed:                           ; d305
        byte >00                                                      ; Defaults to $00, holds $01 when the player is pressing
                                                                      ; "1".
 controls_byte:                         ; d306
@@ -3617,18 +3615,18 @@ controls:                              ; d307
        jne  shot_one                   ; JR NZ,$D360       ; bit 1 is set).}
 * Handles settings flags and shot drawing location for door 2.
 shot_two:                              ; d317
-       movb @two,a                     ; LD A,($D303)      ; {If #R$D303 is not zero then return.
+       movb @two_pressed,a             ; LD A,($D303)      ; {If #R$D303 is not zero then return.
        ; AND A                         ; AND A             ; 
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       movb a,@three                   ; LD ($D304),A      ; {Sets the other two door flags to zero (#R$D304 and
-       movb a,@one                     ; LD ($D305),A      ; #R$D305).}
+       movb a,@three_pressed           ; LD ($D304),A      ; {Sets the other two door flags to zero (#R$D304 and
+       movb a,@one_pressed             ; LD ($D305),A      ; #R$D305).}
        ab   one,a                      ; INC A             ; {Indicate the the middle door is being shot at (write
-       movb a,@two                     ; LD ($D303),A      ; $01 to #R$D303 and $02 to #R$D300).
+       movb a,@two_pressed             ; LD ($D303),A      ; $01 to #R$D303 and $02 to #R$D300).
        movb @bytes+2,a                 ; LD A,$02          ; 
        movb a,*hl                      ; LD (HL),A         ; }
-       li   hl,random_seed                   ; LD HL,$D8AC       ; {Increase #R$D8AC by one.
+       li   hl,random_seed             ; LD HL,$D8AC       ; {Increase #R$D8AC by one.
        ab   one,*hl                    ; INC (HL)          ; }
        li   hl,zx_screen+>082f         ; LD HL,$482F       ; {Sets the screen location for this shot to $482F and
        .push hl                        ; PUSH HL           ; stash it.}
@@ -3638,18 +3636,18 @@ shot_two:                              ; d317
        b    @shot_sound_1_alias        ; JP $6500          ; Jump to #R$6500.
 * Handles settings flags and shot drawing location for door 3.
 shot_three:                            ; d33b
-       movb @three,a                   ; LD A,($D304)      ; {If #R$D304 is not zero then return.
+       movb @three_pressed,a           ; LD A,($D304)      ; {If #R$D304 is not zero then return.
        ; AND A                         ; AND A             ; 
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       movb a,@two                     ; LD ($D303),A      ; {Sets the other two door flags to zero (#R$D303 and
-       movb a,@one                     ; LD ($D305),A      ; #R$D305).}
+       movb a,@two_pressed             ; LD ($D303),A      ; {Sets the other two door flags to zero (#R$D303 and
+       movb a,@one_pressed             ; LD ($D305),A      ; #R$D305).}
        ab   one,a                      ; INC A             ; {Indicate the the right door is being shot at (write $01
-       movb a,@three                   ; LD ($D304),A      ; to #R$D304 and $03 to #R$D300).
+       movb a,@three_pressed           ; LD ($D304),A      ; to #R$D304 and $03 to #R$D300).
        movb @bytes+3,a                 ; LD A,$03          ; 
        movb a,*hl                      ; LD (HL),A         ; }
-       li   hl,random_seed                   ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
+       li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
        ; SLA (HL)                      ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
        li   hl,zx_screen+>083a         ; LD HL,$483A       ; {Sets the screen location for this shot to $483A and
        .push hl                        ; PUSH HL           ; stash it.}
@@ -3659,18 +3657,18 @@ shot_three:                            ; d33b
        b    @shot_sound_2_alias        ; JP $6502          ; Jump to #R$6502.
 * Handles settings flags and shot drawing location for door 1.
 shot_one:                              ; d360
-       movb @one,a                     ; LD A,($D305)      ; {If #R$D305 is not zero then return.
+       movb @one_pressed,a             ; LD A,($D305)      ; {If #R$D305 is not zero then return.
        ; AND A                         ; AND A             ; 
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       movb a,@two                     ; LD ($D303),A      ; {Sets the other two door flags to zero (#R$D303 and
-       movb a,@three                   ; LD ($D304),A      ; #R$D304).}
+       movb a,@two_pressed             ; LD ($D303),A      ; {Sets the other two door flags to zero (#R$D303 and
+       movb a,@three_pressed           ; LD ($D304),A      ; #R$D304).}
        ab   one,a                      ; INC A             ; {Indicate the the left door is being shot at (write $01
-       movb a,@one                     ; LD ($D305),A      ; to #R$D305 and $01 to #R$D300).
+       movb a,@one_pressed             ; LD ($D305),A      ; to #R$D305 and $01 to #R$D300).
        movb one,a                      ; LD A,$01          ; 
        movb a,*hl                      ; LD (HL),A         ; }
-       li   hl,random_seed                   ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
+       li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
        ; SLA (HL)                      ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
        li   hl,zx_screen+>0824         ; LD HL,$4824       ; {Sets the screen location for this shot to $4824 and
        .push hl                        ; PUSH HL           ; stash it.}
@@ -3681,12 +3679,12 @@ shot_one:                              ; d360
        .ret                            ; RET               ; Return.
 * Sets the flag for indicating "right" has been pressed by the player.
 set_right:                             ; d386
-       li   hl,right                   ; LD HL,$D301       ; {Write $01 to #R$D301 and return.
+       li   hl,right_pressed           ; LD HL,$D301       ; {Write $01 to #R$D301 and return.
        movb one,*hl                    ; LD (HL),$01       ; 
        .ret                            ; RET               ; }
 * Sets the flag for indicating "left" has been pressed by the player.
 set_left:                              ; d38c
-       li   hl,left                    ; LD HL,$D302       ; {Write $01 to #R$D302 and return.
+       li   hl,left_pressed            ; LD HL,$D302       ; {Write $01 to #R$D302 and return.
        movb one,*hl                    ; LD (HL),$01       ; 
        .ret                            ; RET               ; }
 
@@ -3811,12 +3809,12 @@ move_right_or_left:                    ; d411
 move_right_or_left_loop:
        .push de                        ; PUSH DE           ; 
        .call @check_right_and_left     ; CALL $D2CF        ;
-       movb @right,a                   ; LD A,($D301)      ; 
+       movb @right_pressed,a           ; LD A,($D301)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D42D     ; 
        .call @move_cashboxes_right     ;
 !
-       movb @left,a                    ; LD A,($D302)      ; 
+       movb @left_pressed,a            ; LD A,($D302)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D449     ; 
        .call @move_cashboxes_left      ;
@@ -4865,8 +4863,9 @@ julius_open_routing:                   ; d8ef
        sb   one,a                      ; DEC A             ; { $06 | #R$D972 }
        jeq  julius_open_5              ; JR Z,$D963        ; { $07 | #R$D981 }
        sb   one,a                      ; DEC A             ; TABLE#
-       jeq  julius_open_6              ; JR Z,$D972        ; 
-       jmp  julius_open_7              ; JR $D981          ; }
+       jne  !
+       b    @julius_open_6             ; JR Z,$D972        ;
+!      b    @julius_open_7             ; JR $D981          ; }
 * Handle door frame 1 countdown/ transition to door frame 2.
 julius_open_1:                         ; d907
        movb @julius_1_timer,a          ; LD A,($D8E8)      ; {Decrease #R$D8E8 by one, return if result is not
@@ -5357,7 +5356,7 @@ scroll_dollar_sign:                    ; f960
        nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
        ; HALT                          ; HALT              ; 
-       li   de,buffer_at_5b00                   ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
+       li   de,buffer_at_5b00          ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
        nop                             ; NOP               ; 
        nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
@@ -5377,12 +5376,12 @@ dollar_scroll_draw_loop:               ; f9c9
        ab   one,h                      ; INC H             ; 
        movb h,a                        ; LD A,H            ; 
        andi a,7*256                    ; AND $07           ; 
-       jne  _f9de                      ; JR NZ,$F9DE       ; 
+       jne  dollar_scroll_draw_1       ; JR NZ,$F9DE       ;
        movb @bytes+64,h                ; LD H,$40          ; 
        movb @l,a                       ; LD A,L            ; 
        ab   @bytes+32,a                ; ADD A,$20         ; 
        movb a,@l                       ; LD L,A            ; 
-_f9de:
+dollar_scroll_draw_1:                  ; f9de
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $F9C9        ; 
        jne  dollar_scroll_draw_loop    ;                   
@@ -5400,7 +5399,7 @@ new_high_score:                        ; fa00
        .call @high_score               ; CALL $FA06        ; 
        b    @high_score_input          ; JP $FB62          ; 
 high_score:                            ; fa06
-       li   de,print_two_tone_text_alias ; LD DE,$5B80       ; {Copies $40 bytes of data from #REGhl to #R$5B80.
+       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $40 bytes of data from #REGhl to #R$5B80.
        li   bc,>0040                   ; LD BC,$0040       ; 
        .ldir                           ; LDIR              ; }
        movb @bytes+48,a                ; LD A,$30          ; {Writes "0" ($30 in ASCII) to #R$FB94.
@@ -5410,16 +5409,16 @@ high_score:                            ; fa06
        mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; }
        .push ix                        ; PUSH IX           ; 
        .call @_fc09                    ; CALL $FC09        ; Call #R$FC09.
-       movb a,@_fb57                   ; LD ($FB57),A      ; 
+       movb a,@high_score_data_2       ; LD ($FB57),A      ;
        .pop ix                         ; POP IX            ; 
        cb   a,@bytes+31                ; CP $1F            ; 
        movb one,a                      ; LD A,$01          ; 
        jne  !                          ; JP Z,$FAB0        ; 
-       b    @_fab0                     ;                   
+       b    @high_score_2              ;
 !
        li   hl,zx_screen               ; LD HL,$4000       ;
        mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; 
-       movb @_fb57,a                   ; LD A,($FB57)      ; 
+       movb @high_score_data_2,a       ; LD A,($FB57)      ;
        .call @high_score_position      ; CALL $FB19        ; 
        li   de,highscore_table+495     ; LD DE,$61EF       ; 
        .push de                        ; PUSH DE           ; 
@@ -5432,7 +5431,7 @@ high_score:                            ; fa06
        li   de,highscore_table+511     ; LD DE,$61FF       ; 
        inc  bc                         ; INC BC            ; 
        .lddr                           ; LDDR              ; 
-       movb @_fb57,a                   ; LD A,($FB57)      ; 
+       movb @high_score_data_2,a       ; LD A,($FB57)      ;
        sb   one,a                      ; DEC A             ; 
        .call @_fbff                    ; CALL $FBFF        ; 
        li   de,highscore_table+761     ; LD DE,$62F9       ; 
@@ -5446,21 +5445,21 @@ high_score:                            ; fa06
        li   de,highscore_table+767     ; LD DE,$62FF       ; 
        inc  bc                         ; INC BC            ; 
        .lddr                           ; LDDR              ; 
-       movb @_fb57,a                   ; LD A,($FB57)      ; 
+       movb @high_score_data_2,a       ; LD A,($FB57)      ;
        .call @_fbff                    ; CALL $FBFF        ; 
        dec  hl                         ; DEC HL            ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push ix                        ; PUSH IX           ; 
        .pop hl                         ; POP HL            ; 
        movb @bytes+6,b                 ; LD B,$06          ; 
-_fa6f:
+high_score_1:                          ; fa6f
        movb *hl,a                      ; LD A,(HL)         ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*de                      ; LD (DE),A         ; 
        dec  de                         ; DEC DE            ; 
        inc  hl                         ; INC HL            ; 
        sb   one,b                      ; DJNZ $FA6F        ; 
-       jne  _fa6f                      ;                   
+       jne  high_score_1               ;
        li   hl,dueller_1               ; LD HL,$5BC0       ; {Overwrites the text at #R$5BC0 with spaces to "blank"
        li   de,_5bc1                   ; LD DE,$5BC1       ; it out ($12 characters).
        li   bc,>0011                   ; LD BC,$0011       ; 
@@ -5477,31 +5476,31 @@ _fa6f:
                                                            ; TABLE#}
        .call @high_score_something     ; CALL $FB26        ; 
        .call @high_score_clear_screen  ; CALL $FAD4        ; 
-       movb @_fb57,a                   ; LD A,($FB57)      ; 
+       movb @high_score_data_2,a       ; LD A,($FB57)      ;
        .call @high_score_position      ; CALL $FB19        ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        li   hl,dueller_1               ; LD HL,$5BC0       ; 
        li   bc,>0010                   ; LD BC,$0010       ; 
        .ldir                           ; LDIR              ; 
        sb   @bytes+5,a                 ; SUB $05           ; 
-       jnc  _fabd                      ; JR NC,$FABD       ; TODO: check code. 
-       jmp  _fabc                      ; JR $FABC          ; 
-_fab0:
+       jnc  high_score_4               ; JR NC,$FABD       ; TODO: check code.
+       jmp  high_score_3               ; JR $FABC          ;
+high_score_2:                          ; _fab0
        li   hl,high_score_sub_head     ; LD HL,$FBB5       ; {Points to #R$FBB5 and sends it to #R$5B80.
        li   de,zx_screen               ; LD DE,$4000       ; #TABLE(default,centre)
        li   bc,>0706                   ; LD BC,$0706       ; { =h Value | =h Ink | =h Paper | =h Bright }
        .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $06 | $06 | $00 | $00 }
                                                            ; TABLE#}
-_fabc:
+high_score_3:                          ; fabc
        sb   a,a                        ; XOR A             ; 
-_fabd:
+high_score_4:                          ; fabd
        ab   one,a                      ; INC A             ; 
        movb @bytes+10,b                ; LD B,$0A          ; 
-_fac0:
+high_score_5:                          ; fac0
        .push bc                        ; PUSH BC           ; 
        .push af                        ; PUSH AF           ; 
-       .call @_fae2                    ; CALL $FAE2        ; 
+       .call @high_score_6             ; CALL $FAE2        ;
        li   de,high_score_text_buffer  ; LD DE,$FB94       ; 
        .call @_fbd5                    ; CALL $FBD5        ; 
        .pop af                         ; POP AF            ; 
@@ -5512,8 +5511,9 @@ _fac0:
        .ret                            ;                   
 !
        sb   one,b                      ; DJNZ $FAC0        ; 
-       jne  _fac0                      ;                   
-       .ret                            ; RET               ; 
+       jne  high_score_5               ;
+       .ret                            ; RET               ;
+
 high_score_clear_screen:               ; fad4
        li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by writing $00 to all 6912
        li   de,zx_screen+1             ; LD DE,$4001       ; memory locations.
@@ -5521,20 +5521,20 @@ high_score_clear_screen:               ; fad4
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ldir                           ; LDIR              ; 
        .ret                            ; RET               ; }
-_fae2:
+high_score_6:                          ; fae2
        movb a,@c                       ; LD C,A            ; 
        li   hl,high_score_text_buffer  ; LD HL,$FB94       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  _fafa                      ; JR C,$FAFA        ; TODO: check code. 
+       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
        movb @bytes+49,*hl              ; LD (HL),$31       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  _fafa                      ; JR C,$FAFA        ; TODO: check code. 
+       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
        movb @bytes+50,*hl              ; LD (HL),$32       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  _fafa                      ; JR C,$FAFA        ; TODO: check code. 
+       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
        movb @bytes+51,*hl              ; LD (HL),$33       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-_fafa:
+high_score_7:                          ; fafa
        ab   @bytes+10,a                ; ADD A,$0A         ; 
        inc  hl                         ; INC HL            ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
@@ -5551,7 +5551,8 @@ _fafa:
        .call @_fbff                    ; CALL $FBFF        ; 
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
 * Works out where in the high score table to place the score.
 high_score_position:                   ; fb19
        sb   one,a                      ; DEC A             ; {Using #R$6000 as a base, work out where to place the new score.
@@ -5564,46 +5565,47 @@ high_score_position:                   ; fb19
        li   de,highscore_table         ; LD DE,$6000       ; 
        a    de,hl                      ; ADD HL,DE         ; }
        .ret                            ; RET               ; Return.
+
 high_score_something:                  ; fb26
        li   hl,dueller_1               ; LD HL,$5BC0       ; {Stores #R$5BC0 at #R$FB55.
-_fb29:
-       mov  hl,@_fb55                  ; LD ($FB55),HL     ; 
+high_score_8:                          ; fb29
+       mov  hl,@high_score_data        ; LD ($FB55),HL     ;
        .call @_fbf2                    ; CALL $FBF2        ; }
        .call @high_score_input         ; CALL $FB62        ; 
-       mov  @_fb55,hl                  ; LD HL,($FB55)     ; 
+       mov  @high_score_data,hl        ; LD HL,($FB55)     ;
        cb   a,@bytes+13                ; CP $0D            ; 
        jne  !                          ; RET Z             ; 
        .ret                            ;                   
 !
        cb   a,@bytes+12                ; CP $0C            ; 
-       jeq  _fb58                      ; JR Z,$FB58        ; 
+       jeq  high_score_11              ; JR Z,$FB58        ;
        movb a,@c                       ; LD C,A            ; 
        movb @l,a                       ; LD A,L            ; 
        cb   a,@bytes+209               ; CP $D1            ; 
-       jhe  _fb29                      ; JR NC,$FB29       ; 
+       jhe  high_score_8               ; JR NC,$FB29       ;
        movb @c,a                       ; LD A,C            ; 
        cb   a,@bytes+32                ; CP $20            ; 
-       jeq  _fb51                      ; JR Z,$FB51        ; 
+       jeq  high_score_9               ; JR Z,$FB51        ;
        cb   a,@bytes+97                ; CP $61            ; 
-       jl   _fb29                      ; JR C,$FB29        ; 
+       jl   high_score_8               ; JR C,$FB29        ;
        cb   a,@bytes+123               ; CP $7B            ; 
-       jhe  _fb29                      ; JR NC,$FB29       ; 
+       jhe  high_score_8               ; JR NC,$FB29       ;
        sb   @bytes+32,a                ; SUB $20           ; 
-_fb51:
+high_score_9:                          ; fb51
        movb a,*hl                      ; LD (HL),A         ; 
        inc  hl                         ; INC HL            ; 
-       jmp  _fb29                      ; JR $FB29          ; 
-_fb55:
-       data 0                                                        ; Cache.
-_fb57:
-       ; RRA                           ; RRA               ; 
-_fb58:
+       jmp  high_score_8               ; JR $FB29          ;
+high_score_data:                       ; fb55
+       data 0                                              ; Cache.
+high_score_data_2:                     ; fb57
+       byte 0                          ; RRA               ;
+high_score_11:                         ; fb58
        movb @l,a                       ; LD A,L            ; 
        cb   a,@bytes+193               ; CP $C1            ; 
-       jl   _fb29                      ; JR C,$FB29        ; 
+       jl   high_score_8               ; JR C,$FB29        ;
        dec  hl                         ; DEC HL            ; 
        movb @bytes+32,*hl              ; LD (HL),$20       ; 
-       jmp  _fb29                      ; JR $FB29          ; 
+       jmp  high_score_8               ; JR $FB29          ;
 * Returns a single keypress.
 high_score_input:                      ; fb62
        li   hl,dueller_3+38            ; LD HL,$5C08       ; {#HTML(Keep looping around until <em>any</em> input is detected. This is achieved by writing $00 to
@@ -5633,27 +5635,31 @@ high_score_sub_head:                   ; fbb5
 * Routine at FBD5
 * 
 * Used by the routine at #R$FA00.
-_fbd5:
+_fbd5: ; fbd5
        mov  @_fbf0,hl                  ; LD HL,($FBF0)     ; 
        movb @l,a                       ; LD A,L            ; 
-       ab   @bytes+64,a                ; ADD A,$40         ; 
-       ; CALL C,$FBEA                  ; CALL C,$FBEA      ; 
-       movb a,@l                       ; LD L,A            ; 
+       ab   @bytes+64,a                ; ADD A,$40         ;
+       jnc  !
+       .call @_FBEA                    ; CALL C,$FBEA      ;
+!      movb a,@l                       ; LD L,A            ;
        mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; 
        li   bc,>0705                   ; LD BC,$0705       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .call @print_two_tone_text_alias ; CALL $5B80        ; 
        .ret                            ; RET               ; 
-_fbea:
+
+_fbea: ; fbea
        movb h,a                        ; LD A,H            ; 
        ab   @bytes+8,a                 ; ADD A,$08         ; 
        movb a,h                        ; LD H,A            ; 
        sb   a,a                        ; XOR A             ; 
        .ret                            ; RET               ; 
-_fbf0:
+
+_fbf0: ; fbf0:
        data >50c0                                          ; Cache
+
 * This entry point is used by the routine at #R$FA00.
-_fbf2:
+_fbf2: ; fbf2
        li   hl,dueller_1               ; LD HL,$5BC0       ; {Points to #R$5BC0 and sends it to #R$5B80.
        li   de,zx_screen+>0887         ; LD DE,$4887       ; #TABLE(default,centre)
        li   bc,>0705                   ; LD BC,$0705       ; { =h Value | =h Ink | =h Paper | =h Bright }
@@ -5661,7 +5667,7 @@ _fbf2:
        .ret                            ; RET               ; { $05 | $05 | $00 | $00 }
                                                            ; TABLE#}
 * This entry point is used by the routine at #R$FA00.
-_fbff:
+_fbff: ; fbff
        movb a,@c                       ; LD C,A            ; 
        sb   a,a                        ; XOR A             ; 
        ab   @c,a                       ; ADD A,C           ; 
@@ -5671,12 +5677,13 @@ _fbff:
        movb a,@l                       ; LD L,A            ; 
        movb @bytes+98,h                ; LD H,$62          ; 
        .ret                            ; RET               ; 
+
 * This entry point is used by the routine at #R$FA00.
-_fc09:
+_fc09: ; fc09
        li   hl,highscore_table+506     ; LD HL,$61FA       ; 
        li   bc,>0006                   ; LD BC,$0006       ; 
        sb   @e,@e                      ; LD E,$00          ; 
-_fc11:
+_fc11: ; fc11
        ab   one,@e                     ; INC E             ; 
        movb @e,a                       ; LD A,E            ; 
        cb   a,@bytes+31                ; CP $1F            ; 
@@ -5691,7 +5698,8 @@ _fc11:
        jeq  _fc23                      ; JR Z,$FC23        ; 
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
-_fc23:
+
+_fc23: ; fc23
        movb @4(ix),a                   ; LD A,(IX+$04)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        inc  hl                         ; INC HL            ; 
@@ -5701,7 +5709,8 @@ _fc23:
        jeq  _fc31                      ; JR Z,$FC31        ; 
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
-_fc31:
+
+_fc31: ; fc31
        movb @3(ix),a                   ; LD A,(IX+$03)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        inc  hl                         ; INC HL            ; 
@@ -5713,7 +5722,8 @@ _fc31:
        jeq  _fc41                      ; JR Z,$FC41        ; 
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
-_fc41:
+
+_fc41: ; fc41
        movb @2(ix),a                   ; LD A,(IX+$02)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        inc  hl                         ; INC HL            ; 
@@ -5727,7 +5737,8 @@ _fc41:
        jeq  _fc53                      ; JR Z,$FC53        ; 
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
-_fc53:
+
+_fc53: ; fc53
        movb @1(ix),a                   ; LD A,(IX+$01)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        inc  hl                         ; INC HL            ; 
@@ -5741,14 +5752,12 @@ _fc53:
        dec  hl                         ; DEC HL            ; 
        jnc  _fc65                      ; JR NC,$FC65       ; TODO: check code. 
        jmp  _fc11                      ; JR $FC11          ; 
-_fc65:
+_fc65: ; fc65
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
 * Unused
        byte >C3,>90,>EA
-
-       ;                               ;                   
 
 * Data block at FD00
        byte >A7,>C2,>0F,>FC,>3A,>0A,>FC
@@ -5767,6 +5776,8 @@ _fc65:
        byte >3E,>32,>0C,>FC,>3A,>07,>FC
        byte >A7,>3A,>0C,>FC,>CB,>EF,>20
        byte >02,>CB,>AF,>32,>0C,>FC,>FB
+_fd80:
+       rt
        byte >C9,>4F,>3A,>0C,>FC,>E6,>01
        byte >28,>1C,>3A,>0C,>FC,>CB,>87
        byte >32,>0C,>18,>02,>18,>24,>3E
@@ -5794,7 +5805,7 @@ _fc65:
 * 
 * Used by the routine at #R$C7C0.
 title_screen:                          ; fe00
-       li   de,print_two_tone_text_alias ; LD DE,$5B80       ; 
+       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
        li   bc,>0040                   ; LD BC,$0040       ; 
        .ldir                           ; LDIR              ; 
        movb one,a                      ; LD A,$01          ; 
@@ -5865,7 +5876,7 @@ ts_set_kempston:                       ; fe8b
        movb a,*hl                      ; LD (HL),A         ; 
        jmp  title_screen_input         ; JR $FE58          ; }
 ts_select_level:                       ; fe8f
-       li   hl,print_two_tone_text_alias ; LD HL,$5B80       ; {Jump to #R$6380 with #REGhl=#R$5B80.
+       li   hl,buffer_at_5b80          ; LD HL,$5B80       ; {Jump to #R$6380 with #REGhl=#R$5B80.
        b    @level_select              ; JP $6380          ; }
 ts_flash_text:                         ; fe95
        li   bc,>0020                   ; LD BC,$0020       ; {ggg
@@ -5879,6 +5890,7 @@ ts_flash_text:                         ; fe95
        a    bc,hl                      ; ADD HL,BC         ; 
        movb @e,*hl                     ; LD (HL),E         ; }
        .ret                            ; RET               ; Return.
+
 * Draw bandits.
 ts_draw_bandit:                        ; fea4
        li   hl,zx_attributes+>00c1     ; LD HL,$58C1       ; {Sets attributes on the left and right of the screen and
