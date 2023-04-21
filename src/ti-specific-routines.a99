@@ -290,3 +290,33 @@ ti_scroll_screen_2:
        rt
 *// ti_scroll_screen
 
+*********************************************************************
+*
+* bc (MSB): number of lines
+* bc (LSB): number of bytes
+* hl: zx screen address
+* de: source address
+*
+ti_copy_routine:
+       .proc
+       seto @graphics_bank_select
+*      VDP address
+       mov  hl,tmp0
+       ai   tmp0,-zx_screen
+       mov  tmp0,tmp1
+       andi tmp0,>00ff                 ; Offset into current 3rd
+       sla  tmp0,3                     ; Times 8 (>0780)
+       andi tmp1,>1800                 ; 3rd bits
+       soc  tmp1,tmp0
+*      Swap width and height, and convert height to characters
+       mov  bc,tmp2
+       mov  bc,tmp1
+       andi tmp1,>ff00
+       srl  tmp1,3
+       movb tmp1,tmp2
+       swpb tmp2
+*      Source
+       mov  de,tmp1
+       bl   @ti_draw_graphics
+       .endproc
+*// ti_copy_routine

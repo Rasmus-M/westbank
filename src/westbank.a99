@@ -2195,6 +2195,9 @@ duel_parameter:                         ; cbcf                       ; This alwa
 * Draw Text.
 two_tone_attributes_buffer:            ; cbd0
        data 1797                                                     ; Stores the attributes; top attribute/ bottom attribute.
+
+* hl: address of text to print
+* de: screen address
 * This entry point is used by the routines at #R$5B80 and #R$C7C0.
 print_two_tone_text:                   ; cbd2
        mov  bc,@two_tone_attributes_buffer ; LD ($CBD0),BC     ; Stash the attributes at #R$CBD0.
@@ -2227,34 +2230,46 @@ print_two_tone_text_1:                 ; cbe0
        ab   @bytes+8,a                 ; ADD A,$08         ; 
        movb a,d                        ; LD D,A            ; 
        jmp  print_two_tone_text_loop   ; JR $CBD6          ; 
+
 * This entry point is used by the routine at #R$5B9B.
 print_tt_text_space_check:             ; cbfc
        cb   a,@bytes+32                ; CP $20            ; {If the character is a space then jump forward to
        jne  print_tt_text_2            ; JR NZ,$CC0E       ; #R$CC0E.}
+*      Space
        li   hl,buffer_at_5b00          ; LD HL,$5B00       ;
        li   bc,>1001                   ; LD BC,$1001       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push hl                        ; PUSH HL           ; 
-       .call @copy_routine             ; CALL $D5E6        ; 
-       .pop hl                         ; POP HL            ; 
+;       .call @copy_routine             ; CALL $D5E6        ;
+       bl   @ti_copy_routine
+       .pop hl                         ; POP HL            ;
        jmp  print_tt_text_4            ; JR $CC1D          ;
-print_tt_text_2: ; cc0e
+*      Not space
+print_tt_text_2:                       ; cc0e              ; not space
        cb   a,@bytes+65                ; CP $41            ; 
        jhe  print_tt_text_3            ; JR NC,$CC14       ;
        ab   @bytes+42,a                ; ADD A,$2A         ; 
-print_tt_text_3: ; cc14
+print_tt_text_3:                       ; cc14
        sb   @bytes+65,a                ; SUB $41           ; 
-       ab   @bytes+10,a                ; ADD A,$0A         ; 
+;       ab   @bytes+10,a                ; ADD A,$0A         ;
        .push de                        ; PUSH DE           ; 
-       .call @draw_number              ; CALL $CDAE        ; 
-       .pop hl                         ; POP HL            ; 
+       .call @draw_tt_char              ; CALL $CDAE        ;
+       .pop hl                         ; POP HL            ;
+*      Attributes
 print_tt_text_4:                       ; cc1d
-       .call @print_tt_attribute_addr  ; CALL $CC2B        ;
+      .call @print_tt_attribute_addr  ; CALL $CC2B        ;
        mov  @two_tone_attributes_buffer,bc ; LD BC,($CBD0)     ; {Load the stored top/ bottom attribute bytes back into
-       movb b,*hl                      ; LD (HL),B         ; #REGbc and write them to the screen.
-       li   de,>0020                   ; LD DE,$0020       ; 
-       a    de,hl                      ; ADD HL,DE         ; 
-       movb @c,*hl                     ; LD (HL),C         ; }
+;       movb b,*hl                      ; LD (HL),B         ; #REGbc and write them to the screen.
+       mov  hl,tmp1
+       movb b,a
+       bl   @ti_draw_attribute
+;       li   de,>0020                   ; LD DE,$0020       ;
+;       a    de,hl                      ; ADD HL,DE         ;
+;       movb @c,*hl                     ; LD (HL),C         ; }
+       ai   hl,>20
+       mov  hl,tmp1
+       movb @c,a
+       bl   @ti_draw_attribute
        .ret                            ; RET               ; Return.
 
 * Routine at CC2B
@@ -2583,8 +2598,8 @@ score_digit_loop:                      ; cd98
        jne  score_digit_non_zero       ; JR NZ,$CDA1       ; { If it's zero then add $0A (as the numbers are stored 1-2-3-4-5-6-7-8-9-0 whereas ASCII uses 0-1-2-3-4-5-6-7-8-9) }
        ab   @bytes+10,a                ; ADD A,$0A         ; { add $23 (so for example "2" will be "$25" - see #R$CDAE) }
 score_digit_non_zero:                  ; cda1
-       ab   @bytes+35,a                ; ADD A,$23         ; { Call #R$CDAE }
-       .call @draw_number              ; CALL $CDAE        ; LIST#}
+       ab   @bytes+25,a                ; ADD A,$23         ; { Call #R$CDAE }
+       .call @draw_tt_char              ; CALL $CDAE        ; LIST#}
        .pop hl                         ; POP HL            ; {Retrieve our current source, destination and counter
        .pop de                         ; POP DE            ; from the stack.
        .pop bc                         ; POP BC            ; }
@@ -2597,7 +2612,8 @@ score_digit_non_zero:                  ; cda1
 * Draw Numbering from Character Set Index.
 * 
 * Used by the routines at #R$CBD0 and #R$CD90.
-draw_number:                           ; cdae
+* a: character index to draw
+draw_tt_char:                          ; cdae
        .push de                        ; PUSH DE           ; {Using $C000 as a base address, this works out the character set memory address from a given index passed
        sb   h,h                        ; LD H,$00          ; in #REGa. To give an example using "2" ($25 - see #R$CD90);
        movb a,@l                       ; LD L,A            ; #LIST
@@ -2605,12 +2621,13 @@ draw_number:                           ; cdae
        a    hl,hl                      ; ADD HL,HL         ; { #HTML(Times by <strong>$10</strong>; #REGhl=$250) }
        a    hl,hl                      ; ADD HL,HL         ; { #HTML(Add <strong>$C000</strong>=#R$C250) }
        a    hl,hl                      ; ADD HL,HL         ; LIST#
-       li   de,bang                    ; LD DE,$C000       ; This is then passed to #R$D5E6.
+       li   de,gfx_char_a              ; LD DE,$C000       ; This is then passed to #R$D5E6.
        a    de,hl                      ; ADD HL,DE         ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .pop hl                         ; POP HL            ; 
-       li   bc,>1001                   ; LD BC,$1001       ; 
-       .call @copy_routine             ; CALL $D5E6        ; }
+       li   bc,>1001                   ; LD BC,$1001       ;
+       bl   @ti_copy_routine
+;       .call @copy_routine             ; CALL $D5E6        ; }
        .ret                            ; RET               ; Return.
 
 * Apply Scoring
@@ -4196,22 +4213,23 @@ draw_character_in_doorway:             ; d5ca
 * This routine copies bytes from #REGde TO #REGhl and uses the #REGbc register to track the number of bytes
 * and the number of lines.
 copy_routine:                          ; d5e6
-       .push bc                        ; PUSH BC           ; {Copies bytes from #REGde TO #REGhl x #REGc number of
-       .push hl                        ; PUSH HL           ; times.
-       sb   b,b                        ; LD B,$00          ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .ldir                           ; LDIR              ; }
-       .ex_de_hl                       ; EX DE,HL          ; {Restores #REGhl with the original screen buffer
-       .pop hl                         ; POP HL            ; location.}
-       ab   one,h                      ; INC H             ; {ggg
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jne  !                          ; CALL Z,$D610      ; }
-       .call @calc_attr                ;                   
-!
-       .pop bc                         ; POP BC            ; {Grabs #REGb and decreases it by one. Loop back round to
-       sb   one,b                      ; DJNZ $D5E6        ; #R$D5E6 if #REGb is not zero.}
-       jne  copy_routine               ;                   
+       bl   @ti_copy_routine
+;       .push bc                        ; PUSH BC           ; {Copies bytes from #REGde TO #REGhl x #REGc number of
+;       .push hl                        ; PUSH HL           ; times.
+;       sb   b,b                        ; LD B,$00          ;
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .ldir                           ; LDIR              ; }
+;       .ex_de_hl                       ; EX DE,HL          ; {Restores #REGhl with the original screen buffer
+;       .pop hl                         ; POP HL            ; location.}
+;       ab   one,h                      ; INC H             ; {ggg
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jne  !                          ; CALL Z,$D610      ; }
+;       .call @calc_attr                ;
+;!
+;       .pop bc                         ; POP BC            ; {Grabs #REGb and decreases it by one. Loop back round to
+;       sb   one,b                      ; DJNZ $D5E6        ; #R$D5E6 if #REGb is not zero.}
+;       jne  copy_routine               ;
        .ret                            ; RET               ; Return.
 
 * Merge Gun Shot Onto Background.
@@ -5827,7 +5845,7 @@ title_screen:                          ; fe00
        li   de,zx_screen+>00cb         ; LD DE,$40CB       ;
        .call @title_screen_print       ; CALL $FEE4        ; }
        li   hl,title_screen_keys       ; LD HL,$FEFC       ; Points to #R$FEFC and sends it to #R$FEE4.
-       li   de,zx_screen+>002b         ; LD DE,$482B       ;
+       li   de,zx_screen+>082b         ; LD DE,$482B       ;
        .call @title_screen_print       ; CALL $FEE4        ; 
        li   hl,title_screen_joystick   ; LD HL,$FF06       ; Points to #R$FF06 and sends it to #R$FEE4.
        li   de,zx_screen+>088b         ; LD DE,$488B       ;
@@ -5836,13 +5854,14 @@ title_screen:                          ; fe00
        li   de,zx_screen+>08eb         ; LD DE,$48EB       ;
        .call @title_screen_print       ; CALL $FEE4        ; 
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
-       li   de,>5983                   ; LD DE,$5083       ;
+       li   de,zx_screen+>1083         ; LD DE,$5083       ;
        li   bc,>0705                   ; LD BC,$0705       ; 
        .call @print_two_tone_text_alias ; CALL $5B80        ; 
        li   hl,title_screen_copyright  ; LD HL,$FF34       ; {Points to #R$FF34 and sends it to #R$5B80.
-       li   de,>50c0                   ; LD DE,$50C0       ;
+       li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
        .call @print_two_tone_text_alias ; CALL $5B80        ; }
+
 * Act on input.
 title_screen_input:                    ; fe58
        movb @controller,a              ; LD A,($5CB0)      ; {If #R$5CB0 is zero (joystick) then #REGde=$0787 else #REGde=$8707. Then call the subroutine at #R$FE95.
@@ -5873,6 +5892,7 @@ ts_call_flash:                         ; fe66
        .ret                            ;                   
 !
        jmp  title_screen_input         ; JR $FE58          ; }
+*
 ts_set_keyboard:                       ; fe86
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$5CB0 and loop back around to #R$FE58.
        movb a,*hl                      ; LD (HL),A         ; 
@@ -5884,17 +5904,31 @@ ts_set_kempston:                       ; fe8b
 ts_select_level:                       ; fe8f
        li   hl,buffer_at_5b80          ; LD HL,$5B80       ; {Jump to #R$6380 with #REGhl=#R$5B80.
        b    @level_select              ; JP $6380          ; }
+*
 ts_flash_text:                         ; fe95
        li   bc,>0020                   ; LD BC,$0020       ; {ggg
        li   hl,zx_attributes+>012b     ; LD HL,$592B       ;
-       movb d,*hl                      ; LD (HL),D         ; 
+*      Attributes for 1 Keys
+       movb d,a
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;       movb d,*hl                      ; LD (HL),D         ;
+       a    bc,hl                      ; ADD HL,BC         ;
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;       movb d,*hl                      ; LD (HL),D         ;
+*      Attributes for 2 Kempston
        a    bc,hl                      ; ADD HL,BC         ; 
-       movb d,*hl                      ; LD (HL),D         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       movb @e,*hl                     ; LD (HL),E         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       movb @e,*hl                     ; LD (HL),E         ; }
+       a    bc,hl                      ; ADD HL,BC         ;
+       movb @e,a
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;       movb @e,*hl                     ; LD (HL),E         ;
+       a    bc,hl                      ; ADD HL,BC         ;
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;       movb @e,*hl                     ; LD (HL),E         ; }
+*      Return
        .ret                            ; RET               ; Return.
 
 * Draw bandits.

@@ -39,7 +39,7 @@ public class ColorTable {
             int flash = a & 0x80; // ignore
             int fore = tiPalette[ink + bright];
             int back = tiPalette[paper + bright];
-            int b = (fore << 4) | back;
+            int b = flash == 0 ? (fore << 4) | back : (back << 4) | fore;
             System.out.print(a % 16 == 0 ? "       byte " : "");
             System.out.print(hexByte(b));
             System.out.print(a % 16 == 15 ? "\n" : ",");
