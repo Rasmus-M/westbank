@@ -1,3 +1,11 @@
+**
+*      West bank for the TI-99/4A
+
+       limi 0
+       lwpi wrksp
+       bl   @setup_environment
+       b    @start
+
 buffer_at_5b00:
        bss  >80                        ; @start=$6000
 
@@ -1612,11 +1620,12 @@ start:                                 ; c7c0
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
        .call @new_game                 ; CALL $C7E5        ; Call #R$C7E5.
-       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
-       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
-       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
+;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
+;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
+       bl   @ti_clear_screen
        movb @bytes+128,b               ; LD B,$80          ; {Calls #R$CD64 with the counter
        .call @halt_loop                ; CALL $CD64        ; $80.}
        li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
@@ -5809,10 +5818,7 @@ title_screen:                          ; fe00
        li   bc,>0040                   ; LD BC,$0040       ; 
        .ldir                           ; LDIR              ; 
        movb one,a                      ; LD A,$01          ; 
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
-       .call @ts_draw_bandit           ; CALL $FEA4        ; 
+       .call @ts_draw_bandits           ; CALL $FEA4        ;
        li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
        li   de,zx_screen+>002b         ; LD DE,$402B       ;
        li   bc,>0703                   ; LD BC,$0703       ; 
@@ -5892,42 +5898,71 @@ ts_flash_text:                         ; fe95
        .ret                            ; RET               ; Return.
 
 * Draw bandits.
-ts_draw_bandit:                        ; fea4
-       li   hl,zx_attributes+>00c1     ; LD HL,$58C1       ; {Sets attributes on the left and right of the screen and
-       .call @ts_bandit_attributes     ; CALL $FEC3        ; points #REGde at #R$6800.
-       li   hl,zx_attributes+>00d9     ; LD HL,$58D9       ;
-       .call @ts_bandit_attributes     ; CALL $FEC3        ; 
-       li   hl,zx_screen+>00c1         ; LD HL,$40C1       ;
-       .call @_feb9                    ; CALL $FEB9        ; 
-       li   hl,zx_screen+>00d9         ; LD HL,$40D9       ;
-_feb9:
-       li   de,gfx_character_00        ; LD DE,$6800       ; TODO
-       movb @bytes+88,b                ; LD B,$58          ; 
-       movb @bytes+6,@c                ; LD C,$06          ; }
-       b    @draw_character            ; JP $5B92          ; Jump to #R$5B92.
-ts_bandit_attributes:                  ; fec3
-       movb @bytes+8,b                 ; LD B,$08          ; {Calls #R$FECE with #REGb=$08 and #REGa=$28.
-       movb @bytes+40,a                ; LD A,$28          ; 
-       .call @ts_bandit_attr_loop      ; CALL $FECE        ; }
-       movb @bytes+3,b                 ; LD B,$03          ; {Calls #R$FEDA with #REGb=$03 and #REGa=$20.
-       movb @bytes+32,a                ; LD A,$20          ; 
-ts_bandit_attr_loop:                   ; fece
-       .push bc                        ; PUSH BC           ; }
-       .call @ts_bandit_attr_copy      ; CALL $FEDA        ; 
-       li   bc,>001b                   ; LD BC,$001B       ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $FECE        ; 
-       jne  ts_bandit_attr_loop        ;                   
-       .ret                            ; RET               ; Return.
-ts_bandit_attr_copy:                   ; feda
-       .push hl                        ; PUSH HL           ; 
-       .pop de                         ; POP DE            ; 
-       inc  de                         ; INC DE            ; 
-       li   bc,>0005                   ; LD BC,$0005       ; 
-       movb a,*hl                      ; LD (HL),A         ; 
-       .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; Return.
+ts_draw_bandits:                        ; fea4
+       .proc
+*      Left bandit
+       li   tmp0,>00c1
+       clr  tmp1
+       bl   @ti_draw_character
+*      Right bandit
+       li   tmp0,>00d9
+       clr  tmp1
+       bl   @ti_draw_character
+*      Feet color
+       li   a,>2000
+       bl   @ti_color
+       mov  tmp0,tmp1
+*      Left bandit feet colors
+       li   tmp0,(>00c1+(8*32))*8
+       li   tmp2,>0603
+       bl   @ti_draw_color_area
+*      Right bandit feet colors
+       li   tmp0,(>00d9+(8*32))*8
+       li   tmp2,>0603
+       bl   @ti_draw_color_area
+       .endproc
+;*      Left bandit colors
+;       li   hl,zx_attributes+>00c1     ; LD HL,$58C1       ; {Sets attributes on the left and right of the screen and
+;       .call @ts_bandit_attributes     ; CALL $FEC3        ; points #REGde at #R$6800.
+;*      Right bandit colors
+;       li   hl,zx_attributes+>00d9     ; LD HL,$58D9       ;
+;       .call @ts_bandit_attributes     ; CALL $FEC3        ;
+;*      Left bandit
+;       li   hl,zx_screen+>00c1         ; LD HL,$40C1       ;
+;       .call @ts_draw_bandits_1        ; CALL $FEB9        ;
+;*      Right bandit
+;       li   hl,zx_screen+>00d9         ; LD HL,$40D9       ;
+;ts_draw_bandits_1: ; feb9
+;       li   de,gfx_character_00        ; LD DE,$6800       ; TODO
+;       movb @bytes+88,b                ; LD B,$58          ;
+;       movb @bytes+6,@c                ; LD C,$06          ; }
+;       b    @draw_character            ; JP $5B92          ; Jump to #R$5B92.
+;ts_bandit_attributes:                  ; fec3
+;       movb @bytes+8,b                 ; LD B,$08          ; {Calls #R$FECE with #REGb=$08 and #REGa=$28.
+;       movb @bytes+40,a                ; LD A,$28          ;
+;       .call @ts_bandit_attr_loop      ; CALL $FECE        ; }
+;       movb @bytes+3,b                 ; LD B,$03          ; {Calls #R$FEDA with #REGb=$03 and #REGa=$20.
+;       movb @bytes+32,a                ; LD A,$20          ;
+;
+;ts_bandit_attr_loop:                   ; fece
+;       .push bc                        ; PUSH BC           ; }
+;       .call @ts_bandit_attr_row       ; CALL $FEDA        ;
+;       li   bc,>001b                   ; LD BC,$001B       ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $FECE        ;
+;       jne  ts_bandit_attr_loop        ;
+;       .ret                            ; RET               ; Return.
+;
+;ts_bandit_attr_row:                    ; feda
+;       .push hl                        ; PUSH HL           ;
+;       .pop de                         ; POP DE            ;
+;       inc  de                         ; INC DE            ;
+;       li   bc,>0005                   ; LD BC,$0005       ;
+;       movb a,*hl                      ; LD (HL),A         ;
+;       .ldir                           ; LDIR              ;
+;       .ret                            ; RET               ; Return.
+
 title_screen_print:                    ; fee4
        li   bc,>0702                   ; LD BC,$0702       ; {#REGb=$07, #REGc=$02 and jump to #R$5B80.
        b    @print_two_tone_text_alias ; JP $5B80          ; }

@@ -72,7 +72,7 @@ graphics_mode_1:
        bl   @vsbw
 *      Init color table
        li   r0,color_table
-       li   r1,>1700
+       li   r1,>f100
        li   r2,>1800
        bl   @vsmw
 *      Init name table2
@@ -111,7 +111,6 @@ ti_init_name_table_1:
        rt
 *// ti_init_name_table
 
-
 *********************************************************************************
 *
 * Select name table 1
@@ -133,6 +132,23 @@ ti_select_name_table_2:
        bl   @vwtr
        lwpi wrksp
        rt
+
+*********************************************************************************
+*
+* Clear screen
+*
+ti_clear_screen:
+       .proc
+       li   r0,pattern_table
+       clr  r1
+       li   r2,>1800
+       bl   @vsmw
+       li   r0,color_table
+       li   r1,>f100
+       li   r2,>1800
+       bl   @vsmw
+       .endproc
+*// ti_clear_screen
 
 *********************************************************************************
 *
@@ -199,7 +215,7 @@ row_src_skip:
 * Draw color area
 *
 * tmp0 (r13): VDP offset in color table
-* tmp1 (r14) MSB: Color to draw
+* tmp1 (r14) MSB: TI color to draw
 * tmp2 (r15) MSB: width in characters
 * tmp2 (r15) LSB: height in characters
 *
@@ -212,7 +228,7 @@ ti_draw_color_area:
        mov  r15,r4                     ; Width and height
        srl  r4,8                       ; Width
        li   r6,vdpwd
-       ori  r0,>6000                   ; Set read/write bits 14 and 15 to write (01) + color table base
+       ori  r0,>4000 + color_table     ; Set read/write bits 14 and 15 to write (01) + color table base
 ti_draw_color_area_1:
        movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
@@ -316,44 +332,6 @@ tipal  byte 1,4,6,13,12,7,10,14,1,5,8,13,2,7,11,15
 * Not used: 3 L Green, 9 L Red
 * Not available: D Cyan, D Magenta
 *// ti_color
-
-*********************************************************************
-*
-* Scroll screen left by the given offset
-*
-* tmp0 (r13): offset in characters (0-31)
-*
-ti_scroll_screen:
-       lwpi ti_wrksp
-       mov  r13,r0                     ; Offset
-       andi r0,1                       ; Odd or even
-       sla  r0,10                      ; 0 or >400
-       ai   r0,3*32+name_table+>4000   ; VDP address + write bit
-       movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
-       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
-       li   r0,vdpwd
-       li   r5,3*32*256                ; Base name for row in MSB
-       mov  r13,r6                     ; Offset
-       swpb r6                         ; Offset to MSB
-       li   r7,>0100                   ; One
-       li   r8,>e0ff                   ; Mask (keep 0-31 in MSB)
-       li   r4,18                      ; Row counter
-ti_scroll_screen_1:
-       li   r3,32                      ; Column counter
-ti_scroll_screen_2:
-       movb r6,r1                      ; Offset
-       socb r5,r1                      ; Add base name
-       movb r1,*r0                     ; Write to name table
-       ab   r7,r6                      ; Increment offset
-       szcb r8,r6                      ; Apply mask
-       dec  r3
-       jne  ti_scroll_screen_2
-       ai   r5,>2000                   ; Update base name
-       dec  r4
-       jne  ti_scroll_screen_1
-       lwpi wrksp
-       rt
-*// ti_scroll_screen
 
 *********************************************************************
 *

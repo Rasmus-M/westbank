@@ -1,4 +1,6 @@
        aorg >a000
-       copy "test.a99"
-       copy "ti-routines.a99"
+*      copy "test.a99"
+       copy "westbank.a99"
+       copy "ti-specific-routines.a99"
+       copy "ti-general-routines.a99"
        copy "data.a99"

@@ -10,3 +10,5 @@
 
        save >a000,
        copy "upper-memory.a99"
+
+       end  start
