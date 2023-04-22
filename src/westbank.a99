@@ -4717,63 +4717,61 @@ bowie_routing:                         ; d7ce
        jmp  bowie_close_1              ; JR $D83C          ; }
 * Handle door frame 1 countdown/ transition to door frame 2.
 bowie_open_1:                          ; d7e3
-       movb @bowie_1_timer,a           ; LD A,($D7C8)      ; {Decrease #R$D7C8 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_1_timer           ; LD ($D7C8),A      ; 
+                                       ; LD A,($D7C8)      ; {Decrease #R$D7C8 by one, return if result is not
+       sb   one,@bowie_1_timer         ; DEC A             ; zero.
+                                       ; LD ($D7C8),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
        movb @bytes+27,a                ; LD A,$1B          ; {Pass character index #R$9FB0($1B) to #R$D6D1 and
-       bl   @draw_door_frame_2        ; CALL $D6D1        ; return.
+       bl   @draw_door_frame_2         ; CALL $D6D1        ; return.
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 3.
 bowie_open_2:                          ; d7f2
-       movb @bowie_2_timer,a           ; LD A,($D7C9)      ; {Decrease #R$D7C9 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_2_timer           ; LD ($D7C9),A      ; 
+                                       ; LD A,($D7C9)      ; {Decrease #R$D7C9 by one, return if result is not
+       sb   one,@bowie_2_timer         ; DEC A             ; zero.
+                                       ; LD ($D7C9),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
        movb @bytes+27,a                ; LD A,$1B          ; {Pass character index #R$9FB0($1B) to #R$D6DF and
-       bl   @draw_door_frame_3        ; CALL $D6DF        ; return.
+       bl   @draw_door_frame_3         ; CALL $D6DF        ; return.
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 4.
 bowie_open_3:                          ; d801
-       movb @bowie_3_timer,a           ; LD A,($D7CA)      ; {Decrease #R$D7CA by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_3_timer           ; LD ($D7CA),A      ; 
+                                       ; LD A,($D7CA)      ; {Decrease #R$D7CA by one, return if result is not
+       sb   one,@bowie_3_timer         ; DEC A             ; zero.
+                                       ; LD ($D7CA),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
        movb @bytes+27,a                ; LD A,$1B          ; {Pass character frame index #R$9FB0($1B) to #R$D6ED
-       bl   @draw_door_frame_4        ; CALL $D6ED        ; and return.
+       bl   @draw_door_frame_4         ; CALL $D6ED        ; and return.
        .ret                            ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
 bowie_open_4:                          ; d810
-       movb @4(ix),@e                  ; LD E,(IX+$04)     ; {Call #R$D5A3 with a callback to either #R$D84B or
-       movb @5(ix),d                   ; LD D,(IX+$05)     ; #R$D85D.
+       mov  @4(ix),de                  ; LD E,(IX+$04)     ; {Call #R$D5A3 with a callback to either #R$D84B or
+                                       ; LD D,(IX+$05)     ; #R$D85D.
        .call @hit_detection            ; CALL $D5A3        ; }
-       movb @bowie_4_timer,a           ; LD A,($D7CB)      ; {Decrease #R$D7CB by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_4_timer           ; LD ($D7CB),A      ; 
-       jeq  !                          ; RET NZ            ; }
-       .ret                            ;                   
-!
+                                       ; LD A,($D7CB)      ; {Decrease #R$D7CB by one, return if result is not
+       sb   one,@bowie_4_timer         ; DEC A             ; zero.
+                                       ; LD ($D7CB),A      ;
+       jeq  bowie_close_3              ; RET NZ            ; }
+       .ret                            ;
 bowie_close_3:                         ; d821
-       equ  $
        li   hl,bowie_state_ref         ; LD HL,$D7C7       ; {Move onto next character state (#R$D7C7).
        ab   one,*hl                    ; INC (HL)          ; }
        movb @bowie_frame_ref,a         ; LD A,($D7C6)      ; {Load the character frame index from #R$D7C6, pass it
-       bl   @draw_door_frame_3        ; CALL $D6DF        ; to #R$D6DF and return.
+       bl   @draw_door_frame_3         ; CALL $D6DF        ; to #R$D6DF and return.
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 2.
 bowie_close_2:                         ; d82c
-       movb @bowie_5_timer,a           ; LD A,($D7CC)      ; {Decrease #R$D7CC by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_5_timer           ; LD ($D7CC),A      ; 
+                                       ; LD A,($D7CC)      ; {Decrease #R$D7CC by one, return if result is not
+       sb   one,@bowie_5_timer         ; DEC A             ; zero.
+                                       ; LD ($D7CC),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -4783,9 +4781,9 @@ bowie_close_2:                         ; d82c
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.
 bowie_close_1:                         ; d83c
-       movb @bowie_6_timer,a           ; LD A,($D7CD)      ; {Decrease #R$D7CD by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@bowie_6_timer           ; LD ($D7CD),A      ; 
+                                       ; LD A,($D7CD)      ; {Decrease #R$D7CD by one, return if result is not
+       sb   one,@bowie_6_timer         ; DEC A             ; zero.
+                                       ; LD ($D7CD),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -4795,29 +4793,30 @@ bowie_close_1:                         ; d83c
 * Handles marking this as something shootable.
 bowie_cash_action:                     ; d84b
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; {Writes $05 to #REGix+$06 and $01 to #REGix+$07.
-       movb one,@7(ix)                 ; LD (IX+$07),$01   ; }
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #REGix+$08 and #R$D190.
-       movb a,@8(ix)                   ; LD (IX+$08),A     ; 
-       movb a,@show_dollar_sign_flag   ; LD ($D190),A      ; }
+       movb one,@7(ix)                 ; LD (IX+$07),$01   ; } Score?
+                                       ; LD A,$01          ; {Writes $01 to #REGix+$08 and #R$D190.
+       movb one,@8(ix)                 ; LD (IX+$08),A     ;
+       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; }
        jmp  bowie_close_3              ; JR $D821          ; Jump to #R$D821.
 * Handles marking this as something unshootable.
 bowie_bomb_action:                     ; d85d
        movb @bytes+5,a                 ; LD A,$05          ; {Writes $05 to #R$D2FE and return.
-       movb a,@player_died_status                   ; LD ($D2FE),A      ;
+       movb a,@player_died_status      ; LD ($D2FE),A      ;
        .ret                            ; RET               ; }
 * Handles both shooting the hats off Bowie's head, and checking/ routing on the
 * last frame for the "surprise".
 bowie_shot_action:                     ; d863
        li   hl,bowie_frame_ref         ; LD HL,$D7C6       ; {#REGa=#R$D7C6.
        movb *hl,a                      ; LD A,(HL)         ; }
+       movb one,@6(ix)
        cb   a,@bytes+33                ; CP $21            ; Is it character frame reference (#R$AC10(1 hat |
                                                            ; $21))?
-       movb one,@6(ix)                 ; LD (IX+$06),$01   ; Writes $01 to #REGix+$06.
-       jnc  bowie_check                ; JR NC,$D875       ; TODO: check code. If Bowie is on the last frame then jump forward to
+                                       ; LD (IX+$06),$01   ; Writes $01 to #REGix+$06.
+       jhe  bowie_check                ; JR NC,$D875       ; TODO: check code. If Bowie is on the last frame then jump forward to
                                                            ; #R$D875.
        ab   one,a                      ; INC A             ; {Else update #R$D7C6 to point at the next frame, call
        movb a,*hl                      ; LD (HL),A         ; #R$D6ED and return.
-       bl   @draw_door_frame_4        ; CALL $D6ED        ;
+       bl   @draw_door_frame_4         ; CALL $D6ED        ;
        .ret                            ; RET               ; }
 * Checks the "good/ bad" flag and routes the gameplay accordingly.
 bowie_check:                           ; d875
@@ -4829,10 +4828,10 @@ bowie_check:                           ; d875
 bowie_state_cash:                      ; d87d
        movb @bytes+35,a                ; LD A,$23          ; {Writes character frame reference #R$B030(cash | $23)
        movb a,@bowie_frame_ref         ; LD ($D7C6),A      ; to #R$D7C6, and pass it to #R$D6ED.
-       bl   @draw_door_frame_4        ; CALL $D6ED        ; }
+       bl   @draw_door_frame_4         ; CALL $D6ED        ; }
        li   hl,bowie_cash_action       ; LD HL,$D84B       ; {Writes #R$D84B to the current door flags (e.g.
-       movb @l,@4(ix)                  ; LD (IX+$04),L     ; #R$D169, #R$D177 or #R$D185).
-       movb h,@5(ix)                   ; LD (IX+$05),H     ; }
+       mov  hl,@4(ix)                  ; LD (IX+$04),L     ; #R$D169, #R$D177 or #R$D185).
+                                       ; LD (IX+$05),H     ; }
        .ret                            ; RET               ; Return.
 * Handle displaying bomb character frame.
 bowie_state_bomb:                      ; d88f
@@ -4840,8 +4839,8 @@ bowie_state_bomb:                      ; d88f
        movb a,@bowie_frame_ref         ; LD ($D7C6),A      ; to #R$D7C6, and pass it to #R$D6ED.
        bl   @draw_door_frame_4        ; CALL $D6ED        ; }
        li   hl,bowie_bomb_action       ; LD HL,$D85D       ; {Writes #R$D85D to the current door flags (e.g.
-       movb @l,@4(ix)                  ; LD (IX+$04),L     ; #R$D169, #R$D177 or #R$D185).
-       movb h,@5(ix)                   ; LD (IX+$05),H     ; }
+       mov  hl,@4(ix)                  ; LD (IX+$04),L     ; #R$D169, #R$D177 or #R$D185).
+                                       ; LD (IX+$05),H     ; }
        .ret                            ; RET               ; Return.
 
 * Routine at D8A1
