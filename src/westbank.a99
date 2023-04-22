@@ -2522,15 +2522,14 @@ flash_lives_loop:                      ; cd25
        .pop bc                         ; POP BC            ; {Loop back until the counter is zero.
        sb   one,b                      ; DJNZ $CD25        ; }
        jne  flash_lives_loop           ;                   
-       movb *hl,a                      ; LD A,(HL)         ; {Finally decrease lives by one and if they are not zero
-       sb   one,a                      ; DEC A             ; jump to #R$CACB.
-       movb a,*hl                      ; LD (HL),A         ; 
+                                       ; LD A,(HL)         ; {Finally decrease lives by one and if they are not zero
+       sb   one,*hl                    ; DEC A             ; jump to #R$CACB.
+                                       ; LD (HL),A         ;
        jeq  !                          ; JP NZ,$CACB       ; }
        b    @next_life                 ;
 !
-       b    @return_with_carry
        ; SCF                           ; SCF               ; {Set the carry flag and return.
-       .ret                            ; RET               ; }
+       b    @return_with_carry         ; RET               ; }
 
 * Routine at CD47
 * 
@@ -2539,23 +2538,22 @@ died:                                  ; cd47
        movb @player_died_status,a      ; LD A,($D2FE)      ; {If bit 2 of #R$D2FE is zero then jump to #R$CD53.
        movb a,tmp0                     ; BIT 2,A           ; 
        andi tmp0,4*256                 ;                   
-       jeq  _cd53                      ; JR Z,$CD53        ; }
-       .call @_f880                    ; CALL $F880        ; 
-       jmp  _cd56                      ; JR $CD56          ; 
-_cd53:
+       jeq  died_1                     ; JR Z,$CD53        ; }
+       .call @explode_bomb             ; CALL $F880        ;
+       jmp  died_2                     ; JR $CD56          ;
+died_1:                                ; cd53
        .call @bang                     ; CALL $C000        ; 
-_cd56:
+died_2:                                ; cd56
        .call @reset_door_routine_flags ; CALL $CD68        ;
        li   hl,lives                   ; LD HL,$CC59       ; 
-       movb *hl,a                      ; LD A,(HL)         ; 
-       sb   one,a                      ; DEC A             ; Lose life
-       movb a,*hl                      ; LD (HL),A         ; 
+                                       ; LD A,(HL)         ;
+       sb   one,*hl                    ; DEC A             ; Lose life
+                                       ; LD (HL),A         ;
        jeq  !                          ; JP NZ,$CACB       ; 
        b    @next_life                 ;
 !
-       b    @return_with_carry
        ; SCF                           ; SCF               ; 
-       .ret                            ; RET               ; 
+       b    @return_with_carry         ; RET               ;
 
 * Configurable "pause".
 * 
@@ -2563,7 +2561,7 @@ _cd56:
 *
 * Loops back on itself using #REGb as a counter.
 halt_loop:                             ; cd64
-       ; HALT                          ; HALT              ; {Short interrupt driven pause, and return.
+       bl   @vsync                     ; HALT              ; {Short interrupt driven pause, and return.
        sb   one,b                      ; DJNZ $CD64        ; 
        jne  halt_loop                  ;                   
        .ret                            ; RET               ; }
@@ -3140,7 +3138,7 @@ init_bandit_draw_open:                 ; d019
        .ret                            ; RET               ; Return.
 
 * Routine at D037
-set_char_state_to_one:            ; d037
+set_state_init_bandit_draw_close:      ; d037
        movb one,a                      ; LD A,$01          ; {Writes $01 to the address contained
        mov  @10(ix),hl                 ; LD L,(IX+$0A)     ; at (depending on which door is currently being actioned);
                                        ; LD H,(IX+$0B)     ; #TABLE(default,centre,centre)
@@ -4227,21 +4225,21 @@ character_addr:                        ; d5b0
 * 
 * Draws the character frame at the location of one of the three (open) doors. This is direct function, hence is
 * only used when the door is open (it doesn't utilise the door buffer).
-draw_character_in_doorway:             ; d5ca
-       .call @character_addr           ; CALL $D5B0        ; Retrieve the memory location for the character frame
-                                                           ; from the passed index in #REGa.
-       .ex_de_hl                       ; EX DE,HL          ; 
-       movb @bytes+88,b                ; LD B,$58          ; {Sets the height and width.
-       movb @bytes+6,@c                ; LD C,$06          ; }
-       movb @door_frame_ref,a          ; LD A,($CE1A)      ; Retrieves the currently in-focus door from #R$CE1A.
-       li   hl,zx_screen+>0082         ; LD HL,$4082       ; {Work out which screen position to use for the currently focused door;
-       sb   one,a                      ; DEC A             ; #TABLE(default,centre)
-       jeq  copy_routine               ; JR Z,$D5E6        ; { =h #REGa | =h Screen Address }
-       sb   one,a                      ; DEC A             ; { $01 | $4082 }
-       li   hl,zx_screen+>008d         ; LD HL,$408D       ; { $02 | $408D }
-       jeq  copy_routine               ; JR Z,$D5E6        ; { $03 | $4098 }
-       li   hl,zx_screen+>0098         ; LD HL,$4098       ; TABLE#
-       jmp  copy_routine               ; JR $D5E6          ; Jump to #R$D5E6 to draw the character and handle the return.
+;draw_character_in_doorway:             ; d5ca
+;       .call @character_addr           ; CALL $D5B0        ; Retrieve the memory location for the character frame
+;                                                           ; from the passed index in #REGa.
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       movb @bytes+88,b                ; LD B,$58          ; {Sets the height and width.
+;       movb @bytes+6,@c                ; LD C,$06          ; }
+;       movb @door_frame_ref,a          ; LD A,($CE1A)      ; Retrieves the currently in-focus door from #R$CE1A.
+;       li   hl,zx_screen+>0082         ; LD HL,$4082       ; {Work out which screen position to use for the currently focused door;
+;       sb   one,a                      ; DEC A             ; #TABLE(default,centre)
+;       jeq  copy_routine               ; JR Z,$D5E6        ; { =h #REGa | =h Screen Address }
+;       sb   one,a                      ; DEC A             ; { $01 | $4082 }
+;       li   hl,zx_screen+>008d         ; LD HL,$408D       ; { $02 | $408D }
+;       jeq  copy_routine               ; JR Z,$D5E6        ; { $03 | $4098 }
+;       li   hl,zx_screen+>0098         ; LD HL,$4098       ; TABLE#
+;       jmp  copy_routine               ; JR $D5E6          ; Jump to #R$D5E6 to draw the character and handle the return.
                                                            ; }
 
 * Copy Routine.
@@ -4334,58 +4332,58 @@ calc_attr:                             ; d610
 * .
 * 
 * Draws the game character together with door frame 2.
-character_door_frame_2:                ; d61e
-       .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
-       .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
-                                                           ; }
-door_frame_2_copy:                     ; d624
-       li   hl,gfx_door_frame_2        ; LD HL,$BCE8       ; {Copies #R$BCE8 into the #R$EA90 (+2 bytes ~ $EA92).
-       li   de,door_buffer+2           ; LD DE,$EA92       ; 
-       movb @bytes+88,b                ; LD B,$58          ; 
-door_frame_2_copy_loop:                ; d62c
-       .push bc                        ; PUSH BC           ; 
-       li   bc,>0005                   ; LD BC,$0005       ; 
-       .ldir                           ; LDIR              ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $D62C        ; }
-       jne  door_frame_2_copy_loop     ;                   
-       .ret                            ; RET               ; Return.
-* Draws the game character together with door frame 3.
-character_door_frame_3:                ; d638
-       .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
-       .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
-                                                           ; }
-door_frame_3_copy:                     ; d63e
-       li   hl,gfx_door_frame_3        ; LD HL,$BEA0       ; {Copies #R$BEA0 into the #R$EA90 (+4 bytes ~ $EA94).
-       li   de,door_buffer+4           ; LD DE,$EA94       ; 
-       movb @bytes+88,b                ; LD B,$58          ; 
-door_frame_3_copy_loop:                ; d646
-       .push bc                        ; PUSH BC           ; 
-       li   bc,>0003                   ; LD BC,$0003       ; 
-       .ldir                           ; LDIR              ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $D646        ; }
-       jne  door_frame_3_copy_loop     ;                   
-       .ret                            ; RET               ; Return.
-* Draws the game character alone to the door frame buffer.
-door_buffer_copy:                      ; d654
-       li   de,door_buffer             ; LD DE,$EA90       ; {Draws a character into the #R$EA90.
-       movb @bytes+88,b                ; LD B,$58          ; 
-door_buffer_copy_loop:                 ; d659
-       .push bc                        ; PUSH BC           ; 
-       li   bc,>0006                   ; LD BC,$0006       ; 
-       .ldir                           ; LDIR              ; 
-       inc  de                         ; INC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $D659        ; 
-       jne  door_buffer_copy_loop      ;                   
-       .ret                            ; RET               ; }
+;character_door_frame_2:                ; d61e
+;       .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
+;       .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
+;                                                           ; }
+;door_frame_2_copy:                     ; d624
+;       li   hl,gfx_door_frame_2        ; LD HL,$BCE8       ; {Copies #R$BCE8 into the #R$EA90 (+2 bytes ~ $EA92).
+;       li   de,door_buffer+2           ; LD DE,$EA92       ;
+;       movb @bytes+88,b                ; LD B,$58          ;
+;door_frame_2_copy_loop:                ; d62c
+;       .push bc                        ; PUSH BC           ;
+;       li   bc,>0005                   ; LD BC,$0005       ;
+;       .ldir                           ; LDIR              ;
+;       inc  de                         ; INC DE            ;
+;       inc  de                         ; INC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $D62C        ; }
+;       jne  door_frame_2_copy_loop     ;
+;       .ret                            ; RET               ; Return.
+;* Draws the game character together with door frame 3.
+;character_door_frame_3:                ; d638
+;       .call @character_addr           ; CALL $D5B0        ; {On entry #REGa points to a character index. The call to #R$D5B0 translates this to the memory location of
+;       .call @door_buffer_copy         ; CALL $D654        ; the character frame data (held in #REGhl) and then calls #R$D654.
+;                                                           ; }
+;door_frame_3_copy:                     ; d63e
+;       li   hl,gfx_door_frame_3        ; LD HL,$BEA0       ; {Copies #R$BEA0 into the #R$EA90 (+4 bytes ~ $EA94).
+;       li   de,door_buffer+4           ; LD DE,$EA94       ;
+;       movb @bytes+88,b                ; LD B,$58          ;
+;door_frame_3_copy_loop:                ; d646
+;       .push bc                        ; PUSH BC           ;
+;       li   bc,>0003                   ; LD BC,$0003       ;
+;       .ldir                           ; LDIR              ;
+;       inc  de                         ; INC DE            ;
+;       inc  de                         ; INC DE            ;
+;       inc  de                         ; INC DE            ;
+;       inc  de                         ; INC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $D646        ; }
+;       jne  door_frame_3_copy_loop     ;
+;       .ret                            ; RET               ; Return.
+;* Draws the game character alone to the door frame buffer.
+;door_buffer_copy:                      ; d654
+;       li   de,door_buffer             ; LD DE,$EA90       ; {Draws a character into the #R$EA90.
+;       movb @bytes+88,b                ; LD B,$58          ;
+;door_buffer_copy_loop:                 ; d659
+;       .push bc                        ; PUSH BC           ;
+;       li   bc,>0006                   ; LD BC,$0006       ;
+;       .ldir                           ; LDIR              ;
+;       inc  de                         ; INC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $D659        ;
+;       jne  door_buffer_copy_loop      ;
+;       .ret                            ; RET               ; }
 
 * Draw Doors.
 * 
@@ -4906,7 +4904,7 @@ random_number:                         ; d8b0
 julius_good_bad:                       ; d8e5
        byte >00                                                      ; If this is $00 then Julius is "good". If this is $01
                                                                      ; then he is "bad" (i.e. will draw on you).
-_d8e6:
+julius_flag:                           ; d8e6
        byte >00                                                      ; 
 julius_state_ref:                      ; d8e7
        byte >04                                                      ; The current character state.
@@ -4940,14 +4938,13 @@ julius_open_routing:                   ; d8ef
        sb   one,a                      ; DEC A             ; { $06 | #R$D972 }
        jeq  julius_open_5              ; JR Z,$D963        ; { $07 | #R$D981 }
        sb   one,a                      ; DEC A             ; TABLE#
-       jne  !
-       b    @julius_open_6             ; JR Z,$D972        ;
-!      b    @julius_open_7             ; JR $D981          ; }
+       jeq  julius_open_6              ; JR Z,$D972
+       b    @julius_open_7              ; JR $D981          ; }
 * Handle door frame 1 countdown/ transition to door frame 2.
 julius_open_1:                         ; d907
-       movb @julius_1_timer,a          ; LD A,($D8E8)      ; {Decrease #R$D8E8 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_1_timer          ; LD ($D8E8),A      ; 
+                                       ; LD A,($D8E8)      ; {Decrease #R$D8E8 by one, return if result is not
+       sb   one,@julius_1_timer        ; DEC A             ; zero.
+                                       ; LD ($D8E8),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -4957,9 +4954,9 @@ julius_open_1:                         ; d907
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 3.
 julius_open_2:                         ; d916
-       movb @julius_2_timer,a          ; LD A,($D8E9)      ; {Decrease #R$D8E9 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_2_timer          ; LD ($D8E9),A      ; 
+                                       ; LD A,($D8E9)      ; {Decrease #R$D8E9 by one, return if result is not
+       sb   one,@julius_2_timer        ; DEC A             ; zero.
+                                       ; LD ($D8E9),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -4969,9 +4966,9 @@ julius_open_2:                         ; d916
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 4.
 julius_open_3:                         ; d925
-       movb @julius_3_timer,a          ; LD A,($D8EA)      ; {Decrease #R$D8EA by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_3_timer          ; LD ($D8EA),A      ; 
+                                       ; LD A,($D8EA)      ; {Decrease #R$D8EA by one, return if result is not
+       sb   one,@julius_3_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EA),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -4983,9 +4980,9 @@ julius_open_3:                         ; d925
 julius_open_4:                         ; d934
        li   de,init_julius_close       ; LD DE,$CFDD       ; {Call #R$D5A3 with a callback to #R$CFDD.
        .call @hit_detection            ; CALL $D5A3        ; }
-       movb @julius_4_timer,a          ; LD A,($D8EB)      ; {Decrease #R$D8EB by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_4_timer          ; LD ($D8EB),A      ; 
+                                       ; LD A,($D8EB)      ; {Decrease #R$D8EB by one, return if result is not
+       sb   one,@julius_4_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EB),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5002,16 +4999,16 @@ julius_open_4:                         ; d934
 julius_state_4_close:                  ; d951
        movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        .call @draw_door_frame_3        ; CALL $D6DF        ; #R$D6DF.}
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
-       movb a,@show_dollar_sign_flag   ; LD ($D190),A      ; #REGix+6 and return.
-       movb a,@8(ix)                   ; LD (IX+$08),A     ; 
+                                       ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
+       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; #REGix+6 and return.
+       movb one,@8(ix)                 ; LD (IX+$08),A     ;
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 2.
 julius_open_5:                         ; d963
-       movb @julius_5_timer,a          ; LD A,($D8EC)      ; {Decrease #R$D8EC by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_5_timer          ; LD ($D8EC),A      ; 
+                                       ; LD A,($D8EC)      ; {Decrease #R$D8EC by one, return if result is not
+       sb   one,@julius_5_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EC),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5021,29 +5018,30 @@ julius_open_5:                         ; d963
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.
 julius_open_6:                         ; d972
-       movb @julius_6_timer,a          ; LD A,($D8ED)      ; {Decrease #R$D8ED by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_6_timer          ; LD ($D8ED),A      ; 
+                                       ; LD A,($D8ED)      ; {Decrease #R$D8ED by one, return if result is not
+       sb   one,@julius_6_timer        ; DEC A             ; zero.
+                                       ; LD ($D8ED),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        .call @draw_door_frame_1        ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
-       .call @reset_door_routine                 ; CALL $D8A1        ; Call #R$D8A1.
+       .call @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
        .ret                            ; RET               ; Return.
-* ???
+
 julius_open_7:                         ; d981
-       li   de,julius_callback                   ; LD DE,$CFE2       ; {Call #R$D5A3 with a callback to #R$CFE2.
+       li   de,julius_callback         ; LD DE,$CFE2       ; {Call #R$D5A3 with a callback to #R$CFE2.
        .call @hit_detection            ; CALL $D5A3        ; }
-       movb @julius_7_timer,a          ; LD A,($D8EE)      ; {Decrease #R$D8EE by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_7_timer          ; LD ($D8EE),A      ; 
+                                       ; LD A,($D8EE)      ; {Decrease #R$D8EE by one, return if result is not
+       sb   one,@julius_7_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EE),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       ab   one,a                      ; INC A             ; Move onto next character state.
-       movb a,@player_died_status                   ; LD ($D2FE),A      ; Write $01 to #R$D2FE.
-       .call @reset_door_routine                 ; CALL $D8A1        ; Call #R$D8A1.
+                                       ; INC A             ; Move onto next character state.
+       movb one,@player_died_status    ; LD ($D2FE),A      ; Write $01 to #R$D2FE.
+       .call @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
        .ret                            ; RET               ; Return.
+
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 julius_close_routing:                  ; d997
@@ -5060,9 +5058,9 @@ julius_close_routing:                  ; d997
        jmp  julius_close_5             ; JR $D9F1          ; TABLE#}
 * Handles state countdown/ transition to character frame #R$B660($26).
 julius_close_1:                        ; d9a9
-       movb @julius_1_timer,a          ; LD A,($D8E8)      ; {Decrease #R$D8E8 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_1_timer          ; LD ($D8E8),A      ; 
+                                       ; LD A,($D8E8)      ; {Decrease #R$D8E8 by one, return if result is not
+       sb   one,@julius_1_timer        ; DEC A             ; zero.
+                                       ; LD ($D8E8),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5072,29 +5070,29 @@ julius_close_1:                        ; d9a9
        .ret                            ; RET               ; }
 * Handles state countdown/ transition to character frame #R$B870($27).
 julius_close_2:                        ; d9b8
-       movb @julius_2_timer,a          ; LD A,($D8E9)      ; {Decrease #R$D8E9 by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_2_timer          ; LD ($D8E9),A      ; 
+                                       ; LD A,($D8E9)      ; {Decrease #R$D8E9 by one, return if result is not
+       sb   one,@julius_2_timer        ; DEC A             ; zero.
+                                       ; LD ($D8E9),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
        movb @bytes+39,a                ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6ED.
        .call @draw_door_frame_4        ; CALL $D6ED        ; }
-       movb @_d8e6,a                   ; LD A,($D8E6)      ; {Return if #R$D8E6 is zero.
+       movb @julius_flag,a             ; LD A,($D8E6)      ; {Return if #R$D8E6 is zero.
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; }
        .ret                            ;                   
 !
        ab   one,a                      ; INC A             ; {Else write #R$D8E6+1 to #R$D2FE, call #R$D8A1 and
-       movb a,@player_died_status                   ; LD ($D2FE),A      ; return.
-       .call @reset_door_routine                 ; CALL $D8A1        ;
+       movb a,@player_died_status      ; LD ($D2FE),A      ; return.
+       .call @reset_door_routine       ; CALL $D8A1        ;
        .ret                            ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
 julius_close_3:                        ; d9d3
-       movb @julius_3_timer,a          ; LD A,($D8EA)      ; {Decrease #R$D8EA by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_3_timer          ; LD ($D8EA),A      ; 
+                                       ; LD A,($D8EA)      ; {Decrease #R$D8EA by one, return if result is not
+       sb   one,@julius_3_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EA),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5104,9 +5102,9 @@ julius_close_3:                        ; d9d3
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 2.
 julius_close_4:                        ; d9e2
-       movb @julius_4_timer,a          ; LD A,($D8EB)      ; {Decrease #R$D8EB by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_4_timer          ; LD ($D8EB),A      ; 
+                                       ; LD A,($D8EB)      ; {Decrease #R$D8EB by one, return if result is not
+       sb   one,@julius_4_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EB),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5116,17 +5114,17 @@ julius_close_4:                        ; d9e2
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.
 julius_close_5:                        ; d9f1
-       movb @julius_5_timer,a          ; LD A,($D8EC)      ; {Decrease #R$D8EC by one, return if result is not
-       sb   one,a                      ; DEC A             ; zero.
-       movb a,@julius_5_timer          ; LD ($D8EC),A      ; 
+                                       ; LD A,($D8EC)      ; {Decrease #R$D8EC by one, return if result is not
+       sb   one,@julius_5_timer        ; DEC A             ; zero.
+                                       ; LD ($D8EC),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        .call @draw_door_frame_1        ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
-       .call @reset_door_routine                 ; CALL $D8A1        ; Call #R$D8A1.
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
-       movb a,@show_dollar_sign_flag                   ; LD ($D190),A      ; #REGix+6 and return.
-       movb a,@8(ix)                   ; LD (IX+$08),A     ; 
+       .call @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
+                                       ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
+       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; #REGix+6 and return.
+       movb one,@8(ix)                 ; LD (IX+$08),A     ;
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        .ret                            ; RET               ; }
 
@@ -5155,6 +5153,7 @@ bandit_draw_4_timer:                   ; da15
        byte >00                                                      ; Character timer 4.
 bandit_draw_5_timer:                   ; da16
        byte >00                                                      ; Character timer 5.
+
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_draw_open_routing:              ; da17
@@ -5171,9 +5170,9 @@ bandit_draw_open_routing:              ; da17
        jmp  bandit_draw_open_5         ; JR $DA6F          ; TABLE#}
 * Handle door frame 1 countdown/ transition to door frame 2.
 bandit_draw_open_1:                    ; da29
-       movb @bandit_draw_1_timer,a     ; LD A,($DA12)      ; {Decrease #R$DA12 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_1_timer     ; LD ($DA12),A      ; 
+                                       ; LD A,($DA12)      ; {Decrease #R$DA12 by one, return if result is not zero.
+       sb   one,@bandit_draw_1_timer   ; DEC A             ;
+                                       ; LD ($DA12),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5183,9 +5182,9 @@ bandit_draw_open_1:                    ; da29
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 3.
 bandit_draw_open_2:                    ; da39
-       movb @bandit_draw_2_timer,a     ; LD A,($DA13)      ; {Decrease #R$DA13 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_2_timer     ; LD ($DA13),A      ; 
+                                       ; LD A,($DA13)      ; {Decrease #R$DA13 by one, return if result is not zero.
+       sb   one,@bandit_draw_2_timer   ; DEC A             ;
+                                       ; LD ($DA13),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5195,9 +5194,9 @@ bandit_draw_open_2:                    ; da39
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 4.
 bandit_draw_open_3:                    ; da49
-       movb @bandit_draw_3_timer,a     ; LD A,($DA14)      ; {Decrease #R$DA14 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_3_timer     ; LD ($DA14),A      ; 
+                                       ; LD A,($DA14)      ; {Decrease #R$DA14 by one, return if result is not zero.
+       sb   one,@bandit_draw_3_timer   ; DEC A             ;
+                                       ; LD ($DA14),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5207,11 +5206,11 @@ bandit_draw_open_3:                    ; da49
        .ret                            ; RET               ; }
 * Handles state countdown.
 bandit_draw_open_4:                    ; da59
-       li   de,set_char_state_to_one   ; LD DE,$D037       ; {Call #R$D5A3 with a callback to #R$D037.
+       li   de,set_state_init_bandit_draw_close   ; LD DE,$D037       ; {Call #R$D5A3 with a callback to #R$D037.
        .call @hit_detection            ; CALL $D5A3        ; }
-       movb @bandit_draw_4_timer,a     ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_4_timer     ; LD ($DA15),A      ; 
+                                       ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
+       sb   one,@bandit_draw_4_timer   ; DEC A             ;
+                                       ; LD ($DA15),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5221,18 +5220,19 @@ bandit_draw_open_4:                    ; da59
        .ret                            ; RET               ; }
 * Handles state countdown.
 bandit_draw_open_5:                    ; da6f
-       li   de,init_bandit_draw_close                   ; LD DE,$D040       ; {Call #R$D5A3 with a callback to #R$D040.
+       li   de,init_bandit_draw_close  ; LD DE,$D040       ; {Call #R$D5A3 with a callback to #R$D040.
        .call @hit_detection            ; CALL $D5A3        ; }
-       movb @bandit_draw_5_timer,a     ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_5_timer     ; LD ($DA16),A      ; 
+                                       ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
+       sb   one,@bandit_draw_5_timer   ; DEC A             ;
+                                       ; LD ($DA16),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       ab   one,a                      ; INC A             ; {Else write $01 to #R$D2FE, call #R$D8A1 and return.
-       movb a,@player_died_status                   ; LD ($D2FE),A      ;
-       .call @reset_door_routine                 ; CALL $D8A1        ;
+       ab   one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE, call #R$D8A1 and return.
+                                       ; LD ($D2FE),A      ;
+       .call @reset_door_routine       ; CALL $D8A1        ;
        .ret                            ; RET               ; }
+
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_draw_close_routing:             ; da85
@@ -5249,9 +5249,9 @@ bandit_draw_close_routing:             ; da85
        jmp  bandit_draw_close_5        ; JR $DAE0          ; TABLE#}
 * Handles state countdown.
 bandit_draw_close_1:                   ; da97
-       movb @bandit_draw_1_timer,a     ; LD A,($DA12)      ; {Decrease #R$DA12 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_1_timer     ; LD ($DA12),A      ; 
+                                       ; LD A,($DA12)      ; {Decrease #R$DA12 by one, return if result is not zero.
+       sb   one,@bandit_draw_1_timer   ; DEC A             ;
+                                       ; LD ($DA12),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5261,9 +5261,9 @@ bandit_draw_close_1:                   ; da97
        .ret                            ; RET               ; }
 * Handles state countdown.
 bandit_draw_close_2:                   ; daa7
-       movb @bandit_draw_2_timer,a     ; LD A,($DA13)      ; {Decrease #R$DA13 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_2_timer     ; LD ($DA13),A      ; 
+                                       ; LD A,($DA13)      ; {Decrease #R$DA13 by one, return if result is not zero.
+       sb   one,@bandit_draw_2_timer   ; DEC A             ;
+                                       ; LD ($DA13),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5275,14 +5275,14 @@ bandit_draw_close_2:                   ; daa7
        jne  !                          ; RET Z             ; }
        .ret                            ;                   
 !
-       ab   one,a                      ; INC A             ; {Else write $01 to #R$D2FE and return.
-       movb a,@player_died_status                   ; LD ($D2FE),A      ;
+       ab   one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE and return.
+                                       ; LD ($D2FE),A      ;
        .ret                            ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
 bandit_draw_close_3:                   ; dac0
-       movb @bandit_draw_3_timer,a     ; LD A,($DA14)      ; {Decrease #R$DA14 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_3_timer     ; LD ($DA14),A      ; 
+                                       ; LD A,($DA14)      ; {Decrease #R$DA14 by one, return if result is not zero.
+       sb   one,@bandit_draw_3_timer   ; DEC A             ;
+                                       ; LD ($DA14),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5292,9 +5292,9 @@ bandit_draw_close_3:                   ; dac0
        .ret                            ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 2.
 bandit_draw_close_4:                   ; dad0
-       movb @bandit_draw_4_timer,a     ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_4_timer     ; LD ($DA15),A      ; 
+                                       ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
+       sb   one,@bandit_draw_4_timer   ; DEC A             ;
+                                       ; LD ($DA15),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5304,9 +5304,9 @@ bandit_draw_close_4:                   ; dad0
        .ret                            ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.
 bandit_draw_close_5:                   ; dae0
-       movb @bandit_draw_5_timer,a     ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@bandit_draw_5_timer     ; LD ($DA16),A      ; 
+                                       ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
+       sb   one,@bandit_draw_5_timer   ; DEC A             ;
+                                       ; LD ($DA16),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -5330,59 +5330,55 @@ gen_random_number:                     ; daef
 * Door Buffer
 * 
 * Used by the routines at #R$6600, #R$C300 and #R$F950.
-door_buffer:                           ; ea90
-       bss 704
+;door_buffer:                           ; ea90
+;       bss 704
 
-* ff
-* 
+*
 * Used by the routine at #R$CD47.
-_f880:
-       movb @bytes+12,b                ; LD B,$0C          ; 
-_f882:
+explode_bomb:
+       li   bc,12                      ; LD B,$0C          ;
+explode_bomb_1:                        ; f882
        .push bc                        ; PUSH BC           ; 
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
-       .call @_f894                    ; CALL $F894        ; 
+       .call @explode_bomb_3           ; CALL $F894        ;
        .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $F882        ; 
-       jne  _f882                      ;                   
+       dec  bc                         ; DJNZ $F882        ;
+       jne  explode_bomb_1             ;
        sb   a,a                        ; XOR A             ; 
-       ; OUT ($FE),A                   ; OUT ($FE),A       ; 
+       bl   @set_border_color          ; OUT ($FE),A       ;
        movb @bytes+64,b                ; LD B,$40          ; 
-_f890:
-       ; HALT                          ; HALT              ; 
+explode_bomb_2:                        ; f890
+       bl   @vsync                     ; HALT              ;
        sb   one,b                      ; DJNZ $F890        ; 
-       jne  _f890                      ;                   
-       .ret                            ; RET               ; 
-_f894:
+       jne  explode_bomb_2             ;
+       .ret                            ; RET               ;
+
+explode_bomb_3:                        ; f894
        movb @bytes+56,a                ; LD A,$38          ; 
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
-       .call @_f8b2                    ; CALL $F8B2        ; 
+       .call @explode_set_attrs        ; CALL $F8B2        ;
        sb   a,a                        ; XOR A             ; 
-       ; OUT ($FE),A                   ; OUT ($FE),A       ; 
-       movb @bytes+4,b                 ; LD B,$04          ; 
-_f8a0:
-       ; HALT                          ; HALT              ; 
-       sb   one,b                      ; DJNZ $F8A0        ; 
-       jne  _f8a0                      ;                   
+       bl   @set_border_color          ; OUT ($FE),A       ;
+       li   bc,4                       ; LD B,$04          ;
+explode_bomb_4:                        ; f8a0
+       bl   @vsync                     ; HALT              ;
+       dec  bc                         ; DJNZ $F8A0        ;
+       jne  explode_bomb_4             ;
        movb @bytes+7,a                 ; LD A,$07          ; 
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
-       .call @_f8b2                    ; CALL $F8B2        ; 
-       ; OUT ($FE),A                   ; OUT ($FE),A       ; 
-       movb @bytes+3,b                 ; LD B,$03          ; 
-_f8ae:
-       ; HALT                          ; HALT              ; 
-       sb   one,b                      ; DJNZ $F8AE        ; 
-       jne  _f8ae                      ;                   
-       .ret                            ; RET               ; 
-_f8b2:
-       li   hl,zx_attributes+>0060     ; LD HL,$5860       ;
-       li   de,zx_attributes+>0061     ; LD DE,$5861       ;
-       li   bc,>01df                   ; LD BC,$01DF       ; 
-       movb a,*hl                      ; LD (HL),A         ; 
-       .ldir                           ; LDIR              ; 
+       .call @explode_set_attrs        ; CALL $F8B2        ;
+       bl   @set_border_color          ; OUT ($FE),A       ;
+       li   bc,3                       ; LD B,$03          ;
+explode_bomb_5:                        ; f8ae
+       bl   @vsync                     ; HALT              ;
+       dec  bc                         ; DJNZ $F8AE        ;
+       jne  explode_bomb_5             ;
+       .ret                            ; RET               ;
+
+explode_set_attrs:                     ; f8b2
+       bl   @ti_set_screen_color
+;       li   hl,zx_attributes+>0060     ; LD HL,$5860       ;
+;       li   de,zx_attributes+>0061     ; LD DE,$5861       ;
+;       li   bc,>01df                   ; LD BC,$01DF       ;
+;       movb a,*hl                      ; LD (HL),A         ;
+;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; 
 
 * This entry point is used by the routine at #R$C7C0.

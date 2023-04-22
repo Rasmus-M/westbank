@@ -152,6 +152,22 @@ ti_clear_screen:
 
 *********************************************************************************
 *
+* Set color of whole screen
+*
+* a: zx attribute
+*
+ti_set_screen_color:
+       .proc
+       bl   @ti_color
+       movb tmp0,r1
+       li   r0,color_table
+       li   r2,>1800
+       bl   @vsmw
+       .endproc
+*// ti_set_screen_color
+
+*********************************************************************************
+*
 * Set border color
 *
 * a: zx color
