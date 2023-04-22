@@ -22,7 +22,7 @@ print_two_tone_text_alias:             ; 5b80
 * 
 * An alias for a jump to #R$CC5A.
 draw_life_images_alias:                ; 5b83
-       b    @life_images               ; JP $CC5A          ; 
+       b    @draw_life_images               ; JP $CC5A          ;
 
 * Lives Memory Address.
 lives_addr:                            ; 5b86
@@ -144,7 +144,7 @@ controller:                            ; 5cb0
 
 * Current Level
 level:                                 ; 5cb1
-       byte >00
+       byte >01
 
 * High Score Table
 highscore_table:                       ; 6000
@@ -855,90 +855,87 @@ bang_next_line:                        ; c085
        .ret                            ; RET               ; Return.
        byte >C3,>90,>EA,>04,>33,>49,>44,>46                          ; 
        byte >47,>B1,>D2,>04,>32                                      ; 
-
+*
 * Draw Playfield
 * 
 * Used by the routine at #R$CC3A.
-draw_playfield:                        ; c300
-       movb *ix,@l                     ; LD L,(IX+$00)     ; {Set #R$D5E6 as the destination address at #R$C3B7.
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; 
-       mov  hl,@alias_copy_routine+1   ; LD ($C3B8),HL     ; }
-       li   hl,>4000                   ; LD HL,$4000       ; {Clears the screen buffer by writing $00 to all 6912
-       li   de,>4001                   ; LD DE,$4001       ; memory locations.
-       li   bc,>1aff                   ; LD BC,$1AFF       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
-* Draws the numbering of the deposit boxes on the left and right of the screen.
-       li   hl,>4001                   ; LD HL,$4001       ; {Points #REGhl to $4001 (screen buffer) and #REGde to
-       li   de,gfx_slot_numbers_left   ; LD DE,$DFA0       ; #R$DFA0, then calls the routine at #R$C3B7.
-       li   bc,>080c                   ; LD BC,$080C       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,>4013                   ; LD HL,$4013       ; {Points #REGhl to $4013 (screen buffer) and #REGde to
-       li   de,gfx_slot_numbers_right  ; LD DE,$E000       ; #R$E000, then calls the routine at #R$C3B7.
-       li   bc,>080c                   ; LD BC,$080C       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-* Draws the centrepiece "till" image.
-       li   hl,zx_screen+>000e         ; LD HL,$400E       ; {Points #REGhl to $400E (screen buffer) and #REGde to
-       li   de,gfx_centrepiece         ; LD DE,$E060       ; #R$E060, then calls the routine at #R$C3B7.
-       movb @bytes+24,b                ; LD B,$18          ; 
-       movb @bytes+4,@c                ; LD C,$04          ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-* Draws the game play area (doors and wall sections).
-       li   hl,zx_screen+>0060         ; LD HL,$4060       ; {Points #REGhl to $4060 (screen buffer) and #REGde to
-       li   de,gfx_doors_top           ; LD DE,$E0C0       ; #R$E0C0, then calls the routine at #R$C3B7.
-       li   bc,>0820                   ; LD BC,$0820       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>0080         ; LD HL,$4080       ; {Points #REGhl to $4080 (screen buffer) and #REGde to
-       li   de,gfx_wall_left           ; LD DE,$E1C0       ; #R$E1C0, then calls the routine at #R$C3B7.
-       movb @bytes+88,b                ; LD B,$58          ; 
-       movb @bytes+2,@c                ; LD C,$02          ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>0089         ; LD HL,$4089       ; {Points #REGhl to $4089 (screen buffer) and #REGde to
-       li   de,gfx_wall_middle         ; LD DE,$E270       ; #R$E270, then calls the routine at #R$C3B7.
-       movb @bytes+88,b                ; LD B,$58          ; 
-       movb @bytes+4,@c                ; LD C,$04          ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>0094         ; LD HL,$4094       ; {Points #REGhl to $4094 (screen buffer) and #REGde to
-       li   de,gfx_wall_middle         ; LD DE,$E270       ; #R$E270, then calls the routine at #R$C3B7.
-       movb @bytes+88,b                ; LD B,$58          ; 
-       movb @bytes+4,@c                ; LD C,$04          ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>009f         ; LD HL,$409F       ; {Points #REGhl to $409F (screen buffer) and #REGde to
-       li   de,gfx_door_frame_side     ; LD DE,$E3D0       ; #R$E3D0, then calls the routine at #R$C3B7.
-       movb @bytes+88,b                ; LD B,$58          ; 
-       movb one,@c                     ; LD C,$01          ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>00e0         ; LD HL,$48E0       ; {Points #REGhl to $48E0 (screen buffer) and #REGde to
-       li   de,gfx_door_bottom         ; LD DE,$E428       ; #R$E428, then calls the routine at #R$C3B7.
-       li   bc,>0820                   ; LD BC,$0820       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-* Draws the Bank Teller desks.
-       li   hl,zx_screen+>1020         ; LD HL,$5020       ; {Points #REGhl to $5020 (screen buffer) and #REGde to
-       li   de,gfx_tellers             ; LD DE,$E528       ; #R$E528, then calls the routine at #R$C3B7.
-       li   bc,>2020                   ; LD BC,$2020       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-* Writes the "SCORE" and "LIVES" labels (these aren't text, they're images).
-       li   hl,zx_screen+>10c1         ; LD HL,$50C1       ; {Points #REGhl to $50C1 (screen buffer) and #REGde to
-       li   de,gfx_score_text_image    ; LD DE,$E928       ; #R$E928, then calls the routine at #R$C3B7.
-       li   bc,>1006                   ; LD BC,$1006       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-       li   hl,zx_screen+>10b0         ; LD HL,$50B0       ; {Points #REGhl to $50B0 (screen buffer) and #REGde to
-       li   de,gfx_lives_text_image    ; LD DE,$E988       ; #R$E988, then calls the routine at #R$C3B7.
-       li   bc,>1606                   ; LD BC,$1606       ; 
-       .call @alias_copy_routine       ; CALL $C3B7        ; }
-* Copies attribute data to the screen.
-       li   hl,attributes              ; LD HL,$ED00       ; {Copies $300 bytes of attribute data from #R$ED00 to
-       li   de,zx_attributes           ; LD DE,$5800       ; $5800.
-       li   bc,>0300                   ; LD BC,$0300       ; 
-       .ldir                           ; LDIR              ; }
-       .ret                            ; RET               ; Return.
-alias_copy_routine:                    ; c3b7
-       .call @copy_routine             ; CALL $D5E6        ; Draws the image pointed to in #REGde to the screen
-                                                           ; location in #REGhl using the dimensions in #REGbc.
-       .ret                            ; RET               ; Return.
-       b    @door_buffer               ; JP $EA90          ; {Unused.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; }
+;draw_playfield:                        ; c300
+;       movb *ix,@l                     ; LD L,(IX+$00)     ; {Set #R$D5E6 as the destination address at #R$C3B7.
+;       movb @1(ix),h                   ; LD H,(IX+$01)     ;
+;       mov  hl,@alias_copy_routine+1   ; LD ($C3B8),HL     ; }
+;       li   hl,>4000                   ; LD HL,$4000       ; {Clears the screen buffer by writing $00 to all 6912
+;       li   de,>4001                   ; LD DE,$4001       ; memory locations.
+;       li   bc,>1aff                   ; LD BC,$1AFF       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
+;* Draws the numbering of the deposit boxes on the left and right of the screen.
+;       li   hl,>4001                   ; LD HL,$4001       ; {Points #REGhl to $4001 (screen buffer) and #REGde to
+;       li   de,gfx_slot_numbers_left   ; LD DE,$DFA0       ; #R$DFA0, then calls the routine at #R$C3B7.
+;       li   bc,>080c                   ; LD BC,$080C       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,>4013                   ; LD HL,$4013       ; {Points #REGhl to $4013 (screen buffer) and #REGde to
+;       li   de,gfx_slot_numbers_right  ; LD DE,$E000       ; #R$E000, then calls the routine at #R$C3B7.
+;       li   bc,>080c                   ; LD BC,$080C       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;* Draws the centrepiece "till" image.
+;       li   hl,zx_screen+>000e         ; LD HL,$400E       ; {Points #REGhl to $400E (screen buffer) and #REGde to
+;       li   de,gfx_centrepiece         ; LD DE,$E060       ; #R$E060, then calls the routine at #R$C3B7.
+;       movb @bytes+24,b                ; LD B,$18          ;
+;       movb @bytes+4,@c                ; LD C,$04          ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;* Draws the game play area (doors and wall sections).
+;       li   hl,zx_screen+>0060         ; LD HL,$4060       ; {Points #REGhl to $4060 (screen buffer) and #REGde to
+;       li   de,gfx_doors_top           ; LD DE,$E0C0       ; #R$E0C0, then calls the routine at #R$C3B7.
+;       li   bc,>0820                   ; LD BC,$0820       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>0080         ; LD HL,$4080       ; {Points #REGhl to $4080 (screen buffer) and #REGde to
+;       li   de,gfx_wall_left           ; LD DE,$E1C0       ; #R$E1C0, then calls the routine at #R$C3B7.
+;       movb @bytes+88,b                ; LD B,$58          ;
+;       movb @bytes+2,@c                ; LD C,$02          ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>0089         ; LD HL,$4089       ; {Points #REGhl to $4089 (screen buffer) and #REGde to
+;       li   de,gfx_wall_middle         ; LD DE,$E270       ; #R$E270, then calls the routine at #R$C3B7.
+;       movb @bytes+88,b                ; LD B,$58          ;
+;       movb @bytes+4,@c                ; LD C,$04          ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>0094         ; LD HL,$4094       ; {Points #REGhl to $4094 (screen buffer) and #REGde to
+;       li   de,gfx_wall_middle         ; LD DE,$E270       ; #R$E270, then calls the routine at #R$C3B7.
+;       movb @bytes+88,b                ; LD B,$58          ;
+;       movb @bytes+4,@c                ; LD C,$04          ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>009f         ; LD HL,$409F       ; {Points #REGhl to $409F (screen buffer) and #REGde to
+;       li   de,gfx_door_frame_side     ; LD DE,$E3D0       ; #R$E3D0, then calls the routine at #R$C3B7.
+;       movb @bytes+88,b                ; LD B,$58          ;
+;       movb one,@c                     ; LD C,$01          ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>00e0         ; LD HL,$48E0       ; {Points #REGhl to $48E0 (screen buffer) and #REGde to
+;       li   de,gfx_door_bottom         ; LD DE,$E428       ; #R$E428, then calls the routine at #R$C3B7.
+;       li   bc,>0820                   ; LD BC,$0820       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;* Draws the Bank Teller desks.
+;       li   hl,zx_screen+>1020         ; LD HL,$5020       ; {Points #REGhl to $5020 (screen buffer) and #REGde to
+;       li   de,gfx_tellers             ; LD DE,$E528       ; #R$E528, then calls the routine at #R$C3B7.
+;       li   bc,>2020                   ; LD BC,$2020       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;* Writes the "SCORE" and "LIVES" labels (these aren't text, they're images).
+;       li   hl,zx_screen+>10c1         ; LD HL,$50C1       ; {Points #REGhl to $50C1 (screen buffer) and #REGde to
+;       li   de,gfx_score_text_image    ; LD DE,$E928       ; #R$E928, then calls the routine at #R$C3B7.
+;       li   bc,>1006                   ; LD BC,$1006       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;       li   hl,zx_screen+>10b0         ; LD HL,$50B0       ; {Points #REGhl to $50B0 (screen buffer) and #REGde to
+;       li   de,gfx_lives_text_image    ; LD DE,$E988       ; #R$E988, then calls the routine at #R$C3B7.
+;       li   bc,>1606                   ; LD BC,$1606       ;
+;       .call @alias_copy_routine       ; CALL $C3B7        ; }
+;* Copies attribute data to the screen.
+;       li   hl,attributes              ; LD HL,$ED00       ; {Copies $300 bytes of attribute data from #R$ED00 to
+;       li   de,zx_attributes           ; LD DE,$5800       ; $5800.
+;       li   bc,>0300                   ; LD BC,$0300       ;
+;       .ldir                           ; LDIR              ; }
+;       .ret                            ; RET               ; Return.
+;alias_copy_routine:                    ; c3b7
+;       .call @copy_routine             ; CALL $D5E6        ; Draws the image pointed to in #REGde to the screen
+;                                                           ; location in #REGhl using the dimensions in #REGbc.
+;       .ret                            ; RET               ; Return.
 
 * Routine at C3C0
 * 
@@ -1639,6 +1636,7 @@ new_game:                              ; c7e5
 **
 * Init new game
        sb   b,b                        ; LD B,$00          ; Unused.
+* Setup input control routine
        movb @controller,a              ; LD A,($5CB0)      ; {Grab the value stored at #R$5CB0
        li   hl,controls_keyboard       ; LD HL,$D39B       ; and if it is $01 then jump ahead
        sb   one,a                      ; DEC A             ; to #R$C7F9 which writes #R$D39B
@@ -1649,7 +1647,7 @@ set_control_alias:                     ; c7f9
 * Resets all game variables/ states ready for a new game.
        li   hl,score_digit_6           ; LD HL,$CD86       ; {Clears the score (writes $00
        li   de,score_digit_5           ; LD DE,$CD87       ; over seven bytes from #R$CD86).
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       sb   *hl,*hl                    ; LD (HL),$00       ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; }
        movb @bytes+3,a                 ; LD A,$03          ; {Initialise #R$CC59 to $03.
@@ -1669,14 +1667,16 @@ set_control_alias:                     ; c7f9
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ldir                           ; LDIR              ; }
        sb   a,a                        ; XOR A             ; {Set the border to black.
-       ; OUT ($FE),A                   ; OUT ($FE),A       ; }
+       bl   @set_border_color          ; OUT ($FE),A       ; }
        ab   one,a                      ; INC A             ; {Write $01 to #R$CBCF.
        movb a,@duel_parameter          ; LD ($CBCF),A      ; }
        .call @init_progress            ; CALL $CA6C        ; 
        .call @set_day_attr             ; CALL $C959        ; 
-       .call @prep_display_day         ; CALL $CA64        ; 
+       .call @cls_display_day         ; CALL $CA64         ;
+       li   tmp0,30
+       bl   @ti_delay
        movb @bytes+3,a                 ; LD A,$03          ; {Writes $03 to #R$CE1B.
-       movb a,@chooser_countdown_init                   ; LD ($CE1B),A      ; }
+       movb a,@chooser_countdown_init  ; LD ($CE1B),A      ; }
        li   hl,>0500                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
        mov  hl,@delay                  ; LD ($CE1C),HL     ; }
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D191.
@@ -1768,7 +1768,7 @@ level_3:
        .ret                            ;                   
 level_3_1:                             ; c8f0
        .call @set_day_attr             ; CALL $C959        ;
-       .call @prep_display_day         ; CALL $CA64        ; 
+       .call @cls_display_day          ; CALL $CA64        ;
        movb @bytes+7,b                 ; LD B,$07          ; 
 level_3_2:                             ; c8f8
        .push bc                        ; PUSH BC           ; 
@@ -1845,9 +1845,9 @@ set_night_attr:                        ; c963
 * Note this is for the opened door background hence it starts from frame 2 (as
 * frame 1 is a closed door).
 set_door_attr:                         ; c966
-       li   de,door_2_attributes       ; LD DE,$D6B9       ; {Copies $18 bytes of data to
+       li   de,door_frame_2_attrs      ; LD DE,$D6B9       ; {Copies $18 bytes of data to
        li   bc,>0018                   ; LD BC,$0018       ; #R$D6B9, then return.
-       .ldir                           ; LDIR              ; 
+       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
 * Door frame attribute data for each day phase.
 door_attr_day:                         ; c96f
@@ -1864,7 +1864,7 @@ door_attr_night:                       ; c99f
        byte >05,>05,>05,>05,>05,>05,>30,>05                          ;
 
 * Clears the cashbox flags, clears the screen and displays the phase number.
-prep_display_phase:                    ; c9b7
+init_game_loop:                        ; c9b7
        li   hl,>0101                   ; LD HL,$0101       ; {Writes $0101 to #R$D45C.
        mov  hl,@cashbox_ref            ; LD ($D45C),HL     ; }
        li   hl,door_deposited_01       ; LD HL,$CC8D       ; {Clear down the deposit flags
@@ -1874,16 +1874,20 @@ prep_display_phase:                    ; c9b7
        .ldir                           ; LDIR              ; }
        sb   a,a                        ; XOR A             ; {Call #R$C9D0 (using $00).
        .call @clear_screen             ; CALL $C9D0        ; }
-       jmp  display_phase              ; JR $C9DD          ; Jump to #R$C9DD.
+       .call @display_phase            ; JR $C9DD          ; Jump to #R$C9DD.
+       li   tmp0,30
+       bl   @ti_delay
+       .ret
 
 * This routine has the ability to write any value across the screen buffer, however it's only ever called with
 * #REGa=$00 (clear screen).
 clear_screen:                          ; c9d0
-       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
-       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
-       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
-       movb a,*hl                      ; LD (HL),A         ; 
-       .ldir                           ; LDIR              ; 
+       bl   @ti_clear_screen
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
+;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
+;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
+;       movb a,*hl                      ; LD (HL),A         ;
+;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
 
 * Displays the current "phase".
@@ -1893,11 +1897,17 @@ display_phase:                         ; c9dd
        li   bc,>0005                   ; LD BC,$0005       ; 
        .ldir                           ; LDIR              ; }
        mov  @phase_ascii,hl            ; LD HL,($CA5A)     ; {Writes #R$CA5A to #R$CA5C (at
-       mov  hl,@progress_buffer+5      ; LD ($CA61),HL     ; $CA61 - just overwriting the
+;       mov  hl,@progress_buffer+5      ; LD ($CA61),HL     ; $CA61 - just overwriting the
                                                            ; numeric part).}
+       movb h,*de+
+       movb @l,*de
        li   hl,phase                   ; LD HL,$CA4A       ; {Call #R$CA19 with #R$CA4A.
        .call @progress_base_10         ; CALL $CA19        ; }
-       mov  @progress_buffer+5,hl      ; LD HL,($CA61)     ; {Writes $CA61 back to #R$CA5A.
+
+
+;       mov  @progress_buffer+5,hl      ; LD HL,($CA61)     ; {Writes $CA61 back to #R$CA5A.
+       movb @progress_buffer+5,h
+       movb @progress_buffer+6,@l
        mov  hl,@phase_ascii            ; LD ($CA5A),HL     ; }
        .ret                            ; RET               ; Return.
 
@@ -1908,11 +1918,15 @@ display_day:                           ; c9fb
        li   bc,>0005                   ; LD BC,$0005       ; 
        .ldir                           ; LDIR              ; }
        mov  @day_ascii,hl              ; LD HL,($CA58)     ; {Writes #R$CA58 to #R$CA5C (at
-       mov  hl,@progress_buffer+5      ; LD ($CA61),HL     ; $CA61 - just overwriting the
+;       mov  hl,@progress_buffer+5      ; LD ($CA61),HL     ; $CA61 - just overwriting the
                                                            ; numeric part).}
+       movb h,*de+
+       movb @l,*de
        li   hl,day                     ; LD HL,$CA4C       ; {Call #R$CA19 with #R$CA4C.
        .call @progress_base_10         ; CALL $CA19        ; }
-       mov  @progress_buffer+5,hl      ; LD HL,($CA61)     ; {Writes $CA61 back to #R$CA58.
+;       mov  @progress_buffer+5,hl      ; LD HL,($CA61)     ; {Writes $CA61 back to #R$CA58.
+       movb @progress_buffer+5,h
+       movb @progress_buffer+6,@l
        mov  hl,@day_ascii              ; LD ($CA58),HL     ; }
        .ret                            ; RET               ; Return.
 
@@ -1964,22 +1978,24 @@ progress_halt_loop:                    ; ca46
 
 * Game variables
 phase:                                 ; ca4a
-       data 6                                                        ; 
+       data >0600                      ; BCD low endian
 day:                                   ; ca4c
-       data 1                                                        ; 
+       data >0100                      ; BCD low endian
 phase_copy:                            ; ca4e
        text 'PHASE'                                                  ; 
 day_copy:                              ; ca53
        text ' DAY '                                                  ; 
+       even
 day_ascii:                             ; ca58
        text ' 1'                                                     ; 
+       even
 phase_ascii:                           ; ca5a
        text ' 6'                                                     ; 
 progress_buffer:                       ; ca5c
        text 'PHASE 6',>ff                                            ; 
 
 * Clears the screen and displays the day number.
-prep_display_day:                      ; ca64
+cls_display_day:                       ; ca64
        sb   a,a                        ; XOR A             ; {Clears the screen by passing $00
        .call @clear_screen             ; CALL $C9D0        ; to #R$C9D0.}
        .call @display_day              ; CALL $C9FB        ; Call #R$C9FB.
@@ -2002,7 +2018,7 @@ cashboxes_completed_flag:              ; ca80
        byte >00                                                      ; 
 
 run_phase:                             ; ca81
-       .call @run_game_loop            ; CALL $CAC8        ;
+       .call @init_and_run_game_loop   ; CALL $CAC8        ;
        jnc  phase_completed            ; RET C             ; TODO: check code.
        .ret                            ;                   
 phase_completed:
@@ -2042,47 +2058,52 @@ deposit_flash_prep:                    ; cab9
        li   bc,>000d                   ; LD BC,$000D       ; from #R$CC8D).
        movb a,*hl                      ; LD (HL),A         ; 
        .ldir                           ; LDIR              ; }
-       b    @draw_cashboxes                     ; JP $CC9B          ; Jump to #R$CC9B.
+       b    @draw_cashboxes            ; JP $CC9B          ; Jump to #R$CC9B.
 *
-run_game_loop:                         ; cac8
-       .call @prep_display_phase       ; CALL $C9B7        ; 
+init_and_run_game_loop:                ; cac8
+       .call @init_game_loop           ; CALL $C9B7        ;
 * This entry point is used by the routines at #R$CD1B and #R$CD47.
-game_loop:
+next_life:
        sb   a,a                        ; XOR A             ; {Writes $00 to #R$D2FE.
        movb a,@player_died_status      ; LD ($D2FE),A      ; }
-       .call @update_display           ; CALL $CAD4        ;
-       jmp  game_loop_1                ; JR $CAE7          ;
-update_display:                        ; cad4
-       .call @populate_door_buffer     ; CALL $CD68        ; 
-       .call @draw_doors               ; CALL $CC3A        ;
-       .call @life_images              ; CALL $CC5A        ; 
+       .call @draw_entire_playfield    ; CALL $CAD4        ;
+       jmp  game_loop                  ; JR $CAE7          ;
+* Why is this a routine?
+draw_entire_playfield:                 ; cad4
+       .call @reset_door_routine_flags ; CALL $CD68        ;
+       .call @draw_doors_and_playfield ; CALL $CC3A        ;
+       .call @draw_life_images         ; CALL $CC5A        ;
        .call @draw_cashboxes           ; CALL $CC9B        ;
-       .call @draw_score               ; CALL $CD90        ; 
+       .call @draw_score               ; CALL $CD90        ;
        .call @draw_cashbox_selections  ; CALL $D45E        ;
        .ret                            ; RET               ; 
-game_loop_1:                           ; cae7
-       movb @bytes+127,a               ; LD A,$7F          ; {Read keys SPACE, FULL-STOP, M,
-       ; IN A,($FE)                    ; IN A,($FE)        ; N, & B.}
-       ; RRA                           ; RRA               ; 
-       joc  read_keys_1                ; JR C,$CAFB        ; Jump if space not pressed TODO: check code.
-       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       ; RRA                           ; RRA               ; 
-       joc  read_keys_1                ; JR C,$CAFB        ; Jump if shift not pressed TODO: check code.
-       li   hl,copied_5b80             ; LD HL,$CBB4       ; Space and shift pressed
-       .call @_fd80                    ; CALL $FD80        ; TODO leave game and return to title screen
-read_keys_1:                           ; cafb
-       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       movb a,tmp0                     ; BIT 1,A           ; 
-       andi tmp0,2*256                 ;                   
-       jne  read_keys_3                ; JR NZ,$CB0B       ;
-read_keys_2:                           ; cb03
-       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       movb a,tmp0                     ; BIT 2,A           ; 
-       andi tmp0,4*256                 ;                   
-       jne  read_keys_2                ; JR NZ,$CB03       ;
+game_loop:                           ; cae7
+;       movb @bytes+127,a               ; LD A,$7F          ; {Read keys SPACE, FULL-STOP, M,
+;       ; IN A,($FE)                    ; IN A,($FE)        ; N, & B.}
+;       ; RRA                           ; RRA               ;
+;       joc  read_keys_1                ; JR C,$CAFB        ; Jump if space not pressed TODO: check code.
+;       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       ; RRA                           ; RRA               ;
+;       joc  read_keys_1                ; JR C,$CAFB        ; Jump if shift not pressed TODO: check code.
+;       li   hl,copied_5b80             ; LD HL,$CBB4       ; Space and shift pressed
+;       .call @_fd80                    ; CALL $FD80        ; TODO leave game and return to title screen
+;read_keys_1:                           ; cafb
+       li   tmp0,KEY_Z
+       bl   @ti_check_key
+;       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       movb a,tmp0                     ; BIT 1,A           ; Key Z
+;       andi tmp0,2*256                 ;
+       jeq  read_keys_3                ; JR NZ,$CB0B       ;
+read_keys_2:                           ; cb03              ; Z pressed. Enter pause mode until X pressed.
+       li   tmp0,KEY_X
+       bl   @ti_check_key
+;       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       movb a,tmp0                     ; BIT 2,A           ; Key X
+;       andi tmp0,4*256                 ;
+        jeq  read_keys_2                ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
        .call @check_right_and_left     ; CALL $D2CF        ;
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
@@ -2091,66 +2112,63 @@ delay_loop:                            ; cb12
        movb b,a                        ; LD A,B            ; 
        socb @c,a                       ; OR C              ; 
        jne  delay_loop                 ; JR NZ,$CB12       ;
-       .call @move_right_or_left                    ; CALL $D411        ;
+       .call @move_right_or_left       ; CALL $D411        ;
        .call @clear_255_bytes_at_5b00  ; CALL $CBA6        ;
 * Door 1 handling
        li   ix,door_1_flags            ; LD IX,$D165       ;
-       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ;
-       li   hl,door_1_routine          ; LD HL,$CE14       ;
-       movb *hl,a                      ; LD A,(HL)         ; 
-       inc  hl                         ; INC HL            ; 
-       socb *hl,a                      ; OR (HL)           ; 
-       .push af                        ; PUSH AF           ; 
+       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
+       mov  @door_1_routine,hl         ; LD HL,$CE14       ;
+                                       ; LD A,(HL)         ;
+                                       ; INC HL            ;
+                                       ; OR (HL)           ;
+                                       ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
        .call @character_chooser        ;                   ; If no door_1_routine, call character_chooser
-!
-       .pop af                         ; POP AF            ; 
-       jeq  after_door_1_routine       ; JR Z,$CB3F        ;
-       mov  @door_1_routine,hl         ; LD HL,($CE14)     ; 
-       li   de,after_door_1_routine    ; LD DE,$CB3F       ;
+                                       ; POP AF            ;
+       jmp  after_door_1_routine       ; JR Z,$CB3F        ;
+                                       ; LD HL,($CE14)     ;
+!      li   de,after_door_1_routine    ; LD DE,$CB3F       ;
        .push de                        ; PUSH DE           ; Set return address
-       movb one,a                      ; LD A,$01          ; 
-       movb a,@door_frame_ref          ; LD ($CE1A),A      ; 
+       movb one,@door_frame_ref        ; LD A,$01          ;
+                                       ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 1 routine
 after_door_1_routine:                  ; cb3f
 * Door 2 handling
        li   ix,door_2_flags            ; LD IX,$D173       ;
-       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; 
-       li   hl,door_2_routine          ; LD HL,$CE16       ; 
-       movb *hl,a                      ; LD A,(HL)         ; 
-       inc  hl                         ; INC HL            ; 
-       socb *hl,a                      ; OR (HL)           ; 
-       .push af                        ; PUSH AF           ; 
+       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
+       mov  @door_2_routine,hl         ; LD HL,$CE16       ;
+                                       ; LD A,(HL)         ;
+                                       ; INC HL            ;
+                                       ; OR (HL)           ;
+                                       ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
        .call @character_chooser                            ; If no door_2_routine, call character_chooser
-!
-       .pop af                         ; POP AF            ; 
-       jeq  after_door_2_routine       ; JR Z,$CB61        ;
-       mov  @door_2_routine,hl         ; LD HL,($CE16)     ; 
-       li   de,after_door_2_routine    ; LD DE,$CB61       ;
+                                       ; POP AF            ;
+       jmp  after_door_2_routine       ; JR Z,$CB61        ;
+                                       ; LD HL,($CE16)     ;
+!      li   de,after_door_2_routine    ; LD DE,$CB61       ;
        .push de                        ; PUSH DE           ; Set return address
-       movb @bytes+2,a                 ; LD A,$02          ; 
-       movb a,@door_frame_ref          ; LD ($CE1A),A      ; 
+       movb @bytes+2,@door_frame_ref   ; LD A,$02          ;
+                                       ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 2 routine
 after_door_2_routine:                  ; _cb61
 * Door 3 handling
        li   ix,door_3_flags            ; LD IX,$D181       ;
-       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; 
-       li   hl,door_3_routine          ; LD HL,$CE18       ; 
-       movb *hl,a                      ; LD A,(HL)         ; 
-       inc  hl                         ; INC HL            ; 
-       socb *hl,a                      ; OR (HL)           ; 
-       .push af                        ; PUSH AF           ; 
+       sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
+       mov  @door_3_routine,hl         ; LD HL,$CE18       ;
+                                       ; LD A,(HL)         ;
+                                       ; INC HL            ;
+                                       ; OR (HL)           ;
+                                       ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
        .call @character_chooser                            ; If no door_3_routine, call character_chooser
-!
-       .pop af                         ; POP AF            ; 
-       jeq  after_door_3_routine       ; JR Z,$CB83        ;
-       mov  @door_3_routine,hl         ; LD HL,($CE18)     ; 
-       li   de,after_door_3_routine    ; LD DE,$CB83       ;
+                                       ; POP AF            ;
+       jmp  after_door_3_routine       ; JR Z,$CB83        ;
+                                       ; LD HL,($CE18)     ;
+!      li   de,after_door_3_routine    ; LD DE,$CB83       ;
        .push de                        ; PUSH DE           ; Set return address
-       movb @bytes+3,a                 ; LD A,$03          ; 
-       movb a,@door_frame_ref          ; LD ($CE1A),A      ; 
+       movb @bytes+3,@door_frame_ref   ; LD A,$03          ;
+                                       ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 3 routine
 after_door_3_routine:                  ; cb83
 * Check status
@@ -2173,7 +2191,7 @@ after_door_3_routine:                  ; cb83
        jeq  !                          ; CALL NZ,$CBA0     ; }
        .call @call_scroll_dollar_sign                    ;
 !
-       b    @game_loop_1               ; JP $CAE7          ;
+       b    @game_loop                 ; JP $CAE7          ;
 call_scroll_dollar_sign:               ; cba0
        .call @scroll_dollar_sign       ; CALL $F960        ;
        b    @draw_cashboxes            ; JP $CC9B          ;
@@ -2240,8 +2258,7 @@ print_tt_text_space_check:             ; cbfc
        li   bc,>1001                   ; LD BC,$1001       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push hl                        ; PUSH HL           ; 
-;       .call @copy_routine             ; CALL $D5E6        ;
-       bl   @ti_copy_routine
+       .call @copy_routine             ; CALL $D5E6        ;
        .pop hl                         ; POP HL            ;
        jmp  print_tt_text_4            ; JR $CC1D          ;
 *      Not space
@@ -2251,15 +2268,15 @@ print_tt_text_2:                       ; cc0e              ; not space
        ab   @bytes+42,a                ; ADD A,$2A         ; 
 print_tt_text_3:                       ; cc14
        sb   @bytes+65,a                ; SUB $41           ; 
-;       ab   @bytes+10,a                ; ADD A,$0A         ;
+;       ab   @bytes+10,a               ; ADD A,$0A         ;
        .push de                        ; PUSH DE           ; 
-       .call @draw_tt_char              ; CALL $CDAE        ;
+       .call @draw_tt_char             ; CALL $CDAE        ;
        .pop hl                         ; POP HL            ;
 *      Attributes
 print_tt_text_4:                       ; cc1d
-      .call @print_tt_attribute_addr  ; CALL $CC2B        ;
+      .call @print_tt_attribute_addr   ; CALL $CC2B        ;
        mov  @two_tone_attributes_buffer,bc ; LD BC,($CBD0)     ; {Load the stored top/ bottom attribute bytes back into
-;       movb b,*hl                      ; LD (HL),B         ; #REGbc and write them to the screen.
+;       movb b,*hl                     ; LD (HL),B         ; #REGbc and write them to the screen.
        mov  hl,tmp1
        movb b,a
        bl   @ti_draw_attribute
@@ -2296,9 +2313,10 @@ buffer_copy_routine:                   ; cc38
 * .
 * 
 * Draws Main Playfield with all three doors closed.
-draw_doors:                            ; cc3a
-       li   ix,buffer_copy_routine     ; LD IX,$CC38       ; {Draw the main game playfield.
-       .call @draw_playfield           ; CALL $C300        ; }
+draw_doors_and_playfield:              ; cc3a
+       bl   @ti_draw_playfield
+;       li   ix,buffer_copy_routine     ; LD IX,$CC38       ; {Draw the main game playfield.
+;       .call @draw_playfield           ; CALL $C300        ; }
        movb one,a                      ; LD A,$01          ; {Calls #R$D664 with #R$CE1A set to $01.
        movb a,@door_frame_ref          ; LD ($CE1A),A      ; 
        .call @draw_door_frame_1        ; CALL $D664        ; }
@@ -2316,18 +2334,20 @@ lives:                                 ; cc59
 * Display The "Life" Images.
 * 
 * Used by the routines at #R$5B83, #R$C7C0 and #R$CD1B.
-life_images:                           ; cc5a
+draw_life_images:                      ; cc5a
+*      Delete all life images
        movb @bytes+5,b                 ; LD B,$05          ; {Set up counter=$05 screen buffer=$50B6.
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ; }
-life_images_loop:                      ; cc5f
+delete_life_images_loop:               ; cc5f
        .push bc                        ; PUSH BC           ; {jjjss
        li   de,buffer_at_5b00          ; LD DE,$5B00       ;
-       .call @copy_routine_loop        ; CALL $CC84        ; 
+       .call @copy_life_image          ; CALL $CC84        ;
        inc  hl                         ; INC HL            ; 
        inc  hl                         ; INC HL            ; 
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $CC5F        ; }
-       jne  life_images_loop           ;                   
+       jne  delete_life_images_loop           ;
+*      Draw life images
        movb @lives,a                   ; LD A,($CC59)      ; {If #R$CC59 are zero then return.
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; }
@@ -2341,21 +2361,20 @@ life_images_loop:                      ; cc5f
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ;
 draw_life_images_loop:                 ; cc77
        .push bc                        ; PUSH BC           ; 
-       .call @draw_life_images         ; CALL $CC81        ; 
+       .call @draw_life_image          ; CALL $CC81        ;
        inc  hl                         ; INC HL            ; 
        inc  hl                         ; INC HL            ; 
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $CC77        ; 
        jne  draw_life_images_loop      ;                   
        .ret                            ; RET               ; Return.
-draw_life_images:                      ; cc81
+draw_life_image:                       ; cc81
        li   de,gfx_lives_image         ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
-copy_routine_loop:                     ; cc84
+copy_life_image:                       ; cc84
        .push hl                        ; PUSH HL           ; 
        li   bc,>1802                   ; LD BC,$1802       ; 
        .call @copy_routine             ; CALL $D5E6        ; }
        .pop hl                         ; POP HL            ; 
-_cc8c:
        .ret                            ; RET               ; Return.
 
 * Deposit Flags.
@@ -2399,7 +2418,7 @@ draw_cashboxes:
        movb @cashbox_ref,a             ; LD A,($D45C)      ; {Converts #R$D45C into cash deposit box flag address
        movb a,@l                       ; LD L,A            ; (e.g. "1" becomes #R$CC8D and so on).
        sb   h,h                        ; LD H,$00          ; 
-       li   de,_cc8c                   ; LD DE,$CC8C       ; 
+       li   de,door_deposited_01-1     ; LD DE,$CC8C       ;
        a    de,hl                      ; ADD HL,DE         ; }
        li   ix,door_1_flags            ; LD IX,$D165       ; {#REGa=#R$D16D.
        movb @8(ix),a                   ; LD A,(IX+$08)     ; }
@@ -2490,13 +2509,13 @@ flash_lives_loop:                      ; cd25
        .push bc                        ; PUSH BC           ; }
        sb   one,*hl                    ; DEC (HL)          ; {Decrease the number of lives by one, stash the lives
        .push hl                        ; PUSH HL           ; memory location and draw the decreased life images.
-       .call @life_images              ; CALL $CC5A        ; }
+       .call @draw_life_images              ; CALL $CC5A        ; }
        movb @bytes+16,b                ; LD B,$10          ; {Short pause.
        .call @halt_loop                ; CALL $CD64        ; }
        .pop hl                         ; POP HL            ; {Grab the lives memory location, increase it by one, stash the location again and draw the now increased life
        ab   one,*hl                    ; INC (HL)          ; images (i.e. what they were on entry to the routine).
        .push hl                        ; PUSH HL           ; 
-       .call @life_images              ; CALL $CC5A        ; }
+       .call @draw_life_images              ; CALL $CC5A        ; }
        movb @bytes+16,b                ; LD B,$10          ; {Short pause.
        .call @halt_loop                ; CALL $CD64        ; }
        .pop hl                         ; POP HL            ; 
@@ -2507,8 +2526,9 @@ flash_lives_loop:                      ; cd25
        sb   one,a                      ; DEC A             ; jump to #R$CACB.
        movb a,*hl                      ; LD (HL),A         ; 
        jeq  !                          ; JP NZ,$CACB       ; }
-       b    @game_loop                     ;
+       b    @next_life                 ;
 !
+       b    @return_with_carry
        ; SCF                           ; SCF               ; {Set the carry flag and return.
        .ret                            ; RET               ; }
 
@@ -2525,14 +2545,15 @@ died:                                  ; cd47
 _cd53:
        .call @bang                     ; CALL $C000        ; 
 _cd56:
-       .call @populate_door_buffer     ; CALL $CD68        ; 
+       .call @reset_door_routine_flags ; CALL $CD68        ;
        li   hl,lives                   ; LD HL,$CC59       ; 
        movb *hl,a                      ; LD A,(HL)         ; 
        sb   one,a                      ; DEC A             ; Lose life
        movb a,*hl                      ; LD (HL),A         ; 
        jeq  !                          ; JP NZ,$CACB       ; 
-       b    @game_loop                     ;
+       b    @next_life                 ;
 !
+       b    @return_with_carry
        ; SCF                           ; SCF               ; 
        .ret                            ; RET               ; 
 
@@ -2552,13 +2573,13 @@ halt_loop:                             ; cd64
 * Used by the routines at #R$C7C0 and #R$CD47.
 *
 * Populates the state flags for each door.
-populate_door_buffer:                  ; cd68
+reset_door_routine_flags:              ; cd68
        li   ix,door_1_flags            ; LD IX,$D165       ; {Call #R$D8A1 using #REGix=#R$D165.
-       .call @reset_door_routine                 ; CALL $D8A1        ; }
+       .call @reset_door_routine       ; CALL $D8A1        ; }
        li   ix,door_2_flags            ; LD IX,$D173       ; {Call #R$D8A1 using #REGix=#R$D173.
-       .call @reset_door_routine                 ; CALL $D8A1        ; }
+       .call @reset_door_routine       ; CALL $D8A1        ; }
        li   ix,door_3_flags            ; LD IX,$D181       ; {Call #R$D8A1 using #REGix=#R$D181.
-       .call @reset_door_routine                 ; CALL $D8A1        ; }
+       .call @reset_door_routine       ; CALL $D8A1        ; }
        .ret                            ; RET               ; Return.
 *
 * Score (6 bytes)
@@ -2626,8 +2647,7 @@ draw_tt_char:                          ; cdae
        .ex_de_hl                       ; EX DE,HL          ; 
        .pop hl                         ; POP HL            ; 
        li   bc,>1001                   ; LD BC,$1001       ;
-       bl   @ti_copy_routine
-;       .call @copy_routine             ; CALL $D5E6        ; }
+       .call @copy_routine             ; CALL $D5E6        ; }
        .ret                            ; RET               ; Return.
 
 * Apply Scoring
@@ -2687,8 +2707,8 @@ scoring_base_10:                       ; ce08
 * 
 * Points to either #R$D392 or #R$D39B depending on the chosen control method.
 control_routine_alias:                 ; ce12
-       byte >9B,>D3                                                  ; 16 bit memory location of either the keyboard or
-                                                                     ; joystick control routines.
+       data controls_joystick                              ; 16 bit memory location of either the keyboard or
+                                                           ; joystick control routines.
 
 * Door Routine Buffer.
 * 
@@ -2751,18 +2771,18 @@ chooser_routine_ptr:                   ; ce1f
 character_chooser:                     ; ce21
 * Wait 3 times before letting us in
        li   hl,chooser_countdown       ; LD HL,$CE1E       ; {Decrease #R$CE1E by one.
-       movb *hl,a                      ; LD A,(HL)         ;
-       sb   one,a                      ; DEC A             ; 
-       movb a,*hl                      ; LD (HL),A         ; }
+                                       ; LD A,(HL)         ;
+       sb   one,*hl                    ; DEC A             ;
+                                       ; LD (HL),A         ; }
        jeq  !                          ; RET NZ            ; Return if not zero.
        .ret                            ;                   
 !
 * Door also has a count-down
-       movb @chooser_countdown_init,a  ; LD A,($CE1B)      ; {Copies #R$CE1B into #R$CE1E.
-       movb a,*hl                      ; LD (HL),A         ; }
-       movb @9(ix),a                   ; LD A,(IX+$09)     ; {Decrease ????? by one.
-       sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
-       movb a,@9(ix)                   ; LD (IX+$09),A     ; { =h Address | =h Door }
+       movb @chooser_countdown_init,*hl ; LD A,($CE1B)      ; {Copies #R$CE1B into #R$CE1E.
+                                       ; LD (HL),A         ; }
+                                       ; LD A,(IX+$09)     ; {Decrease ????? by one.
+       sb   one,@9(ix)                 ; DEC A             ; #TABLE(default,centre,centre)
+                                       ; LD (IX+$09),A     ; { =h Address | =h Door }
                                                            ; { #R$D16E | Door 1 }
                                                            ; { #R$D17C | Door 2 }
                                                            ; { #R$D18A | Door 3 }
@@ -2849,23 +2869,23 @@ choose_bandit_6:                       ; ce9c
        li   de,bandit_6_buffer         ; LD DE,$D10E       ; Set target character buffer to #R$D10E.
 * Stashes the chosen character source/ buffer to the door state buffer.
 choose_action:                         ; cea9
-       movb @l,@12(ix)                 ; LD (IX+$0C),L     ; {Writes the character source memory address to one of the following (depending on which door is currently
-       movb h,@13(ix)                  ; LD (IX+$0D),H     ; being actioned);
+       mov  hl,@12(ix)                 ; LD (IX+$0C),L     ; {Writes the character source memory address to one of the following (depending on which door is currently
+                                       ; LD (IX+$0D),H     ; being actioned);
                                                            ; #TABLE(default,centre,centre)
                                                            ; { =h Address | =h Door }
                                                            ; { #R$D171 | Door 1 }
                                                            ; { #R$D17F | Door 2 }
                                                            ; { #R$D18D | Door 3 }
                                                            ; TABLE#}
-       movb @e,@10(ix)                 ; LD (IX+$0A),E     ; {Writes the character target/ buffer memory address to one of the following (depending on which door is
-       movb d,@11(ix)                  ; LD (IX+$0B),D     ; currently being actioned);
+       movb de,@10(ix)                 ; LD (IX+$0A),E     ; {Writes the character target/ buffer memory address to one of the following (depending on which door is
+                                       ; LD (IX+$0B),D     ; currently being actioned);
                                                            ; #TABLE(default,centre,centre)
                                                            ; { =h Address | =h Door }
                                                            ; { #R$D16F | Door 1 }
                                                            ; { #R$D17D | Door 2 }
                                                            ; { #R$D18B | Door 3 }
                                                            ; TABLE#}
-       b    @_d019                     ; JP $D019          ; Jump to #R$D019.
+       b    @init_bandit_draw_open                     ; JP $D019          ; Jump to #R$D019.
 
 * Character Initialisations.
 * 
@@ -2877,19 +2897,19 @@ choose_action:                         ; cea9
 init_bandit_open:                      ; ceb8
        li   de,prep_bandit_open        ; LD DE,$D192       ; {Writes #R$D192 to the address contained
 *      Set hl = pointer to pointer to door routine
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
 *      Set pointer to door routine to prep_bandit_open
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
 *      Set hl = pointer to bandit data
-       li   hl,bandit_open_source                   ; LD HL,$D076       ; {Handles copying $0007 bytes of data from the address contained
+       li   hl,bandit_open_source      ; LD HL,$D076       ; {Handles copying $0007 bytes of data from the address contained
 *      Set de = pointer to door source data
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
+                                       ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
        li   bc,>0007                   ; LD BC,$0007       ; { =h Address | =h Door }
 *      Copy 7 bytes from bandit data to door source data
        .ldir                           ; LDIR              ; { #R$D167 | Door 1 }
@@ -2898,82 +2918,85 @@ init_bandit_open:                      ; ceb8
                                                            ; TABLE#
                                                            ; to #R$D076.}
 *      Set the flag
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D18F and return.
-       movb a,@copy_char_data_flag     ; LD ($D18F),A      ;
+       movb one,@copy_char_data_flag   ; LD A,$01          ; {Writes $01 to #R$D18F and return.
+                                       ; LD ($D18F),A      ;
        .ret                            ; RET               ; }
 * Writes a "bandit closing the door" to the door flags/ cache.
 init_bandit_close:                     ; ced8
        li   de,prep_bandit_close       ; LD DE,$D1B7       ; {Writes #R$D1B7 to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov *ix,hl                      ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov de,*hl                      ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
        li   hl,bandit_close_source                   ; LD HL,$D07D       ; {Handles copying $0007 bytes of data from the address contained
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
+                                       ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
        li   bc,>0007                   ; LD BC,$0007       ; { =h Address | =h Door }
        .ldir                           ; LDIR              ; { #R$D167 | Door 1 }
                                                            ; { #R$D175 | Door 2 }
                                                            ; { #R$D183 | Door 3 }
                                                            ; TABLE#
                                                            ; to #R$D07D.}
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D18F.
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ; }
-       movb one,@7(ix)                 ; LD (IX+$07),$01   ; 
+       movb one,@copy_char_data_flag   ; LD A,$01          ; {Writes $01 to #R$D18F.
+                                       ; LD ($D18F),A      ; }
+       movb one,@7(ix)                 ; LD (IX+$07),$01   ; Score?
        .ret                            ; RET               ; 
 * Writes "Bowie" to the door flags/ cache.
 init_bowie:                            ; cefc
        li   de,prep_bowie              ; LD DE,$D1DC       ; {Writes #R$D1DC to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov *ix,hl                      ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
        .call @random_number            ; CALL $D8B0        ; 
        andi a,8*256                    ; AND $08           ; 
        li   hl,bowie_source            ; LD HL,$D084       ;
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       sb   *hl,*hl                    ; LD (HL),$00       ;
+       movb a,a
        jeq  init_bowie_set_flag        ; JR Z,$CF16        ; 
        movb one,*hl                    ; LD (HL),$01       ; 
 init_bowie_set_flag:                   ; cf16
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; 
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; 
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ;
+                                       ; LD D,(IX+$03)     ;
        li   bc,>0009                   ; LD BC,$0009       ; 
        .ldir                           ; LDIR              ; 
        li   de,bowie_shot_action       ; LD DE,$D863       ; 
-       movb @e,@4(ix)                  ; LD (IX+$04),E     ; 
-       movb d,@5(ix)                   ; LD (IX+$05),D     ; 
+       mov  de,@4(ix)                  ; LD (IX+$04),E     ;
+                                       ; LD (IX+$05),D     ;
        .ret                            ; RET               ; 
 * Writes a "customer opening the door" to the door flags/ cache.
 init_customer_open:                    ; cf2b
-       movb *ix,@l                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
+                                       ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
        li   de,prep_customer           ; LD DE,$D201       ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
        .call @random_number            ; CALL $D8B0        ; 
        andi a,130*256                  ; AND $82           ; 
-       li   hl,customer_open_source_2           ; LD HL,$D0A1       ;
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       li   hl,customer_open_source_2  ; LD HL,$D0A1       ;
+       sb   *hl,*hl                    ; LD (HL),$00       ;
+       movb a,a
        jne  init_cust_open_set_flag    ; JR NZ,$CF45       ; 
        movb one,*hl                    ; LD (HL),$01       ; 
 init_cust_open_set_flag:               ; cf45
-       li   hl,customer_open_source_1           ; LD HL,$D09C       ;
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; 
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; 
+       li   hl,customer_open_source_1  ; LD HL,$D09C       ;
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ;
+                                       ; LD D,(IX+$03)     ;
        li   bc,>000f                   ; LD BC,$000F       ; 
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ;
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ;
        ; AND A                         ; AND A             ; 
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
 !
@@ -2981,29 +3004,31 @@ init_cust_open_set_flag:               ; cf45
        .ret                            ; RET               ; 
 * Writes a "customer closing the door" to the door flags/ cache.
 init_customer_close:                   ; cf5e
-       movb *ix,@l                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
+                                       ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
        li   de,prep_customer           ; LD DE,$D201       ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
        .call @random_number            ; CALL $D8B0        ; 
        andi a,65*256                   ; AND $41           ; 
-       li   hl,customer_close_source_2             ; LD HL,$D092       ;
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       li   hl,customer_close_source_2 ; LD HL,$D092       ;
+       sb   *hl,*hl                    ; LD (HL),$00       ;
+       movb a,a
        jne  init_cust_close_set_flag   ; JR NZ,$CF78       ; 
        movb one,*hl                    ; LD (HL),$01       ; 
 init_cust_close_set_flag:              ; cf78
-       li   hl,customer_close_source_1                   ; LD HL,$D08D       ;
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; 
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; 
+       li   hl,customer_close_source_1 ; LD HL,$D08D       ;
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ;
+                                       ; LD D,(IX+$03)     ;
        li   bc,>000f                   ; LD BC,$000F       ; 
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ;
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ;
        ; AND A                         ; AND A             ; 
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
 !
@@ -3012,76 +3037,76 @@ init_cust_close_set_flag:              ; cf78
 * Writes a "customer being shot" to the door flags/ cache.
 init_customer_shot:                    ; cf91
        li   de,prep_customer_shot      ; LD DE,$D226       ; {Writes #R$D226 to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; {Loads e.g. #R$D167 (depending on which door is currently
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; being actioned) into #REGde.}
-       li   hl,customer_shot_source                   ; LD HL,$D0AB       ; #REGhl=#R$D0AB.
-       inc  de                         ; INC DE            ; {Increase #REGde by $06.
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; }
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; {Loads e.g. #R$D167 (depending on which door is currently
+                                       ; LD D,(IX+$03)     ; being actioned) into #REGde.}
+       li   hl,customer_shot_source    ; LD HL,$D0AB       ; #REGhl=#R$D0AB.
+       ai   de,6                       ; INC DE            ; {Increase #REGde by $06.
+                                       ; INC DE            ;
+                                       ; INC DE            ;
+                                       ; INC DE            ;
+                                       ; INC DE            ;
+                                       ; INC DE            ; }
        li   bc,>0003                   ; LD BC,$0003       ; {Copies three sequential bytes of data from #REGhl to
        .ldir                           ; LDIR              ; #REGde.}
-       li   hl,copy_char_data_flag                   ; LD HL,$D18F       ; {Writes $01 to #R$D18F and return.
+       li   hl,copy_char_data_flag     ; LD HL,$D18F       ; {Writes $01 to #R$D18F and return.
        movb one,*hl                    ; LD (HL),$01       ; 
        .ret                            ; RET               ; }
 * Writes "Julius opening the door" to the door flags/ cache.
 init_julius_open:                      ; cfb7
        li   de,prep_julius_open        ; LD DE,$D241       ; {Writes #R$D241 to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       li   hl,julius_open_source                   ; LD HL,$D0AE       ;
+       li   hl,julius_open_source      ; LD HL,$D0AE       ;
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .call @random_number            ; CALL $D8B0        ; 
        andi a,32*256                   ; AND $20           ; 
        jne  init_julius_open_set_flag  ; JR NZ,$CFD1       ; 
        movb one,*hl                    ; LD (HL),$01       ; 
 init_julius_open_set_flag:             ; cfd1
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; 
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; 
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ;
+                                       ; LD D,(IX+$03)     ;
        li   bc,>000a                   ; LD BC,$000A       ; 
        .ldir                           ; LDIR              ; 
        .ret                            ; RET               ; 
 * Writes "Julius closing the door" to the door flags/ cache.
 init_julius_close:                     ; cfdd
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D0B8.
-       movb a,@julius_close_source                   ; LD ($D0B8),A      ; }
-_cfe2:
+       movb one,@julius_close_source   ; LD A,$01          ; {Writes $01 to #R$D0B8.
+                                       ; LD ($D0B8),A      ; }
+julius_callback:                       ; cfe2
        li   de,prep_julius_close       ; LD DE,$D265       ; {Writes #R$D265 to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       li   hl,julius_close_source                   ; LD HL,$D0B8       ; {Handles copying $0009 bytes of data from the address (plus 1) contained
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
+       li   hl,julius_close_source     ; LD HL,$D0B8       ; {Handles copying $0009 bytes of data from the address (plus 1) contained
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; at (depending on which door is currently being actioned);
+                                       ; LD D,(IX+$03)     ; #TABLE(default,centre,centre)
        inc  de                         ; INC DE            ; { =h Address | =h Door }
        li   bc,>0009                   ; LD BC,$0009       ; { #R$D167 | Door 1 }
        .ldir                           ; LDIR              ; { #R$D175 | Door 2 }
                                                            ; { #R$D183 | Door 3 }
                                                            ; TABLE#
                                                            ; to #R$D0B8.}
-       movb one,a                      ; LD A,$01          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
-       li   hl,julius_close_source                   ; LD HL,$D0B8       ;
+       movb one,@copy_char_data_flag   ; LD A,$01          ;
+                                       ; LD ($D18F),A      ;
+       li   hl,julius_close_source     ; LD HL,$D0B8       ;
        movb *hl,a                      ; LD A,(HL)         ; 
-       movb @bytes+2,@7(ix)            ; LD (IX+$07),$02   ; 
+       movb @bytes+2,@7(ix)            ; LD (IX+$07),$02   ; Score?
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; 
@@ -3096,57 +3121,57 @@ _cfe2:
 * Routine at D019
 * 
 * Used by the routine at #R$CE21.
-_d019:
+init_bandit_draw_open:                 ; d019
        li   de,prep_bandit_draw_open   ; LD DE,$D289       ; {Writes #R$D289 to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       movb @12(ix),@l                 ; LD L,(IX+$0C)     ; {Copies $000B bytes of data from (depending on which door is currently being actioned);
-       movb @13(ix),h                  ; LD H,(IX+$0D)     ; #TABLE(default,centre,centre)
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; { =h Source | =h Destination | =h Door }
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; { #R$D171 | #R$D167 | Door 1 }
+       mov  @12(ix),hl                 ; LD L,(IX+$0C)     ; {Copies $000B bytes of data from (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$0D)     ; #TABLE(default,centre,centre)
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; { =h Source | =h Destination | =h Door }
+                                       ; LD D,(IX+$03)     ; { #R$D171 | #R$D167 | Door 1 }
        li   bc,>000b                   ; LD BC,$000B       ; { #R$D17F | #R$D175 | Door 2 }
        .ldir                           ; LDIR              ; { #R$D18D | #R$D183 | Door 3 }
                                                            ; TABLE#}
        .ret                            ; RET               ; Return.
 
 * Routine at D037
-todo_door_reset:                       ; d037
+set_char_state_to_one:            ; d037
        movb one,a                      ; LD A,$01          ; {Writes $01 to the address contained
-       movb @10(ix),@l                 ; LD L,(IX+$0A)     ; at (depending on which door is currently being actioned);
-       movb @11(ix),h                  ; LD H,(IX+$0B)     ; #TABLE(default,centre,centre)
+       mov  @10(ix),hl                 ; LD L,(IX+$0A)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$0B)     ; #TABLE(default,centre,centre)
        movb a,*hl                      ; LD (HL),A         ; { =h Address | =h Door }
                                                            ; { #R$D16F | Door 1 }
                                                            ; { #R$D17D | Door 2 }
                                                            ; { #R$D18B | Door 3 }
                                                            ; TABLE#
                                                            ; This is the first byte of character state data.}
-_d040:
+init_bandit_draw_close:                ; d040
        li   de,prep_bandit_draw_close  ; LD DE,$D2AD       ; {Writes #R$D2AD to the address contained
-       movb *ix,@l                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
-       movb @e,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
-       inc  hl                         ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
-       movb d,*hl                      ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; at (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$01)     ; #TABLE(default,centre,centre,centre)
+       mov  de,*hl                     ; LD (HL),E         ; { =h Address | =h Door | =h Target }
+                                       ; INC HL            ; { #R$D165 | Door 1 | #R$CE14 }
+                                       ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#
                                                            ; This is copying the actual source data into the cache where it can be manipulated by the game events.
                                                            ; }
-       movb @10(ix),@l                 ; LD L,(IX+$0A)     ; {Copies $000B bytes of data from (depending on which door is currently being actioned);
-       movb @11(ix),h                  ; LD H,(IX+$0B)     ; #TABLE(default,centre,centre)
-       movb @2(ix),@e                  ; LD E,(IX+$02)     ; { =h Source | =h Destination | =h Door }
-       movb @3(ix),d                   ; LD D,(IX+$03)     ; { #R$D16F | #R$D167 | Door 1 }
+       mov  @10(ix),hl                 ; LD L,(IX+$0A)     ; {Copies $000B bytes of data from (depending on which door is currently being actioned);
+                                       ; LD H,(IX+$0B)     ; #TABLE(default,centre,centre)
+       mov  @2(ix),de                  ; LD E,(IX+$02)     ; { =h Source | =h Destination | =h Door }
+                                       ; LD D,(IX+$03)     ; { #R$D16F | #R$D167 | Door 1 }
        li   bc,>000b                   ; LD BC,$000B       ; { #R$D17D | #R$D175 | Door 2 }
        .ldir                           ; LDIR              ; { #R$D18B | #R$D183 | Door 3 }
                                                            ; TABLE#}
-       movb one,a                      ; LD A,$01          ; {Initialise #R$D18F (writes $01 to it).
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ; }
-       movb @10(ix),@l                 ; LD L,(IX+$0A)     ; {Loads #REGa with the flag from the address contained
-       movb @11(ix),h                  ; LD H,(IX+$0B)     ; at (depending on which door is currently being actioned);
+       movb one,@copy_char_data_flag   ; LD A,$01          ; {Initialise #R$D18F (writes $01 to it).
+                                       ; LD ($D18F),A      ; }
+       mov  @10(ix),hl                 ; LD L,(IX+$0A)     ; {Loads #REGa with the flag from the address contained
+                                       ; LD H,(IX+$0B)     ; at (depending on which door is currently being actioned);
        movb *hl,a                      ; LD A,(HL)         ; #TABLE(default,centre,centre)
                                                            ; { =h Address | =h Door }
                                                            ; { #R$D16F | Door 1 }
@@ -3154,12 +3179,13 @@ _d040:
                                                            ; { #R$D18B | Door 3 }
                                                            ; TABLE#
                                                            ; As per #R$D037, this should be $01.}
-       movb @bytes+2,@7(ix)            ; LD (IX+$07),$02   ; 
-       ; AND A                         ; AND A             ; 
+       movb @bytes+2,@7(ix)            ; LD (IX+$07),$02   ; Score?
+       ; AND A                         ; AND A             ;
+       movb a,a
        jne  !                          ; RET Z             ; 
        .ret                            ;                   
 !
-       sb   @7(ix),@7(ix)              ; LD (IX+$07),$00   ; 
+       sb   @7(ix),@7(ix)              ; LD (IX+$07),$00   ; Score?
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ret                            ; RET               ; Return.
 
@@ -3313,8 +3339,8 @@ sheriff_star_flag:
 * Handles copying a "normal" bandit into the bandit state cache at #R$D71E.
 prep_bandit_open:                      ; d192
 *      Set hl = pointer to door source data
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $0007 bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $0007 bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,bandit_state_ref        ; LD DE,$D71E       ; #TABLE(default,centre,centre)
        li   bc,>0007                   ; LD BC,$0007       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3331,8 +3357,9 @@ prep_bandit_open:                      ; d192
 *      If flag is set then reset and copy state data back to door source data
        movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag     ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3340,8 +3367,8 @@ prep_bandit_open:                      ; d192
        .ret                            ; RET               ; and return.}
 * And copying a successful bandit encounter to close the door.
 prep_bandit_close:                     ; d1b7
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $0007 bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $0007 bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,bandit_state_ref        ; LD DE,$D71E       ; #TABLE(default,centre,centre)
        li   bc,>0007                   ; LD BC,$0007       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3354,10 +3381,11 @@ prep_bandit_close:                     ; d1b7
        .pop de                         ; POP DE            ; 
        .pop hl                         ; POP HL            ; }
        .ex_de_hl                       ; EX DE,HL          ; Swap the source and target.
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3365,8 +3393,8 @@ prep_bandit_close:                     ; d1b7
        .ret                            ; RET               ; and return.}
 * Handles copying Bowie state data into the state cache at #R$D7C5.
 prep_bowie:                            ; d1dc
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $0009 bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $0009 bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,bowie_good_bad          ; LD DE,$D7C5       ; #TABLE(default,centre,centre)
        li   bc,>0009                   ; LD BC,$0009       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3379,10 +3407,11 @@ prep_bowie:                            ; d1dc
        .pop de                         ; POP DE            ; 
        .pop hl                         ; POP HL            ; }
        .ex_de_hl                       ; EX DE,HL          ; Swap the source and target.
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3390,8 +3419,8 @@ prep_bowie:                            ; d1dc
        .ret                            ; RET               ; and return.}
 * Handles copying customer state data into the state cache at #R$D48F.
 prep_customer:                         ; d201
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000F bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000F bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,customer_frame_1        ; LD DE,$D48F       ; #TABLE(default,centre,centre)
        li   bc,>000f                   ; LD BC,$000F       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3404,10 +3433,11 @@ prep_customer:                         ; d201
        .pop de                         ; POP DE            ; 
        .pop hl                         ; POP HL            ; }
        .ex_de_hl                       ; EX DE,HL          ; Swap the source and target.
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3416,8 +3446,8 @@ prep_customer:                         ; d201
 * Handles copying customer "is shot" state data into the state cache at
 * #R$D48F.
 prep_customer_shot:                    ; d226
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000F bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000F bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,customer_frame_1        ; LD DE,$D48F       ; #TABLE(default,centre,centre)
        li   bc,>000f                   ; LD BC,$000F       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3434,8 +3464,8 @@ prep_customer_shot:                    ; d226
        .ret                            ; RET               ; return.}
 * Handles copying Julius state data into the state cache at #R$D8E5.
 prep_julius_open:                      ; d241
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,julius_good_bad         ; LD DE,$D8E5       ; #TABLE(default,centre,centre)
        li   bc,>000a                   ; LD BC,$000A       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3447,10 +3477,11 @@ prep_julius_open:                      ; d241
        .pop bc                         ; POP BC            ; {Restore the source, target and counter from above.
        .pop hl                         ; POP HL            ; 
        .pop de                         ; POP DE            ; }
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3458,8 +3489,8 @@ prep_julius_open:                      ; d241
        .ret                            ; RET               ; }
 * And copying a successful Julius encounter to close the door.
 prep_julius_close:                     ; d265
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       movb @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,julius_good_bad         ; LD DE,$D8E5       ; #TABLE(default,centre,centre)
        li   bc,>000a                   ; LD BC,$000A       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3473,8 +3504,9 @@ prep_julius_close:                     ; d265
        .pop de                         ; POP DE            ; }
        movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3482,8 +3514,8 @@ prep_julius_close:                     ; d265
        .ret                            ; RET               ; }
 * Handles copying a "drawing bandit" into the bandit state cache at #R$DA0C.
 prep_bandit_draw_open:                 ; d289
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,bandit_draw             ; LD DE,$DA0C       ; #TABLE(default,centre,centre)
        li   bc,>000b                   ; LD BC,$000B       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3495,10 +3527,11 @@ prep_bandit_draw_open:                 ; d289
        .pop bc                         ; POP BC            ; {Restore the source, target and counter from above.
        .pop hl                         ; POP HL            ; 
        .pop de                         ; POP DE            ; }
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. Write $00 to it. If it wasn't zero
        ; AND A                         ; AND A             ; then return.
-       sb   a,a                        ; LD A,$00          ; 
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+                                       ; LD A,$00          ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ;
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3506,8 +3539,8 @@ prep_bandit_draw_open:                 ; d289
        .ret                            ; RET               ; }
 * And copying a successful "drawing bandit" encounter to close the door.
 prep_bandit_draw_close:                ; d2ad
-       movb @2(ix),@l                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
-       movb @3(ix),h                   ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
+       mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
+                                       ; LD H,(IX+$03)     ; at (depending on which door is currently being actioned);
        li   de,bandit_draw             ; LD DE,$DA0C       ; #TABLE(default,centre,centre)
        li   bc,>000b                   ; LD BC,$000B       ; { =h Address | =h Door }
        .push hl                        ; PUSH HL           ; { #R$D167 | Door 1 }
@@ -3519,9 +3552,10 @@ prep_bandit_draw_close:                ; d2ad
        .pop bc                         ; POP BC            ; {Restore the source, target and counter from above.
        .pop hl                         ; POP HL            ; 
        .pop de                         ; POP DE            ; }
-       movb @copy_char_data_flag,a                   ; LD A,($D18F)      ; {Check if #R$D18F is zero. If it wasn't zero then
+       movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. If it wasn't zero then
        ; AND A                         ; AND A             ; return.
-       movb a,@copy_char_data_flag                   ; LD ($D18F),A      ;
+       ; TODO: suspicious that flag is not set to 0
+       movb a,@copy_char_data_flag     ; LD ($D18F),A      ;
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3922,10 +3956,15 @@ draw_cashbox_selection:                ; d47e
 draw_cashbox_selection_1:              ; d488
        ab   a,a                        ; ADD A,A           ; 2*a
        ab   @l,a                       ; ADD A,L           ; l=2*a-1 or l=2*a+5
-       movb a,@l                       ; LD L,A            ; 
-       movb @c,*hl                     ; LD (HL),C         ; Draw attribute
+       movb a,@l                       ; LD L,A            ;
+       movb @c,a
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;       movb @c,*hl                     ; LD (HL),C         ; Draw attribute
        inc  hl                         ; INC HL            ; 
-       movb @c,*hl                     ; LD (HL),C         ; Draw attribute
+       mov  hl,tmp1
+       bl   @ti_draw_attribute
+;      movb @c,*hl                     ; LD (HL),C         ; Draw attribute
        .ret                            ; RET               ; 
 
 * Customer Logic.
@@ -4357,111 +4396,123 @@ door_buffer_copy_loop:                 ; d659
 * 
 * Preps door frame 1.
 draw_door_frame_1:                     ; d664
-       li   hl,door_1_attributes       ; LD HL,$D6B1       ; {Calls #R$D684 using #R$D6B1.
-       .call @door_attributes          ; CALL $D684        ; }
-       li   de,gfx_door_frame_1        ; LD DE,$BA80       ; #REGde=#R$BA80.
+       bl   @ti_setup_draw_door_params
+       bl   @ti_draw_door_frame_1
+       .ret
+;       li   hl,door_frame_1_attrs       ; LD HL,$D6B1       ; {Calls #R$D684 using #R$D6B1.
+;       .call @door_attributes          ; CALL $D684        ; }
+;       li   de,gfx_door_frame_1        ; LD DE,$BA80       ; #REGde=#R$BA80.
 * Referencing the door frame index, work out the screen position and send it to
 * the #R$D717 routine.
 prep_door_frame:                       ; d66d
-       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
-       li   hl,zx_screen+>0082         ; LD HL,$4082       ; {Determines which screen address to use for the door reference index currently held in #REGa.
-       sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
-       jne  !                          ; JP Z,$D717        ; { =h #REGa | =h Screen Address }
-       b    @draw_door_frame           ;                   
-!
-       li   hl,zx_screen+>008d         ; LD HL,$408D       ; { $01 | $4082 }
-       sb   one,a                      ; DEC A             ; { $02 | $408D }
-       jne  !                          ; JP Z,$D717        ; { $03 | $4098 }
-       b    @draw_door_frame           ;                   
-!
-       li   hl,zx_screen+>0098         ; LD HL,$4098       ; TABLE#
-       b    @draw_door_frame           ; JP $D717          ; Jump to #R$D717.}
-* Copies attributes for the current door frame index.
-door_attributes:                       ; d684
-       .push af                        ; PUSH AF           ; Stash the accumulator for later.
-       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
-       li   de,zx_attributes+>0082     ; LD DE,$5882       ; {#TABLE(default,centre,centre)
-       sb   one,a                      ; DEC A             ; { =h #REGa | =h Screen Address }
-       jeq  door_attributes_skip       ; JR Z,$D697        ; { $01 | $5882 }
-       li   de,zx_attributes+>008d     ; LD DE,$588D       ; { $02 | $588D }
-       sb   one,a                      ; DEC A             ; { $03 | $5898 }
-       jeq  door_attributes_skip       ; JR Z,$D697        ; TABLE#
-       li   de,zx_attributes+>0098     ; LD DE,$5898       ; ...continue from #R$D697.}
-door_attributes_skip:                  ; d697
-       movb @bytes+11,b                ; LD B,$0B          ; Sets the height of the door
-                                                           ; image.
-door_attributes_loop:                  ; d699
-       .push bc                        ; PUSH BC           ; {Stash the references for later
-       .push hl                        ; PUSH HL           ; and call #R$D6AB.
-       .push de                        ; PUSH DE           ; 
-       .call @door_attributes_copy     ; CALL $D6AB        ; }
-       .pop de                         ; POP DE            ; {Moves the screen attribute
-       li   hl,>0020                   ; LD HL,$0020       ; address down to the next
-       a    de,hl                      ; ADD HL,DE         ; attribute row.
-       .ex_de_hl                       ; EX DE,HL          ; }
-       .pop hl                         ; POP HL            ; {Restore the counter and loop
-       .pop bc                         ; POP BC            ; back to #R$D699 until complete.
-       sb   one,b                      ; DJNZ $D699        ; }
-       jne  door_attributes_loop       ;                   
-       .pop af                         ; POP AF            ; {Restore the accumulator and
-       .ret                            ; RET               ; return.}
-* Simple helper copy routine for sending attribute data to the screen attribute
-* buffer.
-door_attributes_copy:                  ; d6ab
-       li   bc,>0007                   ; LD BC,$0007       ; {Set the door width, copy the
-       .ldir                           ; LDIR              ; attribute data to the screen and
-       .ret                            ; RET               ; return.}
+;       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
+;       li   hl,zx_screen+>0082         ; LD HL,$4082       ; {Determines which screen address to use for the door reference index currently held in #REGa.
+;       sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
+;       jne  !                          ; JP Z,$D717        ; { =h #REGa | =h Screen Address }
+;       b    @draw_door_frame           ;
+;!
+;       li   hl,zx_screen+>008d         ; LD HL,$408D       ; { $01 | $4082 }
+;       sb   one,a                      ; DEC A             ; { $02 | $408D }
+;       jne  !                          ; JP Z,$D717        ; { $03 | $4098 }
+;       b    @draw_door_frame           ;
+;!
+;       li   hl,zx_screen+>0098         ; LD HL,$4098       ; TABLE#
+;       b    @draw_door_frame           ; JP $D717          ; Jump to #R$D717.}
+;* Copies attributes for the current door frame index.
+;door_attributes:                       ; d684
+;       .push af                        ; PUSH AF           ; Stash the accumulator for later.
+;       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
+;       li   de,zx_attributes+>0082     ; LD DE,$5882       ; {#TABLE(default,centre,centre)
+;       sb   one,a                      ; DEC A             ; { =h #REGa | =h Screen Address }
+;       jeq  door_attributes_skip       ; JR Z,$D697        ; { $01 | $5882 }
+;       li   de,zx_attributes+>008d     ; LD DE,$588D       ; { $02 | $588D }
+;       sb   one,a                      ; DEC A             ; { $03 | $5898 }
+;       jeq  door_attributes_skip       ; JR Z,$D697        ; TABLE#
+;       li   de,zx_attributes+>0098     ; LD DE,$5898       ; ...continue from #R$D697.}
+;door_attributes_skip:                  ; d697
+;       movb @bytes+11,b                ; LD B,$0B          ; Sets the height of the door
+;                                                           ; image.
+;door_attributes_loop:                  ; d699
+;       .push bc                        ; PUSH BC           ; {Stash the references for later
+;       .push hl                        ; PUSH HL           ; and call #R$D6AB.
+;       .push de                        ; PUSH DE           ;
+;       .call @door_attributes_copy     ; CALL $D6AB        ; }
+;       .pop de                         ; POP DE            ; {Moves the screen attribute
+;       li   hl,>0020                   ; LD HL,$0020       ; address down to the next
+;       a    de,hl                      ; ADD HL,DE         ; attribute row.
+;       .ex_de_hl                       ; EX DE,HL          ; }
+;       .pop hl                         ; POP HL            ; {Restore the counter and loop
+;       .pop bc                         ; POP BC            ; back to #R$D699 until complete.
+;       sb   one,b                      ; DJNZ $D699        ; }
+;       jne  door_attributes_loop       ;
+;       .pop af                         ; POP AF            ; {Restore the accumulator and
+;       .ret                            ; RET               ; return.}
+;* Simple helper copy routine for sending attribute data to the screen attribute
+;* buffer.
+;door_attributes_copy:                  ; d6ab
+;       li   bc,>0007                   ; LD BC,$0007       ; {Set the door width, copy the
+;       .ldir                           ; LDIR              ; attribute data to the screen and
+;       .ret                            ; RET               ; return.}
 * Door frame attribute data.
-door_1_attributes:                     ; d6b1
+door_frame_1_attrs:                    ; d6b1
        byte >30,>30,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 1.
-door_2_attributes:                     ; d6b9
+door_frame_2_attrs:                    ; d6b9
        byte >28,>28,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 2.
-door_3_attributes:                     ; d6c1
+door_frame_3_attrs:                    ; d6c1
        byte >28,>28,>28,>28,>30,>30,>30,>30                          ; Attribute data for door frame 3.
-door_4_attributes:                     ; d6c9
+door_frame_4_attrs:                    ; d6c9
        byte >28,>28,>28,>28,>28,>28,>30,>28                          ; Attribute data for door frame 4.
 * Preps door frame 2.
 draw_door_frame_2:                     ; d6d1
-       li   hl,door_2_attributes       ; LD HL,$D6B9       ; {Calls #R$D684 using #R$D6B9.
-       .call @door_attributes          ; CALL $D684        ; }
-       .call @character_door_frame_2   ; CALL $D61E        ; {Prepare the character/ door image by calling #R$D61E. Then pass #R$EA90 to #R$D66D which will draw it to the
-       li   de,door_buffer             ; LD DE,$EA90       ; screen.
-       jmp  prep_door_frame            ; JR $D66D          ; }
+       bl   @ti_setup_draw_door_params
+       bl   @ti_draw_door_frame_2
+       .ret
+;       li   hl,door_frame_2_attrs       ; LD HL,$D6B9       ; {Calls #R$D684 using #R$D6B9.
+;       .call @door_attributes          ; CALL $D684        ; }
+;       .call @character_door_frame_2   ; CALL $D61E        ; {Prepare the character/ door image by calling #R$D61E. Then pass #R$EA90 to #R$D66D which will draw it to the
+;       li   de,door_buffer             ; LD DE,$EA90       ; screen.
+;       jmp  prep_door_frame            ; JR $D66D          ; }
 * Preps door frame 3.
 draw_door_frame_3:                     ; d6df
-       li   hl,door_3_attributes       ; LD HL,$D6C1       ; {Calls #R$D684 using #R$D6C1.
-       .call @door_attributes          ; CALL $D684        ; }
-       .call @character_door_frame_3   ; CALL $D638        ; {Prepare the character/ door image by calling #R$D638. Then pass #R$EA90 to #R$D66D which will draw it to the
-       li   de,door_buffer             ; LD DE,$EA90       ; screen.
-       jmp  prep_door_frame            ; JR $D66D          ; }
+       bl   @ti_setup_draw_door_params
+       bl   @ti_draw_door_frame_3
+       .ret
+;       li   hl,door_frame_3_attrs       ; LD HL,$D6C1       ; {Calls #R$D684 using #R$D6C1.
+;       .call @door_attributes          ; CALL $D684        ; }
+;       .call @character_door_frame_3   ; CALL $D638        ; {Prepare the character/ door image by calling #R$D638. Then pass #R$EA90 to #R$D66D which will draw it to the
+;       li   de,door_buffer             ; LD DE,$EA90       ; screen.
+;       jmp  prep_door_frame            ; JR $D66D          ; }
 * Preps door frame 4.
 draw_door_frame_4:                     ; d6ed
-       li   hl,door_4_attributes       ; LD HL,$D6C9       ; {Calls #R$D684 using #R$D6C9.
-       .call @door_attributes          ; CALL $D684        ; }
-       .call @draw_character_in_doorway ; CALL $D5CA        ; The door is fully open so draw
-                                                           ; the whole character in the
-                                                           ; doorway directly.
-       movb @bytes+88,b                ; LD B,$58          ; {Reference #R$BFA8 and the
-       movb one,@c                     ; LD C,$01          ; dimensions for the copy routine.
-       li   de,gfx_door_frame_4        ; LD DE,$BFA8       ; }
-       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
-       li   hl,zx_screen+>0088         ; LD HL,$4088       ; {Determines which screen address to use for the door reference index currently held in #REGa.
-       sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
-       jne  !                          ; JP Z,$D5E6        ; { =h #REGa | =h Screen Address }
-       b    @copy_routine              ;                   
-!
-       li   hl,zx_screen+>0093         ; LD HL,$4093       ; { $01 | $4088 }
-       sb   one,a                      ; DEC A             ; { $02 | $4093 }
-       jne  !                          ; JP Z,$D5E6        ; { $03 | $409E }
-       b    @copy_routine              ;                   
-!
-       li   hl,zx_screen+>009e         ; LD HL,$409E       ; TABLE#
-       b    @copy_routine              ; JP $D5E6          ; Jump to #R$D5E6.}
-       li   de,door_buffer             ; LD DE,$EA90       ; #REGde=#R$EA90.
-draw_door_frame:                       ; d717
-       movb @bytes+88,b                ; LD B,$58          ; {Draws the image pointed at by
-       movb @bytes+7,@c                ; LD C,$07          ; #REGde to the screen address in
-       b    @copy_routine              ; JP $D5E6          ; #REGhl using #R$D5E6.}
+       bl   @ti_setup_draw_door_params
+       bl   @ti_draw_door_frame_4
+       .ret
+;       li   hl,door_frame_4_attrs       ; LD HL,$D6C9       ; {Calls #R$D684 using #R$D6C9.
+;       .call @door_attributes          ; CALL $D684        ; }
+;       .call @draw_character_in_doorway ; CALL $D5CA        ; The door is fully open so draw
+;                                                           ; the whole character in the
+;                                                           ; doorway directly.
+;       movb @bytes+88,b                ; LD B,$58          ; {Reference #R$BFA8 and the
+;       movb one,@c                     ; LD C,$01          ; dimensions for the copy routine.
+;       li   de,gfx_door_frame_4        ; LD DE,$BFA8       ; }
+;       movb @door_frame_ref,a          ; LD A,($CE1A)      ; #REGa=#R$CE1A.
+;       li   hl,zx_screen+>0088         ; LD HL,$4088       ; {Determines which screen address to use for the door reference index currently held in #REGa.
+;       sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
+;       jne  !                          ; JP Z,$D5E6        ; { =h #REGa | =h Screen Address }
+;       b    @copy_routine              ;
+;!
+;       li   hl,zx_screen+>0093         ; LD HL,$4093       ; { $01 | $4088 }
+;       sb   one,a                      ; DEC A             ; { $02 | $4093 }
+;       jne  !                          ; JP Z,$D5E6        ; { $03 | $409E }
+;       b    @copy_routine              ;
+;!
+;       li   hl,zx_screen+>009e         ; LD HL,$409E       ; TABLE#
+;       b    @copy_routine              ; JP $D5E6          ; Jump to #R$D5E6.}
+;       li   de,door_buffer             ; LD DE,$EA90       ; #REGde=#R$EA90.
+;draw_door_frame:                       ; d717
+;       movb @bytes+88,b                ; LD B,$58          ; {Draws the image pointed at by
+;       movb @bytes+7,@c                ; LD C,$07          ; #REGde to the screen address in
+;       b    @copy_routine              ; JP $D5E6          ; #REGhl using #R$D5E6.}
 
 * Generic Bandit in Door Frame Logic.
 *
@@ -4784,12 +4835,12 @@ bowie_state_bomb:                      ; d88f
 * Used by the routines at #R$CD68, #R$D48F, #R$D71E, #R$D7C5, #R$D8E5 and
 * #R$DA0C.
 reset_door_routine:                    ; d8a1
-       movb *ix,@l                     ; LD L,(IX+$00)     ; {Blanks the 16 bit address pointed to by one of the
-       movb @1(ix),h                   ; LD H,(IX+$01)     ; passed door flags (i.e. writes $0000 to one of #R$CE14,
-       sb   a,a                        ; XOR A             ; #R$CE16, #R$CE18).
-       movb a,*hl                      ; LD (HL),A         ; 
-       inc  hl                         ; INC HL            ; 
-       movb a,*hl                      ; LD (HL),A         ; }
+       mov  *ix,hl                     ; LD L,(IX+$00)     ; {Blanks the 16 bit address pointed to by one of the
+                                       ; LD H,(IX+$01)     ; passed door flags (i.e. writes $0000 to one of #R$CE14,
+                                       ; XOR A             ; #R$CE16, #R$CE18).
+       clr  *hl                        ; LD (HL),A         ;
+                                       ; INC HL            ;
+                                       ; LD (HL),A         ; }
        .ret                            ; RET               ; Return.
 
 * Game status buffer entry at D8AC
@@ -4804,50 +4855,49 @@ random_flag:
 * 
 * Used by the routines at #R$C7C0, #R$CE21, #R$CEB8 and #R$DAEF.
 * 
-* .
-* 
-* f
 random_number:                         ; d8b0
-       .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
-       .push hl                        ; PUSH HL           ; }
-       movb @random_flag,a             ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.
-       sb   one,a                      ; DEC A             ; 
-       movb a,@random_flag             ; LD ($D8AE),A      ; }
-       jne  random_number_1            ; JR NZ,$D8C8       ; If the result is not zero jump to #R$D8C8.
-       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
-       inc  hl                         ; INC HL            ; 
-       .push hl                        ; PUSH HL           ; 
-       .pop bc                         ; POP BC            ; 
-       a    hl,hl                      ; ADD HL,HL         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       jmp  random_number_2            ; JR $D8D7          ; 
-random_number_1:                       ; d8c8
-       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
-       inc  hl                         ; INC HL            ; 
-       .push hl                        ; PUSH HL           ; 
-       .pop bc                         ; POP BC            ; 
-       a    hl,hl                      ; ADD HL,HL         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       .push hl                        ; PUSH HL           ; 
-       .pop bc                         ; POP BC            ; 
-       a    hl,hl                      ; ADD HL,HL         ; 
-random_number_2:                       ; d8d7
-       a    bc,hl                      ; ADD HL,BC         ; 
-       dec  hl                         ; DEC HL            ; 
-       mov  hl,@random_seed            ; LD ($D8AC),HL     ;
-       movb @l,a                       ; LD A,L            ; 
-       li   hl,random_flag+1           ; LD HL,$D8AF       ;
-       ab   one,*hl                    ; INC (HL)          ; 
-       ab   *hl,a                      ; ADD A,(HL)        ; 
-       .pop hl                         ; POP HL            ; 
-       .pop bc                         ; POP BC            ; 
+       bl   @ti_rnd
+       mov  tmp0,a
+;       .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
+;       .push hl                        ; PUSH HL           ; }
+;       movb @random_flag,a             ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.
+;       sb   one,a                      ; DEC A             ;
+;       movb a,@random_flag             ; LD ($D8AE),A      ; }
+;       jne  random_number_1            ; JR NZ,$D8C8       ; If the result is not zero jump to #R$D8C8.
+;       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
+;       inc  hl                         ; INC HL            ;
+;       .push hl                        ; PUSH HL           ;
+;       .pop bc                         ; POP BC            ;
+;       a    hl,hl                      ; ADD HL,HL         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       jmp  random_number_2            ; JR $D8D7          ;
+;random_number_1:                       ; d8c8
+;       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
+;       inc  hl                         ; INC HL            ;
+;       .push hl                        ; PUSH HL           ;
+;       .pop bc                         ; POP BC            ;
+;       a    hl,hl                      ; ADD HL,HL         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       .push hl                        ; PUSH HL           ;
+;       .pop bc                         ; POP BC            ;
+;       a    hl,hl                      ; ADD HL,HL         ;
+;random_number_2:                       ; d8d7
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       dec  hl                         ; DEC HL            ;
+;       mov  hl,@random_seed            ; LD ($D8AC),HL     ;
+;       movb @l,a                       ; LD A,L            ;
+;       li   hl,random_flag+1           ; LD HL,$D8AF       ;
+;       ab   one,*hl                    ; INC (HL)          ;
+;       ab   *hl,a                      ; ADD A,(HL)        ;
+;       .pop hl                         ; POP HL            ;
+;       .pop bc                         ; POP BC            ;
        .ret                            ; RET               ; 
 
 * Julius logic.
@@ -4982,7 +5032,7 @@ julius_open_6:                         ; d972
        .ret                            ; RET               ; Return.
 * ???
 julius_open_7:                         ; d981
-       li   de,_cfe2                   ; LD DE,$CFE2       ; {Call #R$D5A3 with a callback to #R$CFE2.
+       li   de,julius_callback                   ; LD DE,$CFE2       ; {Call #R$D5A3 with a callback to #R$CFE2.
        .call @hit_detection            ; CALL $D5A3        ; }
        movb @julius_7_timer,a          ; LD A,($D8EE)      ; {Decrease #R$D8EE by one, return if result is not
        sb   one,a                      ; DEC A             ; zero.
@@ -5157,7 +5207,7 @@ bandit_draw_open_3:                    ; da49
        .ret                            ; RET               ; }
 * Handles state countdown.
 bandit_draw_open_4:                    ; da59
-       li   de,todo_door_reset         ; LD DE,$D037       ; {Call #R$D5A3 with a callback to #R$D037.
+       li   de,set_char_state_to_one   ; LD DE,$D037       ; {Call #R$D5A3 with a callback to #R$D037.
        .call @hit_detection            ; CALL $D5A3        ; }
        movb @bandit_draw_4_timer,a     ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
        sb   one,a                      ; DEC A             ; 
@@ -5171,7 +5221,7 @@ bandit_draw_open_4:                    ; da59
        .ret                            ; RET               ; }
 * Handles state countdown.
 bandit_draw_open_5:                    ; da6f
-       li   de,_d040                   ; LD DE,$D040       ; {Call #R$D5A3 with a callback to #R$D040.
+       li   de,init_bandit_draw_close                   ; LD DE,$D040       ; {Call #R$D5A3 with a callback to #R$D040.
        .call @hit_detection            ; CALL $D5A3        ; }
        movb @bandit_draw_5_timer,a     ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
        sb   one,a                      ; DEC A             ; 
@@ -5269,12 +5319,12 @@ bandit_draw_close_5:                   ; dae0
 * Used by the routine at #R$CE21.
 gen_random_number:                     ; daef
        .call @random_number            ; CALL $D8B0        ; 
-       movb a,@c                       ; LD C,A            ; 
-       movb @>5c78,a                   ; LD A,($5C78)      ; TODO
-       ; RR C                          ; RR C              ; 
-       ; RR C                          ; RR C              ; 
-       ; RR C                          ; RR C              ; 
-       ab   @c,a                       ; ADD A,C           ; 
+;       movb a,@c                       ; LD C,A            ;
+;       movb @>5c78,a                   ; LD A,($5C78)      ; Get FRAMES
+       src  a,3                        ; RR C              ;
+                                       ; RR C              ;
+                                       ; RR C              ;
+;       ab   @c,a                       ; ADD A,C           ;
        .ret                            ; RET               ; 
 
 * Door Buffer
@@ -5836,23 +5886,23 @@ title_screen:                          ; fe00
        li   bc,>0040                   ; LD BC,$0040       ; 
        .ldir                           ; LDIR              ; 
        movb one,a                      ; LD A,$01          ; 
-       .call @ts_draw_bandits           ; CALL $FEA4        ;
+       bl   @ts_draw_bandits           ; CALL $FEA4        ;
        li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
        li   de,zx_screen+>002b         ; LD DE,$402B       ;
        li   bc,>0703                   ; LD BC,$0703       ; 
        .call @print_two_tone_text_alias ; CALL $5B80        ; }
        li   hl,title_screen_play       ; LD HL,$FEF4       ; {Points to #R$FEF4 and sends it to #R$FEE4.
        li   de,zx_screen+>00cb         ; LD DE,$40CB       ;
-       .call @title_screen_print       ; CALL $FEE4        ; }
+       bl   @title_screen_print       ; CALL $FEE4        ; }
        li   hl,title_screen_keys       ; LD HL,$FEFC       ; Points to #R$FEFC and sends it to #R$FEE4.
        li   de,zx_screen+>082b         ; LD DE,$482B       ;
-       .call @title_screen_print       ; CALL $FEE4        ; 
+       bl   @title_screen_print       ; CALL $FEE4        ;
        li   hl,title_screen_joystick   ; LD HL,$FF06       ; Points to #R$FF06 and sends it to #R$FEE4.
        li   de,zx_screen+>088b         ; LD DE,$488B       ;
-       .call @title_screen_print       ; CALL $FEE4        ; 
+       bl   @title_screen_print       ; CALL $FEE4        ;
        li   hl,title_screen_level      ; LD HL,$FF11       ; Points to #R$FF11 and sends it to #R$FEE4.
        li   de,zx_screen+>08eb         ; LD DE,$48EB       ;
-       .call @title_screen_print       ; CALL $FEE4        ; 
+       bl   @title_screen_print       ; CALL $FEE4        ;
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
        li   de,zx_screen+>1083         ; LD DE,$5083       ;
        li   bc,>0705                   ; LD BC,$0705       ; 
@@ -5953,15 +6003,15 @@ ts_draw_bandits:                        ; fea4
        li   tmp0,>00d9
        clr  tmp1
        bl   @ti_draw_character
-*      Feet color
+*      Bottom color
        li   a,>2000
        bl   @ti_color
        mov  tmp0,tmp1
-*      Left bandit feet colors
+*      Left bandit bottom colors
        li   tmp0,(>00c1+(8*32))*8
        li   tmp2,>0603
        bl   @ti_draw_color_area
-*      Right bandit feet colors
+*      Right bandit bottom colors
        li   tmp0,(>00d9+(8*32))*8
        li   tmp2,>0603
        bl   @ti_draw_color_area
@@ -6009,6 +6059,7 @@ ts_draw_bandits:                        ; fea4
 ;       .ret                            ; RET               ; Return.
 
 title_screen_print:                    ; fee4
+       .proc
        li   bc,>0702                   ; LD BC,$0702       ; {#REGb=$07, #REGc=$02 and jump to #R$5B80.
        b    @print_two_tone_text_alias ; JP $5B80          ; }
 

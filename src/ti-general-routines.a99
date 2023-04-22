@@ -577,7 +577,8 @@ ti_check_quit:
 *      Return
        rt
 *      Quit
-ti_quit   clr  @>83c4                     ; Reset user ISR address
+ti_quit:
+       clr  @>83c4                     ; Reset user ISR address
        seto @>6000                     ; Select first ROM bank
        blwp @>0000
 *// ti_check_quit
@@ -635,4 +636,35 @@ vsync_1:
        movb @vdpsta,r12
        .endproc
 *// vsync
+
+*********************************************************************
+*
+* Wait for tmp0 frames
+*
+ti_delay:
+       .proc
+ti_delay_1:
+       bl   @vsync
+       dec  tmp0
+       jne  ti_delay_1
+       .endproc
+*// ti_delay
+
+*********************************************************************
+*
+* For routines that set or reset the carry flag on return
+*
+return_with_carry:
+       .pop  r11
+return_with_carry_1:
+       seto tmp0
+       inc  tmp0
+       rt
+
+return_without_carry:
+       .pop  r11
+return_without_carry_1:
+       clr  tmp0
+       inc  tmp0
+       rt
 

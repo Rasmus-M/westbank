@@ -29,18 +29,18 @@ playfield_data:
        data (0*32+1)*8,gfx_slot_numbers_left,>0c01
        data (0*32+14)*8,gfx_centrepiece,>0403
        data (0*32+19)*8,gfx_slot_numbers_right,>0c01
-       data (1*32+1)*8,gfx_empty_box_image,>0202
-       data (1*32+3)*8,gfx_empty_box_image,>0202
-       data (1*32+5)*8,gfx_empty_box_image,>0202
-       data (1*32+7)*8,gfx_empty_box_image,>0202
-       data (1*32+9)*8,gfx_empty_box_image,>0202
-       data (1*32+11)*8,gfx_empty_box_image,>0202
-       data (1*32+19)*8,gfx_empty_box_image,>0202
-       data (1*32+21)*8,gfx_empty_box_image,>0202
-       data (1*32+23)*8,gfx_empty_box_image,>0202
-       data (1*32+25)*8,gfx_empty_box_image,>0202
-       data (1*32+27)*8,gfx_empty_box_image,>0202
-       data (1*32+29)*8,gfx_empty_box_image,>0202
+;       data (1*32+1)*8,gfx_empty_box_image,>0202
+;       data (1*32+3)*8,gfx_empty_box_image,>0202
+;       data (1*32+5)*8,gfx_empty_box_image,>0202
+;       data (1*32+7)*8,gfx_empty_box_image,>0202
+;       data (1*32+9)*8,gfx_empty_box_image,>0202
+;       data (1*32+11)*8,gfx_empty_box_image,>0202
+;       data (1*32+19)*8,gfx_empty_box_image,>0202
+;       data (1*32+21)*8,gfx_empty_box_image,>0202
+;       data (1*32+23)*8,gfx_empty_box_image,>0202
+;       data (1*32+25)*8,gfx_empty_box_image,>0202
+;       data (1*32+27)*8,gfx_empty_box_image,>0202
+;       data (1*32+29)*8,gfx_empty_box_image,>0202
        data (3*32+0)*8,gfx_doors_top,>2001
        data (4*32+0)*8,gfx_wall_left,>020b
        data (4*32+9)*8,gfx_wall_middle,>040b
@@ -50,14 +50,103 @@ playfield_data:
        data (17*32+0)*8,gfx_tellers,>2004
        data (22*32+1)*8,gfx_score_text_image,>0602
        data (21*32+16)*8,gfx_lives_text_image,>0603
-       data (21*32+22)*8,gfx_lives_image,>0203
-       data (21*32+24)*8,gfx_lives_image,>0203
-       data (21*32+26)*8,gfx_lives_image,>0203
-*      test
-       data (1*32+15)*8,gfx_dollar_image,>0202
-       data (1*32+29)*8,gfx_dollar_box_image,>0202
+;       data (21*32+22)*8,gfx_lives_image,>0203
+;       data (21*32+24)*8,gfx_lives_image,>0203
+;       data (21*32+26)*8,gfx_lives_image,>0203
        data 0
 *// ti_draw_playfield
+
+*********************************************************************
+*
+* Screen positions of the 3 doors
+*
+ti_door_positions:
+       equ  $
+ti_door_position_1:
+       data  4*32+2
+ti_door_position_2:
+       data  4*32+13
+ti_door_position_3:
+       data 4*32+24
+
+*********************************************************************
+*
+* Setup paramaters for calling ti_draw_door_frame_1-4
+*
+ti_setup_draw_door_params:
+       clr  tmp1
+       movb a,tmp1
+       swpb tmp1
+       clr  tmp2
+       movb @door_frame_ref,tmp2
+       swpb tmp2
+       dec  tmp2
+       rt
+*// ti_setup_draw_door_params
+
+*********************************************************************
+*
+* Draw door frame 1
+*
+* tmp1: character index to draw
+* tmp2: door index 0-2
+*
+ti_draw_door_frame_1:
+       .proc
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       clr  tmp2
+       bl   @ti_draw_character_and_door
+       .endproc
+*// ti_draw_door_frame_1
+
+*********************************************************************
+*
+* Draw door frame 2
+*
+* tmp1: character index to draw
+* tmp2: door index 0-2
+*
+ti_draw_door_frame_2:
+       .proc
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       li   tmp2,1
+       bl   @ti_draw_character_and_door
+       .endproc
+*// ti_draw_door_frame_2
+
+*********************************************************************
+*
+* Draw door frame 3
+*
+* tmp1: character index to draw
+* tmp2: door index 0-2
+*
+ti_draw_door_frame_3:
+       .proc
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       li   tmp2,2
+       bl   @ti_draw_character_and_door
+       .endproc
+*// ti_draw_door_frame_3
+
+*********************************************************************
+*
+* Draw door frame 4
+*
+* tmp1: character index to draw
+* tmp2: door index 0-2
+*
+ti_draw_door_frame_4:
+       .proc
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       li   tmp2,3
+       bl   @ti_draw_character_and_door
+       .endproc
+*// ti_draw_door_frame_4
 
 *********************************************************************
 *
@@ -68,10 +157,10 @@ playfield_data:
 *
 ti_draw_door_1:
        .proc
-       li   tmp0,4*32+2
+       mov  @ti_door_position_1,tmp0
        bl   @ti_draw_character_and_door
        .endproc
-*// draw_door_1
+*// ti_draw_door_1
 
 *********************************************************************
 *
@@ -82,10 +171,10 @@ ti_draw_door_1:
 *
 ti_draw_door_2:
        .proc
-       li   tmp0,4*32+13
+       mov  @ti_door_position_2,tmp0
        bl   @ti_draw_character_and_door
        .endproc
-*// draw_door_2
+*// ti_draw_door_2
 
 *********************************************************************
 *
@@ -96,10 +185,10 @@ ti_draw_door_2:
 *
 ti_draw_door_3:
        .proc
-       li   tmp0,4*32+24
+       mov  @ti_door_position_3,tmp0
        bl   @ti_draw_character_and_door
        .endproc
-*// draw_door_3
+*// ti_draw_door_3
 
 *********************************************************************
 *
@@ -305,8 +394,8 @@ ti_copy_routine:
        ai   tmp0,-zx_screen
        mov  tmp0,tmp1
        andi tmp0,>00ff                 ; Offset into current 3rd
-       sla  tmp0,3                     ; Times 8 (>0780)
-       andi tmp1,>1800                 ; 3rd bits
+       sla  tmp0,3                     ; Times 8
+       andi tmp1,>1800                 ; 3rd bits same on TI and ZX
        soc  tmp1,tmp0
 *      Swap width and height, and convert height to characters
        mov  bc,tmp2
