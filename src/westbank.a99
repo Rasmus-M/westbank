@@ -772,7 +772,9 @@ _67ec:
 * 
 * Used by the routines at #R$C687 and #R$CD47.
 bang:                                  ; c000
-       .call @prep_bang                ; CALL $C046        ; Clear the screen.
+       bl   @ti_clear_screen           ; CALL $C046        ; Clear the screen.
+       li   a,>6100
+       bl   @bang_color
        movb @bytes+3,b                 ; LD B,$03          ; {Pass #R$F000 to #R$C061.
        li   hl,gfx_bang_frame_1        ; LD HL,$F000       ;
        .call @bang_copy                ; CALL $C061        ; }
@@ -794,68 +796,76 @@ bang:                                  ; c000
        li   hl,gfx_bang_frame_6        ; LD HL,$F500       ;
        .call @bang_copy                ; CALL $C061        ; }
        movb @bytes+8,b                 ; LD B,$08          ; {Blanks the display by passing a
-       li   hl,zx_screen+>1000         ; LD HL,$5000       ; "clear" part of the screen buffer
-       .call @bang_copy                ; CALL $C061        ; to #R$C061.}
+       li   a,>1100                    ; LD HL,$5000       ; "clear" part of the screen buffer
+       bl   @bang_color                ; CALL $C061        ; to #R$C061.}
        movb @bytes+64,b                ; LD B,$40          ; {Jump to #R$C06D.
-       b    @bang_halt_loop            ; JP $C06D          ; }
-prep_bang:                             ; c046
-       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of
-       li   de,zx_screen+1             ; LD DE,$4001       ; the screen buffer (i.e. "blanks
-       li   bc,>17ff                   ; LD BC,$17FF       ; it").
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
-       li   hl,zx_attributes           ; LD HL,$5800       ; {Continues into the attributes buffer, and writes $02 (red ink) to every location.
-       li   de,zx_attributes+1         ; LD DE,$5801       ; #TABLE(default,centre)
-       li   bc,>02ff                   ; LD BC,$02FF       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       movb @bytes+2,*hl               ; LD (HL),$02       ; { $02 | $00 | $00 | $00 }
-       .ldir                           ; LDIR              ; TABLE#}
-       .ret                            ; RET               ; Returns.
+       jmp  bang_halt_loop             ; JP $C06D          ; }
+;prep_bang:                             ; c046
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of
+;       li   de,zx_screen+1             ; LD DE,$4001       ; the screen buffer (i.e. "blanks
+;       li   bc,>17ff                   ; LD BC,$17FF       ; it").
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
+;       li   hl,zx_attributes           ; LD HL,$5800       ; {Continues into the attributes buffer, and writes $02 (red ink) to every location.
+;       li   de,zx_attributes+1         ; LD DE,$5801       ; #TABLE(default,centre)
+;       li   bc,>02ff                   ; LD BC,$02FF       ; { =h Value | =h Ink | =h Paper | =h Bright }
+;       movb @bytes+2,*hl               ; LD (HL),$02       ; { $02 | $00 | $00 | $00 }
+;       .ldir                           ; LDIR              ; TABLE#}
+;       .ret                            ; RET               ; Returns.
 bang_copy:                             ; c061
-       .push bc                        ; PUSH BC           ; {Sets the screen location and the
-       li   bc,>2008                   ; LD BC,$2008       ; bang image frame sizing, then
-       li   de,zx_screen+>080c         ; LD DE,$480C       ; calls #R$C071, issues a short
-       .ex_de_hl                       ; EX DE,HL          ; pause and ...
-       .call @bang_print               ; CALL $C071        ; 
-       .pop bc                         ; POP BC            ; 
+       seto @graphics_bank_select      ; PUSH BC           ; {Sets the screen location and the
+       li   tmp2,>0804                 ; LD BC,$2008       ; bang image frame sizing, then
+       li   tmp0,>0860                 ; LD DE,$480C       ; calls #R$C071, issues a short
+       mov  hl,tmp1                    ; EX DE,HL          ; pause and ...
+       bl   @ti_draw_graphics          ; CALL $C071        ;
+                                       ; POP BC            ;
 bang_halt_loop:                        ; c06d
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C06D        ; }
-       jne  bang_halt_loop             ;                   
+       jne  bang_halt_loop             ;
        .ret                            ; RET               ; ...returns.
-bang_print:                            ; c071
-       .push bc                        ; PUSH BC           ; {Copy the bang image frame to the
-       .push hl                        ; PUSH HL           ; screen buffer.
-       sb   b,b                        ; LD B,$00          ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .ldir                           ; LDIR              ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .pop hl                         ; POP HL            ; 
-       ab   one,h                      ; INC H             ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jne  !                          ; CALL Z,$C085      ; 
-       .call @bang_next_line           ;                   
-!
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $C071        ; }
-       jne  bang_print                 ;                   
-       .ret                            ; RET               ; Return.
-bang_next_line:                        ; c085
-       movb h,a                        ; LD A,H            ; {Handles working out the next
-       sb   @bytes+8,a                 ; SUB $08           ; line progressively in the screen
-       movb a,h                        ; LD H,A            ; buffer.
-       movb @l,a                       ; LD A,L            ; 
-       ab   @bytes+32,a                ; ADD A,$20         ; 
-       movb a,@l                       ; LD L,A            ; 
-       joc  !                          ; RET NC            ; TODO: check code. 
-       .ret                            ;                   
-!
-       movb h,a                        ; LD A,H            ; 
-       ab   @bytes+8,a                 ; ADD A,$08         ; 
-       movb a,h                        ; LD H,A            ; }
-       .ret                            ; RET               ; Return.
-       byte >C3,>90,>EA,>04,>33,>49,>44,>46                          ; 
-       byte >47,>B1,>D2,>04,>32                                      ; 
+bang_color:
+       .proc
+       li   tmp0,>0860
+       movb a,tmp1
+       li   tmp2,>0804
+       bl   @ti_draw_color_area
+       .endproc
+;bang_print:                            ; c071
+;       .push bc                        ; PUSH BC           ; {Copy the bang image frame to the
+;       .push hl                        ; PUSH HL           ; screen buffer.
+;       sb   b,b                        ; LD B,$00          ;
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .ldir                           ; LDIR              ;
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .pop hl                         ; POP HL            ;
+;       ab   one,h                      ; INC H             ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jne  !                          ; CALL Z,$C085      ;
+;       .call @bang_next_line           ;
+;!
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $C071        ; }
+;       jne  bang_print                 ;
+;       .ret                            ; RET               ; Return.
+;bang_next_line:                        ; c085
+;       movb h,a                        ; LD A,H            ; {Handles working out the next
+;       sb   @bytes+8,a                 ; SUB $08           ; line progressively in the screen
+;       movb a,h                        ; LD H,A            ; buffer.
+;       movb @l,a                       ; LD A,L            ;
+;       ab   @bytes+32,a                ; ADD A,$20         ;
+;       movb a,@l                       ; LD L,A            ;
+;       joc  !                          ; RET NC            ; TODO: check code.
+;       .ret                            ;
+;!
+;       movb h,a                        ; LD A,H            ;
+;       ab   @bytes+8,a                 ; ADD A,$08         ;
+;       movb a,h                        ; LD H,A            ; }
+;       .ret                            ; RET               ; Return.
+;       byte >C3,>90,>EA,>04,>33,>49,>44,>46                          ;
+;       byte >47,>B1,>D2,>04,>32                                      ;
 *
 * Draw Playfield
 * 
