@@ -17,6 +17,7 @@ ti_draw_playfield_2:
        li   hl,attributes
        li   de,zx_attributes
        li   bc,768
+       clr  a
 ti_draw_playfield_3:
        movb *hl+,a
        mov  de,tmp1
@@ -329,7 +330,7 @@ ti_dbl_buffer_scroll_screen:
        .push tmp0
        andi tmp0,31
        bl   @ti_scroll_screen
-       bl   @vsync
+       bl   @ti_vsync
        andi tmp0,1
        jne  scroll_screen_1
        bl   @ti_select_name_table_1

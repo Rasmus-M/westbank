@@ -160,8 +160,8 @@ ti_set_screen_color:
        .proc
        bl   @ti_color
        movb tmp0,r1
-       li   r0,color_table
-       li   r2,>1800
+       li   r0,color_table+(3*256)
+       li   r2,15*256
        bl   @vsmw
        .endproc
 *// ti_set_screen_color
@@ -172,14 +172,14 @@ ti_set_screen_color:
 *
 * a: zx color
 *
-set_border_color:
+ti_set_border_color:
        .proc
        bl   @ti_color
        srl  r0,12
        ori  r0,>0700
        bl   @vwtr
        .endproc
-*// set_border_color
+*// ti_set_border_color
 
 *********************************************************************
 *
@@ -642,16 +642,16 @@ ti_rnd:
 *
 * Wait for vertical retrace (CRU)
 *
-vsync:
+ti_vsync:
        .proc
        movb @vdpsta,r12
-vsync_1:
+ti_vsync_1:
        clr  r12
        tb   2                          ; Test CRU bit for VDP interrupt
-       jeq  vsync_1
+       jeq  ti_vsync_1
        movb @vdpsta,r12
        .endproc
-*// vsync
+*// ti_vsync
 
 *********************************************************************
 *
@@ -660,7 +660,7 @@ vsync_1:
 ti_delay:
        .proc
 ti_delay_1:
-       bl   @vsync
+       bl   @ti_vsync
        dec  tmp0
        jne  ti_delay_1
        .endproc

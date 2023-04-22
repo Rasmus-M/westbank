@@ -39,7 +39,7 @@ jump_control_method:                   ; 5b88
 * 
 * Used by the routine at #R$C607.
 scoring_prep_alias:                    ; 5b8c
-       b    @scoring_prep              ; JP $CDDC          ; 
+       b    @scoring_for_door              ; JP $CDDC          ;
 
 * Character Address (alias).
 * 
@@ -1628,7 +1628,8 @@ start:                                 ; c7c0
        .call @halt_loop                ; CALL $CD64        ; $80.}
        li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
        li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
-       b    @new_high_score            ; JP $FA00          ; #REGix=#R$CD86.}
+; TODO
+;       b    @new_high_score            ; JP $FA00          ; #REGix=#R$CD86.}
 * Displays the title screen and on return, sets the control method and
 * initiates variables for a new game.
 new_game:                              ; c7e5
@@ -1668,7 +1669,7 @@ set_control_alias:                     ; c7f9
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ldir                           ; LDIR              ; }
        sb   a,a                        ; XOR A             ; {Set the border to black.
-       bl   @set_border_color          ; OUT ($FE),A       ; }
+       bl   @ti_set_border_color          ; OUT ($FE),A       ; }
        ab   one,a                      ; INC A             ; {Write $01 to #R$CBCF.
        movb a,@duel_parameter          ; LD ($CBCF),A      ; }
        .call @init_progress            ; CALL $CA6C        ; 
@@ -2021,7 +2022,7 @@ cashboxes_completed_flag:              ; ca80
 run_phase:                             ; ca81
        .call @init_and_run_game_loop   ; CALL $CAC8        ;
        jnc  phase_completed            ; RET C             ; TODO: check code.
-       .ret                            ;                   
+       b    @return_with_carry         ;
 phase_completed:
 *      Flash cashboxes
        movb @bytes+16,b                ; LD B,$10          ;
@@ -2065,8 +2066,8 @@ init_and_run_game_loop:                ; cac8
        .call @init_game_loop           ; CALL $C9B7        ;
 * This entry point is used by the routines at #R$CD1B and #R$CD47.
 next_life:
-       sb   a,a                        ; XOR A             ; {Writes $00 to #R$D2FE.
-       movb a,@player_died_status      ; LD ($D2FE),A      ; }
+                                       ; XOR A             ; {Writes $00 to #R$D2FE.
+       movb @zero,@player_died_status  ; LD ($D2FE),A      ; }
        .call @draw_entire_playfield    ; CALL $CAD4        ;
        jmp  game_loop                  ; JR $CAE7          ;
 * Why is this a routine?
@@ -2110,8 +2111,8 @@ read_keys_3:                           ; cb0b
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
 delay_loop:                            ; cb12
        dec  bc                         ; DEC BC            ;
-       movb b,a                        ; LD A,B            ;
-       socb @c,a                       ; OR C              ;
+                                       ; LD A,B            ;
+                                       ; OR C              ;
        jne  delay_loop                 ; JR NZ,$CB12       ;
        .call @move_right_or_left       ; CALL $D411        ;
 ;       .call @clear_255_bytes_at_5b00  ; CALL $CBA6        ;
@@ -2188,7 +2189,8 @@ after_door_3_routine:                  ; cb83
        li   hl,show_dollar_sign_flag   ; LD HL,$D190       ; {If #R$D190 is not zero then call
        movb *hl,a                      ; LD A,(HL)         ; #R$CBA0 (also, writes $00 to
        ; AND A                         ; AND A             ; #R$D190 to clear it).
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       sb   *hl,*hl                    ; LD (HL),$00       ;
+       movb a,a
        jeq  !                          ; CALL NZ,$CBA0     ; }
        .call @call_scroll_dollar_sign                    ;
 !
@@ -2563,7 +2565,7 @@ died_2:                                ; cd56
 *
 * Loops back on itself using #REGb as a counter.
 halt_loop:                             ; cd64
-       bl   @vsync                     ; HALT              ; {Short interrupt driven pause, and return.
+       bl   @ti_vsync                     ; HALT              ; {Short interrupt driven pause, and return.
        sb   one,b                      ; DJNZ $CD64        ; 
        jne  halt_loop                  ;                   
        .ret                            ; RET               ; }
@@ -2655,15 +2657,15 @@ draw_tt_char:                          ; cdae
 * Used by the routine at #R$C7C0.
 scoring:                               ; cdc3
        li   ix,door_1_flags            ; LD IX,$D165       ; {Calls #R$CDDC three times with #REGix containing;
-       .call @scoring_prep             ; CALL $CDDC        ; #LIST
+       .call @scoring_for_door         ; CALL $CDDC        ; #LIST
        li   ix,door_2_flags            ; LD IX,$D173       ; { #R$D165 }
-       .call @scoring_prep             ; CALL $CDDC        ; { #R$D173 }
+       .call @scoring_for_door         ; CALL $CDDC        ; { #R$D173 }
        li   ix,door_3_flags            ; LD IX,$D181       ; { #R$D181 }
-       .call @scoring_prep             ; CALL $CDDC        ; LIST#}
+       .call @scoring_for_door         ; CALL $CDDC        ; LIST#}
        .call @draw_score               ; CALL $CD90        ; Call #R$CD90.
        .ret                            ; RET               ; Return.
 * Passes the higher and lower score values to #R$CDF7 for the current door.
-scoring_prep:                          ; cddc
+scoring_for_door:                      ; cddc
        li   hl,score_digit_5           ; LD HL,$CD87       ; References #R$CD87.
        movb @6(ix),b                   ; LD B,(IX+$06)     ; Retrieves #REGix+$06, stores it in #REGb then reset it
                                                            ; to zero.
@@ -5360,10 +5362,10 @@ explode_bomb_1:                        ; f882
        dec  bc                         ; DJNZ $F882        ;
        jne  explode_bomb_1             ;
        sb   a,a                        ; XOR A             ; 
-       bl   @set_border_color          ; OUT ($FE),A       ;
+       bl   @ti_set_border_color          ; OUT ($FE),A       ;
        movb @bytes+64,b                ; LD B,$40          ; 
 explode_bomb_2:                        ; f890
-       bl   @vsync                     ; HALT              ;
+       bl   @ti_vsync                     ; HALT              ;
        sb   one,b                      ; DJNZ $F890        ; 
        jne  explode_bomb_2             ;
        .ret                            ; RET               ;
@@ -5372,18 +5374,18 @@ explode_bomb_3:                        ; f894
        movb @bytes+56,a                ; LD A,$38          ; 
        .call @explode_set_attrs        ; CALL $F8B2        ;
        sb   a,a                        ; XOR A             ; 
-       bl   @set_border_color          ; OUT ($FE),A       ;
+       bl   @ti_set_border_color          ; OUT ($FE),A       ;
        li   bc,4                       ; LD B,$04          ;
 explode_bomb_4:                        ; f8a0
-       bl   @vsync                     ; HALT              ;
+       bl   @ti_vsync                     ; HALT              ;
        dec  bc                         ; DJNZ $F8A0        ;
        jne  explode_bomb_4             ;
        movb @bytes+7,a                 ; LD A,$07          ; 
        .call @explode_set_attrs        ; CALL $F8B2        ;
-       bl   @set_border_color          ; OUT ($FE),A       ;
+       bl   @ti_set_border_color          ; OUT ($FE),A       ;
        li   bc,3                       ; LD B,$03          ;
 explode_bomb_5:                        ; f8ae
-       bl   @vsync                     ; HALT              ;
+       bl   @ti_vsync                     ; HALT              ;
        dec  bc                         ; DJNZ $F8AE        ;
        jne  explode_bomb_5             ;
        .ret                            ; RET               ;
@@ -5399,86 +5401,89 @@ explode_set_attrs:                     ; f8b2
 
 * This entry point is used by the routine at #R$C7C0.
 scroll_dollar_sign:                    ; f960
-       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; {Blanks 254 bytes from #R$5B00 onwards.
-       li   de,buffer_at_5b00+1        ; LD DE,$5B01       ;
-       li   bc,>00fe                   ; LD BC,$00FE       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
+       seto @graphics_bank_select
+;       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; {Blanks 254 bytes from #R$5B00 onwards.
+;       li   de,buffer_at_5b00+1        ; LD DE,$5B01       ;
+;       li   bc,>00fe                   ; LD BC,$00FE       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
        li   de,gfx_dollar_image_2      ; LD DE,$F940       ; {Sends #R$F940 to #R$F9C3.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
-       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-       li   hl,>0cf8                   ; LD HL,$0CF8       ; #TABLE(default,centre)
-       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+; TODO: sound
+;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
+;       li   hl,>0cf8                   ; LD HL,$0CF8       ; #TABLE(default,centre)
+;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $0CF8 | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
-       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-       li   hl,>079e                   ; LD HL,$079E       ; #TABLE(default,centre)
-       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+; TODO: sound
+;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
+;       li   hl,>079e                   ; LD HL,$079E       ; #TABLE(default,centre)
+;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $079E | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
        nop                             ; NOP               ; 
        nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
-       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-       li   hl,>029e                   ; LD HL,$029E       ; #TABLE(default,centre)
-       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+; TODO: sound
+;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
+;       li   hl,>029e                   ; LD HL,$029E       ; #TABLE(default,centre)
+;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $029E | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
        nop                             ; NOP               ; 
        nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
-       li   de,>0020                   ; LD DE,$0020       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-       li   hl,>0209                   ; LD HL,$0209       ; #TABLE(default,centre)
-       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+; TODO: sound
+;       li   de,>0020                   ; LD DE,$0020       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
+;       li   hl,>0209                   ; LD HL,$0209       ; #TABLE(default,centre)
+;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $0209 | $0020 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
-       ; HALT                          ; HALT              ; 
+*      Clear
        li   de,buffer_at_5b00          ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
        .ret                            ; RET               ; Return.
 * Draws the image to the screen.
+* de=image to draw
 dollar_scroll_draw:                    ; f9c3
-       li   hl,zx_screen+>002f         ; LD HL,$402F       ;
-       li   bc,>1002                   ; LD BC,$1002       ; 
-dollar_scroll_draw_loop:               ; f9c9
-       .push bc                        ; PUSH BC           ; 
-       .push hl                        ; PUSH HL           ; 
-       sb   b,b                        ; LD B,$00          ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .ldir                           ; LDIR              ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .pop hl                         ; POP HL            ; 
-       ab   one,h                      ; INC H             ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jne  dollar_scroll_draw_1       ; JR NZ,$F9DE       ;
-       movb @bytes+64,h                ; LD H,$40          ; 
-       movb @l,a                       ; LD A,L            ; 
-       ab   @bytes+32,a                ; ADD A,$20         ; 
-       movb a,@l                       ; LD L,A            ; 
-dollar_scroll_draw_1:                  ; f9de
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $F9C9        ; 
-       jne  dollar_scroll_draw_loop    ;                   
-       movb one,b                      ; LD B,$01          ; 
-dollar_scroll_halt_loop:               ; f9e3
-       ; HALT                          ; HALT              ; 
-       sb   one,b                      ; DJNZ $F9E3        ; 
-       jne  dollar_scroll_halt_loop    ;                   
+       li   tmp0,(1*32+15)*8
+       mov  de,tmp1
+       li   tmp2,>0202
+       bl   @ti_draw_graphics
+;       li   hl,zx_screen+>002f         ; LD HL,$402F       ;
+;       li   bc,>1002                   ; LD BC,$1002       ;
+;dollar_scroll_draw_loop:               ; f9c9
+;       .push bc                        ; PUSH BC           ;
+;       .push hl                        ; PUSH HL           ;
+;       sb   b,b                        ; LD B,$00          ;
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .ldir                           ; LDIR              ;
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .pop hl                         ; POP HL            ;
+;       ab   one,h                      ; INC H             ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jne  dollar_scroll_draw_1       ; JR NZ,$F9DE       ;
+;       movb @bytes+64,h                ; LD H,$40          ;
+;       movb @l,a                       ; LD A,L            ;
+;       ab   @bytes+32,a                ; ADD A,$20         ;
+;       movb a,@l                       ; LD L,A            ;
+;dollar_scroll_draw_1:                  ; f9de
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $F9C9        ;
+;       jne  dollar_scroll_draw_loop    ;
+;       movb one,b                      ; LD B,$01          ;
+;dollar_scroll_halt_loop:               ; f9e3
+       li   tmp0,2
+       bl   @ti_delay
+;       sb   one,b                      ; DJNZ $F9E3        ;
+;       jne  dollar_scroll_halt_loop    ;
        .ret                            ; RET               ; Return.
 
 * High Score Entry.

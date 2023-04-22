@@ -5,14 +5,14 @@
        clr  bc
        clr  hl
 loop:
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
-       bl   @vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_vsync
 
        mov  bc,tmp1
        li   tmp2,3
