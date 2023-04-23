@@ -634,6 +634,23 @@ ti_quit:
 
 *********************************************************************
 *
+* Scan keyboard
+*
+ti_keyscan:
+       .proc
+       lwpi gplws
+       movb @zero,@kscan_device
+       bl   @kscan
+       lwpi wrksp
+       movb @kscan_status,a
+       andi a,>2000
+       jeq  !
+       movb @kscan_key,a
+!      .endproc
+*// ti_keyscan
+
+*********************************************************************
+*
 * Generate a pseudo random number within the given limit
 *
 * a: Maximum number (0 - 255) exclusive
@@ -716,4 +733,3 @@ return_without_carry_1:
        clr  tmp0
        inc  tmp0
        rt
-

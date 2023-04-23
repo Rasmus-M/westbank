@@ -45,6 +45,15 @@ rnd_seed:
        equ  b254+>1
 pad_max:
        equ  rnd_seed+>1
+gplws:
+       equ  >83e0
+kscan_device:
+       equ  >8374
+kscan_key:
+       equ  >8375
+kscan_status:
+       equ  >837c
+
 
 **
 * Z80 register mapping
@@ -104,3 +113,5 @@ char_bank_2_select:
        equ  >600C
 char_bank_3_select:
        equ  >600E
+kscan:
+       equ  >02b2
