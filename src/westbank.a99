@@ -1618,8 +1618,8 @@ header_2:                              ; c784
 header_3:                              ; c7a3
        text '    NOW DO YOUR WORK     ',>ff
 
-* Unused
-       byte >C3,>90,>00
+;* Unused
+;       byte >C3,>90,>00
 
 * New Game
 start:                                 ; c7c0
@@ -1636,14 +1636,14 @@ start:                                 ; c7c0
        bl   @ti_clear_screen
        movb @bytes+128,b               ; LD B,$80          ; {Calls #R$CD64 with the counter
        .call @halt_loop                ; CALL $CD64        ; $80.}
-       li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
+;      li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
        li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
 ; TODO
 ;       b    @new_high_score            ; JP $FA00          ; #REGix=#R$CD86.}
 * Displays the title screen and on return, sets the control method and
 * initiates variables for a new game.
 new_game:                              ; c7e5
-       li   hl,copied_5b80             ; LD HL,$CBB4       ; {Calls #R$FE00 with
+;      li   hl,copied_5b80             ; LD HL,$CBB4       ; {Calls #R$FE00 with
        .call @title_screen             ; CALL $FE00        ; #REGhl=#R$CBB4.}
 **
 * Init new game
@@ -1685,8 +1685,6 @@ set_control_alias:                     ; c7f9
        .call @init_progress            ; CALL $CA6C        ; 
        .call @set_day_attr             ; CALL $C959        ; 
        .call @cls_display_day         ; CALL $CA64         ;
-       li   tmp0,30
-       bl   @ti_delay
        movb @bytes+3,a                 ; LD A,$03          ; {Writes $03 to #R$CE1B.
        movb a,@chooser_countdown_init  ; LD ($CE1B),A      ; }
        li   hl,>0500                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
@@ -1809,10 +1807,10 @@ level_3_2:                             ; c8f8
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        ; AND A                         ; AND A             ; 
        jeq  level_3_1                  ; JR Z,$C8F0        ;
-       li   hl,copied_5b80             ; LD HL,$CBB4       ; 
-       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
-       li   bc,>0040                   ; LD BC,$0040       ; 
-       .ldir                           ; LDIR              ; 
+;       li   hl,copied_5b80             ; LD HL,$CBB4       ;
+;       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
+;       li   bc,>0040                   ; LD BC,$0040       ;
+;       .ldir                           ; LDIR              ;
        .call @sheriff_star             ; CALL $C720        ; Call #R$C720.
        .call @halt_loop                ; CALL $CD64        ; 
        .call @halt_loop                ; CALL $CD64        ; 
@@ -1887,8 +1885,6 @@ init_game_loop:                        ; c9b7
        sb   a,a                        ; XOR A             ; {Call #R$C9D0 (using $00).
        .call @clear_screen             ; CALL $C9D0        ; }
        .call @display_phase            ; JR $C9DD          ; Jump to #R$C9DD.
-       li   tmp0,30
-       bl   @ti_delay
        .ret
 
 * This routine has the ability to write any value across the screen buffer, however it's only ever called with
@@ -1983,7 +1979,7 @@ print_progress:                        ; ca38
                                                            ; TABLE#}
        movb @bytes+80,b                ; LD B,$50          ; {Interrupt driven HALT loop ($50
 progress_halt_loop:                    ; ca46
-       ; HALT                          ; HALT              ; cycles).
+       bl   @ti_vsync                  ; HALT              ; cycles).
        sb   one,b                      ; DJNZ $CA46        ; }
        jne  progress_halt_loop         ;                   
        .ret                            ; RET               ; Return.
@@ -2058,7 +2054,7 @@ cashboxes_flash_loop:                  ; ca87
        ab   b,a                        ; ADD A,B           ; 
        movb a,d                        ; LD D,A            ; 
        movb @duel_parameter,a          ; LD A,($CBCF)      ;
-       li   hl,copied_5b80             ; LD HL,$CBB4       ; 
+;      li   hl,copied_5b80             ; LD HL,$CBB4       ;
        .call @perform_duel             ; CALL $C3C0        ;
        movb a,@duel_parameter          ; LD ($CBCF),A      ;
        sb   b,b                        ; LD B,$00          ; 
@@ -2215,11 +2211,11 @@ clear_255_bytes_at_5b00:               ; cba6
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ldir                           ; LDIR              ; 
        .ret                            ; RET               ; }
-copied_5b80:                           ; cbb4
-       byte >C3,>D2,>CB,>C3,>5A,>CC,>59,>CC                          ; {Copied to $5B80.
-       byte >2A,>12,>CE,>E9,>C3,>DC,>CD,>C3                          ; 
-       byte >B0,>D5,>C3,>E6,>D5,>C3,>FA,>D5                          ; 
-       byte >C3,>90,>CD                                              ; }
+;copied_5b80:                           ; cbb4
+;       byte >C3,>D2,>CB,>C3,>5A,>CC,>59,>CC                          ; {Copied to $5B80.
+;       byte >2A,>12,>CE,>E9,>C3,>DC,>CD,>C3                          ;
+;       byte >B0,>D5,>C3,>E6,>D5,>C3,>FA,>D5                          ;
+;       byte >C3,>90,>CD                                              ; }
 duel_parameter:                         ; cbcf                       ; This always appear to be 1
        byte >01                                                      ; 
 
@@ -5488,12 +5484,12 @@ dollar_scroll_draw:                    ; f9c3
 ;       .pop bc                         ; POP BC            ;
 ;       sb   one,b                      ; DJNZ $F9C9        ;
 ;       jne  dollar_scroll_draw_loop    ;
-;       movb one,b                      ; LD B,$01          ;
-;dollar_scroll_halt_loop:               ; f9e3
-       li   tmp0,2
-       bl   @ti_delay
-;       sb   one,b                      ; DJNZ $F9E3        ;
-;       jne  dollar_scroll_halt_loop    ;
+       movb one,b                      ; LD B,$01          ;
+dollar_scroll_halt_loop:               ; f9e3
+       bl   @ti_vsync
+       bl   @ti_vsync
+       sb   one,b                      ; DJNZ $F9E3        ;
+       jne  dollar_scroll_halt_loop    ;
        .ret                            ; RET               ; Return.
 
 * High Score Entry.
@@ -5909,9 +5905,9 @@ _fd80:
 * 
 * Used by the routine at #R$C7C0.
 title_screen:                          ; fe00
-       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
-       li   bc,>0040                   ; LD BC,$0040       ; 
-       .ldir                           ; LDIR              ; 
+;       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
+;       li   bc,>0040                   ; LD BC,$0040       ;
+;       .ldir                           ; LDIR              ;
        movb one,a                      ; LD A,$01          ; 
        bl   @ts_draw_bandits           ; CALL $FEA4        ;
        li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
