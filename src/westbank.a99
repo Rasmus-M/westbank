@@ -1633,18 +1633,21 @@ start:                                 ; c7c0
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
-       .call @new_game                 ; CALL $C7E5        ; Call #R$C7E5.
+main_loop:
+       bl   @ti_clear_screen
+      .call @new_game                  ; CALL $C7E5        ; Call #R$C7E5.
 ;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
 ;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
 ;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
 ;       sb   *hl,*hl                    ; LD (HL),$00       ;
 ;       .ldir                           ; LDIR              ; }
        bl   @ti_clear_screen
-       movb @bytes+128,b               ; LD B,$80          ; {Calls #R$CD64 with the counter
+       movb @bytes+64,b                ; LD B,$80          ; {Calls #R$CD64 with the counter
        .call @halt_loop                ; CALL $CD64        ; $80.}
 ;      li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
        li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
-       b    @draw_and_input_high_scores ; JP $FA00          ; #REGix=#R$CD86.}
+       .call @draw_and_input_high_scores ; JP $FA00        ; #REGix=#R$CD86.}
+       jmp  main_loop
 * Displays the title screen and on return, sets the control method and
 * initiates variables for a new game.
 new_game:                              ; c7e5
