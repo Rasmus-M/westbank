@@ -32,18 +32,6 @@ playfield_data:
        data (0*32+1)*8,gfx_slot_numbers_left,>0c01
        data (0*32+14)*8,gfx_centrepiece,>0403
        data (0*32+19)*8,gfx_slot_numbers_right,>0c01
-;       data (1*32+1)*8,gfx_empty_box_image,>0202
-;       data (1*32+3)*8,gfx_empty_box_image,>0202
-;       data (1*32+5)*8,gfx_empty_box_image,>0202
-;       data (1*32+7)*8,gfx_empty_box_image,>0202
-;       data (1*32+9)*8,gfx_empty_box_image,>0202
-;       data (1*32+11)*8,gfx_empty_box_image,>0202
-;       data (1*32+19)*8,gfx_empty_box_image,>0202
-;       data (1*32+21)*8,gfx_empty_box_image,>0202
-;       data (1*32+23)*8,gfx_empty_box_image,>0202
-;       data (1*32+25)*8,gfx_empty_box_image,>0202
-;       data (1*32+27)*8,gfx_empty_box_image,>0202
-;       data (1*32+29)*8,gfx_empty_box_image,>0202
        data (3*32+0)*8,gfx_doors_top,>2001
        data (4*32+0)*8,gfx_wall_left,>020b
        data (4*32+9)*8,gfx_wall_middle,>040b
@@ -53,9 +41,6 @@ playfield_data:
        data (17*32+0)*8,gfx_tellers,>2004
        data (22*32+1)*8,gfx_score_text_image,>0602
        data (21*32+16)*8,gfx_lives_text_image,>0603
-;       data (21*32+22)*8,gfx_lives_image,>0203
-;       data (21*32+24)*8,gfx_lives_image,>0203
-;       data (21*32+26)*8,gfx_lives_image,>0203
        data 0
 *// ti_draw_playfield
 
@@ -150,48 +135,6 @@ ti_draw_door_frame_4:
        bl   @ti_draw_character_and_door
        .endproc
 *// ti_draw_door_frame_4
-
-*********************************************************************
-*
-* Draw door 1
-*
-* tmp1: character index to draw
-* tmp2: door frame 0-3
-*
-ti_draw_door_1:
-       .proc
-       mov  @ti_door_position_1,tmp0
-       bl   @ti_draw_character_and_door
-       .endproc
-*// ti_draw_door_1
-
-*********************************************************************
-*
-* Draw door 2
-*
-* tmp1: character index to draw
-* tmp2: door frame 0-3
-*
-ti_draw_door_2:
-       .proc
-       mov  @ti_door_position_2,tmp0
-       bl   @ti_draw_character_and_door
-       .endproc
-*// ti_draw_door_2
-
-*********************************************************************
-*
-* Draw door 3
-*
-* tmp1: character index to draw
-* tmp2: door frame 0-3
-*
-ti_draw_door_3:
-       .proc
-       mov  @ti_door_position_3,tmp0
-       bl   @ti_draw_character_and_door
-       .endproc
-*// ti_draw_door_3
 
 *********************************************************************
 *
@@ -430,3 +373,75 @@ ti_copy_routine:
        bl   @ti_draw_graphics
        .endproc
 *// ti_copy_routine
+
+*********************************************************************
+*
+* Draw shot for door 1
+*
+ti_draw_door_1_shot:
+       .proc
+       li   tmp1,SL0
+       bl   @ti_draw_and_hide_door_shot
+       .endproc
+*// ti_draw_door_1_shot
+
+*********************************************************************
+*
+* Draw shot for door 2
+*
+ti_draw_door_2_shot:
+       .proc
+       li   tmp1,SL0+4
+       bl   @ti_draw_and_hide_door_shot
+       .endproc
+*// ti_draw_door_2_shot
+
+*********************************************************************
+*
+* Draw shot for door 3
+*
+ti_draw_door_3_shot:
+       .proc
+       li   tmp1,SL0+8
+       bl   @ti_draw_and_hide_door_shot
+       .endproc
+*// ti_draw_door_3_shot
+
+*********************************************************************
+*
+* Draw and hide shot for door
+*
+ti_draw_and_hide_door_shot:
+       .proc
+       bl   @ti_draw_door_shot
+       bl   @ti_vsync
+       bl   @ti_vsync
+       bl   @ti_hide_door_shots
+       .endproc
+*// ti_draw_and_hide_door_shot
+
+*********************************************************************
+*
+* Draw shot for door
+*
+ti_draw_door_shot:
+       .proc
+       li   tmp0,sprite_attr_table
+       li   tmp2,4
+       bl   @vmbw
+       li   tmp1,>d000
+       movb tmp1,@vdpwd
+       .endproc
+*// ti_draw_door_3_shot
+
+*********************************************************************
+*
+* Hide shots
+*
+ti_hide_door_shots:
+       .proc
+       li   tmp0,sprite_attr_table
+       li   tmp1,>d000
+       bl   @vsbw
+       .endproc
+*// ti_hide_door_shots

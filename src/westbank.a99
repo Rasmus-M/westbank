@@ -3706,11 +3706,12 @@ shot_two:                              ; d317
        movb @bytes+2,*hl               ; LD (HL),A         ; }
        li   hl,random_seed             ; LD HL,$D8AC       ; {Increase #R$D8AC by one.
        ab   one,*hl                    ; INC (HL)          ; }
-       li   hl,zx_screen+>082f         ; LD HL,$482F       ; {Sets the screen location for this shot to $482F and
-       .push hl                        ; PUSH HL           ; stash it.}
-       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
-       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
-       .call @draw_gun_shot            ; CALL $D3CB        ; }
+       bl   @ti_draw_door_2_shot
+;       li   hl,zx_screen+>082f         ; LD HL,$482F       ; {Sets the screen location for this shot to $482F and
+;       .push hl                        ; PUSH HL           ; stash it.}
+;       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
+;       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
+;       .call @draw_gun_shot            ; CALL $D3CB        ; }
        b    @shot_sound_1_alias        ; JP $6500          ; Jump to #R$6500.
 * Handles settings flags and shot drawing location for door 3.
 shot_three:                            ; d33b
@@ -3727,11 +3728,12 @@ shot_three:                            ; d33b
        movb @bytes+3,*hl               ; LD (HL),A         ; }
        li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
        ; SLA (HL)                      ; SLA (HL)          ; todo moved to the carry flag and bit 0 reset (zeroed).}
-       li   hl,zx_screen+>083a         ; LD HL,$483A       ; {Sets the screen location for this shot to $483A and
-       .push hl                        ; PUSH HL           ; stash it.}
-       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
-       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
-       .call @draw_gun_shot            ; CALL $D3CB        ; }
+       bl   @ti_draw_door_3_shot
+;       li   hl,zx_screen+>083a         ; LD HL,$483A       ; {Sets the screen location for this shot to $483A and
+;       .push hl                        ; PUSH HL           ; stash it.}
+;       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
+;       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
+;       .call @draw_gun_shot            ; CALL $D3CB        ; }
        b    @shot_sound_2_alias        ; JP $6502          ; Jump to #R$6502.
 * Handles settings flags and shot drawing location for door 1.
 shot_one:                              ; d360
@@ -3748,12 +3750,13 @@ shot_one:                              ; d360
        movb one,*hl                    ; LD (HL),A         ; }
        li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
        ; SLA (HL)                      ; SLA (HL)          ; todo moved to the carry flag and bit 0 reset (zeroed).}
-       li   hl,zx_screen+>0824         ; LD HL,$4824       ; {Sets the screen location for this shot to $4824 and
-       .push hl                        ; PUSH HL           ; stash it.}
-       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
-       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
-       .call @draw_gun_shot            ; CALL $D3CB        ; }
-       .call @shot_sound_3_alias       ; CALL $6504        ; Jump to #R$6504.
+       bl   @ti_draw_door_1_shot
+;       li   hl,zx_screen+>0824         ; LD HL,$4824       ; {Sets the screen location for this shot to $4824 and
+;       .push hl                        ; PUSH HL           ; stash it.}
+;       .call @draw_shot_mask           ; CALL $D3B4        ; Draw the shot mask.
+;       .pop hl                         ; POP HL            ; {Grab the screen location again, and now draw the shot.
+;       .call @draw_gun_shot            ; CALL $D3CB        ; }
+;       .call @shot_sound_3_alias       ; CALL $6504        ; Jump to #R$6504.
        .ret                            ; RET               ; Return.
 * Sets the flag for indicating "right" has been pressed by the player.
 set_right:                             ; d386
@@ -3803,8 +3806,7 @@ controls_input_3:                      ; d3ad
 * Draw Gun Shot Mask.
 * 
 * Used by the routine at #R$D307.
-draw_shot_mask:                        ; d3b4
-; TODO
+;draw_shot_mask:                        ; d3b4
 ;       li   de,shot_mask_image         ; LD DE,$FF58       ; {Point to #R$FF58 and set the image dimensions.
 ;       li   bc,>0802                   ; LD BC,$0802       ; }
 ;       .push hl                        ; PUSH HL           ; Stash the screen location.
@@ -3820,8 +3822,7 @@ draw_shot_mask:                        ; d3b4
 * Draw Gun Shot.
 * 
 * Used by the routine at #R$D307.
-draw_gun_shot:                         ; d3cb
-; TODO
+;draw_gun_shot:                         ; d3cb
 ;       li   de,shot_image              ; LD DE,$FF68       ; {Point to #R$FF68 and set the image dimensions.
 ;       li   bc,>0802                   ; LD BC,$0802       ; }
 ;       .push hl                        ; PUSH HL           ; Stash the screen location.
@@ -6116,12 +6117,12 @@ title_screen_copyright:                ; ff34
        text 'COPYRIGHT  DINAMIC SOFTWARE 1985',>ff
        text >00,>00,>ff
 
-* Gun Shot Mask.
-shot_mask_image:                       ; ff58
-       byte >00,>00,>00,>00,>00,>00,>05,>D0                          ; {#UDGARRAY2,attr=7,scale=4,step=2;(#PC)-(#PC+$01)(shot-mask)
-       byte >04,>10,>05,>D0,>00,>00,>00,>00                          ; }
-
-* Gun Shot.
-shot_image:                            ; ff68
-       byte >00,>00,>04,>90,>02,>A0,>30,>0C                          ; {#UDGARRAY2,attr=7,scale=4,step=2;(#PC)-(#PC+$01)(shot)
-       byte >04,>20,>08,>90,>00,>80,>00,>00                          ; }
+;* Gun Shot Mask.
+;shot_mask_image:                       ; ff58
+;       byte >00,>00,>00,>00,>00,>00,>05,>D0                          ; {#UDGARRAY2,attr=7,scale=4,step=2;(#PC)-(#PC+$01)(shot-mask)
+;       byte >04,>10,>05,>D0,>00,>00,>00,>00                          ; }
+;
+;* Gun Shot.
+;shot_image:                            ; ff68
+;       byte >00,>00,>04,>90,>02,>A0,>30,>0C                          ; {#UDGARRAY2,attr=7,scale=4,step=2;(#PC)-(#PC+$01)(shot)
+;       byte >04,>20,>08,>90,>00,>80,>00,>00                          ; }

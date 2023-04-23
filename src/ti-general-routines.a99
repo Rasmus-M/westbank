@@ -75,13 +75,18 @@ graphics_mode_1:
        li   r1,>f100
        li   r2,>1800
        bl   @vsmw
-*      Init name table2
+*      Init name tables
        li   r0,name_table
        bl   @vwad
        bl   @ti_init_name_table
        li   r0,name_table_2
        bl   @vwad
        bl   @ti_init_name_table
+*      Sprite patterns
+       li   r0,sprite_pattern_table
+       li   r1,SPR0
+       li   r2,32
+       bl   @vmbw
        lwpi wrksp
        rt
 *      VDP registers
