@@ -3771,11 +3771,27 @@ set_left:                              ; d38c
 
 * Reads In-Game Joystick Controls.
 controls_joystick:                     ; d392
-       li   bc,>00df                   ; LD BC,$00DF       ; 
-       ; IN A,($0C)                    ; IN A,($0C)        ; #HTML(Reads input from the Kempston joystick (see <a
-                                                           ; href="../reference/pokes.html">POKES</a>)).
-       ; AND A                         ; AND A             ; {If there's nothing to read fall back to #R$D39B anyway.
-       jeq  controls_keyboard          ; JR Z,$D39B        ; }
+       sb   a,a
+       li   tmp0,KEY_FI
+       bl   @ti_check_key
+       jeq  controls_joystick_1
+       movb @bytes+>10,a
+controls_joystick_1:
+       li   tmp0,KEY_LF
+       bl   @ti_check_key
+       jeq  controls_joystick_2
+       socb @bytes+>02,a
+controls_joystick_2:
+       li   tmp0,KEY_RG
+       bl   @ti_check_key
+       jeq  controls_joystick_3
+       socb @bytes+>01,a
+controls_joystick_3:
+;       li   bc,>00df                   ; LD BC,$00DF       ;
+;       ; IN A,($0C)                    ; IN A,($0C)        ; #HTML(Reads input from the Kempston joystick (see <a
+;                                                           ; href="../reference/pokes.html">POKES</a>)).
+;       ; AND A                         ; AND A             ; {If there's nothing to read fall back to #R$D39B anyway.
+;       jeq  controls_keyboard          ; JR Z,$D39B        ; }
        .ret                            ; RET               ; Return.
 
 * Reads In-Game Keyboard Controls (1-2-3).
@@ -6107,7 +6123,7 @@ title_screen_play:                     ; fef4
 title_screen_keys:                     ; fefc
        text '1 KEYS   ',>ff
 title_screen_joystick:                 ; ff06
-       text '2 KEMPSTON',>ff
+       text '2 JOYSTICK',>ff
 title_screen_level:                    ; ff11
        text 'N LEVEL',>ff
 * Credits.
