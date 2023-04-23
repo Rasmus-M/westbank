@@ -146,7 +146,7 @@ level:                                 ; 5cb1
        byte >01
 
 * High Score Table
-highscore_table:                       ; 6000
+high_score_table:                       ; 6000
        text 'LUCKY LUCKE     '
        text 'BILLY THE KID   '
        text 'BUFALO BILL     '
@@ -177,7 +177,11 @@ highscore_table:                       ; 6000
        text 'THE CHICKEN MAN '
        text 'THE BLONDE GIRL '
        text 'TOM SMITH       '
-       bss  >20                      ; DEFS $20
+high_score_table_blank_1:              ; 61e0
+       bss  >10                        ; DEFS $20
+high_score_table_blank_2:              ; 61f0
+       bss  >10
+high_score_table_scores:               ; 6200
        text '275430'
        text '265980'
        text '263230'
@@ -219,7 +223,9 @@ highscore_table:                       ; 6000
        text '078000'
        text '069990'
        text '063130'
+high_score_table_score_1:               ; 62f6
        text '058530'
+high_score_table_score_2:               ; 62fc
        text '000500'
 
 * Level Selection
@@ -1629,6 +1635,8 @@ start:                                 ; c7c0
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
+       li   ix,score_digit_6
+       b    @draw_and_input_high_scores
        .call @new_game                 ; CALL $C7E5        ; Call #R$C7E5.
 ;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
 ;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
@@ -1640,8 +1648,7 @@ start:                                 ; c7c0
        .call @halt_loop                ; CALL $CD64        ; $80.}
 ;      li   hl,copied_5b80             ; LD HL,$CBB4       ; {Jump to #R$FA00 with
        li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
-; TODO
-;       b    @new_high_score            ; JP $FA00          ; #REGix=#R$CD86.}
+       b    @draw_and_input_high_scores ; JP $FA00          ; #REGix=#R$CD86.}
 * Displays the title screen and on return, sets the control method and
 * initiates variables for a new game.
 new_game:                              ; c7e5
@@ -5523,32 +5530,36 @@ dollar_scroll_halt_loop:               ; f9e3
 * High Score Entry.
 * 
 * Used by the routine at #R$C7C0.
-new_high_score:                        ; fa00
-       .call @high_score               ; CALL $FA06        ; 
-       b    @high_score_input          ; JP $FB62          ; 
-high_score:                            ; fa06
-       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $40 bytes of data from #REGhl to #R$5B80.
-       li   bc,>0040                   ; LD BC,$0040       ; 
-       .ldir                           ; LDIR              ; }
+* ix=score_digit_6
+draw_and_input_high_scores:            ; fa00
+       .call @high_scores              ; CALL $FA06        ;
+       b    @high_score_read_char      ; JP $FB62          ; Wait keypress and return
+high_scores:                           ; fa06
+;       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $40 bytes of data from #REGhl to #R$5B80.
+;       li   bc,>0040                   ; LD BC,$0040       ;
+;       .ldir                           ; LDIR              ; }
        movb @bytes+48,a                ; LD A,$30          ; {Writes "0" ($30 in ASCII) to #R$FB94.
-       movb a,@high_score_text_buffer  ; LD ($FB94),A      ; }
-       .call @high_score_clear_screen  ; CALL $FAD4        ; Call #R$FAD4.
+       movb a,@high_score_line_buffer  ; LD ($FB94),A      ; }
+       .call @hs_clear_screen          ; CALL $FAD4        ; Call #R$FAD4.
        li   hl,zx_screen+>0040         ; LD HL,$4040       ; {Writes $4040 to #R$FBF0.
-       mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; }
+       mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ; }
        .push ix                        ; PUSH IX           ; 
-       .call @_fc09                    ; CALL $FC09        ; Call #R$FC09.
-       movb a,@high_score_data_2       ; LD ($FB57),A      ;
+       .call @hs_find_position         ; CALL $FC09        ; Call #R$FC09.
+       movb a,@high_score_position     ; LD ($FB57),A      ;
        .pop ix                         ; POP IX            ; 
-       cb   a,@bytes+31                ; CP $1F            ; 
-       movb one,a                      ; LD A,$01          ; 
-       jne  !                          ; JP Z,$FAB0        ; 
-       b    @high_score_2              ;
-!
+       movb a,tmp0
+                                       ; CP $1F            ;
+       movb one,a                      ; LD A,$01          ;
+       cb   tmp0,@bytes+31             ;                   ; Is position last?
+       jne  new_high_score             ; JP Z,$FAB0        ;
+       b    @draw_high_scores   ;
+new_high_score:
        li   hl,zx_screen               ; LD HL,$4000       ;
-       mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; 
-       movb @high_score_data_2,a       ; LD A,($FB57)      ;
-       .call @high_score_position      ; CALL $FB19        ; 
-       li   de,highscore_table+495     ; LD DE,$61EF       ; 
+       mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ;
+*      Move name entries down to make room for new
+       movb @high_score_position,a     ; LD A,($FB57)      ;
+       .call @hs_table_name_addr       ; CALL $FB19        ;
+       li   de,high_score_table_blank_1+15 ; LD DE,$61EF       ;
        .push de                        ; PUSH DE           ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        ; AND A                         ; AND A             ; 
@@ -5556,13 +5567,14 @@ high_score:                            ; fa06
        .push hl                        ; PUSH HL           ; 
        .pop bc                         ; POP BC            ; 
        .pop hl                         ; POP HL            ; 
-       li   de,highscore_table+511     ; LD DE,$61FF       ; 
+       li   de,high_score_table_blank_2+15 ; LD DE,$61FF       ;
        inc  bc                         ; INC BC            ; 
-       .lddr                           ; LDDR              ; 
-       movb @high_score_data_2,a       ; LD A,($FB57)      ;
+       .lddr                           ; LDDR              ;
+*      Move score entries down to make room for new
+       movb @high_score_position,a     ; LD A,($FB57)      ;
        sb   one,a                      ; DEC A             ; 
-       .call @_fbff                    ; CALL $FBFF        ; 
-       li   de,highscore_table+761     ; LD DE,$62F9       ; 
+       .call @hs_table_score_address ; CALL $FBFF        ;
+       li   de,high_score_table_score_1+3 ; LD DE,$62F9       ;
        .push de                        ; PUSH DE           ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        ; AND A                         ; AND A             ; 
@@ -5570,67 +5582,72 @@ high_score:                            ; fa06
        .push hl                        ; PUSH HL           ; 
        .pop bc                         ; POP BC            ; 
        .pop hl                         ; POP HL            ; 
-       li   de,highscore_table+767     ; LD DE,$62FF       ; 
+       li   de,high_score_table_score_2+3 ; LD DE,$62FF       ;
        inc  bc                         ; INC BC            ; 
-       .lddr                           ; LDDR              ; 
-       movb @high_score_data_2,a       ; LD A,($FB57)      ;
-       .call @_fbff                    ; CALL $FBFF        ; 
+       .lddr                           ; LDDR              ;
+*      Copy new score into high score table
+       movb @high_score_position,a     ; LD A,($FB57)      ;
+       .call @hs_table_score_address   ; CALL $FBFF        ;
        dec  hl                         ; DEC HL            ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .push ix                        ; PUSH IX           ; 
-       .pop hl                         ; POP HL            ; 
-       movb @bytes+6,b                 ; LD B,$06          ; 
-high_score_1:                          ; fa6f
+       .ex_de_hl                       ; EX DE,HL          ;
+       .push ix                        ; PUSH IX           ;
+       .pop hl                         ; POP HL            ;
+       movb @bytes+6,b                 ; LD B,$06          ;
+new_high_score_1:                      ; fa6f
        movb *hl,a                      ; LD A,(HL)         ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*de                      ; LD (DE),A         ; 
        dec  de                         ; DEC DE            ; 
        inc  hl                         ; INC HL            ; 
        sb   one,b                      ; DJNZ $FA6F        ; 
-       jne  high_score_1               ;
-       li   hl,dueller_1               ; LD HL,$5BC0       ; TODO {Overwrites the text at #R$5BC0 with spaces to "blank"
-       li   de,dueller_1+1             ; LD DE,$5BC1       ; it out ($12 characters).
+       jne  new_high_score_1           ;
+*      Fill name buffer with spaces
+       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; TODO {Overwrites the text at #R$5BC0 with spaces to "blank"
+       li   de,high_score_name_buffer+1 ; LD DE,$5BC1       ; it out ($12 characters).
        li   bc,>0011                   ; LD BC,$0011       ; 
        movb @bytes+32,*hl              ; LD (HL),$20       ; 
        .ldir                           ; LDIR              ; }
        movb @b255,*hl                  ; LD (HL),$FF       ; Set a string termination character ($FF) at the end of
-                                                           ; the string.
-       .call @high_score_clear_screen  ; CALL $FAD4        ; 
+* Print "Write your name please"                           ; the string.
+       .call @hs_clear_screen          ; CALL $FAD4        ;
        li   hl,high_score_title        ; LD HL,$FB78       ; {Points to #R$FB78 and sends it to #R$5B80.
        li   de,zx_screen+>0802         ; LD DE,$4802       ; #TABLE(default,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
        .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
-       .call @high_score_something     ; CALL $FB26        ; 
-       .call @high_score_clear_screen  ; CALL $FAD4        ; 
-       movb @high_score_data_2,a       ; LD A,($FB57)      ;
-       .call @high_score_position      ; CALL $FB19        ; 
+* Input name
+       .call @high_score_input_name    ; CALL $FB26        ;
+       .call @hs_clear_screen          ; CALL $FAD4        ;
+* Copy name into high score table
+       movb @high_score_position,a     ; LD A,($FB57)      ;
+       .call @hs_table_name_addr       ; CALL $FB19        ; a--
        .ex_de_hl                       ; EX DE,HL          ; 
-       li   hl,dueller_1               ; LD HL,$5BC0       ; 
+       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ;
        li   bc,>0010                   ; LD BC,$0010       ; 
-       .ldir                           ; LDIR              ; 
-       sb   @bytes+5,a                 ; SUB $05           ; 
-       jnc  high_score_4               ; JR NC,$FABD       ; TODO: check code.
-       jmp  high_score_3               ; JR $FABC          ;
-high_score_2:                          ; _fab0
+       .ldir                           ; LDIR              ;
+* Determine from which position to draw
+       sb   @bytes+5,a                 ; SUB $05           ; position - 1 - 5
+       jgt  draw_high_scores_2         ; JR NC,$FABD       ; If 5 or more higher scores start from position - 5
+       jmp  draw_high_scores_1         ; JR $FABC          ; Otherwise start from top
+draw_high_scores:                      ; _fab0
        li   hl,high_score_sub_head     ; LD HL,$FBB5       ; {Points to #R$FBB5 and sends it to #R$5B80.
        li   de,zx_screen               ; LD DE,$4000       ; #TABLE(default,centre)
        li   bc,>0706                   ; LD BC,$0706       ; { =h Value | =h Ink | =h Paper | =h Bright }
        .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $06 | $06 | $00 | $00 }
                                                            ; TABLE#}
-high_score_3:                          ; fabc
+draw_high_scores_1:                    ; fabc
        sb   a,a                        ; XOR A             ; 
-high_score_4:                          ; fabd
+draw_high_scores_2:                    ; fabd
        ab   one,a                      ; INC A             ; 
        movb @bytes+10,b                ; LD B,$0A          ; 
-high_score_5:                          ; fac0
+draw_high_scores_3:                    ; fac0
        .push bc                        ; PUSH BC           ; 
        .push af                        ; PUSH AF           ; 
-       .call @high_score_6             ; CALL $FAE2        ;
-       li   de,high_score_text_buffer  ; LD DE,$FB94       ; 
-       .call @_fbd5                    ; CALL $FBD5        ; 
+       .call @hs_setup_line_buffer     ; CALL $FAE2        ;
+       li   de,high_score_line_buffer  ; LD DE,$FB94       ;
+       .call @advance_2_rows_and_print  ; CALL $FBD5        ;
        .pop af                         ; POP AF            ; 
        .pop bc                         ; POP BC            ; 
        ab   one,a                      ; INC A             ; 
@@ -5639,295 +5656,305 @@ high_score_5:                          ; fac0
        .ret                            ;                   
 !
        sb   one,b                      ; DJNZ $FAC0        ; 
-       jne  high_score_5               ;
+       jne  draw_high_scores_3         ;
        .ret                            ; RET               ;
 
-high_score_clear_screen:               ; fad4
-       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by writing $00 to all 6912
-       li   de,zx_screen+1             ; LD DE,$4001       ; memory locations.
-       li   bc,>1aff                   ; LD BC,$1AFF       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; 
+hs_clear_screen:                       ; fad4
+       bl   @ti_clear_screen
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by writing $00 to all 6912
+;       li   de,zx_screen+1             ; LD DE,$4001       ; memory locations.
+;       li   bc,>1aff                   ; LD BC,$1AFF       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
-high_score_6:                          ; fae2
+
+hs_setup_line_buffer:                  ; fae2
        movb a,@c                       ; LD C,A            ; 
-       li   hl,high_score_text_buffer  ; LD HL,$FB94       ; 
+       li   hl,high_score_line_buffer  ; LD HL,$FB94       ;
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
+       jlt  hs_setup_line_buffer_1     ; JR C,$FAFA        ;
        movb @bytes+49,*hl              ; LD (HL),$31       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
+       jlt  hs_setup_line_buffer_1     ; JR C,$FAFA        ;
        movb @bytes+50,*hl              ; LD (HL),$32       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-       joc  high_score_7               ; JR C,$FAFA        ; TODO: check code.
+       jlt  hs_setup_line_buffer_1     ; JR C,$FAFA        ;
        movb @bytes+51,*hl              ; LD (HL),$33       ; 
        sb   @bytes+10,a                ; SUB $0A           ; 
-high_score_7:                          ; fafa
+hs_setup_line_buffer_1:                ; fafa
        ab   @bytes+10,a                ; ADD A,$0A         ; 
        inc  hl                         ; INC HL            ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*hl                      ; LD (HL),A         ; 
        movb @c,a                       ; LD A,C            ; 
-       .call @high_score_position      ; CALL $FB19        ; 
-       li   de,high_score_text_buffer+6 ; LD DE,$FB9A       ; 
+       .call @hs_table_name_addr      ; CALL $FB19        ;
+       li   de,high_score_line_buffer+6 ; LD DE,$FB9A       ;
        li   bc,>0010                   ; LD BC,$0010       ; 
        .ldir                           ; LDIR              ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       inc  de                         ; INC DE            ; 
-       .call @_fbff                    ; CALL $FBFF        ; 
+       ai   de,4                       ; INC DE            ;
+                                       ; INC DE            ;
+                                       ; INC DE            ;
+                                       ; INC DE            ;
+       .call @hs_table_score_address   ; CALL $FBFF        ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; 
        .ret                            ; RET               ;
 
 * Works out where in the high score table to place the score.
-high_score_position:                   ; fb19
+hs_table_name_addr:                    ; fb19
        sb   one,a                      ; DEC A             ; {Using #R$6000 as a base, work out where to place the new score.
        movb a,@l                       ; LD L,A            ; #LIST
        sb   h,h                        ; LD H,$00          ; { Decrease $1B by one... }
-       a    hl,hl                      ; ADD HL,HL         ; { Loads $1A as the low-order byte; #REGhl=$001A }
-       a    hl,hl                      ; ADD HL,HL         ; { Times by $10; #REGhl=$1A0 }
-       a    hl,hl                      ; ADD HL,HL         ; { Add $6000=#R$61A0 }
-       a    hl,hl                      ; ADD HL,HL         ; LIST#
-       li   de,highscore_table         ; LD DE,$6000       ; 
-       a    de,hl                      ; ADD HL,DE         ; }
+       sla  hl,4                       ; ADD HL,HL         ; { Loads $1A as the low-order byte; #REGhl=$001A }
+                                       ; ADD HL,HL         ; { Times by $10; #REGhl=$1A0 }
+                                       ; ADD HL,HL         ; { Add $6000=#R$61A0 }
+                                       ; ADD HL,HL         ; LIST#
+                                       ; LD DE,$6000       ;
+       ai   hl,high_score_table        ; ADD HL,DE         ; }
        .ret                            ; RET               ; Return.
 
-high_score_something:                  ; fb26
-       li   hl,dueller_1               ; LD HL,$5BC0       ; {Stores #R$5BC0 at #R$FB55.
-high_score_8:                          ; fb29
-       mov  hl,@high_score_data        ; LD ($FB55),HL     ;
-       .call @_fbf2                    ; CALL $FBF2        ; }
-       .call @high_score_input         ; CALL $FB62        ; 
-       mov  @high_score_data,hl        ; LD HL,($FB55)     ;
+high_score_input_name:                 ; fb26
+       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Stores #R$5BC0 at #R$FB55.
+high_score_input_name_1:               ; fb29
+       mov  hl,@high_score_name_buffer_addr ; LD ($FB55),HL     ;
+       .call @hs_print_buffer          ; CALL $FBF2        ; }
+       .call @high_score_read_char     ; CALL $FB62        ;
+       mov  @high_score_name_buffer_addr,hl ; LD HL,($FB55)     ;
        cb   a,@bytes+13                ; CP $0D            ; 
        jne  !                          ; RET Z             ; 
        .ret                            ;                   
 !
        cb   a,@bytes+12                ; CP $0C            ; 
-       jeq  high_score_11              ; JR Z,$FB58        ;
+       jeq  high_score_input_name_3    ; JR Z,$FB58        ;
        movb a,@c                       ; LD C,A            ; 
        movb @l,a                       ; LD A,L            ; 
        cb   a,@bytes+209               ; CP $D1            ; 
-       jhe  high_score_8               ; JR NC,$FB29       ;
+       jhe  high_score_input_name_1    ; JR NC,$FB29       ;
        movb @c,a                       ; LD A,C            ; 
        cb   a,@bytes+32                ; CP $20            ; 
-       jeq  high_score_9               ; JR Z,$FB51        ;
+       jeq  high_score_input_name_2    ; JR Z,$FB51        ;
        cb   a,@bytes+97                ; CP $61            ; 
-       jl   high_score_8               ; JR C,$FB29        ;
+       jl   high_score_input_name_1    ; JR C,$FB29        ;
        cb   a,@bytes+123               ; CP $7B            ; 
-       jhe  high_score_8               ; JR NC,$FB29       ;
+       jhe  high_score_input_name_1    ; JR NC,$FB29       ;
        sb   @bytes+32,a                ; SUB $20           ; 
-high_score_9:                          ; fb51
+high_score_input_name_2:               ; fb51
        movb a,*hl                      ; LD (HL),A         ; 
-       inc  hl                         ; INC HL            ; 
-       jmp  high_score_8               ; JR $FB29          ;
-high_score_data:                       ; fb55
-       data 0                                              ; Cache.
-high_score_data_2:                     ; fb57
-       byte 0                          ; RRA               ;
-high_score_11:                         ; fb58
-       movb @l,a                       ; LD A,L            ; 
-       cb   a,@bytes+193               ; CP $C1            ; 
-       jl   high_score_8               ; JR C,$FB29        ;
-       dec  hl                         ; DEC HL            ; 
-       movb @bytes+32,*hl              ; LD (HL),$20       ; 
-       jmp  high_score_8               ; JR $FB29          ;
+       inc  hl                         ; INC HL            ;
+       jmp  high_score_input_name_1    ; JR $FB29          ;
+high_score_input_name_3:               ; fb58              ;
+       movb @l,a                       ; LD A,L            ;
+       cb   a,@bytes+193               ; CP $C1            ;
+       jl   high_score_input_name_1    ; JR C,$FB29        ;
+       dec  hl                         ; DEC HL            ;
+       movb @bytes+32,*hl              ; LD (HL),$20       ;
+       jmp  high_score_input_name_1    ; JR $FB29          ;
+
 * Returns a single keypress.
-high_score_input:                      ; fb62
-       li   hl,dueller_3+38            ; LD HL,$5C08       ; {#HTML(Keep looping around until <em>any</em> input is detected. This is achieved by writing $00 to
+high_score_read_char:                  ; fb62
+       li   hl,>5C08                   ; LD HL,$5C08       ; {#HTML(Keep looping around until <em>any</em> input is detected. This is achieved by writing $00 to
        sb   *hl,*hl                    ; LD (HL),$00       ; <a href="https://skoolkid.github.io/rom/asm/5C08.html">LAST_K</a> and looping until it's non-zero.)
-high_score_input_loop:                 ; fb67
+high_score_read_char_loop:             ; fb67
        ; HALT                          ; HALT              ; 
        movb *hl,a                      ; LD A,(HL)         ; 
        ; AND A                         ; AND A             ; 
-       jeq  high_score_input_loop      ; JR Z,$FB67        ; }
+       jeq  high_score_read_char_loop  ; JR Z,$FB67        ; }
        .push af                        ; PUSH AF           ; Store it on the stack for now.
-       li   de,>0010                   ; LD DE,$0010       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-       li   hl,>00c0                   ; LD HL,$00C0       ; #TABLE(default,centre)
-       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+;       li   de,>0010                   ; LD DE,$0010       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
+;       li   hl,>00c0                   ; LD HL,$00C0       ; #TABLE(default,centre)
+;       .call @>03b5                    ; CALL $03B5        ; TODO { =h Pitch | =h Duration }
                                                            ; { $00C0 | $0010 }
                                                            ; TABLE#}
        .pop af                         ; POP AF            ; {Return with the keypress in #REGa.
        .ret                            ; RET               ; }
 
+high_score_name_buffer_addr:           ; fb55              ; Moved out of code
+       data 0
+high_score_position:                   ; fb57
+       byte 0                          ; RRA               ;
+
 * High Score Table Name Entry.
 high_score_title:                      ; fb78
        text '  WRITE YOUR NAME PLEASE   ',>ff
-high_score_text_buffer:                ; fb94
+high_score_line_buffer:                ; fb94
        text '10    PANCHO VILLA        241610',>ff
 high_score_sub_head:                   ; fbb5
        text '     THESE ARE THE BEST        ',>ff
+high_score_name_buffer:
+       bss  18
 
 * Routine at FBD5
 * 
 * Used by the routine at #R$FA00.
-_fbd5: ; fbd5
-       mov  @_fbf0,hl                  ; LD HL,($FBF0)     ; 
+advance_2_rows_and_print:              ; fbd5
+       mov  @high_score_screen_addr,hl ; LD HL,($FBF0)     ;
        movb @l,a                       ; LD A,L            ; 
        ab   @bytes+64,a                ; ADD A,$40         ;
        jnc  !
-       .call @_FBEA                    ; CALL C,$FBEA      ;
+       .call @add_8_to_h               ; CALL C,$FBEA      ;
 !      movb a,@l                       ; LD L,A            ;
-       mov  hl,@_fbf0                  ; LD ($FBF0),HL     ; 
+       mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ;
        li   bc,>0705                   ; LD BC,$0705       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .call @print_two_tone_text_alias ; CALL $5B80        ; 
        .ret                            ; RET               ; 
 
-_fbea: ; fbea
+add_8_to_h:                            ; fbea
        movb h,a                        ; LD A,H            ; 
        ab   @bytes+8,a                 ; ADD A,$08         ; 
        movb a,h                        ; LD H,A            ; 
        sb   a,a                        ; XOR A             ; 
        .ret                            ; RET               ; 
 
-_fbf0: ; fbf0:
+high_score_screen_addr:                ; fbf0:
        data >50c0                                          ; Cache
 
 * This entry point is used by the routine at #R$FA00.
-_fbf2: ; fbf2
-       li   hl,dueller_1               ; LD HL,$5BC0       ; {Points to #R$5BC0 and sends it to #R$5B80.
+hs_print_buffer:                       ; fbf2
+       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Points to #R$5BC0 and sends it to #R$5B80.
        li   de,zx_screen+>0887         ; LD DE,$4887       ; #TABLE(default,centre)
        li   bc,>0705                   ; LD BC,$0705       ; { =h Value | =h Ink | =h Paper | =h Bright }
        .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
        .ret                            ; RET               ; { $05 | $05 | $00 | $00 }
                                                            ; TABLE#}
 * This entry point is used by the routine at #R$FA00.
-_fbff: ; fbff
-       movb a,@c                       ; LD C,A            ; 
-       sb   a,a                        ; XOR A             ; 
-       ab   @c,a                       ; ADD A,C           ; 
-       ab   @c,a                       ; ADD A,C           ; 
-       ab   @c,a                       ; ADD A,C           ; 
-       ab   a,a                        ; ADD A,A           ; 
-       movb a,@l                       ; LD L,A            ; 
-       movb @bytes+98,h                ; LD H,$62          ; 
+* Calculate hl = >6200 + 6 * a
+hs_table_score_address:                ; fbff
+       clr  hl
+       movb a,h                        ; LD C,A            ; x1
+                                       ; XOR A             ;
+       sla  hl,1                       ; ADD A,C           ; x2
+       ab   a,h                        ; ADD A,C           ; x3
+       sla  hl,1                       ; ADD A,C           ; x6
+       swpb hl                         ; ADD A,A           ;
+                                       ; LD L,A            ;
+       ai   hl,high_score_table_scores  ; LD H,$62          ;
        .ret                            ; RET               ; 
 
 * This entry point is used by the routine at #R$FA00.
-_fc09: ; fc09
-       li   hl,highscore_table+506     ; LD HL,$61FA       ; 
+* ix points to new potential high score BCD low endian
+* Returns position in a
+hs_find_position:                      ; fc09
+       li   hl,high_score_table_scores-6 ; LD HL,$61FA       ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        sb   @e,@e                      ; LD E,$00          ; 
-_fc11: ; fc11
+hs_find_next_digit:                    ; fc11
        ab   one,@e                     ; INC E             ; 
        movb @e,a                       ; LD A,E            ; 
        cb   a,@bytes+31                ; CP $1F            ; 
-       jl   !                          ; RET NC            ; 
-       .ret                            ;                   
-!
-       a    bc,hl                      ; ADD HL,BC         ; 
+       jl   hs_cmp_1st_digit           ; RET NC            ;
+       .ret                            ;                   ; End of list
+hs_cmp_1st_digit:
+       a    bc,hl                      ; ADD HL,BC         ;
        movb @5(ix),a                   ; LD A,(IX+$05)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        cb   a,*hl                      ; CP (HL)           ; 
-       jl   _fc11                      ; JR C,$FC11        ; 
-       jeq  _fc23                      ; JR Z,$FC23        ; 
+       jl   hs_find_next_digit         ; JR C,$FC11        ;
+       jeq  hs_cmp_2nd_digit           ; JR Z,$FC23        ;
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
-_fc23: ; fc23
+hs_cmp_2nd_digit:                      ; fc23
        movb @4(ix),a                   ; LD A,(IX+$04)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
        inc  hl                         ; INC HL            ; 
        cb   a,*hl                      ; CP (HL)           ; 
        dec  hl                         ; DEC HL            ; 
-       joc  _fc11                      ; JR C,$FC11        ; TODO: check code. 
-       jeq  _fc31                      ; JR Z,$FC31        ; 
+       joc  hs_find_next_digit         ; JR C,$FC11        ; TODO: check code.
+       jeq  hs_cmp_3rd_digit           ; JR Z,$FC31        ;
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
-_fc31: ; fc31
+hs_cmp_3rd_digit:                      ; fc31
        movb @3(ix),a                   ; LD A,(IX+$03)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       cb   a,*hl                      ; CP (HL)           ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       joc  _fc11                      ; JR C,$FC11        ; TODO: check code. 
-       jeq  _fc41                      ; JR Z,$FC41        ; 
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+       cb   a,@1(hl)                   ; CP (HL)           ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+       jl   hs_find_next_digit         ; JR C,$FC11        ; TODO: check code.
+       jeq  hs_cmp_4th_digit           ; JR Z,$FC41        ;
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
-_fc41: ; fc41
+hs_cmp_4th_digit:                      ; fc41
        movb @2(ix),a                   ; LD A,(IX+$02)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       cb   a,*hl                      ; CP (HL)           ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       joc  _fc11                      ; JR C,$FC11        ; TODO: check code. 
-       jeq  _fc53                      ; JR Z,$FC53        ; 
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+       cb   a,@3(hl)                   ; CP (HL)           ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+       jl   hs_find_next_digit         ; JR C,$FC11        ; TODO: check code.
+       jeq  hs_cmp_5th_digit           ; JR Z,$FC53        ;
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
-_fc53: ; fc53
+hs_cmp_5th_digit:                      ; fc53
        movb @1(ix),a                   ; LD A,(IX+$01)     ; 
        ab   @bytes+48,a                ; ADD A,$30         ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
-       cb   a,*hl                      ; CP (HL)           ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  hl                         ; DEC HL            ; 
-       jnc  _fc65                      ; JR NC,$FC65       ; TODO: check code. 
-       jmp  _fc11                      ; JR $FC11          ; 
-_fc65: ; fc65
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+                                       ; INC HL            ;
+       cb   a,@4(hl)                   ; CP (HL)           ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+                                       ; DEC HL            ;
+       jhe  hs_5th_digit_higher        ; JR NC,$FC65       ; TODO: check code.
+       jmp  hs_find_next_digit         ; JR $FC11          ;
+hs_5th_digit_higher:                   ; fc65
        movb @e,a                       ; LD A,E            ; 
        .ret                            ; RET               ; 
 
-* Unused
-       byte >C3,>90,>EA
-
-* Data block at FD00
-       byte >A7,>C2,>0F,>FC,>3A,>0A,>FC
-       byte >F6,>01,>D3,>7F,>3A,>0C,>FC
-       byte >CB,>7F,>20,>06,>CD,>54,>1F
-       byte >D2,>30,>FD,>DB,>FB,>E6,>01
-       byte >20,>ED,>79,>D3,>FB,>3A,>0A
-       byte >FC,>E6,>FE,>D3,>7F,>F6,>01
-       byte >D3,>7F,>32,>0A,>FC,>C9,>3A
-       byte >0C,>FC,>E6,>40,>28,>13,>3A
-       byte >0C,>FC,>F6,>80,>32,>0C,>FC
-       byte >CD,>F5,>FE,>CD,>B8,>FE,>3E
-       byte >06,>CD,>03,>FF,>CD,>50,>FD
-       byte >C3,>0A,>0F,>3E,>FF,>32,>0A
-       byte >FC,>D3,>7F,>3A,>0C,>FC,>E6
-       byte >3E,>32,>0C,>FC,>3A,>07,>FC
-       byte >A7,>3A,>0C,>FC,>CB,>EF,>20
-       byte >02,>CB,>AF,>32,>0C,>FC,>FB
-_fd80:
-       rt
-       byte >C9,>4F,>3A,>0C,>FC,>E6,>01
-       byte >28,>1C,>3A,>0C,>FC,>CB,>87
-       byte >32,>0C,>18,>02,>18,>24,>3E
-       byte >FD,>DB,>FE,>1F,>30,>02,>18
-       byte >16,>3E,>BF,>DB,>FE,>1F,>30
-       byte >01,>C9,>11,>80,>5B,>01,>40
-       byte >00,>ED,>B0,>2A,>86,>5B,>36
-       byte >FF,>C9,>31,>F0,>5F,>18,>14
-       byte >FB,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>21,>01,>01,>22,>B0
-       byte >5C,>3E,>00,>CD,>9B,>22,>21
-       byte >00,>40,>11,>01,>40,>01,>FF
-       byte >1A,>36,>00,>ED,>B0,>CD,>C0
-       byte >C7,>18,>EE,>C3,>90,>EA,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00
-       byte >3A
+;* Unused
+;       byte >C3,>90,>EA
+;
+;* Data block at FD00
+;       byte >A7,>C2,>0F,>FC,>3A,>0A,>FC
+;       byte >F6,>01,>D3,>7F,>3A,>0C,>FC
+;       byte >CB,>7F,>20,>06,>CD,>54,>1F
+;       byte >D2,>30,>FD,>DB,>FB,>E6,>01
+;       byte >20,>ED,>79,>D3,>FB,>3A,>0A
+;       byte >FC,>E6,>FE,>D3,>7F,>F6,>01
+;       byte >D3,>7F,>32,>0A,>FC,>C9,>3A
+;       byte >0C,>FC,>E6,>40,>28,>13,>3A
+;       byte >0C,>FC,>F6,>80,>32,>0C,>FC
+;       byte >CD,>F5,>FE,>CD,>B8,>FE,>3E
+;       byte >06,>CD,>03,>FF,>CD,>50,>FD
+;       byte >C3,>0A,>0F,>3E,>FF,>32,>0A
+;       byte >FC,>D3,>7F,>3A,>0C,>FC,>E6
+;       byte >3E,>32,>0C,>FC,>3A,>07,>FC
+;       byte >A7,>3A,>0C,>FC,>CB,>EF,>20
+;       byte >02,>CB,>AF,>32,>0C,>FC,>FB
+;_fd80:
+;       rt
+;       byte >C9,>4F,>3A,>0C,>FC,>E6,>01
+;       byte >28,>1C,>3A,>0C,>FC,>CB,>87
+;       byte >32,>0C,>18,>02,>18,>24,>3E
+;       byte >FD,>DB,>FE,>1F,>30,>02,>18
+;       byte >16,>3E,>BF,>DB,>FE,>1F,>30
+;       byte >01,>C9,>11,>80,>5B,>01,>40
+;       byte >00,>ED,>B0,>2A,>86,>5B,>36
+;       byte >FF,>C9,>31,>F0,>5F,>18,>14
+;       byte >FB,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>21,>01,>01,>22,>B0
+;       byte >5C,>3E,>00,>CD,>9B,>22,>21
+;       byte >00,>40,>11,>01,>40,>01,>FF
+;       byte >1A,>36,>00,>ED,>B0,>CD,>C0
+;       byte >C7,>18,>EE,>C3,>90,>EA,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00,>00,>00,>00,>00
+;       byte >00,>00,>00
+;       byte >3A
 
 * Title Screen.
 * 
