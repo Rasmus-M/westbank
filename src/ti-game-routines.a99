@@ -299,8 +299,9 @@ ti_scroll_left:
 ti_scroll_left_1:
        bl   @ti_dbl_buffer_scroll_screen
        inc  tmp0
-       ci   tmp0,33
+       ci   tmp0,12
        jlt  ti_scroll_left_1
+       bl   @ti_scroll_cleanup
        .endproc
 *// ti_scroll_left
 
@@ -314,10 +315,27 @@ ti_scroll_right:
 ti_scroll_right_1:
        bl   @ti_dbl_buffer_scroll_screen
        dec  tmp0
-       ci   tmp0,-1
+       ci   tmp0,20
        jgt  ti_scroll_right_1
+       bl   @ti_scroll_cleanup
        .endproc
 *// ti_scroll_right
+
+*********************************************************************
+*
+* Scroll clean-up
+*
+ti_scroll_cleanup:
+       .proc
+       li   r0,name_table
+       bl   @vwad
+       bl   @ti_init_name_table
+       bl   @ti_select_name_table_1
+       li   r2,name_table
+       bl   @vwad
+       bl   @ti_init_name_table
+       .endproc
+*// ti_scroll_cleanup
 
 *********************************************************************
 *

@@ -493,280 +493,280 @@ _6579:
 * Routine at 6600
 * 
 * Used by the routine at #R$D3EA.
-scroll_right:
-       movb @bytes+11,b                ; LD B,$0B          ; 
-scroll_right_loop:
-       .push bc                        ; PUSH BC           ; 
-       .call @_6610                    ; CALL $6610        ; 
-       .call @_6647                    ; CALL $6647        ; 
-       .call @_6647                    ; CALL $6647        ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $6602        ; 
-       jne  scroll_right_loop                      ;
-       .ret                            ; RET               ; 
-_6610:
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       li   hl,zx_screen+>006a         ; LD HL,$406A       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_6664                    ; CALL $6664        ; 
-       li   hl,zx_screen+>007e         ; LD HL,$407E       ;
-       li   de,zx_screen+>007f         ; LD DE,$407F       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_66a0                    ; CALL $66A0        ; 
-       li   hl,zx_attributes+>01ea     ; LD HL,$59EA       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_6681                    ; CALL $6681        ; 
-       li   hl,zx_attributes+>01fe     ; LD HL,$59FE       ;
-       li   de,zx_attributes+>01ff     ; LD DE,$59FF       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_668e                    ; CALL $668E        ; 
-       .ret                            ; RET               ; 
-_6647:
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       li   hl,zx_screen+>102a         ; LD HL,$502A       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_6664                    ; CALL $6664        ; 
-       li   hl,zx_screen+>103e         ; LD HL,$503E       ;
-       li   de,zx_screen+>103f         ; LD DE,$503F       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_66a0                    ; CALL $66A0        ; 
-       .ret                            ; RET               ; 
-       .ret                            ; RET               ; 
-_6664:
-       movb @bytes+8,@c                ; LD C,$08          ; 
-_6666:
-       movb *hl,a                      ; LD A,(HL)         ; 
-       movb a,*ix                      ; LD (IX+$00),A     ; 
-       inc  ix                         ; INC IX            ; 
-       ab   one,h                      ; INC H             ; 
-       sb   one,@c                     ; DEC C             ; 
-       jne  _6666                      ; JR NZ,$6666       ; 
-       movb h,a                        ; LD A,H            ; 
-       sb   @bytes+8,a                 ; SUB $08           ; 
-       movb a,h                        ; LD H,A            ; 
-       li   de,>0020                   ; LD DE,$0020       ; 
-       a    de,hl                      ; ADD HL,DE         ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jeq  !                          ; CALL NZ,$66D2     ; 
-       .call @_66d2                    ;                   
-!
-       sb   one,b                      ; DJNZ $6664        ; 
-       jne  _6664                      ;                   
-       .ret                            ; RET               ; 
-_6681:
-       movb *hl,a                      ; LD A,(HL)         ; 
-       movb a,*ix                      ; LD (IX+$00),A     ; 
-       li   de,>ffe0                   ; LD DE,$FFE0       ; -20
-       a    de,hl                      ; ADD HL,DE         ; 
-       inc  ix                         ; INC IX            ; 
-       sb   one,b                      ; DJNZ $6681        ; 
-       jne  _6681                      ;                   
-       .ret                            ; RET               ; 
-_668e:
-       .push bc                        ; PUSH BC           ; 
-       li   bc,>001f                   ; LD BC,$001F       ; 
-       movb *ix,a                      ; LD A,(IX+$00)     ; 
-       .lddr                           ; LDDR              ; 
-       movb a,*de                      ; LD (DE),A         ; 
-       inc  ix                         ; INC IX            ; 
-       dec  hl                         ; DEC HL            ; 
-       dec  de                         ; DEC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $668E        ; 
-       jne  _668e                      ;                   
-       .ret                            ; RET               ; 
-_66a0:
-       .push bc                        ; PUSH BC           ; 
-       .push hl                        ; PUSH HL           ; 
-       .call @_66ba                    ; CALL $66BA        ; 
-       .pop hl                         ; POP HL            ; 
-       li   bc,>0020                   ; LD BC,$0020       ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jeq  _66b3                      ; JR Z,$66B3        ; 
-       movb h,a                        ; LD A,H            ; 
-       ab   @bytes+7,a                 ; ADD A,$07         ; 
-       movb a,h                        ; LD H,A            ; 
-_66b3:
-       .push hl                        ; PUSH HL           ; 
-       .pop de                         ; POP DE            ; 
-       inc  de                         ; INC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $66A0        ; 
-       jne  _66a0                      ;                   
-       .ret                            ; RET               ; 
-_66ba:
-       .push hl                        ; PUSH HL           ; 
-       .push hl                        ; PUSH HL           ; 
-       li   bc,>001f                   ; LD BC,$001F       ; 
-       movb *ix,a                      ; LD A,(IX+$00)     ; 
-       inc  ix                         ; INC IX            ; 
-       .lddr                           ; LDDR              ; 
-       movb a,*de                      ; LD (DE),A         ; 
-       .pop de                         ; POP DE            ; 
-       .pop hl                         ; POP HL            ; 
-       ab   one,h                      ; INC H             ; 
-       ab   one,d                      ; INC D             ; 
-       inc  de                         ; INC DE            ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jne  !                          ; RET Z             ; 
-       .ret                            ;                   
-!
-       jmp  _66ba                      ; JR $66BA          ; 
-_66d2:
-       movb h,a                        ; LD A,H            ; 
-       ab   @bytes+7,a                 ; ADD A,$07         ; 
-       movb a,h                        ; LD H,A            ; 
-       .ret                            ; RET               ; 
+;scroll_right:
+;       movb @bytes+11,b                ; LD B,$0B          ;
+;scroll_right_loop:
+;       .push bc                        ; PUSH BC           ;
+;       .call @_6610                    ; CALL $6610        ;
+;       .call @_6647                    ; CALL $6647        ;
+;       .call @_6647                    ; CALL $6647        ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $6602        ;
+;       jne  scroll_right_loop                      ;
+       .ret                            ; RET               ;
+;_6610:
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       li   hl,zx_screen+>006a         ; LD HL,$406A       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_6664                    ; CALL $6664        ;
+;       li   hl,zx_screen+>007e         ; LD HL,$407E       ;
+;       li   de,zx_screen+>007f         ; LD DE,$407F       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_66a0                    ; CALL $66A0        ;
+;       li   hl,zx_attributes+>01ea     ; LD HL,$59EA       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_6681                    ; CALL $6681        ;
+;       li   hl,zx_attributes+>01fe     ; LD HL,$59FE       ;
+;       li   de,zx_attributes+>01ff     ; LD DE,$59FF       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_668e                    ; CALL $668E        ;
+;       .ret                            ; RET               ;
+;_6647:
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       li   hl,zx_screen+>102a         ; LD HL,$502A       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_6664                    ; CALL $6664        ;
+;       li   hl,zx_screen+>103e         ; LD HL,$503E       ;
+;       li   de,zx_screen+>103f         ; LD DE,$503F       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_66a0                    ; CALL $66A0        ;
+;       .ret                            ; RET               ;
+;       .ret                            ; RET               ;
+;_6664:
+;       movb @bytes+8,@c                ; LD C,$08          ;
+;_6666:
+;       movb *hl,a                      ; LD A,(HL)         ;
+;       movb a,*ix                      ; LD (IX+$00),A     ;
+;       inc  ix                         ; INC IX            ;
+;       ab   one,h                      ; INC H             ;
+;       sb   one,@c                     ; DEC C             ;
+;       jne  _6666                      ; JR NZ,$6666       ;
+;       movb h,a                        ; LD A,H            ;
+;       sb   @bytes+8,a                 ; SUB $08           ;
+;       movb a,h                        ; LD H,A            ;
+;       li   de,>0020                   ; LD DE,$0020       ;
+;       a    de,hl                      ; ADD HL,DE         ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jeq  !                          ; CALL NZ,$66D2     ;
+;       .call @_66d2                    ;
+;!
+;       sb   one,b                      ; DJNZ $6664        ;
+;       jne  _6664                      ;
+;       .ret                            ; RET               ;
+;_6681:
+;       movb *hl,a                      ; LD A,(HL)         ;
+;       movb a,*ix                      ; LD (IX+$00),A     ;
+;       li   de,>ffe0                   ; LD DE,$FFE0       ; -20
+;       a    de,hl                      ; ADD HL,DE         ;
+;       inc  ix                         ; INC IX            ;
+;       sb   one,b                      ; DJNZ $6681        ;
+;       jne  _6681                      ;
+;       .ret                            ; RET               ;
+;_668e:
+;       .push bc                        ; PUSH BC           ;
+;       li   bc,>001f                   ; LD BC,$001F       ;
+;       movb *ix,a                      ; LD A,(IX+$00)     ;
+;       .lddr                           ; LDDR              ;
+;       movb a,*de                      ; LD (DE),A         ;
+;       inc  ix                         ; INC IX            ;
+;       dec  hl                         ; DEC HL            ;
+;       dec  de                         ; DEC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $668E        ;
+;       jne  _668e                      ;
+;       .ret                            ; RET               ;
+;_66a0:
+;       .push bc                        ; PUSH BC           ;
+;       .push hl                        ; PUSH HL           ;
+;       .call @_66ba                    ; CALL $66BA        ;
+;       .pop hl                         ; POP HL            ;
+;       li   bc,>0020                   ; LD BC,$0020       ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jeq  _66b3                      ; JR Z,$66B3        ;
+;       movb h,a                        ; LD A,H            ;
+;       ab   @bytes+7,a                 ; ADD A,$07         ;
+;       movb a,h                        ; LD H,A            ;
+;_66b3:
+;       .push hl                        ; PUSH HL           ;
+;       .pop de                         ; POP DE            ;
+;       inc  de                         ; INC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $66A0        ;
+;       jne  _66a0                      ;
+;       .ret                            ; RET               ;
+;_66ba:
+;       .push hl                        ; PUSH HL           ;
+;       .push hl                        ; PUSH HL           ;
+;       li   bc,>001f                   ; LD BC,$001F       ;
+;       movb *ix,a                      ; LD A,(IX+$00)     ;
+;       inc  ix                         ; INC IX            ;
+;       .lddr                           ; LDDR              ;
+;       movb a,*de                      ; LD (DE),A         ;
+;       .pop de                         ; POP DE            ;
+;       .pop hl                         ; POP HL            ;
+;       ab   one,h                      ; INC H             ;
+;       ab   one,d                      ; INC D             ;
+;       inc  de                         ; INC DE            ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jne  !                          ; RET Z             ;
+;       .ret                            ;
+;!
+;       jmp  _66ba                      ; JR $66BA          ;
+;_66d2:
+;       movb h,a                        ; LD A,H            ;
+;       ab   @bytes+7,a                 ; ADD A,$07         ;
+;       movb a,h                        ; LD H,A            ;
+;       .ret                            ; RET               ;
 
 * This entry point is used by the routine at #R$D3EA.
-scroll_left:
-       movb @bytes+11,b                ; LD B,$0B          ; 
-scroll_left_loop:
-       .push bc                        ; PUSH BC           ; 
-       .call @_6710                    ; CALL $6710        ; 
-       .call @_6747                    ; CALL $6747        ; 
-       .call @_6747                    ; CALL $6747        ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $6702        ; 
-       jne  scroll_left_loop                      ;
-       .ret                            ; RET               ; 
-_6710:
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       li   hl,zx_screen+>006a         ; LD HL,$406A       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_677e                    ; CALL $677E        ; 
-       li   hl,zx_screen+>0061         ; LD HL,$4061       ;
-       li   de,zx_screen+>0060         ; LD DE,$4060       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_67ba                    ; CALL $67BA        ; 
-       li   hl,zx_attributes+>006a     ; LD HL,$586A       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_679b                    ; CALL $679B        ; 
-       li   hl,zx_attributes+>0061     ; LD HL,$5861       ;
-       li   de,zx_attributes+>0060     ; LD DE,$5860       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+13,b                ; LD B,$0D          ; 
-       .call @_67a8                    ; CALL $67A8        ; 
-       .ret                            ; RET               ; 
-_6747:
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       li   hl,zx_screen+>102a         ; LD HL,$502A       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_677e                    ; CALL $677E        ; 
-       li   hl,zx_screen+>1021         ; LD HL,$5021       ;
-       li   de,zx_screen+>1020         ; LD DE,$5020       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_67ba                    ; CALL $67BA        ; 
-       li   hl,zx_attributes+>0220     ; LD HL,$5A20       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_679b                    ; CALL $679B        ; 
-       li   hl,zx_attributes+>0221     ; LD HL,$5A21       ;
-       li   de,zx_attributes+>0220     ; LD DE,$5A20       ;
-       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
-       movb @bytes+4,b                 ; LD B,$04          ; 
-       .call @_67a8                    ; CALL $67A8        ; 
-       .ret                            ; RET               ; 
-_677e:
-       movb @bytes+8,@c                ; LD C,$08          ; 
-_6780:
-       movb *hl,a                      ; LD A,(HL)         ; 
-       movb a,*ix                      ; LD (IX+$00),A     ; 
-       inc  ix                         ; INC IX            ; 
-       ab   one,h                      ; INC H             ; 
-       sb   one,@c                     ; DEC C             ; 
-       jne  _6780                      ; JR NZ,$6780       ; 
-       movb h,a                        ; LD A,H            ; 
-       sb   @bytes+8,a                 ; SUB $08           ; 
-       movb a,h                        ; LD H,A            ; 
-       li   de,>0020                   ; LD DE,$0020       ; 
-       a    de,hl                      ; ADD HL,DE         ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jeq  !                          ; CALL NZ,$67EC     ; 
-       .call @_67ec                    ;                   
-!
-       sb   one,b                      ; DJNZ $677E        ; 
-       jne  _677e                      ;                   
-       .ret                            ; RET               ; 
-_679b:
-       movb *hl,a                      ; LD A,(HL)         ; 
-       movb a,*ix                      ; LD (IX+$00),A     ; 
-       li   de,>0020                   ; LD DE,$0020       ; 
-       a    de,hl                      ; ADD HL,DE         ; 
-       inc  ix                         ; INC IX            ; 
-       sb   one,b                      ; DJNZ $679B        ; 
-       jne  _679b                      ;                   
-       .ret                            ; RET               ; 
-_67a8:
-       .push bc                        ; PUSH BC           ; 
-       li   bc,>001f                   ; LD BC,$001F       ; 
-       movb *ix,a                      ; LD A,(IX+$00)     ; 
-       .ldir                           ; LDIR              ; 
-       movb a,*de                      ; LD (DE),A         ; 
-       inc  ix                         ; INC IX            ; 
-       inc  hl                         ; INC HL            ; 
-       inc  de                         ; INC DE            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $67A8        ; 
-       jne  _67a8                      ;                   
-       .ret                            ; RET               ; 
-_67ba:
-       .push bc                        ; PUSH BC           ; 
-       .push de                        ; PUSH DE           ; 
-       .call @_67d4                    ; CALL $67D4        ; 
-       .pop hl                         ; POP HL            ; 
-       li   bc,>0020                   ; LD BC,$0020       ; 
-       a    bc,hl                      ; ADD HL,BC         ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jeq  _67cd                      ; JR Z,$67CD        ; 
-       movb h,a                        ; LD A,H            ; 
-       ab   @bytes+7,a                 ; ADD A,$07         ; 
-       movb a,h                        ; LD H,A            ; 
-_67cd:
-       .push hl                        ; PUSH HL           ; 
-       .pop de                         ; POP DE            ; 
-       inc  hl                         ; INC HL            ; 
-       .pop bc                         ; POP BC            ; 
-       sb   one,b                      ; DJNZ $67BA        ; 
-       jne  _67ba                      ;                   
-       .ret                            ; RET               ; 
-_67d4:
-       .push de                        ; PUSH DE           ; 
-       .push de                        ; PUSH DE           ; 
-       li   bc,>001f                   ; LD BC,$001F       ; 
-       movb *ix,a                      ; LD A,(IX+$00)     ; 
-       inc  ix                         ; INC IX            ; 
-       .ldir                           ; LDIR              ; 
-       movb a,*de                      ; LD (DE),A         ; 
-       .pop de                         ; POP DE            ; 
-       .pop hl                         ; POP HL            ; 
-       ab   one,h                      ; INC H             ; 
-       ab   one,d                      ; INC D             ; 
-       inc  hl                         ; INC HL            ; 
-       movb h,a                        ; LD A,H            ; 
-       andi a,7*256                    ; AND $07           ; 
-       jne  !                          ; RET Z             ; 
-       .ret                            ;                   
-!
-       jmp  _67d4                      ; JR $67D4          ; 
-_67ec:
-       movb h,a                        ; LD A,H            ; 
-       ab   @bytes+7,a                 ; ADD A,$07         ; 
-       movb a,h                        ; LD H,A            ; 
-       .ret                            ; RET               ; 
+;scroll_left:
+;       movb @bytes+11,b                ; LD B,$0B          ;
+;scroll_left_loop:
+;       .push bc                        ; PUSH BC           ;
+;       .call @_6710                    ; CALL $6710        ;
+;       .call @_6747                    ; CALL $6747        ;
+;       .call @_6747                    ; CALL $6747        ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $6702        ;
+;       jne  scroll_left_loop                      ;
+;       .ret                            ; RET               ;
+;_6710:
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       li   hl,zx_screen+>006a         ; LD HL,$406A       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_677e                    ; CALL $677E        ;
+;       li   hl,zx_screen+>0061         ; LD HL,$4061       ;
+;       li   de,zx_screen+>0060         ; LD DE,$4060       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_67ba                    ; CALL $67BA        ;
+;       li   hl,zx_attributes+>006a     ; LD HL,$586A       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_679b                    ; CALL $679B        ;
+;       li   hl,zx_attributes+>0061     ; LD HL,$5861       ;
+;       li   de,zx_attributes+>0060     ; LD DE,$5860       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+13,b                ; LD B,$0D          ;
+;       .call @_67a8                    ; CALL $67A8        ;
+;       .ret                            ; RET               ;
+;_6747:
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       li   hl,zx_screen+>102a         ; LD HL,$502A       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_677e                    ; CALL $677E        ;
+;       li   hl,zx_screen+>1021         ; LD HL,$5021       ;
+;       li   de,zx_screen+>1020         ; LD DE,$5020       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_67ba                    ; CALL $67BA        ;
+;       li   hl,zx_attributes+>0220     ; LD HL,$5A20       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_679b                    ; CALL $679B        ;
+;       li   hl,zx_attributes+>0221     ; LD HL,$5A21       ;
+;       li   de,zx_attributes+>0220     ; LD DE,$5A20       ;
+;       li   ix,buffer_at_5b00          ; LD IX,$5B00       ;
+;       movb @bytes+4,b                 ; LD B,$04          ;
+;       .call @_67a8                    ; CALL $67A8        ;
+;       .ret                            ; RET               ;
+;_677e:
+;       movb @bytes+8,@c                ; LD C,$08          ;
+;_6780:
+;       movb *hl,a                      ; LD A,(HL)         ;
+;       movb a,*ix                      ; LD (IX+$00),A     ;
+;       inc  ix                         ; INC IX            ;
+;       ab   one,h                      ; INC H             ;
+;       sb   one,@c                     ; DEC C             ;
+;       jne  _6780                      ; JR NZ,$6780       ;
+;       movb h,a                        ; LD A,H            ;
+;       sb   @bytes+8,a                 ; SUB $08           ;
+;       movb a,h                        ; LD H,A            ;
+;       li   de,>0020                   ; LD DE,$0020       ;
+;       a    de,hl                      ; ADD HL,DE         ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jeq  !                          ; CALL NZ,$67EC     ;
+;       .call @_67ec                    ;
+;!
+;       sb   one,b                      ; DJNZ $677E        ;
+;       jne  _677e                      ;
+;       .ret                            ; RET               ;
+;_679b:
+;       movb *hl,a                      ; LD A,(HL)         ;
+;       movb a,*ix                      ; LD (IX+$00),A     ;
+;       li   de,>0020                   ; LD DE,$0020       ;
+;       a    de,hl                      ; ADD HL,DE         ;
+;       inc  ix                         ; INC IX            ;
+;       sb   one,b                      ; DJNZ $679B        ;
+;       jne  _679b                      ;
+;       .ret                            ; RET               ;
+;_67a8:
+;       .push bc                        ; PUSH BC           ;
+;       li   bc,>001f                   ; LD BC,$001F       ;
+;       movb *ix,a                      ; LD A,(IX+$00)     ;
+;       .ldir                           ; LDIR              ;
+;       movb a,*de                      ; LD (DE),A         ;
+;       inc  ix                         ; INC IX            ;
+;       inc  hl                         ; INC HL            ;
+;       inc  de                         ; INC DE            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $67A8        ;
+;       jne  _67a8                      ;
+;       .ret                            ; RET               ;
+;_67ba:
+;       .push bc                        ; PUSH BC           ;
+;       .push de                        ; PUSH DE           ;
+;       .call @_67d4                    ; CALL $67D4        ;
+;       .pop hl                         ; POP HL            ;
+;       li   bc,>0020                   ; LD BC,$0020       ;
+;       a    bc,hl                      ; ADD HL,BC         ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jeq  _67cd                      ; JR Z,$67CD        ;
+;       movb h,a                        ; LD A,H            ;
+;       ab   @bytes+7,a                 ; ADD A,$07         ;
+;       movb a,h                        ; LD H,A            ;
+;_67cd:
+;       .push hl                        ; PUSH HL           ;
+;       .pop de                         ; POP DE            ;
+;       inc  hl                         ; INC HL            ;
+;       .pop bc                         ; POP BC            ;
+;       sb   one,b                      ; DJNZ $67BA        ;
+;       jne  _67ba                      ;
+;       .ret                            ; RET               ;
+;_67d4:
+;       .push de                        ; PUSH DE           ;
+;       .push de                        ; PUSH DE           ;
+;       li   bc,>001f                   ; LD BC,$001F       ;
+;       movb *ix,a                      ; LD A,(IX+$00)     ;
+;       inc  ix                         ; INC IX            ;
+;       .ldir                           ; LDIR              ;
+;       movb a,*de                      ; LD (DE),A         ;
+;       .pop de                         ; POP DE            ;
+;       .pop hl                         ; POP HL            ;
+;       ab   one,h                      ; INC H             ;
+;       ab   one,d                      ; INC D             ;
+;       inc  hl                         ; INC HL            ;
+;       movb h,a                        ; LD A,H            ;
+;       andi a,7*256                    ; AND $07           ;
+;       jne  !                          ; RET Z             ;
+;       .ret                            ;
+;!
+;       jmp  _67d4                      ; JR $67D4          ;
+;_67ec:
+;       movb h,a                        ; LD A,H            ;
+;       ab   @bytes+7,a                 ; ADD A,$07         ;
+;       movb a,h                        ; LD H,A            ;
+;       .ret                            ; RET               ;
 
 * BANG!
 * 
@@ -2066,7 +2066,7 @@ deposit_flash_prep:                    ; cab9
        li   bc,>000d                   ; LD BC,$000D       ; from #R$CC8D).
        movb a,*hl                      ; LD (HL),A         ; 
        .ldir                           ; LDIR              ; }
-       b    @draw_cashboxes            ; JP $CC9B          ; Jump to #R$CC9B.
+       b    @draw_and_check_cashboxes            ; JP $CC9B          ; Jump to #R$CC9B.
 *
 init_and_run_game_loop:                ; cac8
        .call @init_game_loop           ; CALL $C9B7        ;
@@ -2081,7 +2081,7 @@ draw_entire_playfield:                 ; cad4
        .call @reset_door_routine_flags ; CALL $CD68        ;
        .call @draw_doors_and_playfield ; CALL $CC3A        ;
        .call @draw_life_images         ; CALL $CC5A        ;
-       .call @draw_cashboxes           ; CALL $CC9B        ;
+       .call @draw_and_check_cashboxes           ; CALL $CC9B        ;
        .call @draw_score               ; CALL $CD90        ;
        .call @draw_cashbox_selections  ; CALL $D45E        ;
        .ret                            ; RET               ; 
@@ -2113,7 +2113,7 @@ read_keys_2:                           ; cb03              ; Z pressed. Enter pa
 ;       andi tmp0,4*256                 ;
         jeq  read_keys_2                ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
-       .call @check_input     ; CALL $D2CF        ;
+       .call @check_input              ; CALL $D2CF        ;
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
 delay_loop:                            ; cb12
        dec  bc                         ; DEC BC            ;
@@ -2192,25 +2192,26 @@ after_door_3_routine:                  ; cb83
        b    @flash_lives               ;                   
 !
        .call @scoring                  ; CALL $CDC3        ; Call #R$CDC3.
-       li   hl,show_dollar_sign_flag   ; LD HL,$D190       ; {If #R$D190 is not zero then call
+       li   hl,deposit_flag            ; LD HL,$D190       ; {If #R$D190 is not zero then call
        movb *hl,a                      ; LD A,(HL)         ; #R$CBA0 (also, writes $00 to
        ; AND A                         ; AND A             ; #R$D190 to clear it).
        sb   *hl,*hl                    ; LD (HL),$00       ;
        movb a,a
        jeq  !                          ; CALL NZ,$CBA0     ; }
-       .call @call_scroll_dollar_sign                    ;
+       .call @got_a_deposit                    ;
 !
        b    @game_loop                 ; JP $CAE7          ;
-call_scroll_dollar_sign:               ; cba0
+got_a_deposit:                         ; cba0
        .call @scroll_dollar_sign       ; CALL $F960        ;
-       b    @draw_cashboxes            ; JP $CC9B          ;
-clear_255_bytes_at_5b00:               ; cba6
-       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; {Blanks $FF bytes from #R$5B00
-       li   de,buffer_at_5b00+1        ; LD DE,$5B01       ; onwards, then returns.
-       li   bc,>00ff                   ; LD BC,$00FF       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; }
+       .call @draw_and_check_cashboxes ; JP $CC9B          ;
+       b    @game_loop
+;clear_255_bytes_at_5b00:               ; cba6
+;       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; {Blanks $FF bytes from #R$5B00
+;       li   de,buffer_at_5b00+1        ; LD DE,$5B01       ; onwards, then returns.
+;       li   bc,>00ff                   ; LD BC,$00FF       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ;
+;       .ret                            ; RET               ; }
 ;copied_5b80:                           ; cbb4
 ;       byte >C3,>D2,>CB,>C3,>5A,>CC,>59,>CC                          ; {Copied to $5B80.
 ;       byte >2A,>12,>CE,>E9,>C3,>DC,>CD,>C3                          ;
@@ -2424,7 +2425,7 @@ door_deposited_07_12:                  ; cc9a
 * Draws Deposit Cashboxes.
 * 
 * Used by the routine at #R$C7C0.
-draw_cashboxes:
+draw_and_check_cashboxes:
        movb @cashbox_ref,a             ; LD A,($D45C)      ; {Converts #R$D45C into cash deposit box flag address
        movb a,@l                       ; LD L,A            ; (e.g. "1" becomes #R$CC8D and so on).
        sb   h,h                        ; LD H,$00          ; 
@@ -2454,13 +2455,13 @@ draw_cashboxes:
        movb *de,a                      ; LD A,(DE)         ; Fetch the flag for #R$CC9A.
        socb *hl,a                      ; OR (HL)           ; Run a logical OR against the contents of #REGhl.
        movb a,*hl                      ; LD (HL),A         ; Writes this back into #REGhl (setting the flag).
-       .call @game_cashboxes           ; CALL $CCFB        ; 
-cashboxes_complete:                    ; ccd3
+       .call @draw_cashboxes           ; CALL $CCFB        ;
+check_cashboxes_completed:             ; ccd3
        li   de,door_deposited_01       ; LD DE,$CC8D       ; Points to the cashbox flags (beginning at #R$CC8D).
        li   hl,cashboxes_completed_flag ; LD HL,$CA80       ; {Write $00 to #R$CA80.
        sb   *hl,*hl                    ; LD (HL),$00       ; }
        movb @bytes+12,b                ; LD B,$0C          ; Testing against all 12 cashboxes.
-cashboxes_complete_loop:               ; ccdd
+check_cashboxes_completed_loop:        ; ccdd
        movb *de,a                      ; LD A,(DE)         ; {Fetch the cashbox flag, return if its zero.
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; }
@@ -2468,43 +2469,45 @@ cashboxes_complete_loop:               ; ccdd
 !
        inc  de                         ; INC DE            ; {Move onto the next cashbox (loop back to #R$CCDD) or
        sb   one,b                      ; DJNZ $CCDD        ; continue once all 12 are checked.}
-       jne  cashboxes_complete_loop    ;                   
+       jne  check_cashboxes_completed_loop
        movb a,*hl                      ; LD (HL),A         ; {Write #REGa ($01) to #R$CA80.
        .ret                            ; RET               ; }
-draw_game_cashbox:                     ; cce5
+
+draw_cashbox:                          ; cce5
        ab   a,a                        ; ADD A,A           ; {Determines whether to send #R$FF78 or #R$FF98 to
        ab   @l,a                       ; ADD A,L           ; #R$D5E6.
        movb a,@l                       ; LD L,A            ; 
        li   de,gfx_empty_box_image     ; LD DE,$FF78       ;
        movb *ix,a                      ; LD A,(IX+$00)     ; 
        ; AND A                         ; AND A             ; 
-       jeq  _ccf4                      ; JR Z,$CCF4        ; 
+       jeq  draw_cashbox_1             ; JR Z,$CCF4        ;
        li   de,gfx_dollar_box_image    ; LD DE,$FF98       ;
-_ccf4:
+draw_cashbox_1:                        ; ccf4
        li   bc,>1002                   ; LD BC,$1002       ; 
        .call @copy_routine             ; CALL $D5E6        ; }
        .ret                            ; RET               ; Return.
+
 * Draws all the cashboxes in two blocks of 6.
-game_cashboxes:                        ; ccfb
+draw_cashboxes:                        ; ccfb
        li   ix,door_deposited_01       ; LD IX,$CC8D       ; {The statuses for the cashboxes begin at #R$CC8D. This routine processes them in two blocks of 6 (as they
        li   hl,zx_screen+>001f         ; LD HL,$401F       ; appear. The first block is displayed at $401F, after processing the subroutine returns and continues for the
        movb one,a                      ; LD A,$01          ; next six blocks, just altering the screen location to $4025.
-       .call @game_cashboxes_skip      ; CALL $CD0A        ; 
+       .call @draw_cashboxes_side      ; CALL $CD0A        ;
        li   hl,zx_screen+>0025         ; LD HL,$4025       ;
-game_cashboxes_skip:                   ; cd0a
+draw_cashboxes_side:                   ; cd0a
        movb @bytes+6,b                 ; LD B,$06          ; 
-game_cashboxes_loop:                   ; cd0c
+draw_cashboxes_loop:                   ; cd0c
        .push bc                        ; PUSH BC           ; 
        .push hl                        ; PUSH HL           ; 
        .push af                        ; PUSH AF           ; 
-       .call @draw_game_cashbox        ; CALL $CCE5        ; 
+       .call @draw_cashbox             ; CALL $CCE5        ;
        .pop af                         ; POP AF            ; 
        .pop hl                         ; POP HL            ; 
        .pop bc                         ; POP BC            ; 
        inc  ix                         ; INC IX            ; 
        ab   one,a                      ; INC A             ; 
        sb   one,b                      ; DJNZ $CD0C        ; }
-       jne  game_cashboxes_loop        ;                   
+       jne  draw_cashboxes_loop        ;
        .ret                            ; RET               ; Return.
 
 * Flash Lives/ Lose Life.
@@ -3335,7 +3338,7 @@ copy_char_data_flag:
        byte >00
 
 * Game status buffer entry at D190
-show_dollar_sign_flag:                 ; d190
+deposit_flag:                          ; d190
        byte >00
 
 * Game status buffer entry at D191
@@ -3773,7 +3776,7 @@ controls_joystick:                     ; d392
 * 
 * Used by the routine at #R$D392.
 controls_keyboard:                     ; d39b
-                                       ; LD A,$F7          ; {Read keys 1-2-3-4-5.
+       sb   a,a                        ; LD A,$F7          ; {Read keys 1-2-3-4-5.
                                        ; IN A,($FE)        ; }
 controls_input_1:                      ; d39f
        li   tmp0,KEY_1                 ; BIT 0,A           ; {If "1" isn't being pressed then jump to #R$D3A6.
@@ -3845,49 +3848,52 @@ controls_input_o_p:                    ; d3e2
 !      .ret
 
 * Routine at D3EA
-check_no_doors_active:                 ; d3ea
+check_ready_to_scroll:                 ; d3ea
        li   hl,door_1_routine          ; LD HL,$CE14       ; #R$CE14
        sb   a,a                        ; XOR A             ; {Sets #REGa=0 and #REGb=$06 (counter).
-       movb @bytes+6,b                 ; LD B,$06          ; }
-_d3f0:
-       socb *hl,a                      ; OR (HL)           ; 
-       inc  hl                         ; INC HL            ; 
-       sb   one,b                      ; DJNZ $D3F0        ; 
-       jne  _d3f0                      ;                   
+       li   bc,6                       ; LD B,$06          ; }
+check_no_doors_active:                 ; d3f0
+       socb *hl+,a                     ; OR (HL)           ;
+                                       ; INC HL            ;
+       dec  bc                         ; DJNZ $D3F0        ;
+       jne  check_no_doors_active                        ;
        ; AND A                         ; AND A             ; 
-       .pop bc                         ; POP BC            ; 
+       .pop bc                         ; POP BC            ; Pop return address off stack
+       movb a,a
        jeq  !                          ; RET NZ            ; 
-       .ret                            ;                   
+       .ret                            ;                   ; Return to caller's caller (game_loop) if any door active
 !
-       .push bc                        ; PUSH BC           ; 
-       li   hl,random_seed                   ; LD HL,$D8AC       ;
+       .push bc                        ; PUSH BC           ; Push return address back
+       li   hl,random_seed             ; LD HL,$D8AC       ;
        ab   one,*hl                    ; INC (HL)          ; 
-       li   de,>0400                   ; LD DE,$0400       ; 
-       .call @_d407                    ; CALL $D407        ; 
-       joc  !                          ; RET NC            ; TODO: check code. 
-       .ret                            ;                   
+                                       ; LD DE,$0400       ; (TI moved)
+       .call @check_cashboxes_flag     ; CALL $D407       ;
+       joc  !                          ; RET NC            ; Return move_right_or_left if cashboxes not completed
+       .ret                            ;                   ;
 !
-       .pop af                         ; POP AF            ; 
-       .pop af                         ; POP AF            ; 
+       .pop bc                         ; POP AF            ; Pop return address off stack
+       .pop bc                         ; POP AF            ; Pop return address off stack
        ; AND A                         ; AND A             ; 
-       .ret                            ; RET               ; 
-_d407:
-       li   hl,cashboxes_completed_flag ; LD HL,$CA80       ; 
-       movb *hl,a                      ; LD A,(HL)         ; 
+       b    @return_without_carry      ; RET               ; Return to caller's caller's caller (run_phase)
+
+check_cashboxes_flag:                  ; d407
+       li   hl,cashboxes_completed_flag ; LD HL,$CA80      ;
+       movb *hl,a                      ; LD A,(HL)         ; Check the flag
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; 
-       .ret                            ;                   
+       b    @return_without_carry      ;                   ; Return without carry if not completed
 !
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
+       sb   *hl,*hl                    ; LD (HL),$00       ; Clear the flag
        ; SCF                           ; SCF               ; 
-       .ret                            ; RET               ; 
+       b    @return_with_carry         ; RET               ; Return with carry if completed
 
 * This entry point is used by the routine at #R$C7C0.
 move_right_or_left:                    ; d411
-       .call @check_no_doors_active    ; CALL $D3EA        ;
+       .call @check_ready_to_scroll    ; CALL $D3EA        ;
+       li   de,>0100                                       ; Number of iterations for loop to check left/right
 move_right_or_left_loop:
-       .push de                        ; PUSH DE           ; 
-       .call @check_input     ; CALL $D2CF        ;
+       .push de                        ; PUSH DE           ; de=>400
+       .call @check_input              ; CALL $D2CF        ;
        movb @right_pressed,a           ; LD A,($D301)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D42D     ; 
@@ -3900,38 +3906,37 @@ move_right_or_left_loop:
 !
        .pop de                         ; POP DE            ; 
        dec  de                         ; DEC DE            ; 
-       movb d,a                        ; LD A,D            ; 
-       socb @e,a                       ; OR E              ; 
-       jne  !                          ; RET Z             ; 
-       .ret                            ;                   
-!
-       jmp  move_right_or_left_loop    ; JR $D414          ;
+                                       ; LD A,D            ;
+                                       ; OR E              ;
+       jne  move_right_or_left_loop    ; RET Z             ;
+       .ret                            ;
+                                       ; JR $D414          ;
 move_cashboxes_right:                  ; d42d
-       .call @scroll_right             ; CALL $6600        ;
-       li   de,>0400                   ; LD DE,$0400       ; 
-       li   hl,cashbox_ref_new           ; LD HL,$D45D       ;
+       bl   @ti_scroll_left            ; CALL $6600        ;
+       li   de,>0100                   ; LD DE,$0400       ;
+       li   hl,cashbox_ref_new         ; LD HL,$D45D       ;
        movb *hl,a                      ; LD A,(HL)         ; 
        ab   one,a                      ; INC A             ; 
        movb a,*hl                      ; LD (HL),A         ; 
        cb   a,@bytes+13                ; CP $0D            ; 
-       jl   _d43f                      ; JR C,$D43F        ; 
+       jl   draw_selection_and_return  ; JR C,$D43F        ;
        movb one,*hl                    ; LD (HL),$01       ; 
-_d43f:
+draw_selection_and_return:             ; d43f
        .call @draw_cashbox_selections  ; CALL $D45E        ;
        movb @cashbox_ref_new,a         ; LD A,($D45D)      ;
        movb a,@cashbox_ref             ; LD ($D45C),A      ;
        .ret                            ; RET               ; 
 move_cashboxes_left:                   ; d449
-       .call @scroll_left              ; CALL $6700        ;
-       li   de,>0400                   ; LD DE,$0400       ; 
-       li   hl,cashbox_ref_new           ; LD HL,$D45D       ;
+       bl   @ti_scroll_right           ; CALL $6700        ;
+       li   de,>0100                   ; LD DE,$0400       ;
+       li   hl,cashbox_ref_new         ; LD HL,$D45D       ;
        movb *hl,a                      ; LD A,(HL)         ; 
        sb   one,a                      ; DEC A             ; 
        movb a,*hl                      ; LD (HL),A         ; 
        ; AND A                         ; AND A             ; 
-       jne  _d43f                      ; JR NZ,$D43F       ; 
+       jne  draw_selection_and_return  ; JR NZ,$D43F       ;
        movb @bytes+12,*hl              ; LD (HL),$0C       ; 
-       jmp  _d43f                      ; JR $D43F          ; 
+       jmp  draw_selection_and_return  ; JR $D43F          ;
 
 * Cash Deposit Box Reference.
 cashbox_ref:                           ; d45c
@@ -3945,6 +3950,7 @@ cashbox_ref_new:                       ; d45d
 * 
 * Used by the routines at #R$C7C0 and #R$D3EA.
 draw_cashbox_selections:               ; _d45e
+       clr  a
        movb @cashbox_ref,a             ; LD A,($D45C)      ;
        movb @bytes+56,@c               ; LD C,$38          ; Attribute black/grey
        .call @draw_cashbox_selections_1 ; CALL $D46B       ; Remove old selection
@@ -3968,9 +3974,10 @@ back_to_first_cashbox:                 ; d47b
        movb one,a                      ; LD A,$01          ; 
        .ret                            ; RET               ; 
 draw_cashbox_selection:                ; d47e
-       cb   a,@bytes+7                 ; CP $07            ; In right side?
+                                       ; CP $07            ; In right side?
        li   hl,zx_attributes+>0005     ; LD HL,$5805       ; Right
-       jnc  draw_cashbox_selection_1   ; JR NC,$D488       ; TODO: check code.
+       cb   a,@bytes+7
+       jhe  draw_cashbox_selection_1   ; JR NC,$D488       ;
        li   hl,zx_attributes+>00ff     ; LD HL,$58FF       ; Left
 draw_cashbox_selection_1:              ; d488
        ab   a,a                        ; ADD A,A           ; 2*a
@@ -4103,7 +4110,7 @@ customer_open_4:                       ; d4ed
                                                            ; byte of, e.g. #R$D16B).
                                        ; LD A,$01          ; {Register this as a deposit (by writing $01 to e.g.
        movb one,@8(ix)                 ; LD (IX+$08),A     ; #R$D16D).}
-       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; Writes $01 to #R$D190.
+       movb one,@deposit_flag          ; LD ($D190),A      ; Writes $01 to #R$D190.
        .ret                            ; RET               ; Return.
 * Handle customer putting their hands up.
 customer_hands_up:                     ; d516
@@ -4795,8 +4802,8 @@ bowie_close_1:                         ; d83c
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
-       bl   @draw_door_frame_1        ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
-       .call @reset_door_routine                 ; CALL $D8A1        ; Call #R$D8A1.
+       bl   @draw_door_frame_1         ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
+       .call @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
        .ret                            ; RET               ; Return.
 * Handles marking this as something shootable.
 bowie_cash_action:                     ; d84b
@@ -4804,7 +4811,7 @@ bowie_cash_action:                     ; d84b
        movb one,@7(ix)                 ; LD (IX+$07),$01   ; } Score?
                                        ; LD A,$01          ; {Writes $01 to #REGix+$08 and #R$D190.
        movb one,@8(ix)                 ; LD (IX+$08),A     ;
-       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; }
+       movb one,@deposit_flag          ; LD ($D190),A      ; }
        jmp  bowie_close_3              ; JR $D821          ; Jump to #R$D821.
 * Handles marking this as something unshootable.
 bowie_bomb_action:                     ; d85d
@@ -4864,6 +4871,19 @@ reset_door_routine:                    ; d8a1
                                        ; LD (HL),A         ; }
        .ret                            ; RET               ; Return.
 
+* Routine at DAEF
+*
+* Used by the routine at #R$CE21.
+gen_random_number:                     ; daef
+       bl   @ti_rnd                    ; CALL $D8B0        ;
+;       movb a,@c                      ; LD C,A            ;
+;       movb @>5c78,a                  ; LD A,($5C78)      ; Get FRAMES
+       src  tmp0,3                     ; RR C              ;
+                                       ; RR C              ;
+                                       ; RR C              ;
+       movb tmp0,a                     ; ADD A,C           ;
+       .ret                            ; RET               ;
+
 * Game status buffer entry at D8AC
 random_seed:
        data >92ee
@@ -4879,7 +4899,8 @@ random_flag:
 random_number:                         ; d8b0
        .proc
        bl   @ti_rnd
-       mov  tmp0,a
+       swpb tmp0
+       movb tmp0,a
 ;       .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
 ;       .push hl                        ; PUSH HL           ; }
 ;       movb @random_flag,a             ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.
@@ -5017,14 +5038,14 @@ julius_open_4:                         ; d934
 * Changes the frame to show Julius drawing his pistol.
        movb @bytes+7,*hl               ; LD (HL),$07       ; Writes "07" to #R$D8E7.
        movb @bytes+37,a                ; LD A,$25          ; {Pass character index (#R$B450(draw | $25)) to #R$D6ED
-       bl   @draw_door_frame_4        ; CALL $D6ED        ; and return.
+       bl   @draw_door_frame_4         ; CALL $D6ED        ; and return.
        .ret                            ; RET               ; }
 * Set up (and begin) closing the door.
 julius_state_4_close:                  ; d951
        movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
-       bl   @draw_door_frame_3        ; CALL $D6DF        ; #R$D6DF.}
+       bl   @draw_door_frame_3         ; CALL $D6DF        ; #R$D6DF.}
                                        ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
-       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; #REGix+6 and return.
+       movb one,@deposit_flag          ; LD ($D190),A      ; #REGix+6 and return.
        movb one,@8(ix)                 ; LD (IX+$08),A     ;
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        .ret                            ; RET               ; }
@@ -5147,7 +5168,7 @@ julius_close_5:                        ; d9f1
        bl   @draw_door_frame_1        ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
        .call @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
                                        ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
-       movb one,@show_dollar_sign_flag ; LD ($D190),A      ; #REGix+6 and return.
+       movb one,@deposit_flag          ; LD ($D190),A      ; #REGix+6 and return.
        movb one,@8(ix)                 ; LD (IX+$08),A     ;
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        .ret                            ; RET               ; }
@@ -5337,19 +5358,6 @@ bandit_draw_close_5:                   ; dae0
        bl   @draw_door_frame_1        ; CALL $D664        ; Call #R$D664 (i.e. no character/ door is shut).
        .call @reset_door_routine                 ; CALL $D8A1        ; {Call #R$D8A1 and return.
        .ret                            ; RET               ; }
-
-* Routine at DAEF
-* 
-* Used by the routine at #R$CE21.
-gen_random_number:                     ; daef
-       bl   @random_number            ; CALL $D8B0        ; 
-;       movb a,@c                       ; LD C,A            ;
-;       movb @>5c78,a                   ; LD A,($5C78)      ; Get FRAMES
-       src  a,3                        ; RR C              ;
-                                       ; RR C              ;
-                                       ; RR C              ;
-;       ab   @c,a                       ; ADD A,C           ;
-       .ret                            ; RET               ; 
 
 * Door Buffer
 * 
