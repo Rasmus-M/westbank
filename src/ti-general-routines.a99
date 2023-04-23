@@ -121,6 +121,7 @@ ti_select_name_table_1:
        bl   @vwtr
        lwpi wrksp
        rt
+*// ti_select_name_table_1
 
 *********************************************************************************
 *
@@ -132,6 +133,31 @@ ti_select_name_table_2:
        bl   @vwtr
        lwpi wrksp
        rt
+*// ti_select_name_table_2
+
+*********************************************************************************
+*
+* Display off
+*
+ti_display_off:
+       lwpi ti_wrksp
+       li   r0,>01a2
+       bl   @vwtr
+       lwpi wrksp
+       rt
+*// ti_display_off
+
+*********************************************************************************
+*
+* Display off
+*
+ti_display_on:
+       lwpi ti_wrksp
+       li   r0,>01e2
+       bl   @vwtr
+       lwpi wrksp
+       rt
+*// ti_display_on
 
 *********************************************************************************
 *
@@ -139,6 +165,7 @@ ti_select_name_table_2:
 *
 ti_clear_screen:
        .proc
+       bl   @ti_display_off
        li   r0,pattern_table
        clr  r1
        li   r2,>1800
@@ -147,6 +174,7 @@ ti_clear_screen:
        li   r1,>f100
        li   r2,>1800
        bl   @vsmw
+       bl   @ti_display_on
        .endproc
 *// ti_clear_screen
 

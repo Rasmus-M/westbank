@@ -4,6 +4,7 @@
 *
 ti_draw_playfield:
        .proc
+       bl   @ti_display_off
        seto @graphics_bank_select
        li   hl,playfield_data
 ti_draw_playfield_1:
@@ -25,6 +26,7 @@ ti_draw_playfield_3:
        inc  de
        dec  bc
        jne  ti_draw_playfield_3
+       bl   @ti_display_on
        .endproc
 playfield_data:
        data (0*32+1)*8,gfx_slot_numbers_left,>0c01

@@ -69,7 +69,6 @@ draw_score_alias:                      ; 5b98
 * Populated initially by #R$C3EA.
 dueller_1:                             ; 5bc0
        byte >00                                                      ; Dueller state ("0" is complete).
-_5bc1:
        byte >00                                                      ; Dueller timer.
        byte >00
        byte >00                                                      ; Dueller position.
@@ -952,14 +951,14 @@ bang_color:
 * 
 * Used by the routine at #R$C7C0.
 perform_duel:
-       .call @init_duel                ; CALL $C3DD        ; Call #R$C3DD.
-       movb @_c421,a                   ; LD A,($C421)      ; Grab #R$C421.
+       .call @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
+       movb @duel_some_flag,a          ; LD A,($C421)      ; Grab #R$C421.
        jnc  rebuild                    ; JR NC,$C3C9       ; TODO: check code. 
        ab   one,a                      ; INC A             ; 
 rebuild:                               ; c3c9
        movb @bytes+32,b                ; LD B,$20          ; {Interrupt driven HALT loop ($20 cycles).
 rebuild_halt_loop:                     ; c3cb
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C3CB        ; }
        jne  rebuild_halt_loop          ;                   
        movb a,@e                       ; LD E,A            ; 
@@ -972,17 +971,18 @@ _c3d8:
        ; AND A                         ; AND A             ; {If #R$CC59 is zero then return.
        movb @e,a                       ; LD A,E            ; 
        jeq  !                          ; RET NZ            ; }
-       .ret                            ;                   
+       b    @return_without_carry                            ;
 !
        ; SCF                           ; SCF               ; {Set the carry flag and return.
-       .ret                            ; RET               ; }
+       b    @return_with_carry         ; RET               ; }
+
 * Kicks off the duelling bonus round.
-init_duel:                             ; c3dd
+perform_duel_main:                     ; c3dd
        .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGde.
        .push de                        ; PUSH DE           ; }
-       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $1B of data from #REGhl to #R$5B80.
-       li   bc,>001b                   ; LD BC,$001B       ; 
-       .ldir                           ; LDIR              ; }
+;       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {Copies $1B of data from #REGhl to #R$5B80.
+;       li   bc,>001b                   ; LD BC,$001B       ;
+;       .ldir                           ; LDIR              ; }
        b    @duel_prep                 ; JP $C422          ; Jump to #R$C422.
 
 * Duel Bonus Round Data.
@@ -1027,11 +1027,12 @@ duel_data:                             ; c3ea
        byte >01                                                      ; Current frame?
        byte >18,>19,>1A                                              ; Dueller 3 frames.
        byte >00,>08,>08,>0A                                          ; 
+
 * Buffer holding bonus text.
 duel_bonus_text:                       ; c41d
        text '900',>ff                                                ; Bonus text.
-* Not sure ... it is used though @todo.
-_c421:
+* Not sure ... it is used though       ; TODO
+duel_some_flag:                        ; c421
        byte >00                                                      ; 
 
 * Duel Bonus Round.
@@ -1060,7 +1061,7 @@ duel_prep:                             ; c422
        movb a,*hl                      ; LD (HL),A         ; 
        inc  hl                         ; INC HL            ; 
        movb a,*hl                      ; LD (HL),A         ; }
-       movb @_c421,a                   ; LD A,($C421)      ; #R$C421.
+       movb @duel_some_flag,a                   ; LD A,($C421)      ; #R$C421.
        socb one,a                      ; OR $01            ; 
        cb   a,@bytes+32                ; CP $20            ; 
        li   de,>0001                   ; LD DE,$0001       ; 
@@ -1074,12 +1075,13 @@ duel_prep_loop:                        ; c460
 duel_clear_screen:                     ; c463
        mov  de,@_c52e                  ; LD ($C52E),DE     ; ....
 * Clears down the screen buffer.
-       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer
-       li   de,zx_screen+1             ; LD DE,$4001       ; (i.e. "blanks it").
-       li   bc,>1aff                   ; LD BC,$1AFF       ; 
-       sb   a,a                        ; XOR A             ; 
-       movb a,*hl                      ; LD (HL),A         ; 
-       .ldir                           ; LDIR              ; }
+       bl   @ti_clear_screen
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer
+;       li   de,zx_screen+1             ; LD DE,$4001       ; (i.e. "blanks it").
+;       li   bc,>1aff                   ; LD BC,$1AFF       ;
+;       sb   a,a                        ; XOR A             ;
+;       movb a,*hl                      ; LD (HL),A         ;
+;       .ldir                           ; LDIR              ; }
 * Writes the attributes for the playfield (sky, grass, footer).
        li   hl,zx_attributes           ; LD HL,$5880       ; {Writes $28 to $5880 in the attribute buffer $180 times...
        li   de,zx_attributes+1         ; LD DE,$5881       ; #TABLE(default,centre,centre,centre,centre)
@@ -1448,7 +1450,7 @@ duel_complete:                         ; c690
        b    @duel_flash_text           ;                   
 !
        ; SCF                           ; SCF               ; {Set the carry flag and return.
-       .ret                            ; RET               ; }
+       b    @return_with_carry         ; RET               ; }
 
 * Write "Lives" text.
 * 
@@ -1489,7 +1491,7 @@ duel_flash_halt_loop_2:                ; c6c7
        mov  @lives_addr,hl             ; LD HL,($5B86)     ; {Increase the lives counter by one (#R$CC59).
        ab   one,*hl                    ; INC (HL)          ; }
        ; SCF                           ; SCF               ; {Sets the carry flag and returns.
-       .ret                            ; RET               ; }
+       b    @return_with_carry         ; RET               ; }
 
 * Write "Countdown" text.
 * 
@@ -1550,7 +1552,7 @@ flash_life_image_loop:                 ; c6f6
        .call @draw_life_images_alias   ; CALL $5B83        ; }
        movb @bytes+16,b                ; LD B,$10          ; {Interrupt driven halt loop.
 flash_life_image_halt_loop_1:          ; c6fe
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C6FE        ; }
        jne  flash_life_image_halt_loop_1 ;                   
        .pop hl                         ; POP HL            ; 
@@ -1560,14 +1562,14 @@ flash_life_image_halt_loop_1:          ; c6fe
        .pop hl                         ; POP HL            ; 
        movb @bytes+16,b                ; LD B,$10          ; {Interrupt driven halt loop.
 flash_life_image_halt_loop_2:          ; c70a
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C70A        ; }
        jne  flash_life_image_halt_loop_2 ;                   
        .pop bc                         ; POP BC            ; {Retrieves #REGb (the counter) from the stack and loop
        sb   one,b                      ; DJNZ $C6F6        ; back until finished.}
        jne  flash_life_image_loop      ;                   
        ; SCF                           ; SCF               ; {Set the carry flag and return.
-       .ret                            ; RET               ; }
+       b    @return_with_carry         ; RET               ; }
 
 * Data block at C71E
        byte >22,>FB
@@ -1623,7 +1625,7 @@ header_3:                              ; c7a3
 
 * New Game
 start:                                 ; c7c0
-       mov  @>5C78,hl                  ; LD HL,($5C78)     ; TODO #HTML(Fetch <a
+       mov  @>83c0,hl                  ; LD HL,($5C78)     ; TODO #HTML(Fetch <a
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
@@ -1854,7 +1856,7 @@ set_night_attr:                        ; c963
        li   hl,door_attr_night         ; LD HL,$C99F       ; Call #R$C966 using #R$C99F.
 * Note this is for the opened door background hence it starts from frame 2 (as
 * frame 1 is a closed door).
-set_door_attr:                         ; c966
+set_door_attr:                         ; c966 TODO
        li   de,door_frame_2_attrs      ; LD DE,$D6B9       ; {Copies $18 bytes of data to
        li   bc,>0018                   ; LD BC,$0018       ; #R$D6B9, then return.
        .ldir                           ; LDIR              ;
@@ -2036,7 +2038,7 @@ cashboxes_flash_loop:                  ; ca87
        .push bc                        ; PUSH BC           ; 
        movb b,a                        ; LD A,B            ; 
        andi a,1*256                    ; AND $01           ; 
-       .call @deposit_flash_prep       ; CALL $CAB9        ; 
+       .call @set_all_deposit_flags    ; CALL $CAB9        ;
        movb @bytes+16,b                ; LD B,$10          ; 
        .call @halt_loop                ; CALL $CD64        ; 
        .pop bc                         ; POP BC            ; 
@@ -2045,9 +2047,9 @@ cashboxes_flash_loop:                  ; ca87
        movb @bytes+48,b                ; LD B,$30          ; 
        .call @halt_loop                ; CALL $CD64        ; 
        movb b,a                        ; LD A,B            ; 
-       .call @deposit_flash_prep       ; CALL $CAB9        ; 
+       .call @set_all_deposit_flags    ; CALL $CAB9        ;
 * Duel
-       bl   @random_number            ; CALL $D8B0        ;
+       bl   @random_number             ; CALL $D8B0        ;
        movb a,b                        ; LD B,A            ;
        ; LD A,R                        ; LD A,R            ;
        movb a,@c                       ; LD C,A            ; 
@@ -2055,18 +2057,20 @@ cashboxes_flash_loop:                  ; ca87
        movb a,d                        ; LD D,A            ; 
        movb @duel_parameter,a          ; LD A,($CBCF)      ;
 ;      li   hl,copied_5b80             ; LD HL,$CBB4       ;
-       .call @perform_duel             ; CALL $C3C0        ;
+;       .call @perform_duel             ; CALL $C3C0        ;
        movb a,@duel_parameter          ; LD ($CBCF),A      ;
        sb   b,b                        ; LD B,$00          ; 
-       b    @halt_loop                 ; JP $CD64          ; 
-*
-deposit_flash_prep:                    ; cab9
+       .call @halt_loop                ; JP $CD64          ;
+       b    @return_without_carry
+
+* Set all deposit flags to a
+set_all_deposit_flags:                 ; cab9
        li   hl,door_deposited_01       ; LD HL,$CC8D       ; {Writes #REGa across all the
        li   de,door_deposited_02       ; LD DE,$CC8E       ; deposit flags (copies to each
        li   bc,>000d                   ; LD BC,$000D       ; from #R$CC8D).
        movb a,*hl                      ; LD (HL),A         ; 
        .ldir                           ; LDIR              ; }
-       b    @draw_and_check_cashboxes            ; JP $CC9B          ; Jump to #R$CC9B.
+       b    @draw_and_check_cashboxes  ; JP $CC9B          ; Jump to #R$CC9B.
 *
 init_and_run_game_loop:                ; cac8
        .call @init_game_loop           ; CALL $C9B7        ;
@@ -2203,15 +2207,14 @@ after_door_3_routine:                  ; cb83
        b    @game_loop                 ; JP $CAE7          ;
 got_a_deposit:                         ; cba0
        .call @scroll_dollar_sign       ; CALL $F960        ;
-       .call @draw_and_check_cashboxes ; JP $CC9B          ;
-       b    @game_loop
+       b    @draw_and_check_cashboxes  ; JP $CC9B          ;
 ;clear_255_bytes_at_5b00:               ; cba6
 ;       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; {Blanks $FF bytes from #R$5B00
 ;       li   de,buffer_at_5b00+1        ; LD DE,$5B01       ; onwards, then returns.
 ;       li   bc,>00ff                   ; LD BC,$00FF       ;
 ;       sb   *hl,*hl                    ; LD (HL),$00       ;
 ;       .ldir                           ; LDIR              ;
-;       .ret                            ; RET               ; }
+        .ret                            ; RET               ; }
 ;copied_5b80:                           ; cbb4
 ;       byte >C3,>D2,>CB,>C3,>5A,>CC,>59,>CC                          ; {Copied to $5B80.
 ;       byte >2A,>12,>CE,>E9,>C3,>DC,>CD,>C3                          ;
@@ -3873,7 +3876,7 @@ check_no_doors_active:                 ; d3f0
 !
        .pop bc                         ; POP AF            ; Pop return address off stack
        .pop bc                         ; POP AF            ; Pop return address off stack
-       ; AND A                         ; AND A             ; 
+       ; AND A                         ; AND A             ;
        b    @return_without_carry      ; RET               ; Return to caller's caller's caller (run_phase)
 
 check_cashboxes_flag:                  ; d407
@@ -4875,13 +4878,13 @@ reset_door_routine:                    ; d8a1
 *
 * Used by the routine at #R$CE21.
 gen_random_number:                     ; daef
-       bl   @ti_rnd                    ; CALL $D8B0        ;
-;       movb a,@c                      ; LD C,A            ;
-;       movb @>5c78,a                  ; LD A,($5C78)      ; Get FRAMES
-       src  tmp0,3                     ; RR C              ;
-                                       ; RR C              ;
-                                       ; RR C              ;
-       movb tmp0,a                     ; ADD A,C           ;
+       bl   @random_number             ; CALL $D8B0        ;
+;       movb a,@c                       ; LD C,A            ;
+;       movb @>5c78,a                   ; LD A,($5C78)      ; Get FRAMES
+;       src  a,3                        ; RR C              ;
+;                                       ; RR C              ;
+;                                       ; RR C              ;
+;       ab    @c,a                      ; ADD A,C           ;
        .ret                            ; RET               ;
 
 * Game status buffer entry at D8AC
@@ -4898,49 +4901,49 @@ random_flag:
 * 
 random_number:                         ; d8b0
        .proc
-       bl   @ti_rnd
-       swpb tmp0
-       movb tmp0,a
-;       .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
-;       .push hl                        ; PUSH HL           ; }
-;       movb @random_flag,a             ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.
-;       sb   one,a                      ; DEC A             ;
-;       movb a,@random_flag             ; LD ($D8AE),A      ; }
-;       jne  random_number_1            ; JR NZ,$D8C8       ; If the result is not zero jump to #R$D8C8.
-;       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
-;       inc  hl                         ; INC HL            ;
-;       .push hl                        ; PUSH HL           ;
-;       .pop bc                         ; POP BC            ;
-;       a    hl,hl                      ; ADD HL,HL         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       jmp  random_number_2            ; JR $D8D7          ;
-;random_number_1:                       ; d8c8
-;       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
-;       inc  hl                         ; INC HL            ;
-;       .push hl                        ; PUSH HL           ;
-;       .pop bc                         ; POP BC            ;
-;       a    hl,hl                      ; ADD HL,HL         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       .push hl                        ; PUSH HL           ;
-;       .pop bc                         ; POP BC            ;
-;       a    hl,hl                      ; ADD HL,HL         ;
-;random_number_2:                       ; d8d7
-;       a    bc,hl                      ; ADD HL,BC         ;
-;       dec  hl                         ; DEC HL            ;
-;       mov  hl,@random_seed            ; LD ($D8AC),HL     ;
-;       movb @l,a                       ; LD A,L            ;
-;       li   hl,random_flag+1           ; LD HL,$D8AF       ;
-;       ab   one,*hl                    ; INC (HL)          ;
-;       ab   *hl,a                      ; ADD A,(HL)        ;
-;       .pop hl                         ; POP HL            ;
-;       .pop bc                         ; POP BC            ;
+;       bl   @ti_rnd
+;       swpb tmp0
+;       movb tmp0,a
+       .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
+       .push hl                        ; PUSH HL           ; }
+                                       ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.
+       sb   one,@random_flag           ; DEC A             ;
+                                       ; LD ($D8AE),A      ; }
+       jne  random_number_1            ; JR NZ,$D8C8       ; If the result is not zero jump to #R$D8C8.
+       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
+       inc  hl                         ; INC HL            ;
+       .push hl                        ; PUSH HL           ;
+       .pop bc                         ; POP BC            ;
+       a    hl,hl                      ; ADD HL,HL         ;
+       sla  bc,2                       ; ADD HL,BC         ;
+                                       ; ADD HL,BC         ;
+                                       ; ADD HL,BC         ;
+       a    bc,hl                      ; ADD HL,BC         ;
+       jmp  random_number_2            ; JR $D8D7          ;
+random_number_1:                       ; d8c8
+       mov  @random_seed,hl            ; LD HL,($D8AC)     ;
+       inc  hl                         ; INC HL            ;
+       .push hl                        ; PUSH HL           ;
+       .pop bc                         ; POP BC            ;
+       a    hl,hl                      ; ADD HL,HL         ;
+       a    bc,hl                      ; ADD HL,BC         ;
+       sla  bc,2                       ; ADD HL,BC         ;
+                                       ; ADD HL,BC         ;
+                                       ; ADD HL,BC         ;
+       a    bc,hl                      ; ADD HL,BC         ;
+       .push hl                        ; PUSH HL           ;
+       .pop bc                         ; POP BC            ;
+       a    hl,hl                      ; ADD HL,HL         ;
+random_number_2:                       ; d8d7
+       a    bc,hl                      ; ADD HL,BC         ;
+       dec  hl                         ; DEC HL            ;
+       mov  hl,@random_seed            ; LD ($D8AC),HL     ;
+       movb @l,a                       ; LD A,L            ;
+       li   hl,random_flag+1           ; LD HL,$D8AF       ;
+       ab   one,*hl                    ; INC (HL)          ;
+       ab   *hl,a                      ; ADD A,(HL)        ;
+       .pop hl                         ; POP HL            ;
+       .pop bc                         ; POP BC            ;
        .endproc                         ; RET               ; 
 
 * Julius logic.
@@ -5568,8 +5571,8 @@ high_score_1:                          ; fa6f
        inc  hl                         ; INC HL            ; 
        sb   one,b                      ; DJNZ $FA6F        ; 
        jne  high_score_1               ;
-       li   hl,dueller_1               ; LD HL,$5BC0       ; {Overwrites the text at #R$5BC0 with spaces to "blank"
-       li   de,_5bc1                   ; LD DE,$5BC1       ; it out ($12 characters).
+       li   hl,dueller_1               ; LD HL,$5BC0       ; TODO {Overwrites the text at #R$5BC0 with spaces to "blank"
+       li   de,dueller_1+1             ; LD DE,$5BC1       ; it out ($12 characters).
        li   bc,>0011                   ; LD BC,$0011       ; 
        movb @bytes+32,*hl              ; LD (HL),$20       ; 
        .ldir                           ; LDIR              ; }
