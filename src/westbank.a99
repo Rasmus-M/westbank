@@ -176,7 +176,6 @@ high_score_table:                       ; 6000
        text 'GRAL LEE        '
        text 'THE CHICKEN MAN '
        text 'THE BLONDE GIRL '
-high_score_table_2nd_last_name:
        text 'TOM SMITH       '
 high_score_table_last_name:
        text 'UNKNOWN         '
@@ -210,9 +209,8 @@ high_score_table_scores:               ; 6200
        text '135150'
        text '129110'
        text '129730'
-high_score_table_2nd_last_score:
        text '125960'                   ; Tom Smith
-high_score_table_last_score_2:
+high_score_table_last_score:
        text '000000'
 ;       Never used
 ;       text '115040'
@@ -5559,31 +5557,31 @@ new_high_score:
 *      Move name entries down to make room for new
        movb @high_score_position,a     ; LD A,($FB57)      ;
        .call @hs_table_name_addr       ; CALL $FB19        ;
-       li   de,high_score_table_2nd_last_name+15 ; LD DE,$61EF       ;
-       .push de                        ; PUSH DE           ;
-       .ex_de_hl                       ; EX DE,HL          ; 
-       ; AND A                         ; AND A             ; 
-       s    de,hl                      ; SBC HL,DE         ; 
-       .push hl                        ; PUSH HL           ; 
-       .pop bc                         ; POP BC            ; 
-       .pop hl                         ; POP HL            ; 
+                                       ; LD DE,$61EF       ;
+                                       ; PUSH DE           ;
+                                       ; EX DE,HL          ;
+       li   bc,high_score_table_last_name ; AND A             ;
+       s    hl,bc                      ; SBC HL,DE         ;
+                                       ; PUSH HL           ;
+                                       ; POP BC            ;
+       li   hl,high_score_table_last_name-1 ; POP HL            ;
        li   de,high_score_table_last_name+15 ; LD DE,$61FF       ;
-       inc  bc                         ; INC BC            ; 
+                                       ; INC BC            ;
        .lddr                           ; LDDR              ;
 *      Move score entries down to make room for new
        movb @high_score_position,a     ; LD A,($FB57)      ;
        sb   one,a                      ; DEC A             ; 
-       .call @hs_table_score_address ; CALL $FBFF        ;
-       li   de,high_score_table_2nd_last_score+5 ; LD DE,$62F9       ;
-       .push de                        ; PUSH DE           ; 
-       .ex_de_hl                       ; EX DE,HL          ; 
-       ; AND A                         ; AND A             ; 
-       s    de,hl                      ; SBC HL,DE         ; 
-       .push hl                        ; PUSH HL           ; 
-       .pop bc                         ; POP BC            ; 
-       .pop hl                         ; POP HL            ; 
-       li   de,high_score_table_last_score_2+5 ; LD DE,$62FF       ;
-       inc  bc                         ; INC BC            ; 
+       .call @hs_table_score_address   ; CALL $FBFF        ;
+                                       ; LD DE,$62F9       ;
+                                       ; PUSH DE           ;
+                                       ; EX DE,HL          ;
+       li   bc,high_score_table_last_score ; AND A             ;
+       s    hl,bc                      ; SBC HL,DE         ;
+                                       ; PUSH HL           ;
+                                       ; POP BC            ;
+       li   hl,high_score_table_last_score-1 ; POP HL            ;
+       li   de,high_score_table_last_score+5 ; LD DE,$62FF       ;
+                                       ; INC BC            ;
        .lddr                           ; LDDR              ;
 *      Copy new score into high score table
        movb @high_score_position,a     ; LD A,($FB57)      ;
