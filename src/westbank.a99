@@ -1633,8 +1633,6 @@ start:                                 ; c7c0
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
-       li   ix,score_digit_6
-       b    @draw_and_input_high_scores
        .call @new_game                 ; CALL $C7E5        ; Call #R$C7E5.
 ;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
 ;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
