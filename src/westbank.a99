@@ -230,24 +230,33 @@ high_score_table_last_score:
 * 
 * Used by the routine at #R$FE00.
 level_select:                          ; 6380
-       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {#REGhl points to $5B80 on entry as #REGde is also $5B80
-       li   bc,>0040                   ; LD BC,$0040       ; - this does nothing, it just creates a very short pause.
-       .ldir                           ; LDIR              ; }
-       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen bufffer
-       li   de,zx_screen+1             ; LD DE,$4001       ; (i.e. "blanks it").
-       li   bc,>1aff                   ; LD BC,$1AFF       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
-       li   hl,zx_attributes+>00a0     ; LD HL,$58A0       ; {Writes $28 to $58A0 in the attribute buffer $100 times.
-       li   de,zx_attributes+>00a1     ; LD DE,$58A1       ; #TABLE(default,centre)
-       li   bc,>0100                   ; LD BC,$0100       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       movb @bytes+40,*hl              ; LD (HL),$28       ; { $28 | $00 | $05 | $00 }
-       .ldir                           ; LDIR              ; TABLE#}
-       movb @bytes+32,*hl              ; LD (HL),$20       ; {...and $20 to the attribute buffer another $5F times (following on from the previous location).
-       li   bc,>005f                   ; LD BC,$005F       ; #TABLE(default,centre)
-       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-                                                           ; { $20 | $00 | $04 | $00 }
-                                                           ; TABLE#}
+;       li   de,buffer_at_5b80          ; LD DE,$5B80       ; {#REGhl points to $5B80 on entry as #REGde is also $5B80
+;       li   bc,>0040                   ; LD BC,$0040       ; - this does nothing, it just creates a very short pause.
+;       .ldir                           ; LDIR              ; }
+       bl   @ti_clear_screen
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen bufffer
+;       li   de,zx_screen+1             ; LD DE,$4001       ; (i.e. "blanks it").
+;       li   bc,>1aff                   ; LD BC,$1AFF       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
+       li   tmp0,>0500
+       li   tmp1,>0028
+       li   tmp2,>2008
+       bl   @ti_draw_color_area
+;       li   hl,zx_attributes+>00a0     ; LD HL,$58A0       ; {Writes $28 to $58A0 in the attribute buffer $100 times.
+;       li   de,zx_attributes+>00a1     ; LD DE,$58A1       ; #TABLE(default,centre)
+;       li   bc,>0100                   ; LD BC,$0100       ; { =h Value | =h Ink | =h Paper | =h Bright }
+;       movb @bytes+40,*hl              ; LD (HL),$28       ; { $28 | $00 | $05 | $00 }
+;       .ldir                           ; LDIR              ; TABLE#}
+       li   tmp0,>0d00
+       li   tmp1,>0020
+       li   tmp2,>2003
+       bl   @ti_draw_color_area
+;       movb @bytes+32,*hl              ; LD (HL),$20       ; {...and $20 to the attribute buffer another $5F times (following on from the previous location).
+;       li   bc,>005f                   ; LD BC,$005F       ; #TABLE(default,centre)
+;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
+;                                                           ; { $20 | $00 | $04 | $00 }
+;                                                           ; TABLE#}
 * Prints the labels to the screen.
        li   hl,level_select_one        ; LD HL,$64AC       ; {Pass #R$64AC to #R$647C (index "1").
        movb one,a                      ; LD A,$01          ; 
@@ -274,17 +283,24 @@ level_select:                          ; 6380
        movb @bytes+25,a                ; LD A,$19          ; {Calls #R$643A with (#R$9B90(draw | $19)) for index "3".
        movb @bytes+3,b                 ; LD B,$03          ; 
        .call @level_select_graphics    ; CALL $643A        ; }
+
 * Loop for getting user keyboard input.
        li   hl,level                   ; LD HL,$5CB1       ; Used later for setting the current level at #R$5CB1.
 level_select_input:                    ; 63e5
-       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1-2-3-4-5.
-       ; IN A,($FE)                    ; IN A,($FE)        ; }
-       ; RRA                           ; RRA               ; {If "1" is pressed, jump to #R$63F4.
-       jnc  level_select_level_1       ; JR NC,$63F4       ; TODO: check code. }
-       ; RRA                           ; RRA               ; {If "2" is pressed, jump to #R$6405.
-       jnc  level_select_level_3       ; JR NC,$6405       ; TODO: check code. }
-       ; RRA                           ; RRA               ; {If "3" is pressed, jump to #R$6416.
-       jnc  level_select_level_6       ; JR NC,$6416       ; TODO: check code. }
+       li   r0,KEY_1
+       bl   @ti_check_key
+;       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1-2-3-4-5.
+;       ; IN A,($FE)                    ; IN A,($FE)        ; }
+;       ; RRA                           ; RRA               ; {If "1" is pressed, jump to #R$63F4.
+       jne  level_select_level_1       ; JR NC,$63F4       ; TODO: check code. }
+       li   r0,KEY_2
+       bl   @ti_check_key
+;       ; RRA                           ; RRA               ; {If "2" is pressed, jump to #R$6405.
+       jne  level_select_level_3       ; JR NC,$6405       ; TODO: check code. }
+       li   r0,KEY_3
+       bl   @ti_check_key
+;       ; RRA                           ; RRA               ; {If "3" is pressed, jump to #R$6416.
+       jne  level_select_level_6       ; JR NC,$6416       ; TODO: check code. }
        jmp  level_select_input         ; JR $63E5          ; Cycle back to #R$63E5.
 * Act on level being selected.
 level_select_level_1:                  ; 63f4
@@ -318,31 +334,45 @@ ls_animate_shot:                       ; 6427
        .call @shot_sound_1_alias       ; CALL $6500        ; Call #R$6500.
        movb @bytes+16,b                ; LD B,$10          ; {Short interrupt driven halt loop.
 ls_animate_shot_halt_loop:             ; 6430
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $6430        ; }
        jne  ls_animate_shot_halt_loop  ;                   
        .pop bc                         ; POP BC            ; 
        movb @bytes+39,a                ; LD A,$27          ; {Call #R$643A with (#R$B870(floor | $27)).
        .call @level_select_graphics    ; CALL $643A        ; }
        .ret                            ; RET               ; Return.
+
 * Prints the images to the screen.
+* a=character index
+* b=position
 level_select_graphics:                 ; 643a
-       .push bc                        ; PUSH BC           ; {Stash the current counter and convert the accumulator
-       .call @character_addr_alias     ; CALL $5B8F        ; which is holding a character ID into their memory
-                                                           ; location.}
-       .ex_de_hl                       ; EX DE,HL          ; 
-       .pop af                         ; POP AF            ; 
-       li   hl,zx_screen+>00a2         ; LD HL,$40A2       ; {Work out which screen position to use;
-       sb   one,a                      ; DEC A             ; #TABLE(default,centre)
-       jeq  ls_graphics_skip           ; JR Z,$644F        ; { =h #REGa | =h Screen Address }
-       li   hl,zx_screen+>00ad         ; LD HL,$40AD       ; { $01 | $40A2 }
-       sb   one,a                      ; DEC A             ; { $02 | $40AD }
-       jeq  ls_graphics_skip           ; JR Z,$644F        ; { $03 | $40B8 }
-       li   hl,zx_screen+>00b8         ; LD HL,$40B8       ; TABLE#}
-ls_graphics_skip:                      ; 644f
-       movb @bytes+88,b                ; LD B,$58          ; {Set the dimensions and call #R$5B92.
-       movb @bytes+6,@c                ; LD C,$06          ; 
-       .call @draw_character           ; CALL $5B92        ; }
+       clr  tmp2
+       movb b,tmp2
+       swpb tmp2
+       dec  tmp2
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       ai   tmp0,>20
+       clr  tmp1
+       movb a,tmp1
+       swpb tmp1
+       bl   @ti_draw_character_pattern
+;       .push bc                        ; PUSH BC           ; {Stash the current counter and convert the accumulator
+;       .call @character_addr_alias     ; CALL $5B8F        ; which is holding a character ID into their memory
+;                                                           ; location.}
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       .pop af                         ; POP AF            ;
+;       li   hl,zx_screen+>00a2         ; LD HL,$40A2       ; {Work out which screen position to use;
+;       sb   one,a                      ; DEC A             ; #TABLE(default,centre)
+;       jeq  ls_graphics_skip           ; JR Z,$644F        ; { =h #REGa | =h Screen Address }
+;       li   hl,zx_screen+>00ad         ; LD HL,$40AD       ; { $01 | $40A2 }
+;       sb   one,a                      ; DEC A             ; { $02 | $40AD }
+;       jeq  ls_graphics_skip           ; JR Z,$644F        ; { $03 | $40B8 }
+;       li   hl,zx_screen+>00b8         ; LD HL,$40B8       ; TABLE#}
+;ls_graphics_skip:                      ; 644f
+;       movb @bytes+88,b                ; LD B,$58          ; {Set the dimensions and call #R$5B92.
+;       movb @bytes+6,@c                ; LD C,$06          ;
+;       .call @draw_character           ; CALL $5B92        ; }
        .ret                            ; RET               ; Return.
 * Flashes the selected level text.
 ls_text_flash:                         ; 6457
@@ -355,7 +385,7 @@ ls_text_flash_loop:                    ; 645a
        .call @level_select_print       ; CALL $647C        ; 
        movb @bytes+16,b                ; LD B,$10          ; 
 ls_flash_halt_loop_1:                  ; 6462
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $6462        ; 
        jne  ls_flash_halt_loop_1       ;                   
        li   hl,level_select_whitespace ; LD HL,$64C1       ; 
@@ -365,7 +395,7 @@ ls_flash_halt_loop_1:                  ; 6462
        .call @level_select_print       ; CALL $647C        ; 
        movb @bytes+16,b                ; LD B,$10          ; 
 ls_flash_halt_loop_2:                  ; 6470
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $6470        ; 
        jne  ls_flash_halt_loop_2       ;                   
        .pop bc                         ; POP BC            ; 
@@ -776,7 +806,7 @@ _6579:
 * Used by the routines at #R$C687 and #R$CD47.
 bang:                                  ; c000
        bl   @ti_clear_screen           ; CALL $C046        ; Clear the screen.
-       li   a,>6100
+       li   tmp1,>0002
        bl   @bang_color
        movb @bytes+3,b                 ; LD B,$03          ; {Pass #R$F000 to #R$C061.
        li   hl,gfx_bang_frame_1        ; LD HL,$F000       ;
@@ -799,7 +829,7 @@ bang:                                  ; c000
        li   hl,gfx_bang_frame_6        ; LD HL,$F500       ;
        .call @bang_copy                ; CALL $C061        ; }
        movb @bytes+8,b                 ; LD B,$08          ; {Blanks the display by passing a
-       li   a,>1100                    ; LD HL,$5000       ; "clear" part of the screen buffer
+       li   tmp1,>0000                 ; LD HL,$5000       ; "clear" part of the screen buffer
        bl   @bang_color                ; CALL $C061        ; to #R$C061.}
        movb @bytes+64,b                ; LD B,$40          ; {Jump to #R$C06D.
        jmp  bang_halt_loop             ; JP $C06D          ; }
@@ -831,7 +861,6 @@ bang_halt_loop:                        ; c06d
 bang_color:
        .proc
        li   tmp0,>0860
-       movb a,tmp1
        li   tmp2,>0804
        bl   @ti_draw_color_area
        .endproc
@@ -5996,35 +6025,36 @@ ts_select_kempston:                    ; fe63
 ts_call_flash:                         ; fe66
        .call @ts_flash_text            ; CALL $FE95        ; TABLE#}
        li   hl,controller              ; LD HL,$5CB0       ; Point #REGhl=#R$5CB0.
-
-       li   tmp0,KEY_0
-       bl   @ti_check_key
-       jeq  !
-       .ret
-!      li   tmp0,KEY_1
+       li   tmp0,KEY_1
        bl   @ti_check_key
        jne  ts_set_keyboard
-       li   tmp0,KEY_2
-       bl   @ti_check_key
-       jne  ts_set_kempston
 ;       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1, 2, 3, 4, 5.
 ;       ; IN A,($FE)                    ; IN A,($FE)        ; }
 ;       ; RRA                           ; RRA               ; {Jump to #R$FE86 if "1" is pressed.
-;       jnc  ts_set_keyboard            ; JR NC,$FE86       ; TODO: check code. }
+;       jnc  ts_set_keyboard            ; JR NC,$FE86       ;
+       li   tmp0,KEY_2
+       bl   @ti_check_key
+       jne  ts_set_kempston
 ;       ; RRA                           ; RRA               ; {Jump to #R$FE8B if "2" is pressed.
-;       jnc  ts_set_kempston            ; JR NC,$FE8B       ; TODO: check code. }
+;       jnc  ts_set_kempston            ; JR NC,$FE8B       ;
+       li   tmp0,KEY_N
+       bl   @ti_check_key
+       jne  ts_select_level
 ;       movb @bytes+127,a               ; LD A,$7F          ; {Read keys SPACE, FULL-STOP, M, N, & B.
 ;       ; IN A,($FE)                    ; IN A,($FE)        ; }
 ;       movb a,tmp0                     ; BIT 3,A           ; {Jump to #R$FE8F if "N" is pressed.
 ;       andi tmp0,8*256                 ;
 ;       jeq  ts_select_level            ; JR Z,$FE8F        ; }
+       li   tmp0,KEY_0
+       bl   @ti_check_key
+       jeq  !
 ;       movb @bytes+239,a               ; LD A,$EF          ; {Read keys 0, 9, 8, 7, 6.
 ;       ; IN A,($FE)                    ; IN A,($FE)        ; }
 ;       ; RRA                           ; RRA               ; {Return if "0" is pressed, else loop back around to
-;       joc  !                          ; RET NC            ; TODO: check code. #R$FE58.
-;       .ret                            ;
+;       joc  !                          ; RET NC            ;
+       .ret                            ;
 ;!
-       jmp  title_screen_input         ; JR $FE58          ; }
+!      jmp  title_screen_input         ; JR $FE58          ; }
 *
 ts_set_keyboard:                       ; fe86
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$5CB0 and loop back around to #R$FE58.
@@ -6035,7 +6065,7 @@ ts_set_kempston:                       ; fe8b
        movb a,*hl                      ; LD (HL),A         ; 
        jmp  title_screen_input         ; JR $FE58          ; }
 ts_select_level:                       ; fe8f
-       li   hl,buffer_at_5b80          ; LD HL,$5B80       ; {Jump to #R$6380 with #REGhl=#R$5B80.
+;      li   hl,buffer_at_5b80          ; LD HL,$5B80       ; {Jump to #R$6380 with #REGhl=#R$5B80.
        b    @level_select              ; JP $6380          ; }
 *
 ts_flash_text:                         ; fe95
@@ -6075,16 +6105,14 @@ ts_draw_bandits:                        ; fea4
        li   tmp0,>00d9
        clr  tmp1
        bl   @ti_draw_character
-*      Bottom color
-       li   a,>2000
-       bl   @ti_color
-       mov  tmp0,tmp1
 *      Left bandit bottom colors
        li   tmp0,(>00c1+(8*32))*8
+       li   tmp1,>0020
        li   tmp2,>0603
        bl   @ti_draw_color_area
 *      Right bandit bottom colors
        li   tmp0,(>00d9+(8*32))*8
+       li   tmp1,>0020
        li   tmp2,>0603
        bl   @ti_draw_color_area
        .endproc

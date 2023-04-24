@@ -264,7 +264,7 @@ row_src_skip:
 * Draw color area
 *
 * tmp0 (r13): VDP offset in color table
-* tmp1 (r14) MSB: TI color to draw
+* tmp1 (r14) LSB: ZX attribute to draw
 * tmp2 (r15) MSB: width in characters
 * tmp2 (r15) LSB: height in characters
 *
@@ -272,6 +272,7 @@ ti_draw_color_area:
        lwpi ti_wrksp
        mov  r13,r0
        mov  r14,r1
+       movb @ti_colors(r1),r1
        mov  r15,r2                     ; Width and height
        andi r2,>00ff                   ; Height
        mov  r15,r4                     ; Width and height

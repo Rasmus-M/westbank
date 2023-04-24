@@ -176,14 +176,35 @@ ti_draw_character:
        sla  tmp0,3                     ; VDP address
        li   tmp2,>060b                 ; Width/height in characters
        bl   @ti_draw_graphics          ; Draw graphics
-       li   tmp1,>1700
+       li   tmp1,>0068
        bl   @ti_draw_color_area
        .endproc
 *// ti_draw_character
 
 *********************************************************************
 *
-* Draw a character
+* Draw a character pattern without colors
+*
+* tmp0: screen position in characters
+* tmp1: character index to draw
+*
+ti_draw_character_pattern:
+       .proc
+       sla  tmp1,2                     ; 4 bytes per entry
+       ai   tmp1,character_table       ; Add character table base
+       mov  *tmp1+,tmp2                ; Get ROM select address
+       seto *tmp2                      ; Select ROM bank
+       mov  *tmp1,tmp1                 ; Get source address
+       sla  tmp0,3                     ; VDP address
+       li   tmp2,>060b                 ; Width/height in characters
+       bl   @ti_draw_graphics          ; Draw graphics
+       .endproc
+*// ti_draw_character_pattern
+
+
+*********************************************************************
+*
+* Draw a partial character
 *
 * tmp0: screen position in characters
 * tmp1: character index to draw
@@ -205,7 +226,7 @@ ti_draw_partical_character:
        ori  tmp2,>000b                 ; Set height
        bl   @ti_draw_graphics          ; Draw graphics
        clr  @row_src_skip
-       li   tmp1,>1700
+       li   tmp1,>0068
        bl   @ti_draw_color_area
        .endproc
 *// ti_draw_partial_character
@@ -229,7 +250,7 @@ ti_draw_door:
        sla  tmp2,8                     ; Width to MSB
        ori  tmp2,>000b                 ; Set height
        bl   @ti_draw_graphics          ; Draw graphics
-       li   tmp1,>1a00
+       li   tmp1,>0030
        bl   @ti_draw_color_area
        .endproc
 *// ti_draw_door
