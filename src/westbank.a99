@@ -6,11 +6,11 @@
        bl   @setup_environment
        b    @start
 
-buffer_at_5b00:
-       bss  >80                        ; @start=$6000
+buffer_at_5b00:                        ; Not used as buffer any longer
+       bss  >40                        ; just some zeros to use for clearing
 
-buffer_at_5b80:
-       bss  >80
+;buffer_at_5b80:
+;       bss  >80
 
 * Draw Text (alias).
 * 
@@ -2302,7 +2302,7 @@ print_tt_text_space_check:             ; cbfc
        cb   a,@bytes+32                ; CP $20            ; {If the character is a space then jump forward to
        jne  print_tt_text_2            ; JR NZ,$CC0E       ; #R$CC0E.}
 *      Space
-       li   hl,buffer_at_5b00          ; LD HL,$5B00       ;
+       li   hl,buffer_at_5b00          ; LD HL,$5B00       ; Needs 16 zeros
        li   bc,>1001                   ; LD BC,$1001       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push hl                        ; PUSH HL           ; 
@@ -2389,7 +2389,7 @@ draw_life_images:                      ; cc5a
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ; }
 delete_life_images_loop:               ; cc5f
        .push bc                        ; PUSH BC           ; {jjjss
-       li   de,buffer_at_5b00          ; LD DE,$5B00       ;
+       li   de,buffer_at_5b00          ; LD DE,$5B00       ; Needs 48 zeros
        .call @copy_life_image          ; CALL $CC84        ;
        inc  hl                         ; INC HL            ; 
        inc  hl                         ; INC HL            ; 
@@ -5516,7 +5516,7 @@ scroll_dollar_sign:                    ; f960
        .call @dollar_scroll_draw       ; CALL $F9C3        ; }
 *      Clear
        li   de,buffer_at_5b00          ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
-       .call @dollar_scroll_draw       ; CALL $F9C3        ; }
+       .call @dollar_scroll_draw       ; CALL $F9C3        ;  Needs 32 zeros }
        .ret                            ; RET               ; Return.
 * Draws the image to the screen.
 * de=image to draw
