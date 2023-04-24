@@ -22,7 +22,7 @@ print_two_tone_text_alias:             ; 5b80
 * 
 * An alias for a jump to #R$CC5A.
 draw_life_images_alias:                ; 5b83
-       b    @draw_life_images               ; JP $CC5A          ;
+       b    @draw_life_images          ; JP $CC5A          ;
 
 * Lives Memory Address.
 lives_addr:                            ; 5b86
@@ -31,9 +31,9 @@ lives_addr:                            ; 5b86
 * Jump Controls.
 * 
 * Loads the 16 bit address stored at #R$CE12 into #REGhl and jumps to it.
-jump_control_method:                   ; 5b88
+jump_to_control_method:                ; 5b88
        mov  @control_routine_alias,hl  ; LD HL,($CE12)     ; 
-       b    *hl                        ; JP (HL)           ; TODO. 
+       b    *hl                        ; JP (HL)           ;
 
 * Scoring Preparation (alias).
 * 
@@ -72,7 +72,7 @@ dueller_1:                             ; 5bc0
        byte >00                                                      ; Dueller timer.
        byte >00
        byte >00                                                      ; Dueller position.
-       data 0                                                        ; Screen position above dueller to display "EXTRA" or
+       byte >00,>00                                                  ; Screen position above dueller to display "EXTRA" or
                                                                      ; points.
        byte >00
        byte >00                                                      ; Bonus points (x100, e.g. "9" == "900").
@@ -94,7 +94,7 @@ dueller_2:                             ; 5bd1
        byte >00                                                      ; Dueller timer.
        byte >00
        byte >00                                                      ; Dueller position.
-       data 0                                                        ; Screen position above dueller to display "EXTRA" or
+       byte >00,>00                                                  ; Screen position above dueller to display "EXTRA" or
                                                                      ; points.
        byte >00
        byte >00                                                      ; Bonus points (x100, e.g. "9" == "900").
@@ -984,24 +984,26 @@ bang_color:
 * 
 * Used by the routine at #R$C7C0.
 perform_duel:
+;       mov  a,@duel_counter           ; I think this was intended
        .call @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
-       movb @duel_some_flag,a          ; LD A,($C421)      ; Grab #R$C421.
-       jnc  rebuild                    ; JR NC,$C3C9       ; TODO: check code. 
-       ab   one,a                      ; INC A             ; 
-rebuild:                               ; c3c9
+                                       ; LD A,($C421)      ; Grab #R$C421.
+       jnc  after_duel_1               ; JR NC,$C3C9       ; TODO: check code.
+       ab   one,@duel_counter          ; INC A             ;
+after_duel_1:                          ; c3c9
+       movb @duel_counter,a
        movb @bytes+32,b                ; LD B,$20          ; {Interrupt driven HALT loop ($20 cycles).
-rebuild_halt_loop:                     ; c3cb
+after_duel_loop:                       ; c3cb
        bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C3CB        ; }
-       jne  rebuild_halt_loop          ;                   
+       jne  after_duel_loop            ;
        movb a,@e                       ; LD E,A            ; 
        mov  @lives_addr,hl             ; LD HL,($5B86)     ; {Is #R$CC59 more than $06?
        movb *hl,a                      ; LD A,(HL)         ; Get lives
        cb   a,@bytes+6                 ; CP $06            ; }
-       jl   _c3d8                      ; JR C,$C3D8        ; If so, jump to #R$C3D8.
-       nop                             ; NOP               ; 
-_c3d8:
-       ; AND A                         ; AND A             ; {If #R$CC59 is zero then return.
+       jl   after_duel_2               ; JR C,$C3D8        ; If so, jump to #R$C3D8.
+       nop                             ; NOP               ; We have 6 lives or more ?
+after_duel_2:
+       ; AND A                         ; AND A             ; {If #R$CC59 @duel_counter is zero then return without carry.
        movb @e,a                       ; LD A,E            ; 
        jeq  !                          ; RET NZ            ; }
        b    @return_without_carry                            ;
@@ -1065,7 +1067,7 @@ duel_data:                             ; c3ea
 duel_bonus_text:                       ; c41d
        text '900',>ff                                                ; Bonus text.
 * Not sure ... it is used though       ; TODO
-duel_some_flag:                        ; c421
+duel_counter:                          ; c421
        byte >00                                                      ; 
 
 * Duel Bonus Round.
@@ -1076,37 +1078,37 @@ duel_prep:                             ; c422
        li   de,dueller_1               ; LD DE,$5BC0       ; across all three duellists).
        li   bc,>0033                   ; LD BC,$0033       ; 
        .ldir                           ; LDIR              ; }
-       .pop de                         ; POP DE            ; 
-       .pop bc                         ; POP BC            ; 
-       movb b,a                        ; LD A,B            ; 
+       .pop de                         ; POP DE            ;
+       .pop bc                         ; POP BC            ;
+       movb b,a                        ; LD A,B            ; random number from caller
        li   ix,dueller_1               ; LD IX,$5BC0       ; {Calls #R$C67F with #R$5BC0.
        .call @duel_update_timer        ; CALL $C67F        ; }
-       movb @c,a                       ; LD A,C            ; 
+       movb @c,a                       ; LD A,C            ; random number from caller
        li   ix,dueller_2               ; LD IX,$5BD1       ; {Calls #R$C67F with #R$5BD1.
        .call @duel_update_timer        ; CALL $C67F        ; }
-       movb d,a                        ; LD A,D            ; 
+       movb d,a                        ; LD A,D            ; random number from caller
        li   ix,dueller_3               ; LD IX,$5BE2       ; {Calls #R$C67F with #R$5BE2.
        .call @duel_update_timer        ; CALL $C67F        ; }
        sb   a,a                        ; XOR A             ; {Reset the flags (writes $00 to #R$C6E2, #R$C6E3 and
        li   hl,duel_bang_flag          ; LD HL,$C6E2       ; #R$C6E4).
-       movb a,*hl                      ; LD (HL),A         ; 
-       inc  hl                         ; INC HL            ; 
-       movb a,*hl                      ; LD (HL),A         ; 
-       inc  hl                         ; INC HL            ; 
-       movb a,*hl                      ; LD (HL),A         ; }
-       movb @duel_some_flag,a                   ; LD A,($C421)      ; #R$C421.
-       socb one,a                      ; OR $01            ; 
-       cb   a,@bytes+32                ; CP $20            ; 
-       li   de,>0001                   ; LD DE,$0001       ; 
-       jnc  duel_clear_screen          ; JR NC,$C463       ; TODO: check code. 
+       movb a,*hl+                     ; LD (HL),A         ; clear duel_bang_flag
+                                       ; INC HL            ;
+       movb a,*hl+                     ; LD (HL),A         ; clear duel_lose_life
+                                       ; INC HL            ;
+       movb a,*hl                      ; LD (HL),A         ; clear duel_extra_life
+       movb @duel_counter,a            ; LD A,($C421)      ; #R$C421.
+       socb one,a                      ; OR $01            ; min 1
+       li   de,>0001                   ; CP $20            ;
+       cb   a,@bytes+32                ; LD DE,$0001       ;
+       jhe  duel_clear_screen          ; JR NC,$C463       ;
        movb a,b                        ; LD B,A            ; 
        li   de,>0020                   ; LD DE,$0020       ; 
-duel_prep_loop:                        ; c460
+duel_prep_loop:                        ; c460              ; de = >20 - @duel_counter
        dec  de                         ; DEC DE            ; 
        sb   one,b                      ; DJNZ $C460        ; 
        jne  duel_prep_loop             ;                   
 duel_clear_screen:                     ; c463
-       mov  de,@_c52e                  ; LD ($C52E),DE     ; ....
+       mov  de,@duel_inner_iterations  ; LD ($C52E),DE     ; ....
 * Clears down the screen buffer.
        bl   @ti_clear_screen
 ;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer
@@ -1116,21 +1118,33 @@ duel_clear_screen:                     ; c463
 ;       movb a,*hl                      ; LD (HL),A         ;
 ;       .ldir                           ; LDIR              ; }
 * Writes the attributes for the playfield (sky, grass, footer).
-       li   hl,zx_attributes           ; LD HL,$5880       ; {Writes $28 to $5880 in the attribute buffer $180 times...
-       li   de,zx_attributes+1         ; LD DE,$5881       ; #TABLE(default,centre,centre,centre,centre)
-       li   bc,>0180                   ; LD BC,$0180       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       movb @bytes+40,*hl              ; LD (HL),$28       ; { $00 | $05 | $00 | $00 }
-       .ldir                           ; LDIR              ; TABLE#}
-       movb @bytes+32,*hl              ; LD (HL),$20       ; {...continuing, writes $20 $80 times...
-       li   bc,>0080                   ; LD BC,$0080       ; #TABLE(default,centre,centre,centre,centre)
-       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-                                                           ; { $00 | $04 | $00 | $00 }
-                                                           ; TABLE#}
-       movb @bytes+7,*hl               ; LD (HL),$07       ; {...and finally, writes $07 $7F times.
-       li   bc,>007f                   ; LD BC,$007F       ; #TABLE(default,centre,centre,centre,centre)
-       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-                                                           ; { $07 | $00 | $00 | $00 }
-                                                           ; TABLE#}
+       li   tmp0,>0400
+       li   tmp1,>0028
+       li   tmp2,>200c
+       bl   @ti_draw_color_area
+;       li   hl,zx_attributes           ; LD HL,$5880       ; {Writes $28 to $5880 in the attribute buffer $180 times...
+;       li   de,zx_attributes+1         ; LD DE,$5881       ; #TABLE(default,centre,centre,centre,centre)
+;       li   bc,>0180                   ; LD BC,$0180       ; { =h Value | =h Ink | =h Paper | =h Bright }
+;       movb @bytes+40,*hl              ; LD (HL),$28       ; { $00 | $05 | $00 | $00 }
+;       .ldir                           ; LDIR              ; TABLE#}
+       li   tmp0,>1000
+       li   tmp1,>0020
+       li   tmp2,>2004
+       bl   @ti_draw_color_area
+;       movb @bytes+32,*hl              ; LD (HL),$20       ; {...continuing, writes $20 $80 times...
+;       li   bc,>0080                   ; LD BC,$0080       ; #TABLE(default,centre,centre,centre,centre)
+;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
+;                                                           ; { $00 | $04 | $00 | $00 }
+;                                                           ; TABLE#}
+       li   tmp0,>1400
+       li   tmp1,>0007
+       li   tmp2,>2004
+       bl   @ti_draw_color_area
+;       movb @bytes+7,*hl               ; LD (HL),$07       ; {...and finally, writes $07 $7F times.
+;       li   bc,>007f                   ; LD BC,$007F       ; #TABLE(default,centre,centre,centre,centre)
+;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
+;                                                           ; { $07 | $00 | $00 | $00 }
+;                                                           ; TABLE#}
 * Creates the footer.
        li   hl,playfield_lives         ; LD HL,$C655       ; {Point to #R$C655 and print using #R$C6A7.
        .call @duel_print_lives         ; CALL $C6A7        ; }
@@ -1161,7 +1175,7 @@ countdown_loop:                        ; c4c7
        .call @duel_print_countdown     ; CALL $C6D3        ; 
        movb @bytes+49,b                ; LD B,$31          ; {Short halt loop (1 second pause).
 countdown_halt_loop:                   ; c4d0
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C4D0        ; }
        jne  countdown_halt_loop        ;                   
        .pop af                         ; POP AF            ; {Keep looping back to #R$C4C7 until the countdown is
@@ -1171,100 +1185,104 @@ countdown_halt_loop:                   ; c4d0
        movb @bytes+32,a                ; LD A,$20          ; {Blank the countdown timer by printing a "SPACE" ($20
        movb a,@duel_timer              ; LD ($C6E0),A      ; in ASCII) over the top of it.
        .call @duel_print_countdown     ; CALL $C6D3        ; }
-       jmp  duel_start                 ; JR $C4F9          ; Jump to #R$C4F9 and start the duel!
-duel_loop:                             ; c4e3
+       jmp  duel_outer_loop                 ; JR $C4F9          ; Jump to #R$C4F9 and start the duel!
+
+check_any_duellers_shot:               ; c4e3
        li   ix,dueller_1               ; LD IX,$5BC0       ; {Calls #R$C530 with #R$5BC0.
-       .call @duel_actions             ; CALL $C530        ; }
+       .call @check_if_duellers_are_shot ; CALL $C530        ; }
        li   ix,dueller_2               ; LD IX,$5BD1       ; {Calls #R$C530 with #R$5BD1.
-       .call @duel_actions             ; CALL $C530        ; }
+       .call @check_if_duellers_are_shot ; CALL $C530        ; }
        li   ix,dueller_3               ; LD IX,$5BE2       ; {Calls #R$C530 with #R$5BE2.
-       .call @duel_actions             ; CALL $C530        ; }
+       .call @check_if_duellers_are_shot ; CALL $C530        ; }
        .ret                            ; RET               ; Return.
 * DRAW!
-duel_start:                            ; c4f9
-       mov  @_c52e,de                  ; LD DE,($C52E)     ; {#REGde=#R$C52E and push it on the stack.
-duel_start_loop:                       ; c4fd
+duel_outer_loop:                       ; c4f9
+       mov  @duel_inner_iterations,de  ; LD DE,($C52E)     ; {#REGde=#R$C52E and push it on the stack.
+duel_inner_loop:                       ; c4fd
        .push de                        ; PUSH DE           ; }
-       .call @duel_loop                ; CALL $C4E3        ; 
+       .call @check_any_duellers_shot  ; CALL $C4E3        ;
        .pop de                         ; POP DE            ; 
        dec  de                         ; DEC DE            ; 
-       movb d,a                        ; LD A,D            ; 
-       socb @e,a                       ; OR E              ; 
-       jne  duel_start_loop            ; JR NZ,$C4FD       ; 
+                                       ; LD A,D            ;
+                                       ; OR E              ;
+       jne  duel_inner_loop            ; JR NZ,$C4FD       ;
        li   ix,dueller_1               ; LD IX,$5BC0       ; 
-       .call @_c58b                    ; CALL $C58B        ; 
+       .call @update_dueller_status    ; CALL $C58B        ;
        li   ix,dueller_2               ; LD IX,$5BD1       ; 
-       .call @_c58b                    ; CALL $C58B        ; 
+       .call @update_dueller_status    ; CALL $C58B        ;
        li   ix,dueller_3               ; LD IX,$5BE2       ; 
-       .call @_c58b                    ; CALL $C58B        ; 
+       .call @update_dueller_status    ; CALL $C58B        ;
        li   ix,dueller_1               ; LD IX,$5BC0       ; 
-       movb @8(ix),a                   ; LD A,(IX+$08)     ; 
+       movb @8(ix),a                   ; LD A,(IX+$08)     ; Any duellers left?
        socb @25(ix),a                  ; OR (IX+$19)       ; 
        socb @42(ix),a                  ; OR (IX+$2A)       ; 
        jne  !                          ; JP Z,$C690        ; 
        b    @duel_complete             ;                   
 !
-       jmp  duel_start                 ; JR $C4F9          ; 
-_c52e:
-       data 31                                                       ; 
-duel_actions:                          ; c530
-       .call @duel_action_1            ; CALL $C543        ; 
-       .call @duel_action_4            ; CALL $C56B        ; 
-       .call @duel_action_2            ; CALL $C550        ; 
-       .call @duel_action_4            ; CALL $C56B        ; 
-       .call @duel_action_3            ; CALL $C55D        ; 
-       .call @duel_action_4            ; CALL $C56B        ; 
+       jmp  duel_outer_loop                 ; JR $C4F9          ;
+
+duel_inner_iterations:                 ; c52e
+       data 31                                             ;
+
+check_if_duellers_are_shot:            ; c530
+       .call @duel_check_fire_at_3     ; CALL $C543        ;
+       .call @check_if_dueller_is_shot ; CALL $C56B        ;
+       .call @duel_check_fire_at_1     ; CALL $C550        ;
+       .call @check_if_dueller_is_shot ; CALL $C56B        ;
+       .call @duel_check_fire_at_2     ; CALL $C55D        ;
+       .call @check_if_dueller_is_shot ; CALL $C56B        ;
        .ret                            ; RET               ; Return.
-duel_action_1:                         ; c543
-       .call @jump_control_method      ; CALL $5B88        ; Calls #R$5B88.
+duel_check_fire_at_3:                  ; c543
+       .call @jump_to_control_method   ; CALL $5B88        ; Calls #R$5B88.
        movb a,tmp0                     ; BIT 4,A           ; {Return if bit 4 of #REGa is zero.
        andi tmp0,16*256                ;                   
        jne  !                          ; RET Z             ; }
        .ret                            ;                   
 !
-       movb a,tmp0                     ; BIT 0,A           ; {If bit 0 is not zero then return setting #REGa to
-       andi tmp0,1*256                 ;                   
-       movb @bytes+3,a                 ; LD A,$03          ; $03.
+       movb a,tmp0                     ; BIT 0,A           ; right {If bit 0 is not zero then return setting #REGa to
+       movb @bytes+3,a                 ;
+       andi tmp0,1*256                 ; LD A,$03          ; $03.
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        sb   a,a                        ; XOR A             ; {Set #REGa to zero and return.
        .ret                            ; RET               ; }
-duel_action_2:                         ; c550
-       .call @jump_control_method      ; CALL $5B88        ; Calls #R$5B88.
+duel_check_fire_at_1:                  ; c550
+       .call @jump_to_control_method   ; CALL $5B88        ; Calls #R$5B88.
        movb a,tmp0                     ; BIT 4,A           ; {Return if bit 4 of #REGa is zero.
        andi tmp0,16*256                ;                   
        jne  !                          ; RET Z             ; }
        .ret                            ;                   
 !
-       movb a,tmp0                     ; BIT 1,A           ; {If bit 1 is not zero then return setting #REGa to
-       andi tmp0,2*256                 ;                   
-       movb one,a                      ; LD A,$01          ; $01.
+       movb a,tmp0                     ; BIT 1,A           ; left {If bit 1 is not zero then return setting #REGa to
+       movb one,a                      ;
+       andi tmp0,2*256                 ; LD A,$01          ; $01.
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
        sb   a,a                        ; XOR A             ; {Set #REGa to zero and return.
        .ret                            ; RET               ; }
-duel_action_3:                         ; c55d
-       .call @jump_control_method      ; CALL $5B88        ; 
+duel_check_fire_at_2:                         ; c55d
+       .call @jump_to_control_method   ; CALL $5B88        ;
        movb a,tmp0                     ; BIT 4,A           ; 
        andi tmp0,16*256                ;                   
        jne  !                          ; RET Z             ; 
        .ret                            ;                   
 !
-       andi a,3*256                    ; AND $03           ; 
-       sb   a,a                        ; LD A,$00          ; 
-       jeq  !                          ; RET NZ            ; 
+       movb a,tmp0
+       sb   a,a                        ; AND $03           ;
+       andi a,3*256                    ; LD A,$00          ;
+       jeq  !                          ; RET NZ            ;
        .ret                            ;                   
 !
        movb @bytes+2,a                 ; LD A,$02          ; 
        .ret                            ; RET               ; Return.
-duel_action_4:                         ; c56b
-       cb   a,@3(ix)                   ; CP (IX+$03)       ; {If the dueller position has been changed to zero then
-       jeq  duel_dunno                 ; JR Z,$C575        ; jump to #R$C575.}
+check_if_dueller_is_shot:              ; c56b
+       cb   a,@3(ix)                   ; CP (IX+$03)       ; {If player fires at dueller then
+       jeq  dueller_is_shot            ; JR Z,$C575        ; jump to #R$C575.}
        sb   @13(ix),@13(ix)            ; LD (IX+$0D),$00   ; 
        .ret                            ; RET               ; Return.
-duel_dunno:                            ; c575
+dueller_is_shot:                       ; c575
        movb @13(ix),a                  ; LD A,(IX+$0D)     ; 
        ; AND A                         ; AND A             ; 
        jeq  !                          ; RET NZ            ; 
@@ -1274,13 +1292,15 @@ duel_dunno:                            ; c575
        movb a,@13(ix)                  ; LD (IX+$0D),A     ; 
        movb a,*ix                      ; LD (IX+$00),A     ; Set dueller state to $01.
        .ret                            ; RET               ; Return.
+
 * This entry point is used by the routines at #R$C607 and #R$C6E5.
-_c583:
+duel_shot_sound:
        .push ix                        ; PUSH IX           ; 
        .call @shot_sound_1_alias       ; CALL $6500        ; 
        .pop ix                         ; POP IX            ; 
-       .ret                            ; RET               ; 
-_c58b:
+       .ret                            ; RET               ;
+
+update_dueller_status:
        movb @8(ix),a                   ; LD A,(IX+$08)     ; {If IX+$08 is zero then return.
        ; AND A                         ; AND A             ; 
        jne  !                          ; RET Z             ; }
@@ -1288,15 +1308,15 @@ _c58b:
 !
        movb @9(ix),a                   ; LD A,(IX+$09)     ; {If dueller frame index is $01 then jump to #R$C5A1.
        sb   one,a                      ; DEC A             ; 
-       jeq  _c5a1                      ; JR Z,$C5A1        ; }
+       jeq  update_dueller_status_1    ; JR Z,$C5A1        ; }
        sb   one,a                      ; DEC A             ; {If dueller frame index is $02 then jump to #R$C5B5.
-       jeq  _c5b5                      ; JR Z,$C5B5        ; }
+       jeq  update_dueller_status_2    ; JR Z,$C5B5        ; }
        sb   one,a                      ; DEC A             ; {If dueller frame index is $03 then jump to #R$C5BD.
-       jeq  _c5bd                      ; JR Z,$C5BD        ; }
+       jeq  update_dueller_status_3    ; JR Z,$C5BD        ; }
        sb   one,a                      ; DEC A             ; {If dueller frame index is $04 then jump to #R$C5CF.
-       jeq  _c5cf                      ; JR Z,$C5CF        ; }
-       jmp  _c5dd                      ; JR $C5DD          ; Jump to #R$C5DD.
-_c5a1:
+       jeq  update_dueller_status_4    ; JR Z,$C5CF        ; }
+       jmp  update_dueller_status_5    ; JR $C5DD          ; Jump to #R$C5DD.
+update_dueller_status_1:               ; c5a1
        li   hl,dueller_shot            ; LD HL,$C6E5       ; #R$C6E5.
        .call @dueller_down             ; CALL $C5EB        ; 
        sb   one,@1(ix)                 ; DEC (IX+$01)      ; 
@@ -1307,15 +1327,15 @@ _c5a1:
        movb @11(ix),a                  ; LD A,(IX+$0B)     ; 
        .call @duel_draw_bandit_prep    ; CALL $C661        ; 
        .ret                            ; RET               ; 
-_c5b5:
+update_dueller_status_2:               ; c5b5
        sb   one,@16(ix)                ; DEC (IX+$10)      ; 
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
 !
        ab   one,@9(ix)                 ; INC (IX+$09)      ; 
        .ret                            ; RET               ; 
-_c5bd:
-       li   hl,_c5f6                   ; LD HL,$C5F6       ; 
+update_dueller_status_3:               ; c5bd
+       li   hl,dueller_down_1          ; LD HL,$C5F6       ;
        .call @dueller_down             ; CALL $C5EB        ; 
        sb   one,@2(ix)                 ; DEC (IX+$02)      ; 
        jeq  !                          ; RET NZ            ; 
@@ -1325,7 +1345,7 @@ _c5bd:
        ab   one,a                      ; INC A             ; 
        movb a,@duel_bang_flag          ; LD ($C6E2),A      ; 
        .ret                            ; RET               ; 
-_c5cf:
+update_dueller_status_4:               ; c5cf
        sb   one,@14(ix)                ; DEC (IX+$0E)      ; 
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
@@ -1334,7 +1354,7 @@ _c5cf:
        movb @12(ix),a                  ; LD A,(IX+$0C)     ; 
        .call @duel_draw_bandit_prep    ; CALL $C661        ; 
        .ret                            ; RET               ; 
-_c5dd:
+update_dueller_status_5:                       ; c5dd
        sb   one,@15(ix)                ; DEC (IX+$0F)      ; 
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
@@ -1356,15 +1376,15 @@ dueller_down:                          ; c5eb
        sb   a,a                        ; XOR A             ; {Mark the current dueller as complete.
        movb a,*ix                      ; LD (IX+$00),A     ; }
        .pop af                         ; POP AF            ; {Restore #REGa and jump to whatever address is held by
-       b    *hl                        ; JP (HL)           ; TODO. 
-* Not related?
-_c5f6:
+       b    *hl                        ; JP (HL)           ; Branches to dueller_down_1 (!)
+dueller_down_1:                        ; c5f6
        movb @2(ix),a                   ; LD A,(IX+$02)     ; 
        srl  a,1                        ; SRL A             ; 
-       cb   a,@bytes+9                 ; CP $09            ; 
+                                       ; CP $09            ;
        movb @4(ix),@e                  ; LD E,(IX+$04)     ; 
-       movb @5(ix),d                   ; LD D,(IX+$05)     ; 
-       jnc  duel_points                ; JR NC,$C628       ; TODO: check code. 
+       movb @5(ix),d                   ; LD D,(IX+$05)     ;
+       cb   a,@bytes+9
+       jhe  duel_points                ; JR NC,$C628       ;
        socb one,a                      ; OR $01            ; 
 
 * Displays The Bonus Score Text.
@@ -1384,7 +1404,7 @@ print_bonus_score:                     ; c607
        .call @scoring_prep_alias       ; CALL $5B8C        ; 
        .call @draw_score_alias         ; CALL $5B98        ; 
        ab   one,@9(ix)                 ; INC (IX+$09)      ; 
-       b    @_c583                     ; JP $C583          ; Jump to #R$C583.
+       b    @duel_shot_sound           ; JP $C583          ; Jump to #R$C583.
 
 * "Extra" text.
 extra_text_copy:                       ; c622
@@ -1396,13 +1416,15 @@ extra_text_copy:                       ; c622
 duel_points:                           ; c628
        movb @duel_extra_life,a         ; LD A,($C6E4)      ; {If #R$C6E4 is NOT zero then award 9(00) bonus points.
        ; AND A                         ; AND A             ; 
-       movb @bytes+9,a                 ; LD A,$09          ; 
+       movb @bytes+9,a                 ; LD A,$09          ;
+       movb @duel_extra_life,tmp0
        jne  print_bonus_score          ; JR NZ,$C607       ; }
        mov  @lives_addr,hl             ; LD HL,($5B86)     ; {Fetch a 16 bit address from #R$5B86 (#R$CC59), if it is
-       movb *hl,a                      ; LD A,(HL)         ; higher than $05 then award 9(00) bonus points.
-       cb   a,@bytes+5                 ; CP $05            ; 
-       movb @bytes+9,a                 ; LD A,$09          ; 
-       jnc  print_bonus_score          ; JR NC,$C607       ; TODO: check code. }
+       movb *hl,tmp0                   ; LD A,(HL)         ; higher than $05 then award 9(00) bonus points.
+                                       ; CP $05            ;
+       movb @bytes+9,a                 ; LD A,$09          ;
+       cb   tmp0,@bytes+5
+       jhe  print_bonus_score          ; JR NC,$C607       ; }
        li   hl,extra_text_copy         ; LD HL,$C622       ; {Points to #R$C622 and sends it to #R$5B80.
        dec  de                         ; DEC DE            ; #TABLE(default,centre)
        li   bc,>2a29                   ; LD BC,$2A29       ; { =h Value | =h Ink | =h Paper | =h Bright }
@@ -1426,22 +1448,33 @@ playfield_whitespace:                  ; c65b
 * 
 * Used by the routine at #R$C422.
 duel_draw_bandit_prep:                 ; c661
-       .call @character_addr_alias     ; CALL $5B8F        ; Fetch the address of the character from the given index
-                                                           ; in #REGa.
-       .ex_de_hl                       ; EX DE,HL          ; 
-       movb @3(ix),a                   ; LD A,(IX+$03)     ; Retrieve the character position.
-       li   hl,zx_screen+>0804         ; LD HL,$4804       ; {If this character is in position "1" then point to the
-       sb   one,a                      ; DEC A             ; screen buffer at $4804 and jump to #R$C677.
-       jeq  duel_draw_bandit           ; JR Z,$C677        ; }
-       li   hl,zx_screen+>080c         ; LD HL,$480C       ; {If this character is in position "2" then point to the
-       sb   one,a                      ; DEC A             ; screen buffer at $480C and jump to #R$C677.
-       jeq  duel_draw_bandit           ; JR Z,$C677        ; }
-       li   hl,zx_screen+>0814         ; LD HL,$4814       ; Else this character is in position "3" so point to the
-                                                           ; screen buffer at $4814.
-duel_draw_bandit:                      ; c677
-       movb @bytes+88,b                ; LD B,$58          ; {Call the draw routine with the image dimensions.
-       movb @bytes+6,@c                ; LD C,$06          ; 
-       .call @draw_character           ; CALL $5B92        ; }
+       clr  tmp2
+       movb @3(ix),tmp2
+       swpb tmp2
+       dec  tmp2
+       sla  tmp2,1
+       mov  @ti_door_positions(tmp2),tmp0
+       ai   tmp0,>80
+       clr  tmp1
+       movb a,tmp1
+       swpb tmp1
+       bl   @ti_draw_character_pattern
+;       .call @character_addr_alias     ; CALL $5B8F        ; Fetch the address of the character from the given index
+;                                                           ; in #REGa.
+;       .ex_de_hl                       ; EX DE,HL          ;
+;       movb @3(ix),a                   ; LD A,(IX+$03)     ; Retrieve the character position.
+;       li   hl,zx_screen+>0804         ; LD HL,$4804       ; {If this character is in position "1" then point to the
+;       sb   one,a                      ; DEC A             ; screen buffer at $4804 and jump to #R$C677.
+;       jeq  duel_draw_bandit           ; JR Z,$C677        ; }
+;       li   hl,zx_screen+>080c         ; LD HL,$480C       ; {If this character is in position "2" then point to the
+;       sb   one,a                      ; DEC A             ; screen buffer at $480C and jump to #R$C677.
+;       jeq  duel_draw_bandit           ; JR Z,$C677        ; }
+;       li   hl,zx_screen+>0814         ; LD HL,$4814       ; Else this character is in position "3" so point to the
+;                                                           ; screen buffer at $4814.
+;duel_draw_bandit:                      ; c677
+;       movb @bytes+88,b                ; LD B,$58          ; {Call the draw routine with the image dimensions.
+;       movb @bytes+6,@c                ; LD C,$06          ;
+;       .call @draw_character           ; CALL $5B92        ; }
        .ret                            ; RET               ; Return.
 
 * Routine at C67F
@@ -1456,7 +1489,7 @@ duel_update_timer:                     ; c67f
 * Lose A Life
 * 
 * Used by the routine at #R$C690.
-lose_life:                             ; c687
+lose_life:                             ; c687 TODO
        .call @bang                     ; CALL $C000        ; Calls the subroutine to display the "BANG" animation.
        mov  @lives_addr,hl             ; LD HL,($5B86)     ; {Decrease the lives counter by one (#R$CC59), set the
        sb   one,*hl                    ; DEC (HL)          ; zero flag if all lives are lost.
@@ -1508,14 +1541,14 @@ duel_flash_text_loop:                  ; c6b3
        .call @duel_print_lives         ; CALL $C6A7        ; 
        movb @bytes+16,b                ; LD B,$10          ; 
 duel_flash_halt_loop_1:                ; c6bc
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C6BC        ; 
        jne  duel_flash_halt_loop_1     ;                   
        li   hl,playfield_lives         ; LD HL,$C655       ; 
        .call @duel_print_lives         ; CALL $C6A7        ; 
        movb @bytes+16,b                ; LD B,$10          ; 
 duel_flash_halt_loop_2:                ; c6c7
-       ; HALT                          ; HALT              ; 
+       bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C6C7        ; 
        jne  duel_flash_halt_loop_2     ;                   
        .pop bc                         ; POP BC            ; 
@@ -1568,7 +1601,7 @@ dueller_shot:                          ; c6e5
        movb @bytes+4,a                 ; LD A,$04          ; {Writes $04 to #R$C6E3.
        movb a,@duel_lose_life          ; LD ($C6E3),A      ; }
        movb a,@9(ix)                   ; LD (IX+$09),A     ; Sets the dueller frame index to $04.
-       b    @_c583                     ; JP $C583          ; Jump to #R$C583.
+       b    @duel_shot_sound           ; JP $C583          ; Jump to #R$C583.
 
 * Flash Life Image.
 * 
@@ -1664,7 +1697,7 @@ start:                                 ; c7c0
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
 main_loop:
        bl   @ti_clear_screen
-      .call @new_game                  ; CALL $C7E5        ; Call #R$C7E5.
+       .call @new_game                  ; CALL $C7E5        ; Call #R$C7E5.
 ;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
 ;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
 ;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
@@ -2087,13 +2120,13 @@ cashboxes_flash_loop:                  ; ca87
        bl   @random_number             ; CALL $D8B0        ;
        movb a,b                        ; LD B,A            ;
        ; LD A,R                        ; LD A,R            ;
-       movb a,@c                       ; LD C,A            ; 
+       movb a,@c                       ; LD C,A            ; bc random
        ab   b,a                        ; ADD A,B           ; 
-       movb a,d                        ; LD D,A            ; 
+       movb a,d                        ; LD D,A            ; d random
        movb @duel_parameter,a          ; LD A,($CBCF)      ;
 ;      li   hl,copied_5b80             ; LD HL,$CBB4       ;
-;       .call @perform_duel             ; CALL $C3C0        ;
-       movb a,@duel_parameter          ; LD ($CBCF),A      ;
+       .call @perform_duel             ; CALL $C3C0        ;
+       movb a,@duel_parameter          ; LD ($CBCF),A      ; a=@duel_counter
        sb   b,b                        ; LD B,$00          ; 
        .call @halt_loop                ; JP $CD64          ;
        b    @return_without_carry
@@ -2756,7 +2789,7 @@ scoring_base_10:                       ; ce08
 * 
 * Points to either #R$D392 or #R$D39B depending on the chosen control method.
 control_routine_alias:                 ; ce12
-       data controls_joystick                              ; 16 bit memory location of either the keyboard or
+       data controls_keyboard                              ; 16 bit memory location of either the keyboard or
                                                            ; joystick control routines.
 
 * Door Routine Buffer.
