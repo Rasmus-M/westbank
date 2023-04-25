@@ -15,8 +15,8 @@ buffer_at_5b00:                        ; Not used as buffer any longer
 * Draw Text (alias).
 * 
 * This is an alias for a jump to #R$CBD2.
-print_two_tone_text_alias:             ; 5b80
-       b    @print_two_tone_text       ; JP $CBD2          ; 
+;print_two_tone_text_alias:             ; 5b80
+;       b    @print_two_tone_text       ; JP $CBD2          ;
 
 * Displays The "Life" Images.
 * 
@@ -270,7 +270,7 @@ level_select:                          ; 6380
        li   hl,level_select_copy       ; LD HL,$6492       ; {Points to #R$6492 and sends it to #R$5B80
        li   de,zx_screen+>0023         ; LD DE,$4023       ; #TABLE(default,centre)
        li   bc,>0706                   ; LD BC,$0706       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $06 | $06 | $00 | $00 }
                                                            ; TABLE#}
 * Prints the images to the screen.
@@ -416,7 +416,7 @@ level_select_print:                    ; 647c
        li   de,zx_screen+>1038         ; LD DE,$5038       ; TABLE#}
 _648b:
        li   bc,>0702                   ; LD BC,$0702       ; {Then call the print routine at #R$5B80.
-       .call @print_two_tone_text_alias ; CALL $5B80        ; #TABLE(default,centre)
+       bl    @print_two_tone_text ; CALL $5B80        ; #TABLE(default,centre)
                                                            ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
@@ -1157,7 +1157,7 @@ duel_clear_screen:                     ; c463
        li   hl,playfield_score         ; LD HL,$C64D       ; {Point to #R$C64D and prints using #R$5B80.
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
        .call @draw_score_alias         ; CALL $5B98        ; Writes the players score.
@@ -1405,7 +1405,7 @@ print_bonus_score:                     ; c607
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*hl                      ; LD (HL),A         ; }
        li   bc,>2928                   ; LD BC,$2928       ; {Print using #R$5B80.
-       .call @print_two_tone_text_alias ; CALL $5B80        ; #TABLE(default,centre,centre,centre,centre)
+       bl    @print_two_tone_text ; CALL $5B80        ; #TABLE(default,centre,centre,centre,centre)
                                                            ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $29 | $01 | $05 | $00 }
                                                            ; { $28 | $00 | $05 | $00 }
@@ -1437,7 +1437,7 @@ duel_points:                           ; c628
        li   hl,extra_text_copy         ; LD HL,$C622       ; {Points to #R$C622 and sends it to #R$5B80.
        dec  de                         ; DEC DE            ; #TABLE(default,centre)
        li   bc,>2a29                   ; LD BC,$2A29       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $2A | $02 | $05 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $2A | $02 | $05 | $00 }
                                                            ; { $29 | $01 | $05 | $00 }
                                                            ; TABLE#}
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$C6E4.
@@ -1533,7 +1533,7 @@ duel_complete:                         ; c690
 duel_print_lives:                      ; c6a7
        li   de,zx_screen+>10d0         ; LD DE,$50D0       ; {Helper routine called from #R$C463 used for writing #R$C655 to the screen using the colours held in #REGbc;
        li   bc,>0702                   ; LD BC,$0702       ; #TABLE(default,centre)
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { =h Value | =h Ink | =h Paper | =h Bright }
+       bl    @print_two_tone_text ; CALL $5B80        ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
@@ -1575,7 +1575,7 @@ duel_print_countdown:                  ; c6d3
        li   hl,duel_timer              ; LD HL,$C6E0       ; {Helper routine used for writing #R$C6E0 to the screen using the colours held in #REGbc;
        li   de,zx_screen+>004f         ; LD DE,$404F       ; #TABLE(default,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
        .ret                            ; RET               ; Return.
@@ -1675,19 +1675,19 @@ sheriff_star:                          ; c720
        li   hl,header_1                ; LD HL,$C765       ; {Points to #R$C765 and prints it to the screen using #R$5B80.
        li   de,zx_screen+>1001         ; LD DE,$5001       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0702                   ; LD BC,$0702       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
        li   hl,header_2                ; LD HL,$C784       ; {Points to #R$C784 and prints it to the screen using #R$5B80.
        li   de,zx_screen+>1041         ; LD DE,$5041       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0702                   ; LD BC,$0702       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
        li   hl,header_3                ; LD HL,$C7A3       ; {Points to #R$C7A3 and prints it to the screen using #R$5B80.
        li   de,zx_screen+>1083         ; LD DE,$5083       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0702                   ; LD BC,$0702       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
        .ret                            ; RET               ; Return.
@@ -2065,7 +2065,7 @@ print_progress:                        ; ca38
        li   hl,progress_buffer         ; LD HL,$CA5C       ; {Prints #R$CA5C to the screen buffer at $486C using #R$CBD2.
        li   de,zx_screen+>086c         ; LD DE,$486C       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text      ; CALL $CBD2        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text      ; CALL $CBD2        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
        movb @bytes+80,b                ; LD B,$50          ; {Interrupt driven HALT loop ($50
@@ -2321,24 +2321,24 @@ duel_parameter:                         ; cbcf                       ; This alwa
 two_tone_attributes_buffer:            ; cbd0
        data 1797                                                     ; Stores the attributes; top attribute/ bottom attribute.
 
+*********************************************************************
 * hl: address of text to print
 * de: screen address
 * This entry point is used by the routines at #R$5B80 and #R$C7C0.
 print_two_tone_text:                   ; cbd2
+       .proc
        mov  bc,@two_tone_attributes_buffer ; LD ($CBD0),BC     ; Stash the attributes at #R$CBD0.
 print_two_tone_text_loop:              ; cbd6
        movb *hl,a                      ; LD A,(HL)         ; {Grab the next character in the string, if it's $FF then
        cb   a,@b255                    ; CP $FF            ; return.
-       jne  !                          ; RET Z             ; }
-       .ret                            ;                   
-!
+       jeq  print_two_tone_text_2      ; RET Z             ; }
        cb   a,@bytes+48                ; CP $30            ; 
        jne  print_two_tone_text_1      ; JR NZ,$CBE0       ;
        movb @bytes+58,a                ; LD A,$3A          ; 
 print_two_tone_text_1:                 ; cbe0
        .push hl                        ; PUSH HL           ; 
        .push de                        ; PUSH DE           ; 
-       .call @print_tt_text_space_check ; CALL $CBFC        ; 
+       bl   @print_tt_text_space_check ; CALL $CBFC        ; 
        .pop de                         ; POP DE            ; 
        .pop hl                         ; POP HL            ; 
        inc  hl                         ; INC HL            ; 
@@ -2355,9 +2355,14 @@ print_two_tone_text_1:                 ; cbe0
        ab   @bytes+8,a                 ; ADD A,$08         ; 
        movb a,d                        ; LD D,A            ; 
        jmp  print_two_tone_text_loop   ; JR $CBD6          ; 
+print_two_tone_text_2:
+       .endproc
+*// print_two_tone_text
 
+*********************************************************************
 * This entry point is used by the routine at #R$5B9B.
 print_tt_text_space_check:             ; cbfc
+       .proc
        cb   a,@bytes+32                ; CP $20            ; {If the character is a space then jump forward to
        jne  print_tt_text_2            ; JR NZ,$CC0E       ; #R$CC0E.}
 *      Space
@@ -2381,7 +2386,7 @@ print_tt_text_3:                       ; cc14
        .pop hl                         ; POP HL            ;
 *      Attributes
 print_tt_text_4:                       ; cc1d
-      .call @print_tt_attribute_addr   ; CALL $CC2B        ;
+       bl   @print_tt_attribute_addr   ; CALL $CC2B        ;
        mov  @two_tone_attributes_buffer,bc ; LD BC,($CBD0)     ; {Load the stored top/ bottom attribute bytes back into
 ;       movb b,*hl                     ; LD (HL),B         ; #REGbc and write them to the screen.
        mov  hl,tmp1
@@ -2395,7 +2400,9 @@ print_tt_text_4:                       ; cc1d
        movb @c,a
        bl   @ti_draw_attribute
        .ret                            ; RET               ; Return.
+*// print_tt_text_space_check
 
+*********************************************************************
 * Routine at CC2B
 * 
 * Used by the routine at #R$CBD0.
@@ -2407,7 +2414,8 @@ print_tt_attribute_addr:
        sra  a,1                        ; SRA A             ; 
        ab   @bytes+88,a                ; ADD A,$58         ; 
        movb a,h                        ; LD H,A            ; 
-       .ret                            ; RET               ; Return.
+       rt                              ; RET               ; Return.
+*// print_tt_attribute_addr
 
 * Buffer for holding #R$D5E6 address.
 buffer_copy_routine:                   ; cc38
@@ -5700,7 +5708,7 @@ new_high_score_1:                      ; fa6f
        li   hl,high_score_title        ; LD HL,$FB78       ; {Points to #R$FB78 and sends it to #R$5B80.
        li   de,zx_screen+>0802         ; LD DE,$4802       ; #TABLE(default,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
 * Input name
@@ -5721,7 +5729,7 @@ draw_high_scores:                      ; _fab0
        li   hl,high_score_sub_head     ; LD HL,$FBB5       ; {Points to #R$FBB5 and sends it to #R$5B80.
        li   de,zx_screen               ; LD DE,$4000       ; #TABLE(default,centre)
        li   bc,>0706                   ; LD BC,$0706       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $06 | $06 | $00 | $00 }
                                                            ; TABLE#}
 draw_high_scores_1:                    ; fabc
@@ -5884,7 +5892,7 @@ advance_2_rows_and_print:              ; fbd5
        mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ;
        li   bc,>0705                   ; LD BC,$0705       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
-       .call @print_two_tone_text_alias ; CALL $5B80        ; 
+       bl    @print_two_tone_text ; CALL $5B80        ; 
        .ret                            ; RET               ; 
 
 add_8_to_h:                            ; fbea
@@ -5902,7 +5910,7 @@ hs_print_name_buffer:                  ; fbf2
        li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Points to #R$5BC0 and sends it to #R$5B80.
        li   de,zx_screen+>0887         ; LD DE,$4887       ; #TABLE(default,centre)
        li   bc,>0705                   ; LD BC,$0705       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       .call @print_two_tone_text_alias ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
        .ret                            ; RET               ; { $05 | $05 | $00 | $00 }
                                                            ; TABLE#}
 * This entry point is used by the routine at #R$FA00.
@@ -6051,7 +6059,7 @@ title_screen:                          ; fe00
        li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
        li   de,zx_screen+>002b         ; LD DE,$402B       ;
        li   bc,>0703                   ; LD BC,$0703       ; 
-       .call @print_two_tone_text_alias ; CALL $5B80        ; }
+       bl    @print_two_tone_text ; CALL $5B80        ; }
        li   hl,title_screen_play       ; LD HL,$FEF4       ; {Points to #R$FEF4 and sends it to #R$FEE4.
        li   de,zx_screen+>00cb         ; LD DE,$40CB       ;
        bl   @title_screen_print       ; CALL $FEE4        ; }
@@ -6067,11 +6075,11 @@ title_screen:                          ; fe00
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
        li   de,zx_screen+>1083         ; LD DE,$5083       ;
        li   bc,>0705                   ; LD BC,$0705       ; 
-       .call @print_two_tone_text_alias ; CALL $5B80        ; 
+       bl    @print_two_tone_text ; CALL $5B80        ; 
        li   hl,title_screen_copyright  ; LD HL,$FF34       ; {Points to #R$FF34 and sends it to #R$5B80.
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
-       .call @print_two_tone_text_alias ; CALL $5B80        ; }
+       bl    @print_two_tone_text ; CALL $5B80        ; }
 
 * Act on input.
 title_screen_input:                    ; fe58
@@ -6218,10 +6226,14 @@ ts_draw_bandits:                        ; fea4
 ;       .ldir                           ; LDIR              ;
 ;       .ret                            ; RET               ; Return.
 
+*********************************************************************
+*
 title_screen_print:                    ; fee4
        .proc
        li   bc,>0702                   ; LD BC,$0702       ; {#REGb=$07, #REGc=$02 and jump to #R$5B80.
-       b    @print_two_tone_text_alias ; JP $5B80          ; }
+       bl   @print_two_tone_text       ; JP $5B80          ; }
+       .endproc
+*// title_screen_print
 
 * Title Screen/ Game Options
 title_screen_game_name:                ; feea
