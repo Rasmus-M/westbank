@@ -1,3 +1,6 @@
+; Paul Maddern's SkoolKit disassembly of the ZX Spectrum version
+; Latest version at https://github.com/pobtastic/westbank
+
 @org=$4000
 
 ; Loading screen
