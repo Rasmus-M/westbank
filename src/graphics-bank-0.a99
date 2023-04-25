@@ -1044,3 +1044,6 @@ gfx_char_9:
 gfx_char_0:
        byte >00,>00,>38,>7C,>AA,>C6,>C6,>C6
        byte >C6,>C6,>C6,>AA,>7C,>38,>00,>00
+
+gfx_empty_space:
+       bss  64
