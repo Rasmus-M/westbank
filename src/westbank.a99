@@ -1790,49 +1790,49 @@ set_control_alias:                     ; c7f9
 level_1:                               ; c878
        li   hl,choose_default_set      ; LD HL,$CE42       ; {Writes #R$CE42 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_3         ; LD HL,$CE6F       ; {Writes #R$CE6F to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  level_2                    ; RET C             ; TODO: check code.
        .ret                            ;
 level_2:
        li   hl,choose_bandit_2         ; LD HL,$CE5F       ; {Writes #R$CE5F to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_julius           ; LD HL,$CE55       ; {Writes #R$CE55 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ; TODO: check code. 
        .ret                            ;                   
 !
        li   hl,choose_bandit_4         ; LD HL,$CE7E       ; {Writes #R$CE7E to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  level_3                    ; RET C             ; TODO: check code.
        .ret                            ;
 level_3:
        li   hl,choose_bandit_5         ; LD HL,$CE8D       ; {Writes #R$CE8D to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
@@ -1840,7 +1840,7 @@ level_3:
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_dusk_attr            ; CALL $C95E        ; 
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
@@ -1848,7 +1848,7 @@ level_3:
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_night_attr           ; CALL $C963        ; 
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  level_3_1                  ; RET C             ;
        .ret                            ;                   
 level_3_1:                             ; c8f0
@@ -1857,7 +1857,7 @@ level_3_1:                             ; c8f0
        movb @bytes+7,b                 ; LD B,$07          ; 
 level_3_2:                             ; c8f8
        .push bc                        ; PUSH BC           ; 
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        .pop bc                         ; POP BC            ; 
        jnc  !                          ; RET C             ;
        .ret                            ;                   
@@ -1868,12 +1868,12 @@ level_3_2:                             ; c8f8
        sb   one,b                      ; DJNZ $C8F8        ; 
        jne  level_3_2                  ;                   ; Do 7 times
        .call @set_dusk_attr            ; CALL $C95E        ; 
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        .call @set_night_attr           ; CALL $C963        ; 
-       .call @run_phase                ; CALL $CA81        ;
+       bl    @run_phase                ; CALL $CA81        ;
        jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
@@ -1933,23 +1933,27 @@ set_night_attr:                        ; c963
 * Note this is for the opened door background hence it starts from frame 2 (as
 * frame 1 is a closed door).
 set_door_attr:                         ; c966 TODO
-       li   de,door_frame_2_attrs      ; LD DE,$D6B9       ; {Copies $18 bytes of data to
-       li   bc,>0018                   ; LD BC,$0018       ; #R$D6B9, then return.
-       .ldir                           ; LDIR              ;
+       movb *hl,@character_attr+1
+;       li   de,door_frame_2_attrs      ; LD DE,$D6B9       ; {Copies $18 bytes of data to
+;       li   bc,>0018                   ; LD BC,$0018       ; #R$D6B9, then return.
+;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
 * Door frame attribute data for each day phase.
 door_attr_day:                         ; c96f
-       byte >28,>28,>30,>30,>30,>30,>30,>30                          ; 
-       byte >28,>28,>28,>28,>30,>30,>30,>30                          ; 
-       byte >28,>28,>28,>28,>28,>28,>30,>28                          ; 
+       byte >28
+;       byte >28,>30,>30,>30,>30,>30,>30                          ;
+;       byte >28,>28,>28,>28,>30,>30,>30,>30                          ;
+;       byte >28,>28,>28,>28,>28,>28,>30,>28                          ;
 door_attr_dusk:                        ; c987
-       byte >0D,>0D,>30,>30,>30,>30,>30,>30                          ; 
-       byte >0D,>0D,>0D,>0D,>30,>30,>30,>30                          ; 
-       byte >0D,>0D,>0D,>0D,>0D,>0D,>30,>0D                          ; 
+       byte >0D
+;       byte >0D,>30,>30,>30,>30,>30,>30                          ;
+;       byte >0D,>0D,>0D,>0D,>30,>30,>30,>30                          ;
+;       byte >0D,>0D,>0D,>0D,>0D,>0D,>30,>0D                          ;
 door_attr_night:                       ; c99f
-       byte >05,>05,>30,>30,>30,>30,>30,>30                          ; 
-       byte >05,>05,>05,>05,>30,>30,>30,>30                          ; 
-       byte >05,>05,>05,>05,>05,>05,>30,>05                          ;
+       byte >05
+;       byte >05,>30,>30,>30,>30,>30,>30                          ;
+;       byte >05,>05,>05,>05,>30,>30,>30,>30                          ;
+;       byte >05,>05,>05,>05,>05,>05,>30,>05                          ;
 
 * Clears the cashbox flags, clears the screen and displays the phase number.
 init_game_loop:                        ; c9b7
@@ -2104,6 +2108,7 @@ cashboxes_completed_flag:              ; ca80
        byte >00                                                      ; 
 
 run_phase:                             ; ca81
+       .proc
        .call @init_and_run_game_loop   ; CALL $CAC8        ;
        jnc  phase_completed            ; RET C             ; TODO: check code.
        b    @return_with_carry         ;
@@ -2134,10 +2139,14 @@ cashboxes_flash_loop:                  ; ca87
        movb @duel_parameter,a          ; LD A,($CBCF)      ;
 ;      li   hl,copied_5b80             ; LD HL,$CBB4       ;
        .call @perform_duel             ; CALL $C3C0        ;
+       stst tmp2
        movb a,@duel_parameter          ; LD ($CBCF),A      ; a=@duel_counter
        sb   b,b                        ; LD B,$00          ; 
        .call @halt_loop                ; JP $CD64          ;
+       andi tmp2,>1000                 ; Check carry
+       jne  !
        b    @return_without_carry
+!      b    @return_with_carry
 
 * Set all deposit flags to a
 set_all_deposit_flags:                 ; cab9
@@ -4576,14 +4585,14 @@ prep_door_frame:                       ; d66d
 ;       .ldir                           ; LDIR              ; attribute data to the screen and
 ;       .ret                            ; RET               ; return.}
 * Door frame attribute data.
-door_frame_1_attrs:                    ; d6b1
-       byte >30,>30,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 1.
-door_frame_2_attrs:                    ; d6b9
-       byte >28,>28,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 2.
-door_frame_3_attrs:                    ; d6c1
-       byte >28,>28,>28,>28,>30,>30,>30,>30                          ; Attribute data for door frame 3.
-door_frame_4_attrs:                    ; d6c9
-       byte >28,>28,>28,>28,>28,>28,>30,>28                          ; Attribute data for door frame 4.
+;door_frame_1_attrs:                    ; d6b1
+;       byte >30,>30,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 1.
+;door_frame_2_attrs:                    ; d6b9
+;       byte >28,>28,>30,>30,>30,>30,>30,>30                          ; Attribute data for door frame 2.
+;door_frame_3_attrs:                    ; d6c1
+;       byte >28,>28,>28,>28,>30,>30,>30,>30                          ; Attribute data for door frame 3.
+;door_frame_4_attrs:                    ; d6c9
+;       byte >28,>28,>28,>28,>28,>28,>30,>28                          ; Attribute data for door frame 4.
 * Preps door frame 2.
 draw_door_frame_2:                     ; d6d1
        .proc

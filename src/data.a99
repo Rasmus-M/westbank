@@ -81,3 +81,6 @@ ti_colors:
        byte >81,>85,>88,>8d,>82,>87,>8b,>8f,>d1,>d5,>d8,>dd,>d2,>d7,>db,>df
        byte >21,>25,>28,>2d,>22,>27,>2b,>2f,>71,>75,>78,>7d,>72,>77,>7b,>7f
        byte >b1,>b5,>b8,>bd,>b2,>b7,>bb,>bf,>f1,>f5,>f8,>fd,>f2,>f7,>fb,>ff
+
+character_attr:
+       data >0028
