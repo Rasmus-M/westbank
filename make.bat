@@ -7,6 +7,5 @@ copy /b bin\main8.bin ^
     + bin\banks.bin ^
     westbank8.bin
 
-rem TODO
-java -jar tools/CopyHeader.jar westbank8.bin 60 4 5 6 7
+java -jar tools/CopyHeader.jar westbank8.bin 60
 
