@@ -5803,6 +5803,12 @@ high_score_input_name_2:               ; fb51
        movb a,*hl+                     ; LD (HL),A         ;
                                        ; INC HL            ;
        jmp  high_score_input_name_1    ; JR $FB29          ;
+
+high_score_name_buffer_addr:           ; fb55              ;
+       data 0
+high_score_position:                   ; fb57
+       byte 0                          ; RRA               ;
+
 high_score_input_name_3:               ; fb58              ;
                                        ; LD A,L            ;
        ci   hl,high_score_name_buffer  ; CP $C1            ;
@@ -5828,11 +5834,6 @@ high_score_read_char_loop:             ; fb67
                                                            ; TABLE#}
 ;       .pop af                         ; POP AF            ; {Return with the keypress in #REGa.
        .ret                            ; RET               ; }
-
-high_score_name_buffer_addr:           ; fb55              ; Moved out of code
-       data 0
-high_score_position:                   ; fb57
-       byte 0                          ; RRA               ;
 
 * High Score Table Name Entry.
 high_score_title:                      ; fb78
