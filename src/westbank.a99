@@ -889,7 +889,7 @@ bang_color:
 ;       movb @l,a                       ; LD A,L            ;
 ;       ab   @bytes+32,a                ; ADD A,$20         ;
 ;       movb a,@l                       ; LD L,A            ;
-;       joc  !                          ; RET NC            ; TODO: check code.
+;       joc  !                          ; RET NC            ;
 ;       .ret                            ;
 ;!
 ;       movb h,a                        ; LD A,H            ;
@@ -1644,16 +1644,21 @@ flash_life_image_halt_loop_2:          ; c70a
 * 
 * Used by the routine at #R$C7C0.
 sheriff_star:                          ; c720
-       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer (i.e.
-       li   de,zx_screen+1             ; LD DE,$4001       ; "blanks it").
-       li   bc,>1800                   ; LD BC,$1800       ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       .ldir                           ; LDIR              ; }
-       li   bc,>02ff                   ; LD BC,$02FF       ; {Continues into the attributes buffer, and writes $06 to every location.
-       movb @bytes+6,*hl               ; LD (HL),$06       ; #TABLE(default,centre,centre,centre,centre)
-       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-                                                           ; { $06 | $06 | $00 | $00 }
-                                                           ; TABLE#}
+       bl   @ti_clear_screen
+;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer (i.e.
+;       li   de,zx_screen+1             ; LD DE,$4001       ; "blanks it").
+;       li   bc,>1800                   ; LD BC,$1800       ;
+;       sb   *hl,*hl                    ; LD (HL),$00       ;
+;       .ldir                           ; LDIR              ; }
+       li   tmp0,>0458
+       li   tmp1,>0006
+       li   tmp2,>080a
+       bl   @ti_draw_color_area
+;       li   bc,>02ff                   ; LD BC,$02FF       ; {Continues into the attributes buffer, and writes $06 to every location.
+;       movb @bytes+6,*hl               ; LD (HL),$06       ; #TABLE(default,centre,centre,centre,centre)
+;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
+;                                                           ; { $06 | $06 | $00 | $00 }
+;                                                           ; TABLE#}
        li   hl,zx_screen+>008b         ; LD HL,$408B       ; {Points to #R$F600 and prints it to the screen using
        li   de,gfx_badge_image         ; LD DE,$F600       ; #R$5B92.
        li   bc,>5008                   ; LD BC,$5008       ;
@@ -1691,7 +1696,7 @@ header_3:                              ; c7a3
 
 * New Game
 start:                                 ; c7c0
-       mov  @>83c0,hl                  ; LD HL,($5C78)     ; TODO #HTML(Fetch <a
+       mov  @>83c0,hl                  ; LD HL,($5C78)     ; #HTML(Fetch <a
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
@@ -1732,8 +1737,8 @@ set_control_alias:                     ; c7f9
        sb   *hl,*hl                    ; LD (HL),$00       ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; }
-       movb @bytes+3,a                 ; LD A,$03          ; {Initialise #R$CC59 to $03.
-       movb a,@lives                   ; LD ($CC59),A      ; } Starting_lives
+                                       ; LD A,$03          ; {Initialise #R$CC59 to $03.
+       movb @bytes+3,@lives            ; LD ($CC59),A      ; } Starting_lives
        li   hl,>0101                   ; LD HL,$0101       ; {Initialise #R$D45C to $0101.
        mov  hl,@cashbox_ref            ; LD ($D45C),HL     ; }
        li   hl,>0000                   ; LD HL,$0000       ; {Clears #R$CE14, #R$CE16 and
@@ -1750,17 +1755,17 @@ set_control_alias:                     ; c7f9
        .ldir                           ; LDIR              ; }
        sb   a,a                        ; XOR A             ; {Set the border to black.
        bl   @ti_set_border_color          ; OUT ($FE),A       ; }
-       ab   one,a                      ; INC A             ; {Write $01 to #R$CBCF.
-       movb a,@duel_parameter          ; LD ($CBCF),A      ; }
+                                       ; INC A             ; {Write $01 to #R$CBCF.
+       movb one,@duel_parameter        ; LD ($CBCF),A      ; }
        .call @init_progress            ; CALL $CA6C        ; 
        .call @set_day_attr             ; CALL $C959        ; 
-       .call @cls_display_day         ; CALL $CA64         ;
-       movb @bytes+3,a                 ; LD A,$03          ; {Writes $03 to #R$CE1B.
-       movb a,@chooser_countdown_init  ; LD ($CE1B),A      ; }
+       .call @cls_display_day          ; CALL $CA64         ;
+                                       ; LD A,$03          ; {Writes $03 to #R$CE1B.
+       movb @bytes+3,@chooser_countdown_init ; LD ($CE1B),A      ; }
        li   hl,>0500                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
        mov  hl,@delay                  ; LD ($CE1C),HL     ; }
-       movb one,a                      ; LD A,$01          ; {Writes $01 to #R$D191.
-       movb a,@sheriff_star_flag       ; LD ($D191),A      ; }
+                                       ; LD A,$01          ; {Writes $01 to #R$D191.
+       movb one,@sheriff_star_flag     ; LD ($D191),A      ; }
 **
 *      Execute levels
        movb @level,a                   ; LD A,($5CB1)      ; {Grabs the #R$5CB1, if it's phase
@@ -1786,7 +1791,7 @@ level_1:                               ; c878
        li   hl,choose_default_set      ; LD HL,$CE42       ; {Writes #R$CE42 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_3         ; LD HL,$CE6F       ; {Writes #R$CE6F to #R$CE1F.
@@ -1821,14 +1826,14 @@ level_3:
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        .call @reduce_delay             ; CALL $C941        ;
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
@@ -1836,7 +1841,7 @@ level_3:
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_dusk_attr            ; CALL $C95E        ; 
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
@@ -1844,7 +1849,7 @@ level_3:
        .call @reduce_delay             ; CALL $C941        ;
        .call @set_night_attr           ; CALL $C963        ; 
        .call @run_phase                ; CALL $CA81        ;
-       jnc  level_3_1                  ; RET C             ; TODO: check code.
+       jnc  level_3_1                  ; RET C             ;
        .ret                            ;                   
 level_3_1:                             ; c8f0
        .call @set_day_attr             ; CALL $C959        ;
@@ -1854,7 +1859,7 @@ level_3_2:                             ; c8f8
        .push bc                        ; PUSH BC           ; 
        .call @run_phase                ; CALL $CA81        ;
        .pop bc                         ; POP BC            ; 
-       jnc  !                          ; RET C             ; TODO: check code.
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        .push bc                        ; PUSH BC           ; 
@@ -1864,18 +1869,18 @@ level_3_2:                             ; c8f8
        jne  level_3_2                  ;                   ; Do 7 times
        .call @set_dusk_attr            ; CALL $C95E        ; 
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        .call @set_night_attr           ; CALL $C963        ; 
        .call @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,sheriff_star_flag       ; LD HL,$D191       ;
-       movb *hl,a                      ; LD A,(HL)         ; 
-       sb   *hl,*hl                    ; LD (HL),$00       ; 
-       ; AND A                         ; AND A             ; 
+       movb *hl,tmp0                   ; LD A,(HL)         ;
+       sb   *hl,*hl                    ; LD (HL),$00       ; You only get a sheriff star once
+       movb tmp0,tmp0                  ; AND A             ;
        jeq  level_3_1                  ; JR Z,$C8F0        ;
 ;       li   hl,copied_5b80             ; LD HL,$CBB4       ;
 ;       li   de,buffer_at_5b80          ; LD DE,$5B80       ;
@@ -1887,12 +1892,15 @@ level_3_2:                             ; c8f8
        .call @halt_loop                ; CALL $CD64        ; 
        .call @halt_loop                ; CALL $CD64        ; 
 level_3_3:                             ; c936
-       sb   a,a                        ; XOR A             ; 
-       ; IN A,($FE)                    ; IN A,($FE)        ; 
-       socb @bytes+224,a               ; OR $E0            ; 
-       ab   one,a                      ; INC A             ; 
-       jeq  level_3_3                  ; JR Z,$C936        ;
-       nop                             ; NOP               ; 
+;       sb   a,a                        ; XOR A             ;
+;       ; IN A,($FE)                    ; IN A,($FE)        ;
+;       socb @bytes+224,a               ; OR $E0            ;
+;       ab   one,a                      ; INC A             ;
+;       jeq  level_3_3                  ; JR Z,$C936        ;
+;       nop                             ; NOP               ;
+       li   tmp0,KEY_SP
+       bl   @ti_check_key
+       jeq  level_3_3
        jmp  level_3_1                  ; JR $C8F0          ;
 
 * Reduce delay by 64
