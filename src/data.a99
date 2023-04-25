@@ -202,6 +202,152 @@ high_score_table_scores:               ; 6200
 high_score_table_last_score:
        text '000000'
 
+
+* Bandit open close
+bandit_open_source:                            ; Used in init_bandit_open
+       byte >01,>08,>08,>08,>60,>08,>08        ; State and timers
+bandit_close_source:                           ; Used in init_bandit_close
+       byte >01,>0B,>0B,>0B,>0B,>0B,>0B
+* Bowie
+bowie_source:                                  ; Used in init_bowie
+       byte >01,>1B,>01,>08,>08,>08,>80,>08,>08
+* Customer close
+customer_close_source_1:                       ; Used in init_customer_close
+       byte >0A,>0B,>0C,>0D,>0E
+customer_close_source_2:                       ; Used in init_customer_close
+       byte >00,>01,>08,>08,>08
+       byte >40,>10,>08,>08,>08
+* Customer open
+customer_open_source_1:                        ; Used in init_customer_open
+       byte >03,>04,>05,>06,>07
+customer_open_source_2:                        ; Used in init_customer_open
+       byte >01,>01,>08,>08,>08
+       byte >38,>0C,>06,>08,>08
+* Customer shot
+customer_shot_source:                          ; Used in init_customer_shot
+       byte >01,>0B,>0B
+* Julius open/close
+julius_open_source:                            ; Used in init_julius_open
+       byte >00,>00,>01,>08,>08,>08,>50,>08
+       byte >08,>80
+julius_close_source:                           ; Used in init_julius_close
+       byte >00,>01,>0B,>0B,>0B,>0B,>0B,>0B    ; {??
+       byte >0B                                ; }
+* Bandit 3.
+bandit_3_source:
+       byte >00,>10,>0F,>11,>02,>01,>08,>08    ; {Bandit 3 source data.
+       byte >08,>40,>40                        ; }
+bandit_3_buffer:
+       byte >00,>10,>0F,>11,>02,>01,>0B,>0B    ; {Bandit 3 buffer.
+       byte >0B,>0B,>0B                        ; }
+* Bandit 4.
+bandit_4_source:
+       byte >00,>12,>13,>14,>02,>01,>08,>08    ; {Bandit 4 source data.
+       byte >08,>30,>40                        ; }
+bandit_4_buffer:
+       byte >00,>12,>13,>14,>02,>01,>0B,>0B    ; {Bandit 4 buffer.
+       byte >0B,>0B,>0B                        ; }
+* Bandit 5.
+bandit_5_source:
+       byte >00,>15,>16,>17,>02,>01,>08,>08    ; {Bandit 5 source data.
+       byte >08,>20,>38                        ; }
+bandit_5_buffer:
+       byte >00,>15,>16,>17,>02,>01,>0B,>0B    ; {Bandit 5 buffer.
+       byte >0B,>0B,>0B                        ; }
+* Bandit 6.
+bandit_6_source:
+       byte >00,>18,>19,>1A,>02,>01,>08,>08    ; {Bandit 6 source data.
+       byte >08,>10,>38                        ; }
+bandit_6_buffer:
+       byte >00,>18,>19,>1A,>02,>01,>0B,>0B    ; {Bandit 6 buffer.
+       byte >0B,>0B,>0B                        ; }
+* Bandit 2.
+bandit_2_source:
+       byte >00,>08,>08,>09,>07,>01,>08,>08    ; {Bandit 2 source data.
+       byte >08,>01,>30                        ; }
+bandit_2_buffer:
+       byte >00,>08,>08,>09,>07,>01,>0B,>0B    ; {Bandit 2 buffer.
+       byte >0B,>0B,>0B                        ; }
+* Door data/buffer?
+door_1_data_buffer:
+       byte >00,>10,>0F,>11,>02,>04,>00,>00
+       byte >00,>0D,>40,>10,>08,>00,>00,>20
+       byte >20,>20
+door_2_data_buffer:
+       byte >00,>08,>08,>09,>07,>05,>00,>00
+       byte >00,>00,>00
+       byte >10,>08,>00,>00,>20,>20,>20
+door_3_data_buffer:
+       byte >03,>04,>05,>06,>07,>01,>02,>0B    ; {Target
+       byte >00,>00,>1E                        ; }
+       byte >0C,>06,>08,>08,>20,>20,>20
+
+* Door 1 Flags.
+door_1_flags:                          ; d165 (IX+$00)
+       data door_1_routine
+door_1_source:                         ; d167 (IX+$02)
+       data door_1_data_buffer
+door_1_bowie_action:                   ; d169 (IX+$04)
+       data bowie_bomb_action
+door_1_scoring:                        ; d16b (IX+$06)
+       data 0
+door_1_cash_action:                    ; d16d (IX+$08)
+       byte >00
+door_1_count_down:                     ; d16e (IX+$09)
+       byte >08
+door_1_char_buffer:                    ; d16f (IX+$0a)
+       data bandit_3_buffer
+door_1_char_source:                    ; d171 (IX+$0c)
+       data bandit_3_source
+
+* Door 2 Flags.
+door_2_flags:                          ; d173
+       data door_2_routine
+door_2_source:                         ; d175
+       data door_2_data_buffer
+door_2_bowie_action:                   ; d177
+       data bowie_bomb_action
+door_2_scoring:                        ; d179
+       data 0
+door_2_cash_action:                    ; d17b
+       byte >00
+door_2_count_down:                     ; d17c
+       byte >06
+door_2_char_buffer:                    ; d17d
+       data bandit_2_buffer
+door_2_char_source:                    ; d17f
+       data bandit_2_source
+
+* Door 3 Flags.
+door_3_flags:                          ; d181
+       data door_3_routine
+door_3_source:                         ; d183
+       data door_3_data_buffer
+door_3_bowie_action:                   ; d185
+       data bowie_bomb_action
+door_3_scoring:                        ; d187
+       data 0
+door_3_cash_action:                    ; d189
+       byte >00
+door_3_count_down:                     ; d18a
+       byte >1D
+door_3_char_buffer:                    ; d18b
+       data bandit_3_buffer
+door_3_char_source:                    ; d18d
+       data bandit_3_source
+
+* Game status buffer entry at D18F
+copy_char_data_flag:
+       byte >00
+
+* Game status buffer entry at D190
+deposit_flag:                          ; d190
+       byte >00
+
+* Game status buffer entry at D191
+sheriff_star_flag:
+       byte >01
+
 character_table:
        data char_bank_1_select,gfx_character_00
        data char_bank_1_select,gfx_character_01

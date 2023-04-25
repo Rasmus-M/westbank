@@ -64,15 +64,15 @@ level_select_input:                    ; 63e5
 ;       movb @bytes+247,a               ; LD A,$F7          ; {Read keys 1-2-3-4-5.
 ;       ; IN A,($FE)                    ; IN A,($FE)        ; }
 ;       ; RRA                           ; RRA               ; {If "1" is pressed, jump to #R$63F4.
-       jne  level_select_level_1       ; JR NC,$63F4       ; TODO: check code. }
+       jne  level_select_level_1       ; JR NC,$63F4        ; }
        li   r0,KEY_2
        bl   @ti_check_key
 ;       ; RRA                           ; RRA               ; {If "2" is pressed, jump to #R$6405.
-       jne  level_select_level_3       ; JR NC,$6405       ; TODO: check code. }
+       jne  level_select_level_3       ; JR NC,$6405        ; }
        li   r0,KEY_3
        bl   @ti_check_key
 ;       ; RRA                           ; RRA               ; {If "3" is pressed, jump to #R$6416.
-       jne  level_select_level_6       ; JR NC,$6416       ; TODO: check code. }
+       jne  level_select_level_6       ; JR NC,$6416       ; }
        jmp  level_select_input         ; JR $63E5          ; Cycle back to #R$63E5.
 * Act on level being selected.
 level_select_level_1:                  ; 63f4
@@ -222,7 +222,7 @@ shot_sound_3:                          ; 6547
        .ret                            ; RET               ; Return.
 play_shot_sound:                       ; 654f
        .proc
-;      TODO
+;      TODO: sound
        .ret                            ; RET               ; Return.
 
 * BANG!
@@ -292,7 +292,7 @@ perform_duel:
 ;       mov  a,@duel_counter           ; I think this was intended
        .call @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
                                        ; LD A,($C421)      ; Grab #R$C421.
-       jnc  after_duel_1               ; JR NC,$C3C9       ; TODO: check code.
+       jnc  after_duel_1               ; JR NC,$C3C9       ;
        ab   one,@duel_counter          ; INC A             ;
 after_duel_1:                          ; c3c9
        movb @duel_counter,a
@@ -359,48 +359,27 @@ duel_clear_screen:                     ; c463
        mov  de,@duel_inner_iterations  ; LD ($C52E),DE     ; ....
 * Clears down the screen buffer.
        bl   @ti_clear_screen
-;       li   hl,zx_screen               ; LD HL,$4000       ; {Writes $00 to all 6144 bytes of the screen buffer
-;       li   de,zx_screen+1             ; LD DE,$4001       ; (i.e. "blanks it").
-;       li   bc,>1aff                   ; LD BC,$1AFF       ;
-;       sb   a,a                        ; XOR A             ;
-;       movb a,*hl                      ; LD (HL),A         ;
-;       .ldir                           ; LDIR              ; }
 * Writes the attributes for the playfield (sky, grass, footer).
        li   tmp0,>0400
        li   tmp1,>0028
        li   tmp2,>200c
        bl   @ti_draw_color_area
-;       li   hl,zx_attributes           ; LD HL,$5880       ; {Writes $28 to $5880 in the attribute buffer $180 times...
-;       li   de,zx_attributes+1         ; LD DE,$5881       ; #TABLE(default,centre,centre,centre,centre)
-;       li   bc,>0180                   ; LD BC,$0180       ; { =h Value | =h Ink | =h Paper | =h Bright }
-;       movb @bytes+40,*hl              ; LD (HL),$28       ; { $00 | $05 | $00 | $00 }
-;       .ldir                           ; LDIR              ; TABLE#}
        li   tmp0,>1000
        li   tmp1,>0020
        li   tmp2,>2004
        bl   @ti_draw_color_area
-;       movb @bytes+32,*hl              ; LD (HL),$20       ; {...continuing, writes $20 $80 times...
-;       li   bc,>0080                   ; LD BC,$0080       ; #TABLE(default,centre,centre,centre,centre)
-;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-;                                                           ; { $00 | $04 | $00 | $00 }
-;                                                           ; TABLE#}
        li   tmp0,>1400
        li   tmp1,>0007
        li   tmp2,>2004
        bl   @ti_draw_color_area
-;       movb @bytes+7,*hl               ; LD (HL),$07       ; {...and finally, writes $07 $7F times.
-;       li   bc,>007f                   ; LD BC,$007F       ; #TABLE(default,centre,centre,centre,centre)
-;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-;                                                           ; { $07 | $00 | $00 | $00 }
-;                                                           ; TABLE#}
 * Creates the footer.
        li   hl,playfield_lives         ; LD HL,$C655       ; {Point to #R$C655 and print using #R$C6A7.
-       bl   @duel_print_lives         ; CALL $C6A7        ; }
-       bl   @draw_life_images         ; CALL $5B83        ;
+       bl   @duel_print_lives          ; CALL $C6A7        ; }
+       bl   @draw_life_images          ; CALL $5B83        ;
        li   hl,playfield_score         ; LD HL,$C64D       ; {Point to #R$C64D and prints using #R$5B80.
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text      ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
        .call @draw_score               ; CALL $5B98        ; Writes the players score.
@@ -433,7 +412,7 @@ countdown_halt_loop:                   ; c4d0
        movb @bytes+32,a                ; LD A,$20          ; {Blank the countdown timer by printing a "SPACE" ($20
        movb a,@duel_timer              ; LD ($C6E0),A      ; in ASCII) over the top of it.
        .call @duel_print_countdown     ; CALL $C6D3        ; }
-       jmp  duel_outer_loop                 ; JR $C4F9          ; Jump to #R$C4F9 and start the duel!
+       jmp  duel_outer_loop            ; JR $C4F9          ; Jump to #R$C4F9 and start the duel!
 
 check_any_duellers_shot:               ; c4e3
        li   ix,dueller_1               ; LD IX,$5BC0       ; {Calls #R$C530 with #R$5BC0.
@@ -604,7 +583,7 @@ update_dueller_status_4:               ; c5cf
        movb @12(ix),a                  ; LD A,(IX+$0C)     ; Char frame
        .call @duel_draw_bandit_prep    ; CALL $C661        ; 
        .ret                            ; RET               ; 
-update_dueller_status_5:                       ; c5dd
+update_dueller_status_5:               ; c5dd
        sb   one,@15(ix)                ; DEC (IX+$0F)      ; Timer
        jeq  !                          ; RET NZ            ; 
        .ret                            ;                   
@@ -647,7 +626,7 @@ print_bonus_score:                     ; c607
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*hl                      ; LD (HL),A         ; }
        li   bc,>2928                   ; LD BC,$2928       ; {Print using #R$5B80.
-       bl    @print_two_tone_text ; CALL $5B80        ; #TABLE(default,centre,centre,centre,centre)
+       bl    @print_two_tone_text      ; CALL $5B80        ; #TABLE(default,centre,centre,centre,centre)
                                                            ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $29 | $01 | $05 | $00 }
                                                            ; { $28 | $00 | $05 | $00 }
@@ -721,13 +700,13 @@ duel_update_timer:                     ; c67f
        andi a,63*256                   ; AND $3F           ; {Updates dueller timer.
        socb @bytes+64,a                ; OR $40            ; 
        movb a,@1(ix)                   ; LD (IX+$01),A     ; }
-       rt                            ; RET               ; Return.
+       rt                              ; RET               ; Return.
 
 *********************************************************************
 * Lose A Life
 * 
 * Used by the routine at #R$C690.
-lose_life:                             ; c687 TODO
+lose_life:                             ; c687
        .call @bang                     ; CALL $C000        ; Calls the subroutine to display the "BANG" animation.
        li   hl,lives                   ; LD HL,($5B86)     ; {Decrease the lives counter by one (#R$CC59), set the
        sb   one,*hl                    ; DEC (HL)          ; zero flag if all lives are lost.
@@ -765,11 +744,11 @@ duel_print_lives:                      ; c6a7
        .proc
        li   de,zx_screen+>10d0         ; LD DE,$50D0       ; {Helper routine called from #R$C463 used for writing #R$C655 to the screen using the colours held in #REGbc;
        li   bc,>0702                   ; LD BC,$0702       ; #TABLE(default,centre)
-       bl    @print_two_tone_text ; CALL $5B80        ; { =h Value | =h Ink | =h Paper | =h Bright }
+       bl    @print_two_tone_text      ; CALL $5B80        ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $07 | $07 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
-       .endproc                            ; RET               ; Return.
+       .endproc                        ; RET               ; Return.
 
 *********************************************************************
 * Duel: Gain Extra Life.
@@ -780,14 +759,14 @@ duel_flash_text:                       ; c6b1
 duel_flash_text_loop:                  ; c6b3
        .push bc                        ; PUSH BC           ; the lives indicator.
        li   hl,playfield_whitespace    ; LD HL,$C65B       ; 
-       bl   @duel_print_lives         ; CALL $C6A7        ;
+       bl   @duel_print_lives          ; CALL $C6A7        ;
        movb @bytes+16,b                ; LD B,$10          ; 
 duel_flash_halt_loop_1:                ; c6bc
        bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C6BC        ; 
        jne  duel_flash_halt_loop_1     ;                   
        li   hl,playfield_lives         ; LD HL,$C655       ; 
-       bl   @duel_print_lives         ; CALL $C6A7        ;
+       bl   @duel_print_lives          ; CALL $C6A7        ;
        movb @bytes+16,b                ; LD B,$10          ; 
 duel_flash_halt_loop_2:                ; c6c7
        bl   @ti_vsync                  ; HALT              ;
@@ -808,7 +787,7 @@ duel_print_countdown:                  ; c6d3
        li   hl,duel_timer              ; LD HL,$C6E0       ; {Helper routine used for writing #R$C6E0 to the screen using the colours held in #REGbc;
        li   de,zx_screen+>004f         ; LD DE,$404F       ; #TABLE(default,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       bl    @print_two_tone_text      ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
        .ret                            ; RET               ; Return.
@@ -839,7 +818,7 @@ duel_extra_life:                       ; c6e4
                                                                      ; life.
 
 * Process Dueller Shot.
-dueller_duel_over_2:                      ; c6e5
+dueller_duel_over_2:                   ; c6e5
        movb @bytes+4,a                 ; LD A,$04          ; {Writes $04 to #R$C6E3.
        movb a,@duel_lose_life          ; LD ($C6E3),A      ; }
        movb a,@9(ix)                   ; LD (IX+$09),A     ; Sets the dueller frame index to $04.
@@ -866,7 +845,7 @@ flash_life_image_halt_loop_1:          ; c6fe
        .pop hl                         ; POP HL            ; 
        .push hl                        ; PUSH HL           ; 
        sb   one,*hl                    ; DEC (HL)          ; {Decrease #R$CC59 by one and call #R$5B83.
-       bl   @draw_life_images         ; CALL $5B83        ; }
+       bl   @draw_life_images          ; CALL $5B83        ; }
        .pop hl                         ; POP HL            ; 
        movb @bytes+16,b                ; LD B,$10          ; {Interrupt driven halt loop.
 flash_life_image_halt_loop_2:          ; c70a
@@ -896,11 +875,6 @@ sheriff_star:                          ; c720
        li   tmp1,>0006
        li   tmp2,>080a
        bl   @ti_draw_color_area
-;       li   bc,>02ff                   ; LD BC,$02FF       ; {Continues into the attributes buffer, and writes $06 to every location.
-;       movb @bytes+6,*hl               ; LD (HL),$06       ; #TABLE(default,centre,centre,centre,centre)
-;       .ldir                           ; LDIR              ; { =h Value | =h Ink | =h Paper | =h Bright }
-;                                                           ; { $06 | $06 | $00 | $00 }
-;                                                           ; TABLE#}
        li   hl,zx_screen+>008b         ; LD HL,$408B       ; {Points to #R$F600 and prints it to the screen using
        li   de,gfx_badge_image         ; LD DE,$F600       ; #R$5B92.
        li   bc,>5008                   ; LD BC,$5008       ;
@@ -942,11 +916,6 @@ start:                                 ; c7c0
 main_loop:
        bl   @ti_clear_screen
        .call @new_game                  ; CALL $C7E5        ; Call #R$C7E5.
-;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
-;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
-;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
-;       sb   *hl,*hl                    ; LD (HL),$00       ;
-;       .ldir                           ; LDIR              ; }
        bl   @ti_clear_screen
        movb @bytes+64,b                ; LD B,$80          ; {Calls #R$CD64 with the counter
        .call @halt_loop                ; CALL $CD64        ; $80.}
@@ -1037,28 +1006,28 @@ level_1:                               ; c878
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl    @reduce_delay             ; CALL $C941        ;
        bl    @run_phase                ; CALL $CA81        ;
-       jnc  level_2                    ; RET C             ; TODO: check code.
+       jnc  level_2                    ; RET C             ;
        .ret                            ;
 level_2:
        li   hl,choose_bandit_2         ; LD HL,$CE5F       ; {Writes #R$CE5F to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl    @reduce_delay             ; CALL $C941        ;
        bl    @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_julius           ; LD HL,$CE55       ; {Writes #R$CE55 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl    @reduce_delay             ; CALL $C941        ;
        bl    @run_phase                ; CALL $CA81        ;
-       jnc  !                          ; RET C             ; TODO: check code. 
+       jnc  !                          ; RET C             ;
        .ret                            ;                   
 !
        li   hl,choose_bandit_4         ; LD HL,$CE7E       ; {Writes #R$CE7E to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl    @reduce_delay             ; CALL $C941        ;
        bl    @run_phase                ; CALL $CA81        ;
-       jnc  level_3                    ; RET C             ; TODO: check code.
+       jnc  level_3                    ; RET C             ;
        .ret                            ;
 level_3:
        li   hl,choose_bandit_5         ; LD HL,$CE8D       ; {Writes #R$CE8D to #R$CE1F.
@@ -1161,11 +1130,8 @@ set_night_attr:                        ; c963
        li   hl,door_attr_night         ; LD HL,$C99F       ; Call #R$C966 using #R$C99F.
 * Note this is for the opened door background hence it starts from frame 2 (as
 * frame 1 is a closed door).
-set_door_attr:                         ; c966 TODO
+set_door_attr:                         ; c966
        movb *hl,@character_attr+1
-;       li   de,door_frame_2_attrs      ; LD DE,$D6B9       ; {Copies $18 bytes of data to
-;       li   bc,>0018                   ; LD BC,$0018       ; #R$D6B9, then return.
-;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
 * Door frame attribute data for each day phase.
 door_attr_day:                         ; c96f
@@ -1193,11 +1159,6 @@ init_game_loop:                        ; c9b7
 * #REGa=$00 (clear screen).
 clear_screen:                          ; c9d0
        bl   @ti_clear_screen
-;       li   hl,zx_screen               ; LD HL,$4000       ; {Clears the screen buffer by
-;       li   de,zx_screen+1             ; LD DE,$4001       ; writing $00 to all 6912 memory
-;       li   bc,>1aff                   ; LD BC,$1AFF       ; locations.
-;       movb a,*hl                      ; LD (HL),A         ;
-;       .ldir                           ; LDIR              ;
        .ret                            ; RET               ; }
 
 * Displays the current "phase".
@@ -1330,7 +1291,7 @@ cashboxes_completed_flag:              ; ca80
 run_phase:                             ; ca81
        .proc
        .call @init_and_run_game_loop   ; CALL $CAC8        ;
-       jnc  phase_completed            ; RET C             ; TODO: check code.
+       jnc  phase_completed            ; RET C             ;
        b    @return_with_carry         ;
 phase_completed:
 *      Flash cashboxes
@@ -1397,18 +1358,10 @@ draw_entire_playfield:                 ; cad4
 game_loop:                           ; cae7
        li   tmp0,KEY_Z
        bl   @ti_check_key
-;       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
-;       ; IN A,($FE)                    ; IN A,($FE)        ; }
-;       movb a,tmp0                     ; BIT 1,A           ; Key Z
-;       andi tmp0,2*256                 ;
        jeq  read_keys_3                ; JR NZ,$CB0B       ;
 read_keys_2:                           ; cb03              ; Z pressed. Enter pause mode until X pressed.
        li   tmp0,KEY_X
        bl   @ti_check_key
-;       movb @b254,a                    ; LD A,$FE          ; {Read keys SHIFT, Z, X, C, & V.
-;       ; IN A,($FE)                    ; IN A,($FE)        ; }
-;       movb a,tmp0                     ; BIT 2,A           ; Key X
-;       andi tmp0,4*256                 ;
         jeq  read_keys_2                ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
        .call @check_input              ; CALL $D2CF        ;
@@ -1419,7 +1372,6 @@ delay_loop:                            ; cb12
                                        ; OR C              ;
        jne  delay_loop                 ; JR NZ,$CB12       ;
        .call @move_right_or_left       ; CALL $D411        ;
-;       .call @clear_255_bytes_at_5b00  ; CALL $CBA6        ;
 * Door 1 handling
        li   ix,door_1_flags            ; LD IX,$D165       ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
@@ -1619,8 +1571,6 @@ buffer_copy_routine:                   ; cc38
 * Draws Main Playfield with all three doors closed.
 draw_doors_and_playfield:              ; cc3a
        bl   @ti_draw_playfield
-;       li   ix,buffer_copy_routine     ; LD IX,$CC38       ; {Draw the main game playfield.
-;       .call @draw_playfield           ; CALL $C300        ; }
        movb one,a                      ; LD A,$01          ; {Calls #R$D664 with #R$CE1A set to $01.
        movb a,@door_frame_ref          ; LD ($CE1A),A      ; 
        bl   @draw_door_frame_1        ; CALL $D664        ; }
@@ -2130,13 +2080,13 @@ choose_default_set:                    ; ce42
                                                            ; TABLE#}
 * Handles whether or not to choose Julius.
 choose_julius:                         ; ce55
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,12*256                   ; AND $0C           ; {Keep only bits 2 and 3. Jump to the next character "test" if
        jne  choose_bandit_2            ; JR NZ,$CE5F       ; this is a non-zero number at #R$CE5F.}
        b    @init_julius_open          ; JP $CFB7          ; Jump to #R$CFB7.
 * Handles whether or not to choose Bandit 2.
 choose_bandit_2:                       ; ce5f
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,152*256                  ; AND $98           ; {Keep only bits 3, 4 and 7. Jump to the next character "test" if
        jne  choose_bandit_3            ; JR NZ,$CE6F       ; this is a non-zero number at #R$CE6F.}
        li   hl,bandit_2_source         ; LD HL,$D119       ; Set source character data to #R$D119.
@@ -2144,7 +2094,7 @@ choose_bandit_2:                       ; ce5f
        b    @choose_action             ; JP $CEA9          ; Jump to #R$CEA9.
 * Handles whether or not to choose Bandit 3.
 choose_bandit_3:                       ; ce6f
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,49*256                   ; AND $31           ; {Keep only bits 0, 4 and 5. Jump to the next character "test" if
        jne  choose_default_set         ; JR NZ,$CE42       ; this is a non-zero number then jump back to the #R$CE42.
                                                            ; }
@@ -2153,7 +2103,7 @@ choose_bandit_3:                       ; ce6f
        jmp  choose_action              ; JR $CEA9          ; Jump to #R$CEA9.
 * Handles whether or not to choose Bandit 4.
 choose_bandit_4:                       ; ce7e
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,131*256                  ; AND $83           ; {Keep only bits 0, 1 and 7. Jump to the next character "test" if
        jne  choose_julius              ; JR NZ,$CE55       ; this is a non-zero number #R$CE55.}
        li   hl,bandit_4_source         ; LD HL,$D0D7       ; Set source character data to #R$D0D7.
@@ -2161,7 +2111,7 @@ choose_bandit_4:                       ; ce7e
        jmp  choose_action              ; JR $CEA9          ; Jump to #R$CEA9.
 * Handles whether or not to choose Bandit 5.
 choose_bandit_5:                       ; ce8d
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,88*256                   ; AND $58           ; {Keep only bits 3, 4 and 6. Jump to the next character "test" if
        jne  choose_bandit_4            ; JR NZ,$CE7E       ; this is a non-zero number #R$CE7E.}
        li   hl,bandit_5_source         ; LD HL,$D0ED       ; Set source character data to #R$D0ED.
@@ -2169,7 +2119,7 @@ choose_bandit_5:                       ; ce8d
        jmp  choose_action              ; JR $CEA9          ; Jump to #R$CEA9.
 * Handles whether or not to choose Bandit 6.
 choose_bandit_6:                       ; ce9c
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,113*256                  ; AND $71           ; {Keep only bits 0, 4, 5 and 6. Jump to the next character "test" if
        jne  choose_bandit_5            ; JR NZ,$CE8D       ; this is a non-zero number #R$CE8D.}
        li   hl,bandit_6_source         ; LD HL,$D103       ; Set source character data to #R$D103.
@@ -2192,7 +2142,7 @@ choose_action:                         ; cea9
                                                            ; { #R$D17D | Door 2 }
                                                            ; { #R$D18B | Door 3 }
                                                            ; TABLE#}
-       b    @init_bandit_draw_open                     ; JP $D019          ; Jump to #R$D019.
+       b    @init_bandit_draw_open     ; JP $D019          ; Jump to #R$D019.
 
 * Character Initialisations.
 * 
@@ -2319,7 +2269,7 @@ init_customer_close:                   ; cf5e
                                        ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       bl   @random_number            ; CALL $D8B0        ; 
+       bl   @random_number             ; CALL $D8B0        ;
        andi a,65*256                   ; AND $41           ; 
        li   hl,customer_close_source_2 ; LD HL,$D092       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;
@@ -2377,7 +2327,7 @@ init_julius_open:                      ; cfb7
                                                            ; TABLE#}
        li   hl,julius_open_source      ; LD HL,$D0AE       ;
        sb   *hl,*hl                    ; LD (HL),$00       ; 
-       bl   @random_number            ; CALL $D8B0        ; 
+       bl   @random_number             ; CALL $D8B0        ;
        andi a,32*256                   ; AND $20           ; 
        jne  init_julius_open_set_flag  ; JR NZ,$CFD1       ; 
        movb one,*hl                    ; LD (HL),$01       ; 
@@ -2495,151 +2445,6 @@ init_bandit_draw_close:                ; d040
        sb   @7(ix),@7(ix)              ; LD (IX+$07),$00   ; Score?
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ret                            ; RET               ; Return.
-
-* Bandit open close
-bandit_open_source:                            ; Used in init_bandit_open
-       byte >01,>08,>08,>08,>60,>08,>08        ; State and timers
-bandit_close_source:                           ; Used in init_bandit_close
-       byte >01,>0B,>0B,>0B,>0B,>0B,>0B
-* Bowie
-bowie_source:                                  ; Used in init_bowie
-       byte >01,>1B,>01,>08,>08,>08,>80,>08,>08
-* Customer close
-customer_close_source_1:                       ; Used in init_customer_close
-       byte >0A,>0B,>0C,>0D,>0E
-customer_close_source_2:                       ; Used in init_customer_close
-       byte >00,>01,>08,>08,>08
-       byte >40,>10,>08,>08,>08
-* Customer open
-customer_open_source_1:                        ; Used in init_customer_open
-       byte >03,>04,>05,>06,>07
-customer_open_source_2:                        ; Used in init_customer_open
-       byte >01,>01,>08,>08,>08
-       byte >38,>0C,>06,>08,>08
-* Customer shot
-customer_shot_source:                          ; Used in init_customer_shot
-       byte >01,>0B,>0B
-* Julius open/close
-julius_open_source:                            ; Used in init_julius_open
-       byte >00,>00,>01,>08,>08,>08,>50,>08
-       byte >08,>80
-julius_close_source:                           ; Used in init_julius_close
-       byte >00,>01,>0B,>0B,>0B,>0B,>0B,>0B    ; {??
-       byte >0B                                ; }
-* Bandit 3.
-bandit_3_source:
-       byte >00,>10,>0F,>11,>02,>01,>08,>08    ; {Bandit 3 source data.
-       byte >08,>40,>40                        ; }
-bandit_3_buffer:
-       byte >00,>10,>0F,>11,>02,>01,>0B,>0B    ; {Bandit 3 buffer.
-       byte >0B,>0B,>0B                        ; }
-* Bandit 4.
-bandit_4_source:
-       byte >00,>12,>13,>14,>02,>01,>08,>08    ; {Bandit 4 source data.
-       byte >08,>30,>40                        ; }
-bandit_4_buffer:
-       byte >00,>12,>13,>14,>02,>01,>0B,>0B    ; {Bandit 4 buffer.
-       byte >0B,>0B,>0B                        ; }
-* Bandit 5.
-bandit_5_source:
-       byte >00,>15,>16,>17,>02,>01,>08,>08    ; {Bandit 5 source data.
-       byte >08,>20,>38                        ; }
-bandit_5_buffer:
-       byte >00,>15,>16,>17,>02,>01,>0B,>0B    ; {Bandit 5 buffer.
-       byte >0B,>0B,>0B                        ; }
-* Bandit 6.
-bandit_6_source:
-       byte >00,>18,>19,>1A,>02,>01,>08,>08    ; {Bandit 6 source data.
-       byte >08,>10,>38                        ; }
-bandit_6_buffer:
-       byte >00,>18,>19,>1A,>02,>01,>0B,>0B    ; {Bandit 6 buffer.
-       byte >0B,>0B,>0B                        ; }
-* Bandit 2.
-bandit_2_source:
-       byte >00,>08,>08,>09,>07,>01,>08,>08    ; {Bandit 2 source data.
-       byte >08,>01,>30                        ; }
-bandit_2_buffer:
-       byte >00,>08,>08,>09,>07,>01,>0B,>0B    ; {Bandit 2 buffer.
-       byte >0B,>0B,>0B                        ; }
-* Door data/buffer?
-door_1_data_buffer:
-       byte >00,>10,>0F,>11,>02,>04,>00,>00
-       byte >00,>0D,>40,>10,>08,>00,>00,>20
-       byte >20,>20
-door_2_data_buffer:
-       byte >00,>08,>08,>09,>07,>05,>00,>00
-       byte >00,>00,>00
-       byte >10,>08,>00,>00,>20,>20,>20
-door_3_data_buffer:
-       byte >03,>04,>05,>06,>07,>01,>02,>0B    ; {Target
-       byte >00,>00,>1E                        ; }
-       byte >0C,>06,>08,>08,>20,>20,>20
-
-* Door 1 Flags.
-door_1_flags:                          ; d165 (IX+$00)
-       data door_1_routine
-door_1_source:                         ; d167 (IX+$02)
-       data door_1_data_buffer
-door_1_bowie_action:                   ; d169 (IX+$04)
-       data bowie_bomb_action
-door_1_scoring:                        ; d16b (IX+$06)
-       data 0
-door_1_cash_action:                    ; d16d (IX+$08)
-       byte >00
-door_1_count_down:                     ; d16e (IX+$09)
-       byte >08
-door_1_char_buffer:                    ; d16f (IX+$0a)
-       data bandit_3_buffer
-door_1_char_source:                    ; d171 (IX+$0c)
-       data bandit_3_source
-
-* Door 2 Flags.
-door_2_flags:                          ; d173
-       data door_2_routine
-door_2_source:                         ; d175
-       data door_2_data_buffer
-door_2_bowie_action:                   ; d177
-       data bowie_bomb_action
-door_2_scoring:                        ; d179
-       data 0
-door_2_cash_action:                    ; d17b
-       byte >00
-door_2_count_down:                     ; d17c
-       byte >06
-door_2_char_buffer:                    ; d17d
-       data bandit_2_buffer
-door_2_char_source:                    ; d17f
-       data bandit_2_source
-
-* Door 3 Flags.
-door_3_flags:                          ; d181
-       data door_3_routine
-door_3_source:                         ; d183
-       data door_3_data_buffer
-door_3_bowie_action:                   ; d185
-       data bowie_bomb_action
-door_3_scoring:                        ; d187
-       data 0
-door_3_cash_action:                    ; d189
-       byte >00
-door_3_count_down:                     ; d18a
-       byte >1D
-door_3_char_buffer:                    ; d18b
-       data bandit_3_buffer
-door_3_char_source:                    ; d18d
-       data bandit_3_source
-
-* Game status buffer entry at D18F
-copy_char_data_flag:
-       byte >00
-
-* Game status buffer entry at D190
-deposit_flag:                          ; d190
-       byte >00
-
-* Game status buffer entry at D191
-sheriff_star_flag:
-       byte >01
 
 * Copy Source Character Data To Character State Data.
 *
@@ -2861,8 +2666,8 @@ prep_bandit_draw_close:                ; d2ad
        .pop de                         ; POP DE            ; }
        movb @copy_char_data_flag,a     ; LD A,($D18F)      ; {Check if #R$D18F is zero. If it wasn't zero then
        ; AND A                         ; AND A             ; return.
-       ; TODO: suspicious that flag is not set to 0
-       movb a,@copy_char_data_flag     ; LD ($D18F),A      ;
+       movb @zero,@copy_char_data_flag ; LD ($D18F),A      ; Suspicious that flag was not set to 0
+       movb a,a
        jeq  !                          ; RET NZ            ; }
        .ret                            ;                   
 !
@@ -3015,8 +2820,9 @@ shot_three:                            ; d33b
        movb one,@three_pressed         ; LD ($D304),A      ; to #R$D304 and $03 to #R$D300).
                                        ; LD A,$03          ;
        movb @bytes+3,*hl               ; LD (HL),A         ; }
-       li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
-       ; SLA (HL)                      ; SLA (HL)          ; todo moved to the carry flag and bit 0 reset (zeroed).}
+       mov  @random_seed,tmp0          ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
+       sla  tmp0,1                     ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
+       mov  tmp0,@random_seed
        bl   @ti_draw_door_3_shot
        bl   @shot_sound_2              ; JP $6502          ; Jump to #R$6502.
        .ret
@@ -3033,8 +2839,9 @@ shot_one:                              ; d360
        movb one,@one_pressed           ; LD ($D305),A      ; to #R$D305 and $01 to #R$D300).
                                        ; LD A,$01          ;
        movb one,*hl                    ; LD (HL),A         ; }
-       li   hl,random_seed             ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
-       ; SLA (HL)                      ; SLA (HL)          ; todo moved to the carry flag and bit 0 reset (zeroed).}
+       mov  @random_seed,tmp0          ; LD HL,$D8AC       ; {Shifts the value at #R$D8AC to the left with bit 7
+       sla  tmp0,1                     ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
+       mov  tmp0,@random_seed
        bl   @ti_draw_door_1_shot
        bl   @shot_sound_3              ; CALL $6504        ; Jump to #R$6504.
        .ret                            ; RET               ; Return.
@@ -3486,8 +3293,7 @@ hit_detection:                         ; d5a3
        .ret                            ;
 !      .pop af                         ; POP AF            ; Drop return address
        .ex_de_hl                       ; EX DE,HL          ; {Jumps to the address held in #REGde on entry (with
-       b    *hl                        ; JP (HL)           ; TODO. 
-
+       b    *hl                        ; JP (HL)           ;
 * Copy Routine.
 * 
 * Used by the routines at #R$5B92, #R$C300, #R$CBD0, #R$CC5A, #R$CC9B, #R$CDAE,
@@ -3816,7 +3622,7 @@ bowie_shot_action:                     ; d863
        cb   a,@bytes+33                ; CP $21            ; Is it character frame reference (#R$AC10(1 hat |
                                                            ; $21))?
                                        ; LD (IX+$06),$01   ; Writes $01 to #REGix+$06.
-       jhe  bowie_check                ; JR NC,$D875       ; TODO: check code. If Bowie is on the last frame then jump forward to
+       jhe  bowie_check                ; JR NC,$D875       ; If Bowie is on the last frame then jump forward to
                                                            ; #R$D875.
        ab   one,a                      ; INC A             ; {Else update #R$D7C6 to point at the next frame, call
        movb a,*hl                      ; LD (HL),A         ; #R$D6ED and return.
@@ -4529,8 +4335,8 @@ new_high_score_1:                      ; fa6f
        sb   one,b                      ; DJNZ $FA6F        ; 
        jne  new_high_score_1           ;
 *      Fill name buffer with spaces
-       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; TODO {Overwrites the text at #R$5BC0 with spaces to "blank"
-       li   de,high_score_name_buffer+1 ; LD DE,$5BC1       ; it out ($12 characters).
+       li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Overwrites the text at #R$5BC0 with spaces to "blank"
+       li   de,high_score_name_buffer+1 ; LD DE,$5BC1      ; it out ($12 characters).
        li   bc,>0011                   ; LD BC,$0011       ; 
        movb @bytes+32,*hl              ; LD (HL),$20       ; 
        .ldir                           ; LDIR              ; }
