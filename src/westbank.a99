@@ -4,17 +4,9 @@
        limi 0
        lwpi wrksp
        bl   @setup_environment
+;       bl   @perform_duel
        b    @start
 *
-*********************************************************************
-
-* Jump Controls.
-* 
-* Loads the 16 bit address stored at #R$CE12 into #REGhl and jumps to it.
-jump_to_control_method:                ; 5b88
-       mov  @control_routine_alias,hl  ; LD HL,($CE12)     ; 
-       b    *hl                        ; JP (HL)           ;
-
 *********************************************************************
 * Level Selection
 * 
@@ -79,7 +71,7 @@ level_select_level_1:                  ; 63f4
        movb one,*hl                    ; LD (HL),$01       ; {Store $01 at #R$5CB1 and call #R$6427 with
        movb @bytes+38,a                ; LD A,$26          ; (#R$B660(shot | $26)) for index "1".
        movb one,b                      ; LD B,$01          ; 
-       .call @ls_animate_shot          ; CALL $6427        ; }
+       bl   @ls_animate_shot          ; CALL $6427        ; }
        movb one,a                      ; LD A,$01          ; {Jump to #R$6457 with #REGhl=#R$64AC and #REGa=$01.
        li   hl,level_select_one        ; LD HL,$64AC       ; 
        b    @ls_text_flash             ; JP $6457          ; }
@@ -87,7 +79,7 @@ level_select_level_3:                  ; 6405
        movb @bytes+2,*hl               ; LD (HL),$02       ; {Store $02 at #R$5CB1 and call #R$6427 with
        movb @bytes+9,a                 ; LD A,$09          ; (#R$7A90(shot | $09)) for index "2".
        movb @bytes+2,b                 ; LD B,$02          ; 
-       .call @ls_animate_shot          ; CALL $6427        ; }
+       bl   @ls_animate_shot          ; CALL $6427        ; }
        movb @bytes+2,a                 ; LD A,$02          ; {Jump to #R$6457 with #REGhl=#R$64B3 and #REGa=$02.
        li   hl,level_select_three      ; LD HL,$64B3       ; 
        b    @ls_text_flash             ; JP $6457          ; }
@@ -95,13 +87,16 @@ level_select_level_6:                  ; 6416
        movb @bytes+3,*hl               ; LD (HL),$03       ; {Store $03 at #R$5CB1 and call #R$6427 with
        movb @bytes+26,a                ; LD A,$1A          ; (#R$9DA0(shot | $1A)) for index "3".
        movb @bytes+3,b                 ; LD B,$03          ; 
-       .call @ls_animate_shot          ; CALL $6427        ; }
+       bl   @ls_animate_shot          ; CALL $6427        ; }
        movb @bytes+3,a                 ; LD A,$03          ; {Jump to #R$6457 with #REGhl=#R$64BA and #REGa=$03.
        li   hl,level_select_six        ; LD HL,$64BA       ; 
        b    @ls_text_flash             ; JP $6457          ; }
+
+*********************************************************************
 * Animates the selected bandit being shot.
 ls_animate_shot:                       ; 6427
-       .push bc                        ; PUSH BC           ; 
+       .proc
+       .push bc                        ; PUSH BC           ;
        bl   @level_select_graphics    ; CALL $643A        ; Call #R$643A.
        bl   @shot_sound_1              ; CALL $6500        ; Call #R$6500.
        movb @bytes+16,b                ; LD B,$10          ; {Short interrupt driven halt loop.
@@ -112,7 +107,7 @@ ls_animate_shot_halt_loop:             ; 6430
        .pop bc                         ; POP BC            ; 
        movb @bytes+39,a                ; LD A,$27          ; {Call #R$643A with (#R$B870(floor | $27)).
        bl   @level_select_graphics    ; CALL $643A        ; }
-       .ret                            ; RET               ; Return.
+       .endproc                            ; RET               ; Return.
 
 *********************************************************************
 * Prints the images to the screen.
@@ -386,13 +381,13 @@ duel_clear_screen:                     ; c463
 * Initialise duellers.
        li   ix,dueller_1               ; LD IX,$5BC0       ; {Initialise #R$5BC0 (draws frame 1).
        movb @10(ix),a                  ; LD A,(IX+$0A)     ; 
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; }
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ; }
        li   ix,dueller_2               ; LD IX,$5BD1       ; {Initialise #R$5BD1 (draws frame 1).
-       movb @10(ix),a                  ; LD A,(IX+$0A)     ; 
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; }
+       movb @10(ix),a                  ; LD A,(IX+$0A)     ;
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ; }
        li   ix,dueller_3               ; LD IX,$5BE2       ; {Initialise #R$5BE2 (draws frame 1).
        movb @10(ix),a                  ; LD A,(IX+$0A)     ; 
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; }
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ; }
 * Count down 5-4-3-2-1...0!
 countdown_initialise:                  ; c4c5
        movb @bytes+53,a                ; LD A,$35          ; {Initialise countdown to "5" seconds ($35 in ASCII),
@@ -414,20 +409,23 @@ countdown_halt_loop:                   ; c4d0
        .call @duel_print_countdown     ; CALL $C6D3        ; }
        jmp  duel_outer_loop            ; JR $C4F9          ; Jump to #R$C4F9 and start the duel!
 
+*********************************************************************
 check_any_duellers_shot:               ; c4e3
+       .proc
        li   ix,dueller_1               ; LD IX,$5BC0       ; {Calls #R$C530 with #R$5BC0.
-       .call @check_if_duellers_are_shot ; CALL $C530        ; }
+       bl   @check_if_duellers_are_shot ; CALL $C530        ; }
        li   ix,dueller_2               ; LD IX,$5BD1       ; {Calls #R$C530 with #R$5BD1.
-       .call @check_if_duellers_are_shot ; CALL $C530        ; }
+       bl   @check_if_duellers_are_shot ; CALL $C530        ; }
        li   ix,dueller_3               ; LD IX,$5BE2       ; {Calls #R$C530 with #R$5BE2.
-       .call @check_if_duellers_are_shot ; CALL $C530        ; }
-       .ret                            ; RET               ; Return.
-* DRAW!
+       bl   @check_if_duellers_are_shot ; CALL $C530        ; }
+       .endproc                        ; RET               ; Return.
+
+*********************************************************************
 duel_outer_loop:                       ; c4f9
        mov  @duel_inner_iterations,de  ; LD DE,($C52E)     ; {#REGde=#R$C52E and push it on the stack.
 duel_inner_loop:                       ; c4fd
        .push de                        ; PUSH DE           ; }
-       .call @check_any_duellers_shot  ; CALL $C4E3        ;
+       bl   @check_any_duellers_shot   ; CALL $C4E3        ;
        .pop de                         ; POP DE            ; 
        dec  de                         ; DEC DE            ; 
                                        ; LD A,D            ;
@@ -451,82 +449,87 @@ duel_inner_loop:                       ; c4fd
 duel_inner_iterations:                 ; c52e
        data 31                                             ;
 
+*********************************************************************
 check_if_duellers_are_shot:            ; c530
-       .call @duel_check_fire_at_3     ; CALL $C543        ;
-       .call @check_if_dueller_is_shot ; CALL $C56B        ;
-       .call @duel_check_fire_at_1     ; CALL $C550        ;
-       .call @check_if_dueller_is_shot ; CALL $C56B        ;
-       .call @duel_check_fire_at_2     ; CALL $C55D        ;
-       .call @check_if_dueller_is_shot ; CALL $C56B        ;
-       .ret                            ; RET               ; Return.
+       .proc
+       bl   @duel_check_fire_at_3     ; CALL $C543        ;
+       bl   @check_if_dueller_is_shot ; CALL $C56B        ;
+       bl   @duel_check_fire_at_1     ; CALL $C550        ;
+       bl   @check_if_dueller_is_shot ; CALL $C56B        ;
+       bl   @duel_check_fire_at_2     ; CALL $C55D        ;
+       bl   @check_if_dueller_is_shot ; CALL $C56B        ;
+       .endproc                        ; RET               ; Return.
+
+*********************************************************************
 duel_check_fire_at_3:                  ; c543
-       .call @jump_to_control_method   ; CALL $5B88        ; Calls #R$5B88.
+       .proc
+       bl   @execute_control_method    ; CALL $5B88        ; Calls #R$5B88.
        movb a,tmp0                     ; BIT 4,A           ; {Return if bit 4 of #REGa is zero.
        andi tmp0,16*256                ;                   
-       jne  !                          ; RET Z             ; }
-       .ret                            ;                   
-!
+       jeq  duel_check_fire_at_3_1     ; RET Z             ; }
        movb a,tmp0                     ; BIT 0,A           ; right {If bit 0 is not zero then return setting #REGa to
        movb @bytes+3,a                 ;
        andi tmp0,1*256                 ; LD A,$03          ; $03.
-       jeq  !                          ; RET NZ            ; }
-       .ret                            ;                   
-!
+       jne  duel_check_fire_at_3_1     ; RET NZ            ; }
        sb   a,a                        ; XOR A             ; {Set #REGa to zero and return.
+duel_check_fire_at_3_1:
        .ret                            ; RET               ; }
+
+*********************************************************************
 duel_check_fire_at_1:                  ; c550
-       .call @jump_to_control_method   ; CALL $5B88        ; Calls #R$5B88.
+       .proc
+       bl   @execute_control_method    ; CALL $5B88        ; Calls #R$5B88.
        movb a,tmp0                     ; BIT 4,A           ; {Return if bit 4 of #REGa is zero.
        andi tmp0,16*256                ;                   
-       jne  !                          ; RET Z             ; }
-       .ret                            ;                   
-!
+       jeq  duel_check_fire_at_1_1     ; RET Z             ; }
        movb a,tmp0                     ; BIT 1,A           ; left {If bit 1 is not zero then return setting #REGa to
        movb one,a                      ;
        andi tmp0,2*256                 ; LD A,$01          ; $01.
-       jeq  !                          ; RET NZ            ; }
-       .ret                            ;                   
-!
+       jne  duel_check_fire_at_1_1     ; RET NZ            ; }
        sb   a,a                        ; XOR A             ; {Set #REGa to zero and return.
+duel_check_fire_at_1_1:
        .ret                            ; RET               ; }
-duel_check_fire_at_2:                         ; c55d
-       .call @jump_to_control_method   ; CALL $5B88        ;
+
+*********************************************************************
+duel_check_fire_at_2:                  ; c55d
+       .proc
+       bl   @execute_control_method    ; CALL $5B88        ;
        movb a,tmp0                     ; BIT 4,A           ; 
        andi tmp0,16*256                ;                   
-       jne  !                          ; RET Z             ; 
-       .ret                            ;                   
-!
+       jeq  duel_check_fire_at_2_1     ; RET Z             ;
        movb a,tmp0
        sb   a,a                        ; AND $03           ;
        andi tmp0,3*256                 ; LD A,$00          ;
-       jeq  !                          ; RET NZ            ;
-       .ret                            ;                   
-!
-       movb @bytes+2,a                 ; LD A,$02          ; 
-       .ret                            ; RET               ; Return.
+       jne  duel_check_fire_at_2_1     ; RET NZ            ;
+       movb @bytes+2,a                 ; LD A,$02          ;
+duel_check_fire_at_2_1:
+       .endproc                        ; RET               ; Return.
 
+*********************************************************************
 check_if_dueller_is_shot:              ; c56b
+       .proc
        cb   a,@3(ix)                   ; CP (IX+$03)       ; {If player fires at dueller then
        jeq  dueller_is_shot            ; JR Z,$C575        ; jump to #R$C575.}
        sb   @13(ix),@13(ix)            ; LD (IX+$0D),$00   ; 
-       .ret                            ; RET               ; Return.
+       jmp  check_if_dueller_is_shot_1 ; RET               ; Return.
 dueller_is_shot:                       ; c575
        movb @13(ix),a                  ; LD A,(IX+$0D)     ; 
        ; AND A                         ; AND A             ; 
-       jeq  !                          ; RET NZ            ; 
-       .ret                            ;                   
-!
-       movb one,a                      ; LD A,$01          ; 
+       jne  check_if_dueller_is_shot_1 ; RET NZ            ;
+       movb one,a                      ; LD A,$01          ;
        movb a,@13(ix)                  ; LD (IX+$0D),A     ; 
        movb a,*ix                      ; LD (IX+$00),A     ; Set dueller state to $01.
-       .ret                            ; RET               ; Return.
+check_if_dueller_is_shot_1:
+       .endproc                        ; RET               ; Return.
 
+*********************************************************************
 * This entry point is used by the routines at #R$C607 and #R$C6E5.
 duel_shot_sound:
-       .proc
+* Jump - not call
        bl   @shot_sound_1              ; CALL $6500        ;
        .endproc                        ; RET               ;
 
+*********************************************************************
 * Dueller routing
 update_dueller_status:
        movb @8(ix),a                   ; LD A,(IX+$08)     ; {If IX+$08 is zero then return.
@@ -554,7 +557,7 @@ update_dueller_status_1:               ; c5a1
 !
        ab   one,@9(ix)                 ; INC (IX+$09)      ; Frame/state
        movb @11(ix),a                  ; LD A,(IX+$0B)     ; Char frame
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; Draw?
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ; Draw?
        .ret                            ; RET               ; 
 update_dueller_status_2:               ; c5b5
        sb   one,@16(ix)                ; DEC (IX+$10)      ; Timer
@@ -581,7 +584,7 @@ update_dueller_status_4:               ; c5cf
 !
        ab   one,@9(ix)                 ; INC (IX+$09)      ; Frame/state
        movb @12(ix),a                  ; LD A,(IX+$0C)     ; Char frame
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; 
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ;
        .ret                            ; RET               ; 
 update_dueller_status_5:               ; c5dd
        sb   one,@15(ix)                ; DEC (IX+$0F)      ; Timer
@@ -589,10 +592,11 @@ update_dueller_status_5:               ; c5dd
        .ret                            ;                   
 !
        movb @bytes+2,a                 ; LD A,$02          ; Char frame
-       .call @duel_draw_bandit_prep    ; CALL $C661        ; 
+       bl   @duel_draw_bandit_prep    ; CALL $C661        ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; Completed
        .ret                            ; RET               ; 
 
+*********************************************************************
 * Routine at C5EB
 * 
 * Used by the routine at #R$C422.
@@ -679,6 +683,7 @@ playfield_whitespace:                  ; c65b
 * 
 * Used by the routine at #R$C422.
 duel_draw_bandit_prep:                 ; c661
+       .proc
        clr  tmp2
        movb @3(ix),tmp2
        swpb tmp2
@@ -690,7 +695,7 @@ duel_draw_bandit_prep:                 ; c661
        movb a,tmp1
        swpb tmp1
        bl   @ti_draw_character_pattern
-       .ret                            ; RET               ; Return.
+       .endproc                        ; RET               ; Return.
 
 *********************************************************************
 * Routine at C67F
@@ -2678,10 +2683,10 @@ prep_bandit_draw_close:                ; d2ad
 * 
 * Used by the routines at #R$C7C0 and #R$D3EA.
 check_input:                           ; d2cf
-       mov  @control_routine_alias,hl  ; LD HL,($CE12)     ; #R$CE12
-       li   de,check_input_1           ; LD DE,$D2D7       ; Return address
-       .push de                        ; PUSH DE           ; 
-       b    *hl                        ; JP (HL)           ;
+       bl   @execute_control_method    ; LD HL,($CE12)     ; #R$CE12
+                                       ; LD DE,$D2D7       ; Return address
+                                       ; PUSH DE           ;
+                                       ; JP (HL)           ;
 check_input_1:                         ; d2d7
 *      Clear
        movb a,@c                       ; LD C,A            ;
@@ -2856,8 +2861,18 @@ set_left:                              ; d38c
        movb one,*hl                    ; LD (HL),$01       ; 
        .ret                            ; RET               ; }
 
+*********************************************************************
+* Jump Controls.
+*
+* Loads the 16 bit address stored at #R$CE12 into #REGhl and jumps to it.
+execute_control_method:                ; 5b88
+       .proc
+       mov  @control_routine_alias,hl  ; LD HL,($CE12)     ;
+       b    *hl                        ; JP (HL)           ;
+
 * Reads In-Game Joystick Controls.
 controls_joystick:                     ; d392
+* Jump - not call
        sb   a,a
        li   tmp0,KEY_FI
        bl   @ti_check_key
@@ -2874,54 +2889,52 @@ controls_joystick_2:
        jeq  controls_joystick_3
        socb @bytes+>01,a
 controls_joystick_3:
-;       li   bc,>00df                   ; LD BC,$00DF       ;
-;       ; IN A,($0C)                    ; IN A,($0C)        ; #HTML(Reads input from the Kempston joystick (see <a
-;                                                           ; href="../reference/pokes.html">POKES</a>)).
-;       ; AND A                         ; AND A             ; {If there's nothing to read fall back to #R$D39B anyway.
-;       jeq  controls_keyboard          ; JR Z,$D39B        ; }
-       .ret                            ; RET               ; Return.
+       .endproc                         ; RET               ; Return.
 
+*********************************************************************
 * Reads In-Game Keyboard Controls (1-2-3).
 * 
 * Used by the routine at #R$D392.
 controls_keyboard:                     ; d39b
+* Jump - not call
        sb   a,a                        ; LD A,$F7          ; {Read keys 1-2-3-4-5.
                                        ; IN A,($FE)        ; }
-controls_input_1:                      ; d39f
+controls_keyboard_1:                   ; d39f
        li   tmp0,KEY_1                 ; BIT 0,A           ; {If "1" isn't being pressed then jump to #R$D3A6.
        bl   @ti_check_key              ;
-       jeq  controls_input_2           ; JR NZ,$D3A6       ; }
+       jeq  controls_keyboard_2        ; JR NZ,$D3A6       ; }
        movb @bytes+18,a                ; LD A,$12          ; {Set #REGa=$12 and return.
-       .ret                            ; RET               ; }
-controls_input_2:                      ; d3a6
+       jmp  controls_keyboard_6                            ; RET               ; }
+controls_keyboard_2:                   ; d3a6
        li   tmp0,KEY_2                 ; BIT 1,A           ; {If "2" isn't being pressed then jump to #R$D3AD.
        bl   @ti_check_key              ;
-       jeq  controls_input_3           ; JR NZ,$D3AD       ; }
+       jeq  controls_keyboard_3        ; JR NZ,$D3AD       ; }
        movb @bytes+16,a                ; LD A,$10          ; {Set #REGa=$10 and return.
-       .ret                            ; RET               ; }
-controls_input_3:                      ; d3ad
+       jmp  controls_keyboard_6                            ; RET               ; }
+controls_keyboard_3:                   ; d3ad
        li   tmp0,KEY_3                 ; BIT 2,A           ; {If "3" isn't being pressed then jump to #R$D3E2.
        bl   @ti_check_key              ;
        jeq  controls_input_o_p         ; JR NZ,$D3E2       ; }
        movb @bytes+17,a                ; LD A,$11          ; {Set #REGa=$11 and return.
-       .ret                            ; RET               ; }
-
+       jmp  controls_keyboard_6                            ; RET               ; }
 * Reads In-Game Controls (Left + Right).
-* 
 * Used by the routine at #R$D39B.
 controls_input_o_p:                    ; d3e2
        li   tmp0,KEY_O                 ; LD A,$DF          ; {Read keys P-O-I-U-Y.
        bl   @ti_check_key              ; IN A,($FE)        ; }
-       jeq  !                          ; CPL               ; Invert all the bits of #REGa.
+       jeq  controls_keyboard_5        ; CPL               ; Invert all the bits of #REGa.
        movb @bytes+2,a                 ; AND $03           ; Keep only bits 0 and 1 (i.e. we only care about "P" and
                                                            ; "O" for left and right).
-       .ret                            ; RET               ; Return.
-!      li   tmp0,KEY_P
+       jmp  controls_keyboard_6                            ; RET               ; Return.
+controls_keyboard_5:
+      li   tmp0,KEY_P
        bl   @ti_check_key
-       jeq  !
+       jeq  controls_keyboard_6
        movb one,a
-!      .ret
+controls_keyboard_6:
+       .endproc
 
+*********************************************************************
 * Routine at D3EA
 check_ready_to_scroll:                 ; d3ea
        li   hl,door_1_routine          ; LD HL,$CE14       ; #R$CE14
