@@ -883,7 +883,7 @@ sheriff_star:                          ; c720
        li   hl,zx_screen+>008b         ; LD HL,$408B       ; {Points to #R$F600 and prints it to the screen using
        li   de,gfx_badge_image         ; LD DE,$F600       ; #R$5B92.
        li   bc,>5008                   ; LD BC,$5008       ;
-       .call @copy_routine             ; CALL $5B92        ; }
+       bl   @ti_copy_routine             ; CALL $5B92        ; }
        li   hl,header_1                ; LD HL,$C765       ; {Points to #R$C765 and prints it to the screen using #R$5B80.
        li   de,zx_screen+>1001         ; LD DE,$5001       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0702                   ; LD BC,$0702       ; { =h Value | =h Ink | =h Paper | =h Bright }
@@ -1516,7 +1516,7 @@ print_tt_text_space_check:             ; cbfc
        li   bc,>1001                   ; LD BC,$1001       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
        .push hl                        ; PUSH HL           ; 
-       .call @copy_routine             ; CALL $D5E6        ;
+       bl   @ti_copy_routine             ; CALL $D5E6        ;
        .pop hl                         ; POP HL            ;
        jmp  print_tt_text_4            ; JR $CC1D          ;
 *      Not space
@@ -1563,16 +1563,10 @@ print_tt_attribute_addr:
        rt                              ; RET               ; Return.
 *// print_tt_attribute_addr
 
-* Buffer for holding #R$D5E6 address.
-buffer_copy_routine:                   ; cc38
-       data copy_routine
-
 * Main Playfield Initialisation.
 * 
 * Used by the routine at #R$C7C0.
-* 
-* .
-* 
+*
 * Draws Main Playfield with all three doors closed.
 draw_doors_and_playfield:              ; cc3a
        bl   @ti_draw_playfield
@@ -1591,6 +1585,7 @@ draw_doors_and_playfield:              ; cc3a
 lives:                                 ; cc59
        byte >00
 
+*********************************************************************
 * Display The "Life" Images.
 * 
 * Used by the routines at #R$5B83, #R$C7C0 and #R$CD1B.
@@ -1601,10 +1596,10 @@ draw_life_images:                      ; cc5a
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ; }
 delete_life_images_loop:               ; cc5f
        .push bc                        ; PUSH BC           ; {jjjss
-       li   de,gfx_empty_space          ; LD DE,$5B00       ; Needs 48 zeros
-       .call @copy_life_image          ; CALL $CC84        ;
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
+       li   de,gfx_empty_space         ; LD DE,$5B00       ; Needs 48 zeros
+       bl   @copy_life_image           ; CALL $CC84        ;
+       inct hl                         ; INC HL            ;
+                                       ; INC HL            ;
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $CC5F        ; }
        jne  delete_life_images_loop           ;
@@ -1618,24 +1613,33 @@ delete_life_images_loop:               ; cc5f
        li   hl,zx_screen+>10b6         ; LD HL,$50B6       ;
 draw_life_images_loop:                 ; cc77
        .push bc                        ; PUSH BC           ; 
-       .call @draw_life_image          ; CALL $CC81        ;
-       inc  hl                         ; INC HL            ; 
-       inc  hl                         ; INC HL            ; 
+       bl   @draw_life_image          ; CALL $CC81        ;
+       inct hl                         ; INC HL            ;
+                                       ; INC HL            ;
        .pop bc                         ; POP BC            ; 
        sb   one,b                      ; DJNZ $CC77        ; 
        jne  draw_life_images_loop      ;                   
-       jmp  draw_life_images_end       ; RET               ; Return.
-draw_life_image:                       ; cc81
-       li   de,gfx_lives_image         ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
-copy_life_image:                       ; cc84
-       .push hl                        ; PUSH HL           ; 
-       li   bc,>1802                   ; LD BC,$1802       ; 
-       .call @copy_routine             ; CALL $D5E6        ; }
-       .pop hl                         ; POP HL            ; 
 draw_life_images_end:
        .endproc                        ; RET               ; Return.
 *// draw_life_images
 
+*********************************************************************
+draw_life_image:                       ; cc81
+       .proc
+       li   de,gfx_lives_image         ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
+       jmp  copy_life_image_1
+**
+copy_life_image:                       ; cc84
+       .proc
+copy_life_image_1:
+;      .push hl                        ; PUSH HL           ;
+       li   bc,>1802                   ; LD BC,$1802       ; 
+       bl   @ti_copy_routine             ; CALL $D5E6        ; }
+;      .pop hl                         ; POP HL            ;
+       .endproc                        ; RET               ; Return.
+*// draw_life_image
+
+*********************************************************************
 * Deposit Flags.
 * 
 * Stores whether a deposit has been made for each door.
@@ -1732,7 +1736,7 @@ draw_cashbox:                          ; cce5
        li   de,gfx_dollar_box_image    ; LD DE,$FF98       ;
 draw_cashbox_1:                        ; ccf4
        li   bc,>1002                   ; LD BC,$1002       ; 
-       .call @copy_routine             ; CALL $D5E6        ; }
+       bl   @ti_copy_routine             ; CALL $D5E6        ; }
        .ret                            ; RET               ; Return.
 
 * Draws all the cashboxes in two blocks of 6.
@@ -1908,7 +1912,7 @@ draw_tt_char:                          ; cdae
        .ex_de_hl                       ; EX DE,HL          ; 
        .pop hl                         ; POP HL            ; 
        li   bc,>1001                   ; LD BC,$1001       ;
-       .call @copy_routine             ; CALL $D5E6        ; }
+       bl   @ti_copy_routine             ; CALL $D5E6        ; }
        .endproc                        ; RET               ; Return.
 *// draw_tt_char
 
