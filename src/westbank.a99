@@ -281,6 +281,7 @@ bang_color:
 * 
 * Used by the routine at #R$C7C0.
 perform_duel:
+       .proc
 ;       mov  a,@duel_counter           ; I think this was intended
        bl   @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
                                        ; LD A,($C421)      ; Grab #R$C421.
@@ -1170,7 +1171,7 @@ display_phase:                         ; c9dd
        movb h,*de+
        movb @l,*de
        li   hl,phase                   ; LD HL,$CA4A       ; {Call #R$CA19 with #R$CA4A.
-       bl   @progress_base_10         ; CALL $CA19        ; }
+       bl   @progress_base_10          ; CALL $CA19        ; }
 
 
 ;       mov  @progress_buffer+5,hl      ; LD HL,($CA61)     ; {Writes $CA61 back to #R$CA5A.
@@ -1299,7 +1300,7 @@ cashboxes_completed_flag:              ; ca80
 *********************************************************************
 run_phase:                             ; ca81
        .proc
-       .call @init_and_run_game_loop   ; CALL $CAC8        ;
+       bl   @init_and_run_game_loop    ; CALL $CAC8        ;
        jnc  phase_completed            ; RET C             ;
        b    @return_with_carry         ;
 phase_completed:
@@ -1309,7 +1310,7 @@ cashboxes_flash_loop:                  ; ca87
        .push bc                        ; PUSH BC           ; 
        movb b,a                        ; LD A,B            ; 
        andi a,1*256                    ; AND $01           ; 
-       bl   @set_all_deposit_flags    ; CALL $CAB9        ;
+       bl   @set_all_deposit_flags     ; CALL $CAB9        ;
        movb @bytes+16,b                ; LD B,$10          ; 
        bl   @halt_loop                 ; CALL $CD64        ;
        .pop bc                         ; POP BC            ; 
@@ -1318,7 +1319,7 @@ cashboxes_flash_loop:                  ; ca87
        movb @bytes+48,b                ; LD B,$30          ; 
        bl   @halt_loop                 ; CALL $CD64        ;
        movb b,a                        ; LD A,B            ; 
-       bl   @set_all_deposit_flags    ; CALL $CAB9        ;
+       bl   @set_all_deposit_flags     ; CALL $CAB9        ;
 * Duel
        bl   @random_number             ; CALL $D8B0        ;
        movb a,b                        ; LD B,A            ;
@@ -1327,8 +1328,7 @@ cashboxes_flash_loop:                  ; ca87
        ab   b,a                        ; ADD A,B           ; 
        movb a,d                        ; LD D,A            ; d random
        movb @duel_parameter,a          ; LD A,($CBCF)      ;
-;      li   hl,copied_5b80             ; LD HL,$CBB4       ;
-       .call @perform_duel             ; CALL $C3C0        ;
+       bl   @perform_duel              ; CALL $C3C0        ;
        stst tmp2
        movb a,@duel_parameter          ; LD ($CBCF),A      ; a=@duel_counter
        sb   b,b                        ; LD B,$00          ; 
@@ -1347,12 +1347,13 @@ set_all_deposit_flags:                 ; cab9
        li   bc,>000d                   ; LD BC,$000D       ; from #R$CC8D).
        movb a,*hl                      ; LD (HL),A         ; 
        .ldir                           ; LDIR              ; }
-       b    @draw_and_check_cashboxes ; JP $CC9B          ; Jump to #R$CC9B.
+       bl   @draw_and_check_cashboxes ; JP $CC9B          ; Jump to #R$CC9B.
        .endproc
 
 *********************************************************************
 *
 init_and_run_game_loop:                ; cac8
+       .proc
        bl   @init_game_loop            ; CALL $C9B7        ;
 * This entry point is used by the routines at #R$CD1B and #R$CD47.
 next_life:
@@ -1364,6 +1365,9 @@ next_life:
        bl   @draw_and_check_cashboxes  ; CALL $CC9B        ;
        bl   @draw_score                ; CALL $CD90        ;
        bl   @draw_cashbox_selections   ; CALL $D45E        ;
+**
+*      Game loop
+*
 game_loop:                             ; cae7
        li   tmp0,KEY_Z
        bl   @ti_check_key
@@ -1373,14 +1377,14 @@ read_keys_2:                           ; cb03              ; Z pressed. Enter pa
        bl   @ti_check_key
         jeq  read_keys_2                ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
-       .call @check_input              ; CALL $D2CF        ;
+       bl   @check_input              ; CALL $D2CF        ;
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
 delay_loop:                            ; cb12
        dec  bc                         ; DEC BC            ;
                                        ; LD A,B            ;
                                        ; OR C              ;
        jne  delay_loop                 ; JR NZ,$CB12       ;
-       .call @move_right_or_left       ; CALL $D411        ;
+       bl   @move_right_or_left       ; CALL $D411        ;
 * Door 1 handling
        li   ix,door_1_flags            ; LD IX,$D165       ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
@@ -1390,7 +1394,7 @@ delay_loop:                            ; cb12
                                        ; OR (HL)           ;
                                        ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
-       .call @character_chooser        ;                   ; If no door_1_routine, call character_chooser
+       bl   @character_chooser        ;                   ; If no door_1_routine, call character_chooser
                                        ; POP AF            ;
        jmp  after_door_1_routine       ; JR Z,$CB3F        ;
                                        ; LD HL,($CE14)     ;
@@ -1409,7 +1413,7 @@ after_door_1_routine:                  ; cb3f
                                        ; OR (HL)           ;
                                        ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
-       .call @character_chooser                            ; If no door_2_routine, call character_chooser
+       bl   @character_chooser                            ; If no door_2_routine, call character_chooser
                                        ; POP AF            ;
        jmp  after_door_2_routine       ; JR Z,$CB61        ;
                                        ; LD HL,($CE16)     ;
@@ -1428,7 +1432,7 @@ after_door_2_routine:                  ; _cb61
                                        ; OR (HL)           ;
                                        ; PUSH AF           ;
        jne  !                          ; CALL Z,$CE21      ; 
-       .call @character_chooser                            ; If no door_3_routine, call character_chooser
+       bl   @character_chooser                            ; If no door_3_routine, call character_chooser
                                        ; POP AF            ;
        jmp  after_door_3_routine       ; JR Z,$CB83        ;
                                        ; LD HL,($CE18)     ;
@@ -1464,7 +1468,7 @@ after_door_3_routine:                  ; cb83
 *********************************************************************
 got_a_deposit:                         ; cba0
        .proc
-       .call @scroll_dollar_sign       ; CALL $F960        ;
+       bl    @scroll_dollar_sign       ; CALL $F960        ;
        bl    @draw_and_check_cashboxes ; JP $CC9B          ;
        .endproc
 
@@ -2041,7 +2045,10 @@ door_frame_ref:                        ; ce1a
                                                                      ; { $03 | Door 3 }
                                                                      ; TABLE#
 
+*********************************************************************
+*
 * Game status buffer entry at CE1B
+*
 chooser_countdown_init:                ; ce1b copied to _ce1e
        byte >03
 delay:                                 ; ce1c
@@ -2053,6 +2060,8 @@ chooser_countdown:                     ; ce1e
 chooser_routine_ptr:                   ; ce1f
        data choose_bandit_5
 
+*********************************************************************
+*
 * Choose Door Character.
 * 
 * Used by the routine at #R$C7C0.
@@ -2068,15 +2077,14 @@ chooser_routine_ptr:                   ; ce1f
 * hl=door routine (door_1_routine, door_2_routine, door_3_routine)
 *
 character_chooser:                     ; ce21
-* Wait 3 times before letting us in
+       .proc
+*      Wait 3 times before letting us in
        li   hl,chooser_countdown       ; LD HL,$CE1E       ; {Decrease #R$CE1E by one.
                                        ; LD A,(HL)         ;
        sb   one,*hl                    ; DEC A             ;
                                        ; LD (HL),A         ; }
-       jeq  !                          ; RET NZ            ; Return if not zero.
-       .ret                            ;                   
-!
-* Door also has a count-down
+       jne  character_chooser_2        ; RET NZ            ; Return if not zero.
+*      Door also has a count-down
        movb @chooser_countdown_init,*hl ; LD A,($CE1B)      ; {Copies #R$CE1B into #R$CE1E.
                                        ; LD (HL),A         ; }
                                        ; LD A,(IX+$09)     ; {Decrease ????? by one.
@@ -2086,11 +2094,9 @@ character_chooser:                     ; ce21
                                                            ; { #R$D17C | Door 2 }
                                                            ; { #R$D18A | Door 3 }
                                                            ; TABLE#}
-       jeq  chooser                    ; RET NZ            ; Return if not zero.
-       .ret                            ;
-chooser:                               ; ce34
+       jne  character_chooser_2        ; RET NZ            ; Return if not zero.
 *      Reset door count-down to random value
-       bl   @random_number            ; CALL $D8B0        ; Call #R$D8B0.
+       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
        andi a,31*256                   ; AND $1F           ; Keep bits 0-4 (so 0-31).
        socb @bytes+8,a                 ; OR $08            ; {Set bit 3 and write the resulting value to;
        movb a,@9(ix)                   ; LD (IX+$09),A     ; #TABLE(default,centre,centre)
@@ -2101,21 +2107,22 @@ chooser:                               ; ce34
                                                            ; TABLE#}
        mov  @chooser_routine_ptr,hl    ; LD HL,($CE1F)     ; {Jump to the memory address contained at #R$CE1F.
        b    *hl                        ; JP (HL)           ; .
+character_chooser_2:
+       .endproc
+
 * Handles choosing one of the initial "default" characters. A
 * character is always chosen here, so this is the end of the
 * choosing routine.
 choose_default_set:                    ; ce42
-       .call @gen_random_number        ; CALL $DAEF        ; Call #R$DAEF.
+       bl   @gen_random_number        ; CALL $DAEF        ; Call #R$DAEF.
        andi a,3*256                    ; AND $03           ; Keep only bits 0 and 1 (which determine the type of
                                                            ; character).
        jeq  init_bandit_open           ; JR Z,$CEB8        ; {Determines which character initialisation to run;
        sb   one,a                      ; DEC A             ; #TABLE(default,centre,centre)
-       jne  !                          ; JP Z,$CEFC        ; { =h #REGa | =h Initialisation Routine }
-       b    @init_bowie                ;                   
-!
+       jeq  init_bowie                 ; JP Z,$CEFC        ; { =h #REGa | =h Initialisation Routine }
        sb   one,a                      ; DEC A             ; { $00 | #R$CEB8 }
        jne  !                          ; JP Z,$CF5E        ; { $01 | #R$CEFC }
-       b    @init_customer_close       ;                   
+       b    @init_customer_close       ;
 !
        sb   one,a                      ; DEC A             ; { $02 | #R$CF5E }
        b    @init_customer_open        ; JP $CF2B          ; { $03 | #R$CF2B }
@@ -2720,11 +2727,11 @@ prep_bandit_draw_close:                ; d2ad
 * 
 * Used by the routines at #R$C7C0 and #R$D3EA.
 check_input:                           ; d2cf
+       .proc
        bl   @execute_control_method    ; LD HL,($CE12)     ; #R$CE12
                                        ; LD DE,$D2D7       ; Return address
                                        ; PUSH DE           ;
                                        ; JP (HL)           ;
-check_input_1:                         ; d2d7
 *      Clear
        movb a,@c                       ; LD C,A            ;
        sb   a,a                        ; XOR A             ;
@@ -2751,17 +2758,27 @@ check_input_1:                         ; d2d7
 *      Is right pressed?
        movb a,tmp0                     ; BIT 0,A           ; 
        andi tmp0,1*256                 ;                   
-       jeq  !                          ; JP NZ,$D386       ; 
-       b    @set_right                 ;                   
-!
+       jne  set_right                  ; JP NZ,$D386       ;
 *      Is left pressed
        movb a,tmp0                     ; BIT 1,A           ; 
        andi tmp0,2*256                 ;                   
-       jeq  !                          ; JP NZ,$D38C       ; 
-       b    @set_left                  ;                   
-!
-       .ret                            ; RET               ;
+       jne  set_left                   ; JP NZ,$D38C       ;
+check_input_1:
+       .endproc                        ; RET               ;
 
+* Sets the flag for indicating "right" has been pressed by the player.
+set_right:                             ; d386
+       li   hl,right_pressed           ; LD HL,$D301       ; {Write $01 to #R$D301 and return.
+       movb one,*hl                    ; LD (HL),$01       ;
+       jmp  check_input_1              ; RET               ; }
+* Sets the flag for indicating "left" has been pressed by the player.
+set_left:                              ; d38c
+       li   hl,left_pressed            ; LD HL,$D302       ; {Write $01 to #R$D302 and return.
+       movb one,*hl                    ; LD (HL),$01       ;
+       jmp  check_input_1              ; RET               ; }
+
+*********************************************************************
+*
 player_died_status:                    ; d2fe
        byte >02                        ;
 byte_before_hit:
@@ -2805,6 +2822,8 @@ controls_byte:                         ; d306
                                                                      ; { $11 | #EVAL($11, 2, 8) | Door 3 }
                                                                      ; { $12 | #EVAL($12, 2, 8) | Door 1 }
                                                                      ; TABLE#
+
+*********************************************************************
 * Action Controls.
 * 
 * Used by the routine at #R$D2CF.
@@ -2887,16 +2906,6 @@ shot_one:                              ; d360
        bl   @ti_draw_door_1_shot
        bl   @shot_sound_3              ; CALL $6504        ; Jump to #R$6504.
        .ret                            ; RET               ; Return.
-* Sets the flag for indicating "right" has been pressed by the player.
-set_right:                             ; d386
-       li   hl,right_pressed           ; LD HL,$D301       ; {Write $01 to #R$D301 and return.
-       movb one,*hl                    ; LD (HL),$01       ; 
-       .ret                            ; RET               ; }
-* Sets the flag for indicating "left" has been pressed by the player.
-set_left:                              ; d38c
-       li   hl,left_pressed            ; LD HL,$D302       ; {Write $01 to #R$D302 and return.
-       movb one,*hl                    ; LD (HL),$01       ; 
-       .ret                            ; RET               ; }
 
 *********************************************************************
 * Jump Controls.
@@ -2907,6 +2916,7 @@ execute_control_method:                ; 5b88
        mov  @control_routine_alias,hl  ; LD HL,($CE12)     ;
        b    *hl                        ; JP (HL)           ;
 
+*********************************************************************
 * Reads In-Game Joystick Controls.
 controls_joystick:                     ; d392
 * Jump - not call
@@ -3012,13 +3022,15 @@ check_cashboxes_flag:                  ; d407
        ; SCF                           ; SCF               ; 
        b    @return_with_carry         ; RET               ; Return with carry if completed
 
+*********************************************************************
 * This entry point is used by the routine at #R$C7C0.
 move_right_or_left:                    ; d411
+       .proc
        .call @check_ready_to_scroll    ; CALL $D3EA        ;
        li   de,>0100                                       ; Number of iterations for loop to check left/right
 move_right_or_left_loop:
-       .push de                        ; PUSH DE           ; de=>400
-       .call @check_input              ; CALL $D2CF        ;
+       .push de                        ; PUSH DE           ;
+       bl   @check_input               ; CALL $D2CF        ;
        movb @right_pressed,a           ; LD A,($D301)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D42D     ; 
@@ -3034,8 +3046,9 @@ move_right_or_left_loop:
                                        ; LD A,D            ;
                                        ; OR E              ;
        jne  move_right_or_left_loop    ; RET Z             ;
-       .ret                            ;
-                                       ; JR $D414          ;
+       .endproc                        ;
+
+*********************************************************************
 move_cashboxes_right:                  ; d42d
        bl   @ti_scroll_left            ; CALL $6600        ;
        li   de,>0100                   ; LD DE,$0400       ;
@@ -3730,14 +3743,15 @@ reset_door_routine:                    ; d8a1
 *
 * Used by the routine at #R$CE21.
 gen_random_number:                     ; daef
+       .proc
        bl   @random_number             ; CALL $D8B0        ;
-;       movb a,@c                       ; LD C,A            ;
+;       movb a,@c                       ; LD C,A            ; TODO
 ;       movb @>5c78,a                   ; LD A,($5C78)      ; Get FRAMES
 ;       src  a,3                        ; RR C              ;
 ;                                       ; RR C              ;
 ;                                       ; RR C              ;
 ;       ab    @c,a                      ; ADD A,C           ;
-       .ret                            ; RET               ;
+       .endproc                         ; RET               ;
 
 * Game status buffer entry at D8AC
 random_seed:
