@@ -1,7 +1,9 @@
        aorg >a000
 
        copy "westbank.a99"
+       copy "character-logic.a99"
        copy "ti-game-routines.a99"
        copy "ti-general-routines.a99"
+       copy "text.a99"
        copy "data.a99"
        copy "sprites.a99"
