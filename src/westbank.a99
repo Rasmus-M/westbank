@@ -4191,7 +4191,7 @@ bandit_draw_close_2:                   ; daa7
        bl   @draw_door_frame_4        ; CALL $D6ED        ; Call #R$D6ED.
        movb @bandit_draw,a             ; LD A,($DA0C)      ; {Return if #R$DA0C is zero.
        ; AND A                         ; AND A             ; 
-       jne  bandit_draw_close_6        ; RET NZ            ; }
+       jeq  bandit_draw_close_6        ; RET N             ; }
        ab   one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE and return.
                                        ; LD ($D2FE),A      ;
        jmp  bandit_draw_close_6        ; RET               ; }
