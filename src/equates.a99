@@ -41,10 +41,10 @@ b255:
        equ  stack+>20
 b254:
        equ  b255+1
-rnd_seed:
+frame:
        equ  b254+>1
 pad_max:
-       equ  rnd_seed+>1
+       equ  frame+>1
 gplws:
        equ  >83e0
 kscan_device:

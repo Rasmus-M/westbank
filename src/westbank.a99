@@ -1373,6 +1373,7 @@ next_life:
 *      Game loop
 *
 game_loop:                             ; cae7
+       inc  @frame
        li   tmp0,KEY_Z
        bl   @ti_check_key
        jeq  read_keys_3                ; JR NZ,$CB0B       ;
@@ -2131,7 +2132,7 @@ character_chooser_2:
 * character is always chosen here, so this is the end of the
 * choosing routine.
 choose_default_set:                    ; ce42
-       bl   @gen_random_number        ; CALL $DAEF        ; Call #R$DAEF.
+       bl   @random_number_x        ; CALL $DAEF        ; Call #R$DAEF.
        andi a,3*256                    ; AND $03           ; Keep only bits 0 and 1 (which determine the type of
                                                            ; character).
        jeq  init_bandit_open_1         ; JR Z,$CEB8        ; 0 {Determines which character initialisation to run;
@@ -2312,7 +2313,7 @@ init_customer_open:                    ; cf2b
                                        ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       bl   @random_number            ; CALL $D8B0        ; 
+       bl   @random_number             ; CALL $D8B0        ;
        andi a,130*256                  ; AND $82           ; 
        li   hl,customer_open_source_2  ; LD HL,$D0A1       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;
@@ -3772,8 +3773,9 @@ reset_door_routine:                    ; d8a1
 * Routine at DAEF
 *
 * Used by the routine at #R$CE21.
-gen_random_number:                     ; daef
+random_number_x:                     ; daef
        .proc
+       a    @frame,@random_seed
        bl   @random_number             ; CALL $D8B0        ;
 ;       movb a,@c                       ; LD C,A            ; TODO
 ;       movb @>5c78,a                   ; LD A,($5C78)      ; Get FRAMES
@@ -3799,9 +3801,6 @@ random_flag:
 * 
 random_number:                         ; d8b0
        .proc
-;       bl   @ti_rnd
-;       swpb tmp0
-;       movb tmp0,a
        .push bc                        ; PUSH BC           ; {Stashes #REGbc and #REGhl for later.
        .push hl                        ; PUSH HL           ; }
                                        ; LD A,($D8AE)      ; {Decrease #R$D8AE by one.

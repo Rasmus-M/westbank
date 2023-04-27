@@ -7,6 +7,7 @@ setup_environment:
        li   one,>0100
        li   tmp0,>fffe
        mov  tmp0,@b255
+       clr  @frame
        li   sp,stack
        .proc
        bl   @init_bits
@@ -687,6 +688,8 @@ ti_rnd:
        mov  tmp2,@rnd_seed             ; Save this number for next time
        mov  tmp2,tmp0
        rt
+rnd_seed:
+       data 0
 *// ti_rnd
 
 *********************************************************************
