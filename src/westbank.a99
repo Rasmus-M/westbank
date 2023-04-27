@@ -194,7 +194,8 @@ level_select_six:                      ; 64ba
        text '  SIX ',>ff                                             ; "SIX"
 level_select_whitespace:               ; 64c1
        text '      ',>ff                                             ; "WHITESPACE"
-**
+
+*********************************************************************
 * Sounds.
 * 
 * Shot sound 1.
@@ -220,6 +221,7 @@ play_shot_sound:                       ; 654f
 ;      TODO: sound
        .ret                            ; RET               ; Return.
 
+*********************************************************************
 * BANG!
 * 
 * Used by the routines at #R$C687 and #R$CD47.
@@ -611,6 +613,7 @@ dueller_duel_over_1:                   ; c5f6
        jhe  duel_points                ; JR NC,$C628       ;
        socb one,a                      ; OR $01            ; 
 
+*********************************************************************
 * Displays The Bonus Score Text.
 * 
 * Used by the routine at #R$C628.
@@ -634,6 +637,7 @@ print_bonus_score:                     ; c607
 extra_text_copy:                       ; c622
        text 'EXTRA',>ff
 
+*********************************************************************
 * Displays "Extra" and Bonus Score text.
 * 
 * Handles whether to display points or "EXTRA" above each downed Bandit.
@@ -660,6 +664,7 @@ duel_points:                           ; c628
        ab   one,@9(ix)                 ; INC (IX+$09)      ; Move onto the next frame.
        .ret                            ; RET               ; Return.
 
+*********************************************************************
 * Playfield Text
 playfield_score:                       ; c64d
        text ' SCORE ',>ff
@@ -926,8 +931,7 @@ main_loop:
        bl   @ti_clear_screen
        movb @bytes+64,b                ; LD B,$80          ; {Calls #R$CD64 with the counter
        bl   @halt_loop                 ; CALL $CD64        ; $80.}
-       li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
-       bl  @draw_and_input_high_scores ; JP $FA00          ; #REGix=#R$CD86.}
+       bl   @draw_and_input_high_scores ; JP $FA00          ; #REGix=#R$CD86.}
        jmp  main_loop
 
 *********************************************************************
@@ -1725,7 +1729,7 @@ draw_and_check_cashboxes:
        movb *de,a                      ; LD A,(DE)         ; Fetch the flag for #R$CC9A.
        socb *hl,a                      ; OR (HL)           ; Run a logical OR against the contents of #REGhl.
        movb a,*hl                      ; LD (HL),A         ; Writes this back into #REGhl (setting the flag).
-       .call @draw_cashboxes           ; CALL $CCFB        ;
+       bl   @draw_cashboxes           ; CALL $CCFB        ;
 check_cashboxes_completed:             ; ccd3
        li   de,door_deposited_01       ; LD DE,$CC8D       ; Points to the cashbox flags (beginning at #R$CC8D).
        li   hl,cashboxes_completed_flag ; LD HL,$CA80       ; {Write $00 to #R$CA80.
@@ -1743,7 +1747,9 @@ check_cashboxes_completed_loop:        ; ccdd
        movb a,*hl                      ; LD (HL),A         ; {Write #REGa ($01) to #R$CA80.
        .ret                            ; RET               ; }
 
+*********************************************************************
 draw_cashbox:                          ; cce5
+       .proc
        ab   a,a                        ; ADD A,A           ; {Determines whether to send #R$FF78 or #R$FF98 to
        ab   @l,a                       ; ADD A,L           ; #R$D5E6.
        movb a,@l                       ; LD L,A            ; 
@@ -1754,23 +1760,30 @@ draw_cashbox:                          ; cce5
        li   de,gfx_dollar_box_image    ; LD DE,$FF98       ;
 draw_cashbox_1:                        ; ccf4
        li   bc,>1002                   ; LD BC,$1002       ; 
-       bl   @ti_copy_routine             ; CALL $D5E6        ; }
-       .ret                            ; RET               ; Return.
+       bl   @ti_copy_routine           ; CALL $D5E6        ; }
+       .endproc                        ; RET               ; Return.
 
+*********************************************************************
 * Draws all the cashboxes in two blocks of 6.
 draw_cashboxes:                        ; ccfb
+       .proc
        li   ix,door_deposited_01       ; LD IX,$CC8D       ; {The statuses for the cashboxes begin at #R$CC8D. This routine processes them in two blocks of 6 (as they
        li   hl,zx_screen+>001f         ; LD HL,$401F       ; appear. The first block is displayed at $401F, after processing the subroutine returns and continues for the
        movb one,a                      ; LD A,$01          ; next six blocks, just altering the screen location to $4025.
-       .call @draw_cashboxes_side      ; CALL $CD0A        ;
+       bl   @draw_cashboxes_side       ; CALL $CD0A        ;
        li   hl,zx_screen+>0025         ; LD HL,$4025       ;
+       bl   @draw_cashboxes_side
+       .endproc
+
+*********************************************************************
 draw_cashboxes_side:                   ; cd0a
-       movb @bytes+6,b                 ; LD B,$06          ; 
+       .proc
+       movb @bytes+6,b                 ; LD B,$06          ;
 draw_cashboxes_loop:                   ; cd0c
        .push bc                        ; PUSH BC           ; 
        .push hl                        ; PUSH HL           ; 
        .push af                        ; PUSH AF           ; 
-       .call @draw_cashbox             ; CALL $CCE5        ;
+       bl   @draw_cashbox             ; CALL $CCE5        ;
        .pop af                         ; POP AF            ; 
        .pop hl                         ; POP HL            ; 
        .pop bc                         ; POP BC            ; 
@@ -1778,8 +1791,9 @@ draw_cashboxes_loop:                   ; cd0c
        ab   one,a                      ; INC A             ; 
        sb   one,b                      ; DJNZ $CD0C        ; }
        jne  draw_cashboxes_loop        ;
-       .ret                            ; RET               ; Return.
+       .endproc                        ; RET               ; Return.
 
+*********************************************************************
 * Flash Lives/ Lose Life.
 * 
 * Used by the routine at #R$C7C0.
@@ -1814,6 +1828,7 @@ flash_lives_loop:                      ; cd25
        ; SCF                           ; SCF               ; {Set the carry flag and return.
        b    @return_with_carry         ; RET               ; }
 
+*********************************************************************
 * Routine at CD47
 * 
 * Used by the routine at #R$C7C0.
@@ -1822,7 +1837,7 @@ died:                                  ; cd47
        movb a,tmp0                     ; BIT 2,A           ; 
        andi tmp0,4*256                 ;                   
        jeq  died_1                     ; JR Z,$CD53        ; }
-       .call @explode_bomb             ; CALL $F880        ;
+       bl   @explode_bomb             ; CALL $F880        ;
        jmp  died_2                     ; JR $CD56          ;
 died_1:                                ; cd53
        bl    @bang                     ; CALL $C000        ;
@@ -1891,6 +1906,7 @@ score_digit_1:                         ; cd8b
 * Game status buffer entry at CD8D
        byte >07,>4F,>52                                              ; ???
 
+*********************************************************************
 * Draw Score To The Screen
 * 
 * Used by the routines at #R$5B98, #R$C7C0 and #R$CDC3.
@@ -2110,6 +2126,7 @@ character_chooser:                     ; ce21
 character_chooser_2:
        .endproc
 
+*********************************************************************
 * Handles choosing one of the initial "default" characters. A
 * character is always chosen here, so this is the end of the
 * choosing routine.
@@ -2193,6 +2210,7 @@ choose_action:                         ; cea9
                                                            ; TABLE#}
        b    @init_bandit_draw_open     ; JP $D019          ; Jump to #R$D019.
 
+*********************************************************************
 * Character Initialisations.
 * 
 * Used by the routines at #R$CE21 and #R$D48F.
@@ -2227,6 +2245,8 @@ init_bandit_open:                      ; ceb8
        movb one,@copy_char_data_flag   ; LD A,$01          ; {Writes $01 to #R$D18F and return.
                                        ; LD ($D18F),A      ;
        .ret                            ; RET               ; }
+
+*********************************************************************
 * Writes a "bandit closing the door" to the door flags/ cache.
 init_bandit_close:                     ; ced8
        li   de,prep_bandit_close       ; LD DE,$D1B7       ; {Writes #R$D1B7 to the address contained
@@ -2249,7 +2269,9 @@ init_bandit_close:                     ; ced8
        movb one,@copy_char_data_flag   ; LD A,$01          ; {Writes $01 to #R$D18F.
                                        ; LD ($D18F),A      ; }
        movb one,@7(ix)                 ; LD (IX+$07),$01   ; Score?
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
+*********************************************************************
 * Writes "Bowie" to the door flags/ cache.
 init_bowie:                            ; cefc
        li   de,prep_bowie              ; LD DE,$D1DC       ; {Writes #R$D1DC to the address contained
@@ -2275,7 +2297,9 @@ init_bowie_set_flag:                   ; cf16
        li   de,bowie_shot_action       ; LD DE,$D863       ; 
        mov  de,@4(ix)                  ; LD (IX+$04),E     ;
                                        ; LD (IX+$05),D     ;
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
+*********************************************************************
 * Writes a "customer opening the door" to the door flags/ cache.
 init_customer_open:                    ; cf2b
        mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
@@ -2307,7 +2331,9 @@ init_cust_open_set_flag:               ; cf45
        .ret                            ;                   
 !
        .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
+*********************************************************************
 * Writes a "customer closing the door" to the door flags/ cache.
 init_customer_close:                   ; cf5e
        mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
@@ -2339,7 +2365,9 @@ init_cust_close_set_flag:              ; cf78
        .ret                            ;                   
 !
        .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
+*********************************************************************
 * Writes a "customer being shot" to the door flags/ cache.
 init_customer_shot:                    ; cf91
        li   de,prep_customer_shot      ; LD DE,$D226       ; {Writes #R$D226 to the address contained
@@ -2364,6 +2392,8 @@ init_customer_shot:                    ; cf91
        li   hl,copy_char_data_flag     ; LD HL,$D18F       ; {Writes $01 to #R$D18F and return.
        movb one,*hl                    ; LD (HL),$01       ; 
        .ret                            ; RET               ; }
+
+*********************************************************************
 * Writes "Julius opening the door" to the door flags/ cache.
 init_julius_open:                      ; cfb7
        li   de,prep_julius_open        ; LD DE,$D241       ; {Writes #R$D241 to the address contained
@@ -2385,7 +2415,9 @@ init_julius_open_set_flag:             ; cfd1
                                        ; LD D,(IX+$03)     ;
        li   bc,>000a                   ; LD BC,$000A       ; 
        .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ; 
+       .ret                            ; RET               ;
+
+*********************************************************************
 * Writes "Julius closing the door" to the door flags/ cache.
 init_julius_close:                     ; cfdd
        movb one,@julius_close_source   ; LD A,$01          ; {Writes $01 to #R$D0B8.
@@ -2424,6 +2456,7 @@ julius_callback:                       ; cfe2
        movb a,*hl                      ; LD (HL),A         ; 
        .ret                            ; RET               ; 
 
+*********************************************************************
 * Routine at D019
 * 
 * Used by the routine at #R$CE21.
@@ -2445,6 +2478,7 @@ init_bandit_draw_open:                 ; d019
                                                            ; TABLE#}
        .ret                            ; RET               ; Return.
 
+*********************************************************************
 * Routine at D037
 set_state_init_bandit_draw_close:      ; d037
        movb one,a                      ; LD A,$01          ; {Writes $01 to the address contained
@@ -2495,6 +2529,7 @@ init_bandit_draw_close:                ; d040
        sb   *hl,*hl                    ; LD (HL),$00       ; 
        .ret                            ; RET               ; Return.
 
+*********************************************************************
 * Copy Source Character Data To Character State Data.
 *
 * Handles copying a "normal" bandit into the bandit state cache at #R$D71E.
@@ -2526,6 +2561,8 @@ prep_bandit_open:                      ; d192
 !
        .ldir                           ; LDIR              ; {Else copy the (swapped) source back to the new target
        .ret                            ; RET               ; and return.}
+
+*********************************************************************
 * And copying a successful bandit encounter to close the door.
 prep_bandit_close:                     ; d1b7
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $0007 bytes of data from the address contained
@@ -2552,6 +2589,8 @@ prep_bandit_close:                     ; d1b7
 !
        .ldir                           ; LDIR              ; {Else copy the (swapped) source back to the new target
        .ret                            ; RET               ; and return.}
+
+*********************************************************************
 * Handles copying Bowie state data into the state cache at #R$D7C5.
 prep_bowie:                            ; d1dc
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $0009 bytes of data from the address contained
@@ -2578,6 +2617,8 @@ prep_bowie:                            ; d1dc
 !
        .ldir                           ; LDIR              ; {Else copy the (swapped) source back to the new target
        .ret                            ; RET               ; and return.}
+
+*********************************************************************
 * Handles copying customer state data into the state cache at #R$D48F.
 prep_customer:                         ; d201
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000F bytes of data from the address contained
@@ -2604,6 +2645,8 @@ prep_customer:                         ; d201
 !
        .ldir                           ; LDIR              ; {Else copy the (swapped) source back to the new target
        .ret                            ; RET               ; and return.}
+
+*********************************************************************
 * Handles copying customer "is shot" state data into the state cache at
 * #R$D48F.
 prep_customer_shot:                    ; d226
@@ -2623,6 +2666,8 @@ prep_customer_shot:                    ; d226
        .ex_de_hl                       ; EX DE,HL          ; Swap the source and target.
        .ldir                           ; LDIR              ; {Copy the (swapped) source back to the new target and
        .ret                            ; RET               ; return.}
+
+*********************************************************************
 * Handles copying Julius state data into the state cache at #R$D8E5.
 prep_julius_open:                      ; d241
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
@@ -2648,6 +2693,8 @@ prep_julius_open:                      ; d241
 !
        .ldir                           ; LDIR              ; {Copy the source to the target again and return.
        .ret                            ; RET               ; }
+
+*********************************************************************
 * And copying a successful Julius encounter to close the door.
 prep_julius_close:                     ; d265
        movb @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000A bytes of data from the address contained
@@ -2673,6 +2720,8 @@ prep_julius_close:                     ; d265
 !
        .ldir                           ; LDIR              ; {Copy the source to the target again and return.
        .ret                            ; RET               ; }
+
+*********************************************************************
 * Handles copying a "drawing bandit" into the bandit state cache at #R$DA0C.
 prep_bandit_draw_open:                 ; d289
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
@@ -2698,6 +2747,8 @@ prep_bandit_draw_open:                 ; d289
 !
        .ldir                           ; LDIR              ; {Copy the source to the target again and return.
        .ret                            ; RET               ; }
+
+*********************************************************************
 * And copying a successful "drawing bandit" encounter to close the door.
 prep_bandit_draw_close:                ; d2ad
        mov  @2(ix),hl                  ; LD L,(IX+$02)     ; {Handles copying $000B bytes of data from the address contained
@@ -2723,6 +2774,7 @@ prep_bandit_draw_close:                ; d2ad
        .ldir                           ; LDIR              ; {Copy the source to the target again and return.
        .ret                            ; RET               ; }
 
+*********************************************************************
 * Routine at D2CF
 * 
 * Used by the routines at #R$C7C0 and #R$D3EA.
@@ -2984,6 +3036,7 @@ controls_keyboard_6:
 *********************************************************************
 * Routine at D3EA
 check_ready_to_scroll:                 ; d3ea
+       .proc
        li   hl,door_1_routine          ; LD HL,$CE14       ; #R$CE14
        sb   a,a                        ; XOR A             ; {Sets #REGa=0 and #REGb=$06 (counter).
        li   bc,6                       ; LD B,$06          ; }
@@ -2991,42 +3044,44 @@ check_no_doors_active:                 ; d3f0
        socb *hl+,a                     ; OR (HL)           ;
                                        ; INC HL            ;
        dec  bc                         ; DJNZ $D3F0        ;
-       jne  check_no_doors_active                        ;
+       jne  check_no_doors_active                          ;
        ; AND A                         ; AND A             ; 
        .pop bc                         ; POP BC            ; Pop return address off stack
        movb a,a
-       jeq  !                          ; RET NZ            ; 
-       .ret                            ;                   ; Return to caller's caller (game_loop) if any door active
-!
+       jne  check_ready_to_scroll_1    ; RET NZ            ; Return to caller's caller (game_loop) if any door active
        .push bc                        ; PUSH BC           ; Push return address back
        li   hl,random_seed             ; LD HL,$D8AC       ;
        ab   one,*hl                    ; INC (HL)          ; 
                                        ; LD DE,$0400       ; (TI moved)
-       .call @check_cashboxes_flag     ; CALL $D407       ;
-       joc  !                          ; RET NC            ; Return move_right_or_left if cashboxes not completed
-       .ret                            ;                   ;
-!
+;      bl   @check_cashboxes_flag      ; CALL $D407       ;
+       li   hl,cashboxes_completed_flag
+       movb *hl,a
+       jeq  check_ready_to_scroll_1    ; RET NC            ; Return move_right_or_left if cashboxes not completed
+       sb   *hl,*hl
        .pop bc                         ; POP AF            ; Pop return address off stack
        .pop bc                         ; POP AF            ; Pop return address off stack
        ; AND A                         ; AND A             ;
+check_ready_to_scroll_1:
        b    @return_without_carry      ; RET               ; Return to caller's caller's caller (run_phase)
 
-check_cashboxes_flag:                  ; d407
-       li   hl,cashboxes_completed_flag ; LD HL,$CA80      ;
-       movb *hl,a                      ; LD A,(HL)         ; Check the flag
-       ; AND A                         ; AND A             ; 
-       jne  !                          ; RET Z             ; 
-       b    @return_without_carry      ;                   ; Return without carry if not completed
-!
-       sb   *hl,*hl                    ; LD (HL),$00       ; Clear the flag
-       ; SCF                           ; SCF               ; 
-       b    @return_with_carry         ; RET               ; Return with carry if completed
+*********************************************************************
+;check_cashboxes_flag:                  ; d407
+;       .proc
+;       li   hl,cashboxes_completed_flag ; LD HL,$CA80      ;
+;       movb *hl,a                      ; LD A,(HL)         ; Check the flag
+;       ; AND A                         ; AND A             ;
+;       jne  !                          ; RET Z             ;
+;       b    @return_without_carry      ;                   ; Return without carry if not completed
+;!
+;       sb   *hl,*hl                    ; LD (HL),$00       ; Clear the flag
+;       ; SCF                           ; SCF               ;
+;       b    @return_with_carry         ; RET               ; Return with carry if completed
 
 *********************************************************************
 * This entry point is used by the routine at #R$C7C0.
 move_right_or_left:                    ; d411
        .proc
-       .call @check_ready_to_scroll    ; CALL $D3EA        ;
+       bl   @check_ready_to_scroll     ; CALL $D3EA        ;
        li   de,>0100                                       ; Number of iterations for loop to check left/right
 move_right_or_left_loop:
        .push de                        ; PUSH DE           ;
@@ -3034,12 +3089,12 @@ move_right_or_left_loop:
        movb @right_pressed,a           ; LD A,($D301)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D42D     ; 
-       .call @move_cashboxes_right     ;
+       bl   @move_cashboxes_right      ;
 !
        movb @left_pressed,a            ; LD A,($D302)      ;
        ; AND A                         ; AND A             ; 
        jeq  !                          ; CALL NZ,$D449     ; 
-       .call @move_cashboxes_left      ;
+       bl   @move_cashboxes_left       ;
 !
        .pop de                         ; POP DE            ; 
        dec  de                         ; DEC DE            ; 
@@ -3050,6 +3105,7 @@ move_right_or_left_loop:
 
 *********************************************************************
 move_cashboxes_right:                  ; d42d
+       .proc
        bl   @ti_scroll_left            ; CALL $6600        ;
        li   de,>0100                   ; LD DE,$0400       ;
        li   hl,cashbox_ref_new         ; LD HL,$D45D       ;
@@ -3059,12 +3115,16 @@ move_cashboxes_right:                  ; d42d
        cb   a,@bytes+13                ; CP $0D            ; 
        jl   draw_selection_and_return  ; JR C,$D43F        ;
        movb one,*hl                    ; LD (HL),$01       ; 
+
 draw_selection_and_return:             ; d43f
        bl   @draw_cashbox_selections  ; CALL $D45E        ;
        movb @cashbox_ref_new,a         ; LD A,($D45D)      ;
        movb a,@cashbox_ref             ; LD ($D45C),A      ;
-       .ret                            ; RET               ; 
+       .endproc                        ; RET               ;
+
+*********************************************************************
 move_cashboxes_left:                   ; d449
+       .proc
        bl   @ti_scroll_right           ; CALL $6700        ;
        li   de,>0100                   ; LD DE,$0400       ;
        li   hl,cashbox_ref_new         ; LD HL,$D45D       ;
@@ -3076,6 +3136,7 @@ move_cashboxes_left:                   ; d449
        movb @bytes+12,*hl              ; LD (HL),$0C       ; 
        jmp  draw_selection_and_return  ; JR $D43F          ;
 
+*********************************************************************
 * Cash Deposit Box Reference.
 cashbox_ref:                           ; d45c
        byte >01                                                      ; Holds 01-12 which refer to the deposit cash boxes
@@ -3173,6 +3234,8 @@ customer_7_timer:                      ; d49c
        byte >08                                                      ; Character timer 7.
 customer_8_timer:                      ; d49d
        byte >08                                                      ; Character timer 8.
+
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 customer_routing:                      ; d49e
@@ -3238,7 +3301,7 @@ customer_open_3:                       ; d4dd
 * Handle door frame 4 timer...
 customer_open_4:                       ; d4ed
        li   de,init_customer_shot      ; LD DE,$CF91       ; {Calls #R$D5A3 with #REGde=#R$CF91.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($D499)      ; {Decrease #R$D499 by one, return if result is not
        sb   one,@customer_4_timer      ; DEC A             ; zero.
                                        ; LD ($D499),A      ;
@@ -3269,7 +3332,7 @@ customer_hands_up:                     ; d516
 * Handles customer uncovering a "hidden" bandit action.
 customer_uncover:                      ; d524
        li   de,init_customer_shot      ; LD DE,$CF91       ; {Calls #R$D5A3 with #REGde=#R$CF91.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($D49A)      ; {Decrease #R$D49A by one, return if result is not
        sb   one,@customer_5_timer      ; DEC A             ; zero.
                                        ; LD ($D49A),A      ;
@@ -3349,12 +3412,14 @@ customer_shot_floor:                   ; d58c
        bl   @reset_door_routine       ; CALL $D8A1        ; {Call #R$D8A1 and return.
        .ret                            ; RET               ; }
 
+*********************************************************************
 * Hit Detection.
 * 
 * Compares the #R$CE1A against the user input for a shot.
 * If there isn't a shot to account for then we simply return,
 * else we action a jump to the address held in #REGde on entry.
 hit_detection:                         ; d5a3
+       .proc
                                        ; PUSH HL           ; Store #REGhl on the stack for later.
                                        ; LD A,($D300)      ; {Does a comparison of #R$D300 against #R$CE1A.
                                        ; LD HL,$CE1A       ;
@@ -3365,17 +3430,8 @@ hit_detection:                         ; d5a3
 !      .pop af                         ; POP AF            ; Drop return address
        .ex_de_hl                       ; EX DE,HL          ; {Jumps to the address held in #REGde on entry (with
        b    *hl                        ; JP (HL)           ;
-* Copy Routine.
-* 
-* Used by the routines at #R$5B92, #R$C300, #R$CBD0, #R$CC5A, #R$CC9B, #R$CDAE,
-* #R$D5CA and #R$D664.
-* 
-* This routine copies bytes from #REGde TO #REGhl and uses the #REGbc register to track the number of bytes
-* and the number of lines.
-copy_routine:                          ; d5e6
-       bl   @ti_copy_routine
-       .ret                            ; RET               ; Return.
 
+*********************************************************************
 * Draw Doors.
 * 
 * Used by the routines at #R$CC3A, #R$D48F, #R$D71E, #R$D7C5, #R$D8E5 and
@@ -3409,6 +3465,7 @@ draw_door_frame_4:                     ; d6ed
        bl   @ti_draw_door_frame_4
        .endproc
 
+*********************************************************************
 * Generic Bandit in Door Frame Logic.
 *
 * Character state variables/ flags.
@@ -3423,7 +3480,9 @@ bandit_3_timer:                        ; d721
 bandit_4_timer:                        ; d722
        byte >55                                                      ; Character timer 4.
        byte >08                                                      ; 
-       byte >08                                                      ; 
+       byte >08                                                      ;
+
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_open_routing:                   ; d725
@@ -3473,7 +3532,7 @@ bandit_open_3:                         ; d74e
 * Handle door frame 4 timer...
 bandit_open_4:                         ; d75b
        li   de,init_bandit_close       ; LD DE,$CED8       ; {Calls #R$D5A3 with #REGde=$CED8.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
        movb @bandit_4_timer,a          ; LD A,($D722)      ; {Decrease #R$D722 by one, return if result is not zero.
        sb   one,a                      ; DEC A             ; 
        movb a,@bandit_4_timer          ; LD ($D722),A      ; 
@@ -3484,6 +3543,8 @@ bandit_open_4:                         ; d75b
        movb a,@player_died_status      ; LD ($D2FE),A      ; }
        bl   @reset_door_routine       ; CALL $D8A1        ; Call #R$D8A1.
        .ret                            ; RET               ; Return.
+
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_close_routing:                  ; d771
@@ -3554,6 +3615,7 @@ bandit_close_1:                        ; d7b6
        bl   @reset_door_routine                 ; CALL $D8A1        ; Call #R$D8A1.
        .ret                            ; RET               ; Return.
 
+*********************************************************************
 * Bowie logic.
 * 
 * Handles all the logic around drawing Bowie and handling his "special" logic.
@@ -3580,6 +3642,8 @@ bowie_5_timer:                         ; d7cc
        byte >00                                                      ; Character timer 5.
 bowie_6_timer:                         ; d7cd
        byte >00                                                      ; Character timer 6.
+
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bowie_routing:                         ; d7ce
@@ -3636,7 +3700,7 @@ bowie_open_3:                          ; d801
 bowie_open_4:                          ; d810
        mov  @4(ix),de                  ; LD E,(IX+$04)     ; {Call #R$D5A3 with a callback to either #R$D84B or
                                        ; LD D,(IX+$05)     ; #R$D85D.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($D7CB)      ; {Decrease #R$D7CB by one, return if result is not
        sb   one,@bowie_4_timer         ; DEC A             ; zero.
                                        ; LD ($D7CB),A      ;
@@ -3753,6 +3817,7 @@ gen_random_number:                     ; daef
 ;       ab    @c,a                      ; ADD A,C           ;
        .endproc                         ; RET               ;
 
+*********************************************************************
 * Game status buffer entry at D8AC
 random_seed:
        data >92ee
@@ -3813,6 +3878,7 @@ random_number_2:                       ; d8d7
        .pop bc                         ; POP BC            ;
        .endproc                         ; RET               ; 
 
+*********************************************************************
 * Julius logic.
 *
 * Handles all the logic around drawing Julius and handling his "special" logic.
@@ -3837,6 +3903,8 @@ julius_6_timer:                        ; d8ed
        byte >08                                                      ; Character timer 6.
 julius_7_timer:                        ; d8ee
        byte >80                                                      ; Character timer 7.
+
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 julius_open_routing:                   ; d8ef
@@ -3894,7 +3962,7 @@ julius_open_3:                         ; d925
 * Handle door frame 4 countdown.
 julius_open_4:                         ; d934
        li   de,init_julius_close       ; LD DE,$CFDD       ; {Call #R$D5A3 with a callback to #R$CFDD.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($D8EB)      ; {Decrease #R$D8EB by one, return if result is not
        sb   one,@julius_4_timer        ; DEC A             ; zero.
                                        ; LD ($D8EB),A      ;
@@ -3945,7 +4013,7 @@ julius_open_6:                         ; d972
 
 julius_open_7:                         ; d981
        li   de,julius_callback         ; LD DE,$CFE2       ; {Call #R$D5A3 with a callback to #R$CFE2.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($D8EE)      ; {Decrease #R$D8EE by one, return if result is not
        sb   one,@julius_7_timer        ; DEC A             ; zero.
                                        ; LD ($D8EE),A      ;
@@ -4043,6 +4111,7 @@ julius_close_5:                        ; d9f1
        movb @bytes+5,@6(ix)            ; LD (IX+$06),$05   ; 
        .ret                            ; RET               ; }
 
+*********************************************************************
 * Drawing Bandit Logic.
 *
 * Character state variables/ flags.
@@ -4069,6 +4138,7 @@ bandit_draw_4_timer:                   ; da15
 bandit_draw_5_timer:                   ; da16
        byte >00                                                      ; Character timer 5.
 
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_draw_open_routing:              ; da17
@@ -4122,7 +4192,7 @@ bandit_draw_open_3:                    ; da49
 * Handles state countdown.
 bandit_draw_open_4:                    ; da59
        li   de,set_state_init_bandit_draw_close   ; LD DE,$D037       ; {Call #R$D5A3 with a callback to #R$D037.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($DA15)      ; {Decrease #R$DA15 by one, return if result is not zero.
        sb   one,@bandit_draw_4_timer   ; DEC A             ;
                                        ; LD ($DA15),A      ;
@@ -4136,7 +4206,7 @@ bandit_draw_open_4:                    ; da59
 * Handles state countdown.
 bandit_draw_open_5:                    ; da6f
        li   de,init_bandit_draw_close  ; LD DE,$D040       ; {Call #R$D5A3 with a callback to #R$D040.
-       .call @hit_detection            ; CALL $D5A3        ; }
+       bl   @hit_detection            ; CALL $D5A3        ; }
                                        ; LD A,($DA16)      ; {Decrease #R$DA16 by one, return if result is not zero.
        sb   one,@bandit_draw_5_timer   ; DEC A             ;
                                        ; LD ($DA16),A      ;
@@ -4148,6 +4218,7 @@ bandit_draw_open_5:                    ; da6f
        bl   @reset_door_routine       ; CALL $D8A1        ;
        .ret                            ; RET               ; }
 
+*********************************************************************
 * This routine looks at the current character state and routes to the correct
 * subroutine.
 bandit_draw_close_routing:             ; da85
@@ -4229,54 +4300,44 @@ bandit_draw_close_5:                   ; dae0
        bl   @reset_door_routine        ; CALL $D8A1        ; {Call #R$D8A1 and return.
        .ret                            ; RET               ; }
 
-* Door Buffer
-* 
-* Used by the routines at #R$6600, #R$C300 and #R$F950.
-;door_buffer:                           ; ea90
-;       bss 704
-
-*
+*********************************************************************
 * Used by the routine at #R$CD47.
 explode_bomb:
+       .proc
        li   bc,12                      ; LD B,$0C          ;
 explode_bomb_1:                        ; f882
        .push bc                        ; PUSH BC           ; 
-       .call @explode_bomb_3           ; CALL $F894        ;
+       bl @explode_bomb_3              ; CALL $F894        ;
        .pop bc                         ; POP BC            ; 
        dec  bc                         ; DJNZ $F882        ;
        jne  explode_bomb_1             ;
        sb   a,a                        ; XOR A             ; 
-       bl   @ti_set_border_color          ; OUT ($FE),A       ;
-       movb @bytes+64,b                ; LD B,$40          ; 
-explode_bomb_2:                        ; f890
-       bl   @ti_vsync                     ; HALT              ;
-       sb   one,b                      ; DJNZ $F890        ; 
-       jne  explode_bomb_2             ;
-       .ret                            ; RET               ;
+       bl   @ti_set_border_color       ; OUT ($FE),A       ;
+       movb @bytes+64,b                ; LD B,$40          ;
+       bl   @halt_loop
+       .endproc                        ; RET               ;
 
+*********************************************************************
 explode_bomb_3:                        ; f894
+       .proc
        movb @bytes+56,a                ; LD A,$38          ; 
-       .call @explode_set_attrs        ; CALL $F8B2        ;
+       bl   @ti_set_screen_color       ; CALL $F8B2        ;
        sb   a,a                        ; XOR A             ; 
-       bl   @ti_set_border_color          ; OUT ($FE),A       ;
+       bl   @ti_set_border_color       ; OUT ($FE),A       ;
        li   bc,4                       ; LD B,$04          ;
 explode_bomb_4:                        ; f8a0
-       bl   @ti_vsync                     ; HALT              ;
+       bl   @ti_vsync                  ; HALT              ;
        dec  bc                         ; DJNZ $F8A0        ;
        jne  explode_bomb_4             ;
        movb @bytes+7,a                 ; LD A,$07          ; 
-       .call @explode_set_attrs        ; CALL $F8B2        ;
-       bl   @ti_set_border_color          ; OUT ($FE),A       ;
+       bl   @ti_set_screen_color       ; CALL $F8B2        ;
+       bl   @ti_set_border_color       ; OUT ($FE),A       ;
        li   bc,3                       ; LD B,$03          ;
 explode_bomb_5:                        ; f8ae
-       bl   @ti_vsync                     ; HALT              ;
+       bl   @ti_vsync                  ; HALT              ;
        dec  bc                         ; DJNZ $F8AE        ;
        jne  explode_bomb_5             ;
-       .ret                            ; RET               ;
-
-explode_set_attrs:                     ; f8b2
-       bl   @ti_set_screen_color
-       .ret                            ; RET               ;
+       .endproc                        ; RET               ;
 
 *********************************************************************
 * This entry point is used by the routine at #R$C7C0.
@@ -4288,7 +4349,7 @@ scroll_dollar_sign:                    ; f960
 ; TODO: sound
 ;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
 ;       li   hl,>0cf8                   ; LD HL,$0CF8       ; #TABLE(default,centre)
-;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $0CF8 | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
@@ -4296,7 +4357,7 @@ scroll_dollar_sign:                    ; f960
 ; TODO: sound
 ;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
 ;       li   hl,>079e                   ; LD HL,$079E       ; #TABLE(default,centre)
-;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $079E | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
@@ -4306,7 +4367,7 @@ scroll_dollar_sign:                    ; f960
 ; TODO: sound
 ;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
 ;       li   hl,>029e                   ; LD HL,$029E       ; #TABLE(default,centre)
-;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $029E | $0006 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
@@ -4316,7 +4377,7 @@ scroll_dollar_sign:                    ; f960
 ; TODO: sound
 ;       li   de,>0020                   ; LD DE,$0020       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
 ;       li   hl,>0209                   ; LD HL,$0209       ; #TABLE(default,centre)
-;       .call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
+;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
                                                            ; { $0209 | $0020 }
                                                            ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
@@ -4350,6 +4411,7 @@ dollar_scroll_halt_loop:               ; f9e3
 * ix=score_digit_6
 draw_and_input_high_scores:            ; fa00
        .proc
+       li   ix,score_digit_6           ; LD IX,$CD86       ; #REGhl=#R$CBB4 and
        bl    @high_scores              ; CALL $FA06        ;
        bl    @high_score_read_char      ; JP $FB62         ; Wait keypress
        .endproc
@@ -4360,11 +4422,11 @@ high_scores:                           ; fa06
        .proc
        movb @bytes+48,a                ; LD A,$30          ; {Writes "0" ($30 in ASCII) to #R$FB94.
        movb a,@high_score_line_buffer  ; LD ($FB94),A      ; }
-       .call @hs_clear_screen          ; CALL $FAD4        ; Call #R$FAD4.
+       bl   @ti_clear_screen           ; CALL $FAD4        ; Call #R$FAD4.
        li   hl,zx_screen+>0040         ; LD HL,$4040       ; {Writes $4040 to #R$FBF0.
        mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ; }
        .push ix                        ; PUSH IX           ; 
-       .call @hs_find_position         ; CALL $FC09        ; Call #R$FC09.
+       bl   @hs_find_position         ; CALL $FC09        ; Call #R$FC09.
        movb a,@high_score_position     ; LD ($FB57),A      ;
        .pop ix                         ; POP IX            ; 
        movb a,tmp0
@@ -4378,7 +4440,7 @@ new_high_score:
        mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ;
 *      Move name entries down to make room for new
        movb @high_score_position,a     ; LD A,($FB57)      ;
-       .call @hs_table_name_addr       ; CALL $FB19        ;
+       bl   @hs_table_name_addr       ; CALL $FB19        ;
                                        ; LD DE,$61EF       ;
                                        ; PUSH DE           ;
                                        ; EX DE,HL          ;
@@ -4393,7 +4455,7 @@ new_high_score:
 *      Move score entries down to make room for new
        movb @high_score_position,a     ; LD A,($FB57)      ;
        sb   one,a                      ; DEC A             ; 
-       .call @hs_table_score_address   ; CALL $FBFF        ;
+       bl   @hs_table_score_address   ; CALL $FBFF        ;
                                        ; LD DE,$62F9       ;
                                        ; PUSH DE           ;
                                        ; EX DE,HL          ;
@@ -4407,7 +4469,7 @@ new_high_score:
        .lddr                           ; LDDR              ;
 *      Copy new score into high score table
        movb @high_score_position,a     ; LD A,($FB57)      ;
-       .call @hs_table_score_address   ; CALL $FBFF        ;
+       bl   @hs_table_score_address   ; CALL $FBFF        ;
        dec  hl                         ; DEC HL            ; 
        .ex_de_hl                       ; EX DE,HL          ;
        .push ix                        ; PUSH IX           ;
@@ -4429,7 +4491,7 @@ new_high_score_1:                      ; fa6f
        .ldir                           ; LDIR              ; }
        movb @b255,*hl                  ; LD (HL),$FF       ; Set a string termination character ($FF) at the end of
 * Print "Write your name please"                           ; the string.
-       .call @hs_clear_screen          ; CALL $FAD4        ;
+       bl   @ti_clear_screen           ; CALL $FAD4        ;
        li   hl,high_score_title        ; LD HL,$FB78       ; {Points to #R$FB78 and sends it to #R$5B80.
        li   de,zx_screen+>0802         ; LD DE,$4802       ; #TABLE(default,centre)
        li   bc,>0703                   ; LD BC,$0703       ; { =h Value | =h Ink | =h Paper | =h Bright }
@@ -4437,11 +4499,11 @@ new_high_score_1:                      ; fa6f
                                                            ; { $03 | $03 | $00 | $00 }
                                                            ; TABLE#}
 * Input name
-       .call @high_score_input_name    ; CALL $FB26        ;
-       .call @hs_clear_screen          ; CALL $FAD4        ;
+       bl   @high_score_input_name    ; CALL $FB26        ;
+       bl   @ti_clear_screen           ; CALL $FAD4        ;
 * Copy name into high score table
        movb @high_score_position,a     ; LD A,($FB57)      ;
-       .call @hs_table_name_addr       ; CALL $FB19        ; a--
+       bl   @hs_table_name_addr       ; CALL $FB19        ; a--
        .ex_de_hl                       ; EX DE,HL          ; 
        li   hl,high_score_name_buffer  ; LD HL,$5BC0       ;
        li   bc,>0010                   ; LD BC,$0010       ; 
@@ -4465,9 +4527,9 @@ draw_high_scores_2:                    ; fabd
 draw_high_scores_3:                    ; fac0
        .push bc                        ; PUSH BC           ; 
        .push af                        ; PUSH AF           ; 
-       .call @hs_setup_line_buffer     ; CALL $FAE2        ;
+       bl   @hs_setup_line_buffer     ; CALL $FAE2        ;
        li   de,high_score_line_buffer  ; LD DE,$FB94       ;
-       .call @advance_2_rows_and_print ; CALL $FBD5        ;
+       bl   @advance_2_rows_and_print ; CALL $FBD5        ;
        .pop af                         ; POP AF            ; 
        .pop bc                         ; POP BC            ; 
        ab   one,a                      ; INC A             ; 
@@ -4479,13 +4541,9 @@ draw_high_scores_4:
        .endproc                        ; RET               ; Return from high_scores
 
 *********************************************************************
-hs_clear_screen:                       ; fad4
-       bl   @ti_clear_screen
-       .ret                            ; RET               ; }
-
-*********************************************************************
 hs_setup_line_buffer:                  ; fae2
-       movb a,@c                       ; LD C,A            ; 
+       .proc
+       movb a,@c                       ; LD C,A            ;
        li   hl,high_score_line_buffer  ; LD HL,$FB94       ;
        sb   @bytes+10,a                ; SUB $0A           ; 
        jlt  hs_setup_line_buffer_1     ; JR C,$FAFA        ;
@@ -4503,7 +4561,7 @@ hs_setup_line_buffer_1:                ; fafa
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*hl                      ; LD (HL),A         ; 
        movb @c,a                       ; LD A,C            ; 
-       .call @hs_table_name_addr      ; CALL $FB19        ;
+       bl   @hs_table_name_addr      ; CALL $FB19        ;
        li   de,high_score_line_buffer+6 ; LD DE,$FB9A       ;
        li   bc,>0010                   ; LD BC,$0010       ; 
        .ldir                           ; LDIR              ; 
@@ -4511,10 +4569,10 @@ hs_setup_line_buffer_1:                ; fafa
                                        ; INC DE            ;
                                        ; INC DE            ;
                                        ; INC DE            ;
-       .call @hs_table_score_address   ; CALL $FBFF        ;
+       bl   @hs_table_score_address    ; CALL $FBFF        ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        .ldir                           ; LDIR              ; 
-       .ret                            ; RET               ;
+       .endproc                        ; RET               ;
 
 *********************************************************************
 * Works out where in the high score table to place the score.
@@ -4528,19 +4586,20 @@ hs_table_name_addr:                    ; fb19
                                        ; ADD HL,HL         ; LIST#
                                        ; LD DE,$6000       ;
        ai   hl,high_score_table        ; ADD HL,DE         ; }
-       .ret                            ; RET               ; Return.
+       rt                              ; RET               ; Return.
 
 *********************************************************************
 high_score_input_name:                 ; fb26
+       .proc
        li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Stores #R$5BC0 at #R$FB55.
 high_score_input_name_1:               ; fb29
        mov  hl,@high_score_name_buffer_addr ; LD ($FB55),HL     ;
-       .call @hs_print_name_buffer          ; CALL $FBF2        ; }
+       bl   @hs_print_name_buffer          ; CALL $FBF2        ; }
        bl   @high_score_read_char     ; CALL $FB62        ;
        mov  @high_score_name_buffer_addr,hl ; LD HL,($FB55)     ;
        cb   a,@bytes+13                ; CP $0D            ; 
        jne  !                          ; RET Z             ; 
-       .ret                            ;                   
+       .endproc                        ;
 !
        cb   a,@bytes+8                 ; CP $0C            ;
        jeq  high_score_input_name_3    ; JR Z,$FB58        ;
@@ -4561,11 +4620,6 @@ high_score_input_name_2:               ; fb51
                                        ; INC HL            ;
        jmp  high_score_input_name_1    ; JR $FB29          ;
 
-high_score_name_buffer_addr:           ; fb55              ;
-       data 0
-high_score_position:                   ; fb57
-       byte 0                          ; RRA               ;
-
 high_score_input_name_3:               ; fb58              ;
                                        ; LD A,L            ;
        ci   hl,high_score_name_buffer  ; CP $C1            ;
@@ -4573,6 +4627,11 @@ high_score_input_name_3:               ; fb58              ;
        dec  hl                         ; DEC HL            ;
        movb @bytes+32,*hl              ; LD (HL),$20       ;
        jmp  high_score_input_name_1    ; JR $FB29          ;
+
+high_score_name_buffer_addr:           ; fb55              ;
+       data 0
+high_score_position:                   ; fb57
+       byte 0                          ; RRA               ;
 
 *********************************************************************
 * Returns a single keypress.
@@ -4602,24 +4661,26 @@ high_score_name_buffer:
 * 
 * Used by the routine at #R$FA00.
 advance_2_rows_and_print:              ; fbd5
+       .proc
        mov  @high_score_screen_addr,hl ; LD HL,($FBF0)     ;
        movb @l,a                       ; LD A,L            ; 
        ab   @bytes+64,a                ; ADD A,$40         ;
        jnc  !
-       .call @add_8_to_h               ; CALL C,$FBEA      ;
+       bl   @add_8_to_h                ; CALL C,$FBEA      ;
 !      movb a,@l                       ; LD L,A            ;
        mov  hl,@high_score_screen_addr ; LD ($FBF0),HL     ;
        li   bc,>0705                   ; LD BC,$0705       ; 
        .ex_de_hl                       ; EX DE,HL          ; 
-       bl    @print_two_tone_text ; CALL $5B80        ; 
-       .ret                            ; RET               ; 
+       bl    @print_two_tone_text      ; CALL $5B80        ;
+       .endproc                        ; RET               ;
 
+*********************************************************************
 add_8_to_h:                            ; fbea
        movb h,a                        ; LD A,H            ; 
        ab   @bytes+8,a                 ; ADD A,$08         ; 
        movb a,h                        ; LD H,A            ; 
        sb   a,a                        ; XOR A             ; 
-       .ret                            ; RET               ; 
+       rt                              ; RET               ;
 
 high_score_screen_addr:                ; fbf0:
        data >50c0                                          ; Cache
@@ -4627,11 +4688,12 @@ high_score_screen_addr:                ; fbf0:
 *********************************************************************
 * This entry point is used by the routine at #R$FA00.
 hs_print_name_buffer:                  ; fbf2
+       .proc
        li   hl,high_score_name_buffer  ; LD HL,$5BC0       ; {Points to #R$5BC0 and sends it to #R$5B80.
        li   de,zx_screen+>0887         ; LD DE,$4887       ; #TABLE(default,centre)
        li   bc,>0705                   ; LD BC,$0705       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
-       .ret                            ; RET               ; { $05 | $05 | $00 | $00 }
+       bl    @print_two_tone_text      ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+       .endproc                        ; RET               ; { $05 | $05 | $00 | $00 }
                                                            ; TABLE#}
 *********************************************************************
 * This entry point is used by the routine at #R$FA00.
@@ -4646,13 +4708,14 @@ hs_table_score_address:                ; fbff
        swpb hl                         ; ADD A,A           ;
                                        ; LD L,A            ;
        ai   hl,high_score_table_scores  ; LD H,$62          ;
-       .ret                            ; RET               ; 
+       rt                             ; RET               ;
 
 *********************************************************************
 * This entry point is used by the routine at #R$FA00.
 * ix points to new potential high score BCD low endian
 * Returns position in a
 hs_find_position:                      ; fc09
+       .proc
        li   hl,high_score_table_scores-6 ; LD HL,$61FA       ;
        li   bc,>0006                   ; LD BC,$0006       ; 
        sb   @e,@e                      ; LD E,$00          ; 
@@ -4722,7 +4785,7 @@ hs_cmp_5th_digit:                      ; fc53
        jmp  hs_find_next_digit         ; JR $FC11          ;
 hs_find_return:                        ; fc65
        movb @e,a                       ; LD A,E            ; 
-       .ret                            ; RET               ;
+       .endproc                        ; RET               ;
 
 *********************************************************************
 * Title Screen.
