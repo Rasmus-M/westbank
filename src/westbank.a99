@@ -2132,7 +2132,7 @@ character_chooser_2:
 * character is always chosen here, so this is the end of the
 * choosing routine.
 choose_default_set:                    ; ce42
-       bl   @random_number_x        ; CALL $DAEF        ; Call #R$DAEF.
+       bl   @random_number_x           ; CALL $DAEF        ; Call #R$DAEF.
        andi a,3*256                    ; AND $03           ; Keep only bits 0 and 1 (which determine the type of
                                                            ; character).
        jeq  init_bandit_open_1         ; JR Z,$CEB8        ; 0 {Determines which character initialisation to run;
@@ -2140,10 +2140,10 @@ choose_default_set:                    ; ce42
        jeq  init_bowie                 ; JP Z,$CEFC        ; 1 { =h #REGa | =h Initialisation Routine }
        sb   one,a                      ; DEC A             ; { $00 | #R$CEB8 }
        jne  !                          ; JP Z,$CF5E        ; { $01 | #R$CEFC }
-       b    @init_customer_close       ;                   ; 2
+       b    @init_customer_daisy       ;                   ; 2
 !
        sb   one,a                      ; DEC A             ; { $02 | #R$CF5E }
-       b    @init_customer_open        ; JP $CF2B          ; 3 { $03 | #R$CF2B }
+       b    @init_customer_jordan      ; JP $CF2B          ; 3 { $03 | #R$CF2B }
                                                            ; TABLE#}
 * Handles whether or not to choose Julius.
 choose_julius:                         ; ce55
@@ -2285,7 +2285,7 @@ init_bowie:                            ; cefc
                                        ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       bl   @random_number            ; CALL $D8B0        ; 
+       bl   @random_number             ; CALL $D8B0        ;
        andi a,8*256                    ; AND $08           ; 
        li   hl,bowie_source            ; LD HL,$D084       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;
@@ -2304,7 +2304,7 @@ init_bowie_set_flag:                   ; cf16
 
 *********************************************************************
 * Writes a "customer opening the door" to the door flags/ cache.
-init_customer_open:                    ; cf2b
+init_customer_jordan:                  ; cf2b
        mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
                                        ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
        li   de,prep_customer           ; LD DE,$D201       ; #TABLE(default,centre,centre,centre)
@@ -2315,13 +2315,13 @@ init_customer_open:                    ; cf2b
                                                            ; TABLE#}
        bl   @random_number             ; CALL $D8B0        ;
        andi a,130*256                  ; AND $82           ; 
-       li   hl,customer_open_source_2  ; LD HL,$D0A1       ;
+       li   hl,jordan_source_2         ; LD HL,$D0A1       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;
        movb a,a
-       jne  init_cust_open_set_flag    ; JR NZ,$CF45       ; 
+       jne  init_cust_jordan_set_flag  ; JR NZ,$CF45       ;
        movb one,*hl                    ; LD (HL),$01       ; 
-init_cust_open_set_flag:               ; cf45
-       li   hl,customer_open_source_1  ; LD HL,$D09C       ;
+init_cust_jordan_set_flag:             ; cf45
+       li   hl,jordan_source_1         ; LD HL,$D09C       ;
        mov  @2(ix),de                  ; LD E,(IX+$02)     ;
                                        ; LD D,(IX+$03)     ;
        li   bc,>000f                   ; LD BC,$000F       ; 
@@ -2337,8 +2337,8 @@ init_cust_open_set_flag:               ; cf45
        .ret                            ; RET               ;
 
 *********************************************************************
-* Writes a "customer closing the door" to the door flags/ cache.
-init_customer_close:                   ; cf5e
+*
+init_customer_daisy:                   ; cf5e
        mov  *ix,hl                     ; LD L,(IX+$00)     ; {Writes #R$D201 to the address contained
                                        ; LD H,(IX+$01)     ; at (depending on which door is currently being actioned);
        li   de,prep_customer           ; LD DE,$D201       ; #TABLE(default,centre,centre,centre)
@@ -2349,13 +2349,13 @@ init_customer_close:                   ; cf5e
                                                            ; TABLE#}
        bl   @random_number             ; CALL $D8B0        ;
        andi a,65*256                   ; AND $41           ; 
-       li   hl,customer_close_source_2 ; LD HL,$D092       ;
+       li   hl,daisy_source_2          ; LD HL,$D092       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;
        movb a,a
-       jne  init_cust_close_set_flag   ; JR NZ,$CF78       ; 
+       jne  init_cust_daisy_set_flag   ; JR NZ,$CF78       ;
        movb one,*hl                    ; LD (HL),$01       ; 
-init_cust_close_set_flag:              ; cf78
-       li   hl,customer_close_source_1 ; LD HL,$D08D       ;
+init_cust_daisy_set_flag:              ; cf78
+       li   hl,daisy_source_1          ; LD HL,$D08D       ;
        mov  @2(ix),de                  ; LD E,(IX+$02)     ;
                                        ; LD D,(IX+$03)     ;
        li   bc,>000f                   ; LD BC,$000F       ; 

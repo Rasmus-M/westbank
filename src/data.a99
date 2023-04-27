@@ -211,16 +211,16 @@ bandit_close_source:                           ; Used in init_bandit_close
 * Bowie
 bowie_source:                                  ; Used in init_bowie
        byte >01,>1B,>01,>08,>08,>08,>80,>08,>08
-* Customer close
-customer_close_source_1:                       ; Used in init_customer_close
+* Daisy
+daisy_source_1:                        ; Used in init_customer_close
        byte >0A,>0B,>0C,>0D,>0E
-customer_close_source_2:                       ; Used in init_customer_close
+daisy_source_2:                        ; Used in init_customer_close
        byte >00,>01,>08,>08,>08
        byte >40,>10,>08,>08,>08
-* Customer open
-customer_open_source_1:                        ; Used in init_customer_open
+* Jordan
+jordan_source_1:                       ; Used in init_customer_open
        byte >03,>04,>05,>06,>07
-customer_open_source_2:                        ; Used in init_customer_open
+jordan_source_2:                       ; Used in init_customer_open
        byte >01,>01,>08,>08,>08
        byte >38,>0C,>06,>08,>08
 * Customer shot
@@ -268,6 +268,7 @@ bandit_2_source:
 bandit_2_buffer:
        byte >00,>08,>08,>09,>07,>01,>0B,>0B    ; {Bandit 2 buffer.
        byte >0B,>0B,>0B                        ; }
+
 * Door data/buffer?
 door_1_data_buffer:
        byte >00,>10,>0F,>11,>02,>04,>00,>00
