@@ -17,6 +17,7 @@ controller:                            ; 5cb0
 *
 player_died_status:                    ; d2fe
        byte >02                        ;
+* Keep next together
 byte_before_hit:
        byte >00                        ; just cleared - not used
 * Player Shot. Which door player is shooting at.
@@ -58,6 +59,15 @@ controls_byte:                         ; d306
                                                                      ; { $11 | #EVAL($11, 2, 8) | Door 3 }
                                                                      ; { $12 | #EVAL($12, 2, 8) | Door 1 }
                                                                      ; TABLE#
+
+*********************************************************************
+* Control Method Routine Alias.
+*
+* Points to either #R$D392 or #R$D39B depending on the chosen control method.
+control_routine_alias:                 ; ce12
+       data controls_keyboard                              ; 16 bit memory location of either the keyboard or
+                                                           ; joystick control routines.
+
 
 * Number of lives remaining
 lives:                                 ; cc59
@@ -106,122 +116,6 @@ score_digit_2:                         ; cd8a
 score_digit_1:                         ; cd8b
        byte >00
 
-* Game status buffer entry at CD8C
-       byte >00
-
-* Game status buffer entry at CD8D
-       byte >07,>4F,>52                                              ; ???
-
-*********************************************************************
-* Control Method Routine Alias.
-*
-* Points to either #R$D392 or #R$D39B depending on the chosen control method.
-control_routine_alias:                 ; ce12
-       data controls_keyboard                              ; 16 bit memory location of either the keyboard or
-                                                           ; joystick control routines.
-
-* Door Routine Buffer.
-*
-* These buffers point to the routines for character/ door actions for each door that are currently "in-play".
-* Some example routines would be;
-* #TABLE(default,centre,centre)
-* { =h Routine | =h Door }
-* { #R$D192 | "Normal" Bandit }
-* { #R$D1DC | Bowie }
-* { #R$D201 | Customer }
-* { #R$D241 | Julius }
-* { #R$D289 | "Drawing" Bandit }
-* TABLE#
-* And will also hold the door closing routines as well.
-door_1_routine:                        ; ce14
-       data 0                                                        ; Door 1 character/ door routine in-play.
-door_2_routine:                        ; ce16
-       data 0                                                        ; Door 2 character/ door routine in-play.
-door_3_routine:                        ; ce18
-       data 0                                                        ; Door 3 character/ door routine in-play.
-
-* Door Frame Reference
-*
-* Only one door is "active" at a time, this status buffer points to the
-* "currently in-focus door".
-door_frame_ref:                        ; ce1a
-       byte >03                                                      ; #TABLE(default,centre,centre)
-                                                                     ; { =h Value | =h Which One }
-                                                                     ; { $01 | Door 1 }
-                                                                     ; { $02 | Door 2 }
-                                                                     ; { $03 | Door 3 }
-                                                                     ; TABLE#
-
-*********************************************************************
-*
-* Game status buffer entry at CE1B
-*
-chooser_countdown_init:                ; ce1b copied to _ce1e
-       byte >03
-delay:                                 ; ce1c
-       data >0380
-chooser_countdown:                     ; ce1e
-       byte >03
-* Defines the entry point for the choosing routines. Note, this isn't for one choice - they chain into each other
-* this simply points to where the chain starts.
-chooser_routine_ptr:                   ; ce1f
-       data choose_bandit_5
-
-*********************************************************************
-* Door 1 Flags.
-door_1_flags:                          ; d165 (IX+$00)
-       data door_1_routine
-door_1_source:                         ; d167 (IX+$02)
-       data door_1_data_buffer
-door_1_bowie_action:                   ; d169 (IX+$04)
-       data bowie_bomb_action
-door_1_scoring:                        ; d16b (IX+$06)
-       data 0
-door_1_cash_action:                    ; d16d (IX+$08)
-       byte >00
-door_1_count_down:                     ; d16e (IX+$09)
-       byte >08
-door_1_char_buffer:                    ; d16f (IX+$0a)
-       data bandit_3_buffer
-door_1_char_source:                    ; d171 (IX+$0c)
-       data bandit_3_source
-
-* Door 2 Flags.
-door_2_flags:                          ; d173
-       data door_2_routine
-door_2_source:                         ; d175
-       data door_2_data_buffer
-door_2_bowie_action:                   ; d177
-       data bowie_bomb_action
-door_2_scoring:                        ; d179
-       data 0
-door_2_cash_action:                    ; d17b
-       byte >00
-door_2_count_down:                     ; d17c
-       byte >06
-door_2_char_buffer:                    ; d17d
-       data bandit_2_buffer
-door_2_char_source:                    ; d17f
-       data bandit_2_source
-
-* Door 3 Flags.
-door_3_flags:                          ; d181
-       data door_3_routine
-door_3_source:                         ; d183
-       data door_3_data_buffer
-door_3_bowie_action:                   ; d185
-       data bowie_bomb_action
-door_3_scoring:                        ; d187
-       data 0
-door_3_cash_action:                    ; d189
-       byte >00
-door_3_count_down:                     ; d18a
-       byte >1D
-door_3_char_buffer:                    ; d18b
-       data bandit_3_buffer
-door_3_char_source:                    ; d18d
-       data bandit_3_source
-
 *********************************************************************
 * Deposit Flags.
 *
@@ -257,6 +151,15 @@ door_deposited_01_06:                  ; cc99
        byte >00
 door_deposited_07_12:                  ; cc9a
        byte >00
+
+* Draw Text.
+two_tone_attributes_buffer:            ; cbd0
+       data 1797                                                     ; Stores the attributes; top attribute/ bottom attribute.
+
+
+*********************************************************************
+duel_parameter:                         ; cbcf                       ; This always appear to be 1
+       byte >01                                                      ;
 
 *********************************************************************
 *
@@ -381,6 +284,7 @@ duel_data:                             ; c3ea
 * Buffer holding bonus text.
 duel_bonus_text:                       ; c41d
        text '900',>ff                                                ; Bonus text.
+
 * Not sure ... it is used though       ; TODO
 duel_counter:                          ; c421
        byte >00                                                      ;
@@ -410,6 +314,110 @@ duel_lose_life_flag:                   ; c6e3
 duel_extra_life_flag:                  ; c6e4
        byte >00                                                      ; Holds $00/ $01 to indicate player has gained an extra
                                                                      ; life.
+
+*********************************************************************
+* Door Routine Buffer.
+*
+* These buffers point to the routines for character/ door actions for each door that are currently "in-play".
+* Some example routines would be;
+* #TABLE(default,centre,centre)
+* { =h Routine | =h Door }
+* { #R$D192 | "Normal" Bandit }
+* { #R$D1DC | Bowie }
+* { #R$D201 | Customer }
+* { #R$D241 | Julius }
+* { #R$D289 | "Drawing" Bandit }
+* TABLE#
+* And will also hold the door closing routines as well.
+door_1_routine:                        ; ce14
+       data 0                                                        ; Door 1 character/ door routine in-play.
+door_2_routine:                        ; ce16
+       data 0                                                        ; Door 2 character/ door routine in-play.
+door_3_routine:                        ; ce18
+       data 0                                                        ; Door 3 character/ door routine in-play.
+
+* Door Frame Reference
+*
+* Only one door is "active" at a time, this status buffer points to the
+* "currently in-focus door".
+door_frame_ref:                        ; ce1a
+       byte >03                                                      ; #TABLE(default,centre,centre)
+                                                                     ; { =h Value | =h Which One }
+                                                                     ; { $01 | Door 1 }
+                                                                     ; { $02 | Door 2 }
+                                                                     ; { $03 | Door 3 }
+                                                                     ; TABLE#
+
+*********************************************************************
+* Door 1 Flags.
+door_1_flags:                          ; d165 (IX+$00)
+       data door_1_routine
+door_1_source:                         ; d167 (IX+$02)
+       data door_1_data_buffer
+door_1_bowie_action:                   ; d169 (IX+$04)
+       data bowie_bomb_action
+door_1_scoring:                        ; d16b (IX+$06)
+       data 0
+door_1_cash_action:                    ; d16d (IX+$08)
+       byte >00
+door_1_count_down:                     ; d16e (IX+$09)
+       byte >08
+door_1_char_buffer:                    ; d16f (IX+$0a)
+       data bandit_3_buffer
+door_1_char_source:                    ; d171 (IX+$0c)
+       data bandit_3_source
+
+* Door 2 Flags.
+door_2_flags:                          ; d173
+       data door_2_routine
+door_2_source:                         ; d175
+       data door_2_data_buffer
+door_2_bowie_action:                   ; d177
+       data bowie_bomb_action
+door_2_scoring:                        ; d179
+       data 0
+door_2_cash_action:                    ; d17b
+       byte >00
+door_2_count_down:                     ; d17c
+       byte >06
+door_2_char_buffer:                    ; d17d
+       data bandit_2_buffer
+door_2_char_source:                    ; d17f
+       data bandit_2_source
+
+* Door 3 Flags.
+door_3_flags:                          ; d181
+       data door_3_routine
+door_3_source:                         ; d183
+       data door_3_data_buffer
+door_3_bowie_action:                   ; d185
+       data bowie_bomb_action
+door_3_scoring:                        ; d187
+       data 0
+door_3_cash_action:                    ; d189
+       byte >00
+door_3_count_down:                     ; d18a
+       byte >1D
+door_3_char_buffer:                    ; d18b
+       data bandit_3_buffer
+door_3_char_source:                    ; d18d
+       data bandit_3_source
+
+*********************************************************************
+*
+* Game status buffer entry at CE1B
+*
+chooser_countdown_init:                ; ce1b copied to _ce1e
+       byte >03
+delay:                                 ; ce1c
+       data >0380
+chooser_countdown:                     ; ce1e
+       byte >03
+
+* Defines the entry point for the choosing routines. Note, this isn't for one choice - they chain into each other
+* this simply points to where the chain starts.
+chooser_routine_ptr:                   ; ce1f
+       data choose_bandit_5
 
 *********************************************************************
 *
