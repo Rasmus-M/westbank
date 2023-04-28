@@ -1890,56 +1890,6 @@ scoring_base_10_1:
        rt                              ; RET               ; next digit as it goes lowest to highest) and return.}
 
 *********************************************************************
-*
-* Choose Door Character.
-* 
-* Used by the routine at #R$C7C0.
-* 
-* The characters available on a particular level are determined by #R$CE1F.
-* #TABLE(default,centre,centre)
-* { =h Initialisation Routine | =h Door }
-* { #R$CE42 | Door 1 }
-* { #R$CE8D | Door 2 }
-* { #R$D18A | Door 3 }
-* TABLE#
-* ix=door flags (door_1_flags, door_2_flags, door_3_flags)
-* hl=door routine (door_1_routine, door_2_routine, door_3_routine)
-*
-character_chooser:                     ; ce21
-       .proc
-*      Wait 3 times before letting us in
-       li   hl,chooser_countdown       ; LD HL,$CE1E       ; {Decrease #R$CE1E by one.
-                                       ; LD A,(HL)         ;
-       sb   one,*hl                    ; DEC A             ;
-                                       ; LD (HL),A         ; }
-       jne  character_chooser_2        ; RET NZ            ; Return if not zero.
-*      Door also has a count-down
-       movb @chooser_countdown_init,*hl ; LD A,($CE1B)      ; {Copies #R$CE1B into #R$CE1E.
-                                       ; LD (HL),A         ; }
-                                       ; LD A,(IX+$09)     ; {Decrease ????? by one.
-       sb   one,@9(ix)                 ; DEC A             ; #TABLE(default,centre,centre)
-                                       ; LD (IX+$09),A     ; { =h Address | =h Door }
-                                                           ; { #R$D16E | Door 1 }
-                                                           ; { #R$D17C | Door 2 }
-                                                           ; { #R$D18A | Door 3 }
-                                                           ; TABLE#}
-       jne  character_chooser_2        ; RET NZ            ; Return if not zero.
-*      Reset door count-down to random value
-       bl   @random_number             ; CALL $D8B0        ; Call #R$D8B0.
-       andi a,31*256                   ; AND $1F           ; Keep bits 0-4 (so 0-31).
-       socb @bytes+8,a                 ; OR $08            ; {Set bit 3 and write the resulting value to;
-       movb a,@9(ix)                   ; LD (IX+$09),A     ; #TABLE(default,centre,centre)
-                                                           ; { =h Address | =h Door }
-                                                           ; { #R$D16E | Door 1 }
-                                                           ; { #R$D17C | Door 2 }
-                                                           ; { #R$D18A | Door 3 }
-                                                           ; TABLE#}
-       mov  @chooser_routine_ptr,hl    ; LD HL,($CE1F)     ; {Jump to the memory address contained at #R$CE1F.
-       b    *hl                        ; JP (HL)           ; .
-character_chooser_2:
-       .endproc
-
-*********************************************************************
 * Routine at D2CF
 * 
 * Used by the routines at #R$C7C0 and #R$D3EA.

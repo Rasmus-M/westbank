@@ -484,14 +484,17 @@ bandit_2_buffer:
        byte >0B,>0B,>0B                        ; }
 
 * Door data/buffer?
+       even
 door_1_data_buffer:
        byte >00,>10,>0F,>11,>02,>04,>00,>00
        byte >00,>0D,>40,>10,>08,>00,>00,>20
        byte >20,>20
+       even
 door_2_data_buffer:
        byte >00,>08,>08,>09,>07,>05,>00,>00
        byte >00,>00,>00
        byte >10,>08,>00,>00,>20,>20,>20
+       even
 door_3_data_buffer:
        byte >03,>04,>05,>06,>07,>01,>02,>0B    ; {Target
        byte >00,>00,>1E                        ; }
