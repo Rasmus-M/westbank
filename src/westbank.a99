@@ -644,15 +644,15 @@ after_duel_loop:                       ; c3cb
        bl   @ti_vsync                  ; HALT              ;
        sb   one,b                      ; DJNZ $C3CB        ; }
        jne  after_duel_loop            ;
-       movb a,@e                       ; LD E,A            ; 
+;      movb a,@e                       ; LD E,A            ;
        li   hl,lives                   ; LD HL,($5B86)     ; {Is #R$CC59 more than $06?
-       movb *hl,a                      ; LD A,(HL)         ; Get lives
-       cb   a,@bytes+6                 ; CP $06            ; }
-       jl   after_duel_2               ; JR C,$C3D8        ; If so, jump to #R$C3D8.
-       nop                             ; NOP               ; We have 6 lives or more ?
-after_duel_2:
-       ; AND A                         ; AND A             ; {If #R$CC59 @duel_counter is zero then return without carry.
-       movb @e,a                       ; LD A,E            ; 
+       movb *hl,tmp0                   ; LD A,(HL)         ; Get lives
+;       cb   tmp0,@bytes+6              ; CP $06            ; }
+;       jl   after_duel_2               ; JR C,$C3D8        ; If so, jump to #R$C3D8.
+;       nop                             ; NOP               ; We have 6 lives or more ?
+;after_duel_2:
+;       ; AND A                         ; AND A             ; {If #R$CC59 @duel_counter is zero then return without carry.
+;       movb @e,a                       ; LD A,E            ;
        jeq  !                          ; RET NZ            ; }
        b    @return_without_carry                            ;
 !
@@ -1213,6 +1213,7 @@ sheriff_star:                          ; c720
        li   de,zx_screen+>1083         ; LD DE,$5083       ; #TABLE(default,centre,centre,centre,centre)
        li   bc,>0702                   ; LD BC,$0702       ; { =h Value | =h Ink | =h Paper | =h Bright }
        bl    @print_two_tone_text ; CALL $5B80        ; { $07 | $07 | $00 | $00 }
+                                                           ; { $02 | $02 | $00 | $00 }
                                                            ; { $02 | $02 | $00 | $00 }
                                                            ; TABLE#}
        .endproc                            ; RET               ; Return.
