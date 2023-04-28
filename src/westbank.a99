@@ -5,6 +5,15 @@
        lwpi wrksp
        bl   @setup_environment
 ;       bl   @perform_duel
+*      Test
+;       li   bc,0
+;!      mov  bc,tmp1
+;       li   tmp2,1
+;       bl   @ti_draw_door_frame_4
+;       bl   @ti_vsync
+;       inc  bc
+;       ci   bc,27
+;       jne  -!
        b    @start
 *
 *********************************************************************

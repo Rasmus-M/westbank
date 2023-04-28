@@ -226,6 +226,7 @@ door_3_char_source:                    ; d18d
 * Deposit Flags.
 *
 * Stores whether a deposit has been made for each door.
+       even
 door_deposited_01:                     ; cc8d
        byte >00
 door_deposited_02:                     ; cc8e
@@ -264,6 +265,7 @@ door_deposited_07_12:                  ; cc9a
 * Dueller Number 1.
 *
 * Populated initially by #R$C3EA.
+       even
 dueller_1:                             ; 5bc0
        byte >00                        ; 00 Dueller state ("0" is complete).
        byte >00                        ; 01 Dueller timer.
@@ -330,6 +332,7 @@ dueller_3:                             ; 5be2
 * Duel Bonus Round Data.
 *
 * Dueller 1 data.
+       even
 duel_data:                             ; c3ea
        byte >00                        ; 00 Dueller state ("1" is complete). Set when dueller is shot
        byte >80                        ; 01 Dueller timer.
@@ -412,6 +415,7 @@ duel_extra_life_flag:                  ; c6e4
 *
 * Character data
 *
+       even
 
 * Bandit open close
 bandit_open_source:                            ; Used in init_bandit_open
@@ -497,6 +501,7 @@ door_3_data_buffer:
 * Customer Logic.
 *
 * Character state variables/ flags.
+       even
 customer_frame_1:                      ; d48f
        byte >03                                                      ; Character frame index 1.
 customer_frame_2:                      ; d490
@@ -533,6 +538,7 @@ customer_8_timer:                      ; d49d
 * Generic Bandit in Door Frame Logic.
 *
 * Character state variables/ flags.
+       even
 bandit_state_ref:                      ; d71e
        byte >04                                                      ; The current character state.
 bandit_1_timer:                        ; d71f
@@ -552,6 +558,7 @@ bandit_4_timer:                        ; d722
 * Handles all the logic around drawing Bowie and handling his "special" logic.
 *
 * Bowie state variables/ flags.
+       even
 bowie_good_bad:                        ; d7c5
        byte >01                                                      ; If this is $00 then Bowie is "good". If this is $01
                                                                      ; then he is "bad" (i.e. there's a bomb under his hat).
@@ -576,6 +583,7 @@ bowie_6_timer:                         ; d7cd
 * Julius logic.
 *
 * Handles all the logic around drawing Julius and handling his "special" logic.
+       even
 julius_good_bad:                       ; d8e5
        byte >00                                                      ; If this is $00 then Julius is "good". If this is $01
                                                                      ; then he is "bad" (i.e. will draw on you).
@@ -602,6 +610,7 @@ julius_7_timer:                        ; d8ee
 * Drawing Bandit Logic.
 *
 * Character state variables/ flags.
+       even
 bandit_draw:                           ; da0c
        byte >00                                                      ;
 bandit_draw_frame_1:                   ; da0d
@@ -629,8 +638,8 @@ bandit_draw_5_timer:                   ; da16
 *
 * TI specific data
 *
-
 character_table:
+       even
        data char_bank_1_select,gfx_character_00
        data char_bank_1_select,gfx_character_01
        data char_bank_1_select,gfx_character_02
