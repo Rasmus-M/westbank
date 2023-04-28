@@ -704,6 +704,7 @@ ti_vsync_1:
        tb   2                          ; Test CRU bit for VDP interrupt
        jeq  ti_vsync_1
        movb @vdpsta,r12
+       bl   @snd_player
        .endproc
 *// ti_vsync
 

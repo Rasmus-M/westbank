@@ -1,0 +1,69 @@
+*********************************************************************
+*
+* Mute sound
+*
+mute_sound:
+       li   r0,mute_table              ; Mute all
+       li   r2,4
+mute_sound_1:
+       movb *r0+,@sound
+       dec  r2
+       jne  mute_sound_1
+       clr  @snd_channel_1
+       clr  @snd_channel_2
+       clr  @snd_channel_3
+       clr  @snd_channel_4
+*      Return
+       rt
+mute_table:
+       byte >9f, >bf, >df, >ff
+*// mute_sound
+
+*********************************************************************
+*
+* Play shot
+*
+play_shot_1:
+       .proc
+       li   r0,snd_shot_1
+       li   r1,snd_channel_4
+       bl   @play_snd
+       .endproc
+*// play_shot_1
+
+*********************************************************************
+*
+* Play shot
+*
+play_shot_2:
+       .proc
+       li   r0,snd_shot_2
+       li   r1,snd_channel_4
+       bl   @play_snd
+       .endproc
+*// play_shot_2
+
+*********************************************************************
+*
+* Play shot
+*
+play_shot_3:
+       .proc
+       li   r0,snd_shot_3
+       li   r1,snd_channel_4
+       bl   @play_snd
+       .endproc
+*// play_shot_3
+
+*********************************************************************
+*
+* Play deposit
+*
+play_deposit:
+       .proc
+       li   r0,snd_deposit
+       li   r1,snd_channel_3
+       li   r2,A5
+       bl   @play_snd
+       .endproc
+*// play_deposit

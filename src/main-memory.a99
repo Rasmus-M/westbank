@@ -9,6 +9,7 @@
        copy "character-bank-3.a99"
 
        save >a000,
+start:
        copy "upper-memory.a99"
 
        end  start

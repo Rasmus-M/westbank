@@ -440,6 +440,7 @@ next_life:
 *
 game_loop:                             ; cae7
        inc  @frame
+       bl   @snd_player
        li   tmp0,KEY_Z
        bl   @ti_check_key
        jeq  read_keys_3                ; JR NZ,$CB0B       ;
@@ -549,24 +550,17 @@ got_a_deposit:                         ; cba0
 * Shot sound 1.
 shot_sound_1:                          ; 6537
        .proc
-       li   ix,1
-       bl   @play_shot_sound          ; CALL $654F        ; }
+       bl   @play_shot_1               ; CALL $654F        ; }
        .ret                            ; RET               ; Return.
 * Shot sound 2.
 shot_sound_2:                          ; 653f
        .proc
-       li   ix,2
-       bl   @play_shot_sound          ; CALL $654F        ; }
+       bl   @play_shot_2               ; CALL $654F        ; }
        .ret                            ; RET               ; Return.
 * Shot sound 3.
 shot_sound_3:                          ; 6547
        .proc
-       li   ix,3
-       bl   @play_shot_sound          ; CALL $654F        ; }
-       .ret                            ; RET               ; Return.
-play_shot_sound:                       ; 654f
-       .proc
-;      TODO: sound
+       bl   @play_shot_3               ; CALL $654F        ; }
        .ret                            ; RET               ; Return.
 
 *********************************************************************
@@ -2237,43 +2231,20 @@ explode_bomb_5:                        ; f8ae
 * This entry point is used by the routine at #R$C7C0.
 scroll_dollar_sign:                    ; f960
        .proc
+       bl   @play_deposit
        seto @graphics_bank_select
        li   de,gfx_dollar_image_2      ; LD DE,$F940       ; {Sends #R$F940 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-; TODO: sound
-;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-;       li   hl,>0cf8                   ; LD HL,$0CF8       ; #TABLE(default,centre)
-;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
-                                                           ; { $0CF8 | $0006 }
-                                                           ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-; TODO: sound
-;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-;       li   hl,>079e                   ; LD HL,$079E       ; #TABLE(default,centre)
-;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
-                                                           ; { $079E | $0006 }
-                                                           ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
        nop                             ; NOP               ; 
        nop                             ; NOP               ; 
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-; TODO: sound
-;       li   de,>0006                   ; LD DE,$0006       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-;       li   hl,>029e                   ; LD HL,$029E       ; #TABLE(default,centre)
-;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
-                                                           ; { $029E | $0006 }
-                                                           ; TABLE#}
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
        nop                             ; NOP               ; 
        nop                             ; NOP               ; 
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-; TODO: sound
-;       li   de,>0020                   ; LD DE,$0020       ; {#HTML(Makes a noise using the <a href="https://skoolkid.github.io/rom/asm/03B5.html">BEEP</a> routine.)
-;       li   hl,>0209                   ; LD HL,$0209       ; #TABLE(default,centre)
-;       call @>03b5                    ; CALL $03B5        ; { =h Pitch | =h Duration }
-                                                           ; { $0209 | $0020 }
-                                                           ; TABLE#}
        li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
 *      Clear

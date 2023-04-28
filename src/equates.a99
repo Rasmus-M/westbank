@@ -23,6 +23,8 @@ rndsd:
 *
 ti_wrksp:
        equ  >8300
+sndws:
+       equ  ti_wrksp
 ti_r0lb:
        equ  ti_wrksp+1
 ti_r1lb:
@@ -115,3 +117,5 @@ char_bank_3_select:
        equ  >600E
 kscan:
        equ  >02b2
+
+       copy "sound-defs.a99"
