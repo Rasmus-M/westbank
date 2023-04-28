@@ -63,7 +63,7 @@ set_control_alias:                     ; c7f9
        bl   @cls_inc_display_day          ; CALL $CA64         ;
                                        ; LD A,$03          ; {Writes $03 to #R$CE1B.
        movb @bytes+3,@chooser_countdown_init ; LD ($CE1B),A      ; }
-       li   hl,>0500                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
+       li   hl,>0400                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
        mov  hl,@delay                  ; LD ($CE1C),HL     ; }
                                        ; LD A,$01          ; {Writes $01 to #R$D191.
        movb one,@sheriff_star_flag     ; LD ($D191),A      ; }
