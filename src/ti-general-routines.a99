@@ -2,7 +2,7 @@
 *
 * Setup environment
 *
-setup_environment:
+ti_setup_environment:
        mov  @rndsd,@rnd_seed
        li   one,>0100
        li   tmp0,>fffe
@@ -14,7 +14,7 @@ setup_environment:
        bl   @copy_to_pad
        bl   @graphics_mode
        .endproc
-*// setup_environment
+*// ti_setup_environment
 
 *********************************************************************
 *

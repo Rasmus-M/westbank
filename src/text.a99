@@ -1,0 +1,134 @@
+* Title Screen/ Game Options
+title_screen_game_name:                ; feea
+       text 'WEST BANK',>ff
+* Playing Options.
+title_screen_play:                     ; fef4
+       text '0 PLAY ',>ff
+title_screen_keys:                     ; fefc
+       text '1 KEYS   ',>ff
+title_screen_joystick:                 ; ff06
+       text '2 JOYSTICK',>ff
+title_screen_level:                    ; ff11
+       text 'N LEVEL',>ff
+* Credits.
+title_screen_author:                   ; ff19
+       text ' PROGRAM BY ALVARO MATEOS ',>ff
+title_screen_copyright:                ; ff34
+       text 'COPYRIGHT  DINAMIC SOFTWARE 1985',>ff
+       text >00,>00,>ff
+
+* Level Selection Text
+level_select_choose:                   ; 6492
+       text 'CHOOSE THE LEVEL PREFERED',>ff                ; "CHOOSE THE LEVEL PREFERED"
+level_select_one:                      ; 64ac
+       text ' ONE  ',>ff                                   ; "ONE"
+level_select_three:                    ; 64b3
+       text ' THREE',>ff                                   ; "THREE"
+level_select_six:                      ; 64ba
+       text '  SIX ',>ff                                   ; "SIX"
+level_select_whitespace:               ; 64c1
+       text '      ',>ff                                   ; "WHITESPACE"
+
+* Playfield Text
+playfield_score:                       ; c64d
+       text ' SCORE ',>ff
+playfield_lives:                       ; c655
+       text 'LIVES',>ff
+playfield_whitespace:                  ; c65b
+       text '     ',>ff
+
+phase_text:                            ; ca4e
+       text 'PHASE'                                                  ;
+day_text:                              ; ca53
+       text ' DAY '                                                  ;
+
+* "Extra" text.
+extra_text_copy:                       ; c622
+       text 'EXTRA',>ff
+
+* High Score Table Name Entry.
+high_score_title:                      ; fb78
+       text '  WRITE YOUR NAME PLEASE   ',>ff
+high_score_line_buffer:                ; fb94
+       text '10    PANCHO VILLA        241610',>ff
+high_score_sub_head:                   ; fbb5
+       text '     THESE ARE THE BEST        ',>ff
+high_score_name_buffer:
+       bss  18
+
+* High Score Table
+high_score_table:                       ; 6000
+       text 'LUCKY LUCKE     '
+       text 'BILLY THE KID   '
+       text 'BUFALO BILL     '
+       text 'CALAMITY JANE   '
+       text 'JESSE JAMES     '
+       text 'JOE DALTON      '
+       text 'THE GOOD        '
+       text 'JACK THE FAST   '
+       text 'DAVY CROCKETT   '
+       text 'PANCHO VILLA    '
+       text 'ALVARO MATEOS H '
+       text 'JACK DALTON     '
+       text 'THOMY WILLIANS  '
+       text 'LIBERTY B       '
+       text 'THE UGLY        '
+       text 'GRAL GRANT      '
+       text 'JIMMY THE BLACK '
+       text 'WILLIAM DALTON  '
+       text 'THE BAD         '
+       text 'GRAL CASTER     '
+       text 'FRANK MATA      '
+       text 'KIT WILLIANS    '
+       text 'ALBERT THE HEAVY'
+       text 'THE SCREW MAN   '
+       text 'AVERELL DALTON  '
+       text 'ANDREW THE BELL '
+       text 'GRAL LEE        '
+       text 'THE CHICKEN MAN '
+       text 'THE BLONDE GIRL '
+       text 'TOM SMITH       '
+high_score_table_last_name:
+       text 'UNKNOWN         '
+high_score_table_scores:               ; 6200
+       text '275430'
+       text '265980'
+       text '263230'
+       text '258980'
+       text '254070'
+       text '255430'
+       text '250990'
+       text '245430'
+       text '240510'
+       text '241610'
+       text '231940'
+       text '226450'
+       text '226520'
+       text '223320'
+       text '213230'
+       text '204510'
+       text '200640'
+       text '195910'
+       text '196900'
+       text '193030'
+       text '188320'
+       text '176510'
+       text '164760'
+       text '157110'
+       text '149070'
+       text '139970'
+       text '135150'
+       text '129110'
+       text '129730'
+       text '125960'                   ; Tom Smith
+high_score_table_last_score:
+       text '000000'
+
+* Sheriff's Star Page Text
+header_1:                              ; c765
+       text '      THIS IS YOUR STAR       ',>ff
+header_2:                              ; c784
+       text 'YOU ARE THE SOFT CITY SHERIFF ',>ff
+header_3:                              ; c7a3
+       text '    NOW DO YOUR WORK     ',>ff
+
