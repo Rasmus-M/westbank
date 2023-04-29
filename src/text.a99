@@ -12,10 +12,11 @@ title_screen_level:                    ; ff11
        text 'N LEVEL',>ff
 * Credits.
 title_screen_author:                   ; ff19
-       text ' PROGRAM BY ALVARO MATEOS ',>ff
+       text '    PROGRAM BY ALVARO MATEOS    ',>ff
+title_screen_ti_author:
+       text 'TI VERSION BY  RASMUS MOUSTGAARD',>ff
 title_screen_copyright:                ; ff34
        text 'COPYRIGHT  DINAMIC SOFTWARE 1985',>ff
-       text >00,>00,>ff
 
 * Level Selection Text
 level_select_choose:                   ; 6492
