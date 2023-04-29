@@ -24,8 +24,8 @@ snd_shot_3:
        data 0
 
 snd_deposit:
-       byte T2
+       byte T1
        byte 16                         ; Frames
        byte 0                          ; Attn start
-       byte 16                         ; Attn step
+       byte 15                         ; Attn step
        data 0                          ; Freq step
