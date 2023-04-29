@@ -2304,7 +2304,7 @@ title_screen:                          ; fe00
        li   de,zx_screen+>08eb         ; LD DE,$48EB       ;
        bl   @title_screen_print       ; CALL $FEE4        ;
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
-       li   de,zx_screen+>1083         ; LD DE,$5083       ;
+       li   de,zx_screen+>1080         ; LD DE,$5083       ;
        li   bc,>0705                   ; LD BC,$0705       ;
        bl    @print_two_tone_text ; CALL $5B80        ;
        li   hl,title_screen_copyright  ; LD HL,$FF34       ; {Points to #R$FF34 and sends it to #R$5B80.
@@ -2344,11 +2344,15 @@ ts_call_flash:                         ; fe66
        bl   @ti_check_key
        jne  title_screen_return
        bl   @module_player
+       inc  @frame
+       mov  @frame,tmp0
+       andi tmp0,>0fff
+       jne  title_screen_input
+       bl   @toggle_author
        jmp  title_screen_input         ; JR $FE58          ; }
 title_screen_return:
        .endproc
 
-*
 ts_set_keyboard:                       ; fe86
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$5CB0 and loop back around to #R$FE58.
        movb a,*hl                      ; LD (HL),A         ;
@@ -2388,6 +2392,20 @@ ts_flash_text:                         ; fe95
 ;       movb @e,*hl                     ; LD (HL),E         ; }
 *      Return
        .endproc                            ; RET               ; Return.
+
+*********************************************************************
+toggle_author:
+       .proc
+       li   hl,title_screen_author
+       li   bc,>0705
+       mov  @frame,tmp0
+       andi tmp0,>1000
+       jeq  !
+       li   hl,title_screen_ti_author
+       li   bc,>0706
+!      li   de,zx_screen+>1080
+       bl    @print_two_tone_text
+       .endproc
 
 *********************************************************************
 * Draw bandits.
