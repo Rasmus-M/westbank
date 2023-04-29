@@ -357,11 +357,39 @@ ti_scroll_screen_2:
        szcb r8,r6                      ; Apply mask
        dec  r3
        jne  ti_scroll_screen_2
+       movb @vdpsta,@vdp_status
+       jlt  ti_scroll_sound
+ti_scroll_screen_3:
        ai   r5,>2000                   ; Update base name
        dec  r4
        jne  ti_scroll_screen_1
        lwpi wrksp
        rt
+
+*      Call the module player while scrolling
+ti_scroll_sound:
+       mov  r0,@save_r0
+       mov  r3,@save_r3
+       mov  r4,@save_r4
+       mov  r5,@save_r5
+       mov  r6,@save_r6
+       lwpi wrksp
+       .push r11
+        bl  @module_player_0
+       .pop r11
+       lwpi ti_wrksp
+       mov  @save_r0,r0
+       mov  @save_r3,r3
+       mov  @save_r4,r4
+       mov  @save_r5,r5
+       mov  @save_r6,r6
+       jmp  ti_scroll_screen_3
+save_r0: data 0
+save_r3: data 0
+save_r4: data 0
+save_r5: data 0
+save_r6: data 0
+
 *// ti_scroll_screen
 
 *********************************************************************

@@ -903,8 +903,8 @@ bandit_open_4:                         ; d75b
        sb   one,@bandit_4_timer        ; DEC A             ;
                                        ; LD ($D722),A      ;
        jne  bandit_open_5              ; RET NZ            ; }
-       ab   one,a                      ; INC A             ; {Writes $01 to #R$D2FE.
-       movb a,@player_died_status      ; LD ($D2FE),A      ; }
+                                       ; INC A             ; {Writes $01 to #R$D2FE.
+       movb one,@player_died_status    ; LD ($D2FE),A      ; }
        bl   @reset_door_routine        ; CALL $D8A1        ; Call #R$D8A1.
 bandit_open_5:
        .endproc                            ; RET               ; Return.
@@ -1068,8 +1068,8 @@ bowie_cash_action:                     ; d84b
 
 * Handles marking this as something unshootable.
 bowie_bomb_action:                     ; d85d
-       movb @bytes+5,a                 ; LD A,$05          ; {Writes $05 to #R$D2FE and return.
-       movb a,@player_died_status      ; LD ($D2FE),A      ;
+                                       ; LD A,$05          ; {Writes $05 to #R$D2FE and return.
+       movb @bytes+5,@player_died_status ; LD ($D2FE),A      ;
        jmp  bowie_routing_end          ; RET               ; }
 
 * Handles both shooting the hats off Bowie's head, and checking/ routing on the
@@ -1262,9 +1262,9 @@ julius_close_2:                        ; d9b8
        movb @julius_flag,a             ; LD A,($D8E6)      ; {Return if #R$D8E6 is zero.
        ; AND A                         ; AND A             ;
        jeq  julius_close_6             ; RET  Z            ; }
-       ab   one,a                      ; INC A             ; {Else write #R$D8E6+1 to #R$D2FE, call #R$D8A1 and
-       movb a,@player_died_status      ; LD ($D2FE),A      ; return.
-       bl   @reset_door_routine       ; CALL $D8A1        ;
+                                       ; INC A             ; {Else write #R$D8E6+1 to #R$D2FE, call #R$D8A1 and
+       movb one,@player_died_status    ; LD ($D2FE),A      ; return.
+       bl   @reset_door_routine        ; CALL $D8A1        ;
        jmp  julius_close_6             ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
 julius_close_3:                        ; d9d3
@@ -1367,7 +1367,7 @@ bandit_draw_open_5:                    ; da6f
        sb   one,@bandit_draw_5_timer   ; DEC A             ;
                                        ; LD ($DA16),A      ;
        jne  bandit_draw_open_return    ; RET NZ            ; }
-       ab   one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE, call #R$D8A1 and return.
+       mov  one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE, call #R$D8A1 and return.
                                        ; LD ($D2FE),A      ;
        bl   @reset_door_routine        ; CALL $D8A1        ;
 bandit_draw_open_return:
@@ -1411,7 +1411,7 @@ bandit_draw_shot_2:                    ; daa7
        movb @bandit_draw,a             ; LD A,($DA0C)      ; {Return if #R$DA0C is zero.
        ; AND A                         ; AND A             ;
        jeq  bandit_draw_shot_return    ; RET Z             ; }
-       ab   one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE and return.
+       mov  one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE and return.
                                        ; LD ($D2FE),A      ;
        jmp  bandit_draw_shot_return    ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.

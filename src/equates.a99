@@ -44,17 +44,19 @@ b255:
 b254:
        equ  b255+1
 frame:
-       equ  b254+>1
+       equ  b254+1
+vdp_status:
+       equ  frame+2
 pad_max:
-       equ  frame+>1
-gplws:
-       equ  >83e0
+       equ  vdp_status+2
 kscan_device:
        equ  >8374
 kscan_key:
        equ  >8375
 kscan_status:
        equ  >837c
+gplws:
+       equ  >83e0
 
 
 **

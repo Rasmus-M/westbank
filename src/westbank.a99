@@ -11,7 +11,9 @@
 main_loop:
        bl   @ti_clear_screen
        bl   @title_screen              ; CALL $FE00        ; #REGhl=#R$CBB4.}
-       bl   @new_game                  ; CALL $C7E5        ; Call #R$C7E5.
+       bl   @mute_sound
+       bl   @play_game                  ; CALL $C7E5        ; Call #R$C7E5.
+       bl   @mute_sound
        bl   @ti_clear_screen
        movb @bytes+64,b                ; LD B,$80          ; {Calls #R$CD64 with the counter
        bl   @halt_loop                 ; CALL $CD64        ; $80.}
@@ -22,7 +24,7 @@ main_loop:
 * New game
 * Displays the title screen and on return, sets the control method and
 * initiates variables for a new game.
-new_game:                              ; c7e5
+play_game:                              ; c7e5
        .proc
 * Setup input control routine
        movb @controller,a              ; LD A,($5CB0)      ; {Grab the value stored at #R$5CB0
@@ -94,59 +96,59 @@ level_1:                               ; c878
        li   hl,choose_default_set      ; LD HL,$CE42       ; {Writes #R$CE42 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 2
        li   hl,choose_bandit_3         ; LD HL,$CE6F       ; {Writes #R$CE6F to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 level_2:
 *      Phase 3
        li   hl,choose_bandit_2         ; LD HL,$CE5F       ; {Writes #R$CE5F to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 4
        li   hl,choose_julius           ; LD HL,$CE55       ; {Writes #R$CE55 to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 5
        li   hl,choose_bandit_4         ; LD HL,$CE7E       ; {Writes #R$CE7E to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 level_3:
 *      Phase 6
        li   hl,choose_bandit_5         ; LD HL,$CE8D       ; {Writes #R$CE8D to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 7
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 8
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @set_dusk_attr             ; CALL $C95E        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 *      Phase 9
        li   hl,choose_bandit_6         ; LD HL,$CE9C       ; {Writes #R$CE9C to #R$CE1F.
        mov  hl,@chooser_routine_ptr    ; LD ($CE1F),HL     ; }
        bl   @reduce_delay              ; CALL $C941        ;
        bl   @set_night_attr            ; CALL $C963        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return            ; RET C             ;
 level_3_1:                             ; c8f0
 *      Day 2
 *      Phase 10-16
@@ -157,7 +159,7 @@ level_3_2:                             ; c8f8
        .push bc                        ; PUSH BC           ;
        bl    @run_phase                ; CALL $CA81        ;
        .pop bc                         ; POP BC            ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return           ; RET C             ;
        .push bc                        ; PUSH BC           ;
        bl    @reduce_delay             ; CALL $C941        ;
        .pop bc                         ; POP BC            ;
@@ -166,11 +168,11 @@ level_3_2:                             ; c8f8
 *      Phase 17
        bl   @set_dusk_attr             ; CALL $C95E        ;
        bl   @run_phase                 ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return           ; RET C             ;
 *      Phase 18
        bl   @set_night_attr            ; CALL $C963        ;
        bl    @run_phase                ; CALL $CA81        ;
-       joc  new_game_return            ; RET C             ;
+       joc  play_game_return           ; RET C             ;
 *      Sheriff
        li   hl,sheriff_star_flag       ; LD HL,$D191       ;
        movb *hl,tmp0                   ; LD A,(HL)         ;
@@ -186,7 +188,7 @@ level_3_3:                             ; c936
        bl   @ti_check_key
        jeq  level_3_3
        jmp  level_3_1                  ; JR $C8F0          ;
-new_game_return:
+play_game_return:
        .endproc
 
 *********************************************************************
@@ -391,6 +393,7 @@ cashboxes_flash_loop:                  ; ca87
        movb b,a                        ; LD A,B            ;
        bl   @set_all_deposit_flags     ; CALL $CAB9        ;
 * Duel
+       bl   @mute_sound
        bl   @random_number             ; CALL $D8B0        ;
        movb a,b                        ; LD B,A            ;
        ; LD A,R                        ; LD A,R            ;
@@ -435,27 +438,30 @@ next_life:
        bl   @draw_and_check_cashboxes  ; CALL $CC9B        ;
        bl   @draw_score                ; CALL $CD90        ;
        bl   @draw_cashbox_selections   ; CALL $D45E        ;
+       li   tmp0,tune2_module
+       bl   @play_module
 **
 *      Game loop
 *
 game_loop:                             ; cae7
        inc  @frame
-       bl   @snd_player
+       bl   @module_player
        li   tmp0,KEY_Z
        bl   @ti_check_key
        jeq  read_keys_3                ; JR NZ,$CB0B       ;
 read_keys_2:                           ; cb03              ; Z pressed. Enter pause mode until X pressed.
        li   tmp0,KEY_X
        bl   @ti_check_key
-        jeq  read_keys_2                ; JR NZ,$CB03       ;
+       jeq  read_keys_2               ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
-       bl   @check_input              ; CALL $D2CF        ;
+       bl   @check_input               ; CALL $D2CF        ;
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
 delay_loop:                            ; cb12
        dec  bc                         ; DEC BC            ;
                                        ; LD A,B            ;
                                        ; OR C              ;
        jne  delay_loop                 ; JR NZ,$CB12       ;
+       bl   @module_player
        bl   @move_right_or_left       ; CALL $D411        ;
 * Door 1 handling
        li   ix,door_1_flags            ; LD IX,$D165       ;
@@ -476,6 +482,7 @@ delay_loop:                            ; cb12
                                        ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 1 routine
 after_door_1_routine:                  ; cb3f
+       bl   @module_player
 * Door 2 handling
        li   ix,door_2_flags            ; LD IX,$D173       ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
@@ -495,6 +502,7 @@ after_door_1_routine:                  ; cb3f
                                        ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 2 routine
 after_door_2_routine:                  ; _cb61
+       bl   @module_player
 * Door 3 handling
        li   ix,door_3_flags            ; LD IX,$D181       ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down
@@ -514,18 +522,20 @@ after_door_2_routine:                  ; _cb61
                                        ; LD ($CE1A),A      ;
        b    *hl                        ; JP (HL)           ; Execute door 3 routine
 after_door_3_routine:                  ; cb83
+       bl   @module_player
 * Check status
        movb @player_died_status,a      ; LD A,($D2FE)      ; {If bit 0 of #R$D2FE is not zero
+       jeq  game_loop_2
        movb a,tmp0                     ; BIT 0,A           ; then jump to #R$CD47.
        andi tmp0,1*256                 ;
-       jeq  !                          ; JP NZ,$CD47       ; }
-       b    @died                     ;
-!
+       jeq  game_loop_1                ; JP NZ,$CD47       ; }
+       b    @died                      ;
+game_loop_1:
        movb a,tmp0                     ; BIT 1,A           ; {Else if bit 1 is not zero, jump
        andi tmp0,2*256                 ;
-       jeq  !                          ; JP NZ,$CD1B       ; to #R$CD1B.}
+       jeq  game_loop_2                ; JP NZ,$CD1B       ; to #R$CD1B.}
        b    @flash_lives               ;
-!
+game_loop_2:
        bl   @scoring                  ; CALL $CDC3        ; Call #R$CDC3.
        li   hl,deposit_flag            ; LD HL,$D190       ; {If #R$D190 is not zero then call
        movb *hl,a                      ; LD A,(HL)         ; #R$CBA0 (also, writes $00 to
@@ -770,7 +780,8 @@ duel_inner_loop:                       ; c4fd
        .push de                        ; PUSH DE           ; }
        bl   @check_any_duellers_shot   ; CALL $C4E3        ;
        .pop de                         ; POP DE            ; 
-       dec  de                         ; DEC DE            ; 
+       bl   @module_player
+       dec  de                         ; DEC DE            ;
                                        ; LD A,D            ;
                                        ; OR E              ;
        jne  duel_inner_loop            ; JR NZ,$C4FD       ;
@@ -1486,6 +1497,7 @@ draw_cashboxes_loop:                   ; cd0c
 * 
 * Used by the routine at #R$C7C0.
 flash_lives:                           ; cd1b
+       bl   @mute_sound
        movb @bytes+10,b                ; LD B,$0A          ; {Short pause.
        bl   @halt_loop                 ; CALL $CD64        ; }
        li   hl,lives                   ; LD HL,$CC59       ; {Point to #R$CC59. Set a counter for $05 times and stash
@@ -1521,9 +1533,10 @@ flash_lives_loop:                      ; cd25
 * 
 * Used by the routine at #R$C7C0.
 died:                                  ; cd47
+       bl   @mute_sound
        movb @player_died_status,a      ; LD A,($D2FE)      ; {If bit 2 of #R$D2FE is zero then jump to #R$CD53.
        movb a,tmp0                     ; BIT 2,A           ; 
-       andi tmp0,4*256                 ;                   
+       andi tmp0,4*256                 ;                   ; Died from bomb flag
        jeq  died_1                     ; JR Z,$CD53        ; }
        bl   @explode_bomb             ; CALL $F880        ;
        jmp  died_2                     ; JR $CD56          ;
@@ -1963,6 +1976,7 @@ move_right_or_left_loop:
        jeq  !                          ; CALL NZ,$D449     ; 
        bl   @move_cashboxes_left       ;
 !
+       bl   @module_player
        .pop de                         ; POP DE            ; 
        dec  de                         ; DEC DE            ; 
                                        ; LD A,D            ;
@@ -2297,6 +2311,8 @@ title_screen:                          ; fe00
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
        bl    @print_two_tone_text ; CALL $5B80        ; }
+       li   tmp0,tune1_module
+       bl   @play_module
 * Act on input.
 title_screen_input:                    ; fe58
        movb @controller,a              ; LD A,($5CB0)      ; {If #R$5CB0 is zero (joystick) then #REGde=$0787 else #REGde=$8707. Then call the subroutine at #R$FE95.
@@ -2327,6 +2343,7 @@ ts_call_flash:                         ; fe66
        li   tmp0,KEY_0
        bl   @ti_check_key
        jne  title_screen_return
+       bl   @module_player
        jmp  title_screen_input         ; JR $FE58          ; }
 title_screen_return:
        .endproc
@@ -2463,6 +2480,7 @@ level_select_input:                    ; 63e5
        bl   @ti_check_key
 ;       ; RRA                           ; RRA               ; {If "3" is pressed, jump to #R$6416.
        jne  level_select_level_6       ; JR NC,$6416       ; }
+       bl   @module_player
        jmp  level_select_input         ; JR $63E5          ; Cycle back to #R$63E5.
 * Act on level being selected.
 level_select_level_1:                  ; 63f4

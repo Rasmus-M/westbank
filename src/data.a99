@@ -16,7 +16,7 @@ controller:                            ; 5cb0
 *********************************************************************
 *
 player_died_status:                    ; d2fe
-       byte >02                        ;
+       byte >02                        ; 1=dead, 2=killed innocent; 5=died from bomb
 * Keep next together
 byte_before_hit:
        byte >00                        ; just cleared - not used

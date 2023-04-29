@@ -172,17 +172,31 @@ ti_display_on:
 ti_clear_screen:
        .proc
        bl   @ti_display_off
-       li   r0,pattern_table
-       clr  r1
-       li   r2,>1800
-       bl   @vsmw
-       li   r0,color_table
-       li   r1,>f100
-       li   r2,>1800
-       bl   @vsmw
+       bl   @module_player
+       li   tmp1,vdpwd
+       li   tmp0,pattern_table
+       bl   @vwad
+       bl   @ti_clear_screen_part
+       bl   @ti_clear_screen_part
+       bl   @ti_clear_screen_part
+       li   tmp0,color_table
+       bl   @vwad
+       bl   @ti_clear_screen_part
+       bl   @ti_clear_screen_part
+       bl   @ti_clear_screen_part
        bl   @ti_display_on
        .endproc
 *// ti_clear_screen
+
+ti_clear_screen_part:
+       .proc
+       li   tmp2,>800
+ti_clear_screen_part_1:
+       clr  *tmp1
+       dec  tmp2
+       jne  ti_clear_screen_part_1
+       bl   @module_player
+       .endproc
 
 *********************************************************************************
 *
@@ -195,8 +209,17 @@ ti_set_screen_color:
        bl   @ti_color
        movb tmp0,r1
        li   r0,color_table+(3*256)
-       li   r2,15*256
+       li   r2,5*256
        bl   @vsmw
+       bl   @module_player
+       li   r0,color_table+(8*256)
+       li   r2,5*256
+       bl   @vsmw
+       bl   @module_player
+       li   r0,color_table+(13*256)
+       li   r2,5*256
+       bl   @vsmw
+       bl   @module_player
        .endproc
 *// ti_set_screen_color
 
@@ -225,6 +248,7 @@ ti_set_border_color:
 * tmp2 (r15) LSB: height in characters
 *
 ti_draw_graphics:
+       .proc
        lwpi ti_wrksp
        mov  r13,r0
        mov  r14,r1
@@ -255,7 +279,8 @@ ti_draw_graphics_2:
        dec  r2
        jne  ti_draw_graphics_1
        lwpi wrksp
-       rt
+       bl   @module_player
+       .endproc
 row_src_skip:
        data 0
 *// ti_draw_graphics
@@ -270,6 +295,7 @@ row_src_skip:
 * tmp2 (r15) LSB: height in characters
 *
 ti_draw_color_area:
+       .proc
        lwpi ti_wrksp
        mov  r13,r0
        mov  r14,r1
@@ -299,7 +325,8 @@ ti_draw_color_area_2:
        dec  r2
        jne  ti_draw_color_area_1
        lwpi wrksp
-       rt
+       bl   @module_player
+       .endproc
 *// ti_draw_color_area
 
 *********************************************************************************
@@ -698,13 +725,12 @@ rnd_seed:
 *
 ti_vsync:
        .proc
-       movb @vdpsta,r12
+       movb @vdpsta,@vdp_status
 ti_vsync_1:
        clr  r12
        tb   2                          ; Test CRU bit for VDP interrupt
        jeq  ti_vsync_1
-       movb @vdpsta,r12
-       bl   @snd_player
+       bl   @module_player
        .endproc
 *// ti_vsync
 
