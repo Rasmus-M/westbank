@@ -438,7 +438,7 @@ next_life:
        bl   @draw_and_check_cashboxes  ; CALL $CC9B        ;
        bl   @draw_score                ; CALL $CD90        ;
        bl   @draw_cashbox_selections   ; CALL $D45E        ;
-       li   tmp0,tune2_module
+       li   tmp0,bnwrag_module
        bl   @play_module
 **
 *      Game loop
@@ -592,7 +592,7 @@ bang:                                  ; c000
        li   hl,gfx_bang_frame_3        ; LD HL,$F200       ;
        bl   @bang_copy                 ; CALL $C061        ; }
        bl   @shot_sound_2              ; CALL $6502        ; {Calls $6502 twice.
-       bl   @shot_sound_2              ; CALL $6502        ; }
+;       bl   @shot_sound_2              ; CALL $6502        ; }
        movb @bytes+12,b                ; LD B,$06          ; {Pass #R$F300 to #R$C061.
        li   hl,gfx_bang_frame_4        ; LD HL,$F300       ;
        bl   @bang_copy                 ; CALL $C061        ; }
@@ -1817,7 +1817,7 @@ shot_three:                            ; d33b
        sla  tmp0,1                     ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
        mov  tmp0,@random_seed
        bl   @ti_draw_door_3_shot
-       bl   @shot_sound_2              ; JP $6502          ; Jump to #R$6502.
+       bl   @shot_sound_1              ; JP $6502          ; Jump to #R$6502.
        .ret
 * Handles settings flags and shot drawing location for door 1.
 shot_one:                              ; d360
@@ -1836,7 +1836,7 @@ shot_one:                              ; d360
        sla  tmp0,1                     ; SLA (HL)          ; moved to the carry flag and bit 0 reset (zeroed).}
        mov  tmp0,@random_seed
        bl   @ti_draw_door_1_shot
-       bl   @shot_sound_3              ; CALL $6504        ; Jump to #R$6504.
+       bl   @shot_sound_1              ; CALL $6504        ; Jump to #R$6504.
        .ret                            ; RET               ; Return.
 
 *********************************************************************
@@ -2206,6 +2206,7 @@ random_number_2:                       ; d8d7
 * Used by the routine at #R$CD47.
 explode_bomb:
        .proc
+       bl   @shot_sound_3
        li   bc,12                      ; LD B,$0C          ;
 explode_bomb_1:                        ; f882
        .push bc                        ; PUSH BC           ; 
@@ -2311,7 +2312,7 @@ title_screen:                          ; fe00
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
        bl    @print_two_tone_text ; CALL $5B80        ; }
-       li   tmp0,tune1_module
+       li   tmp0,bnwrag_module
        bl   @play_module
 * Act on input.
 title_screen_input:                    ; fe58

@@ -29,7 +29,7 @@ mute_table:
 play_shot_1:
        .proc
        li   r0,snd_shot_1
-       li   r1,snd_channel_1
+       li   r1,snd_channel_4
        bl   @play_snd
        .endproc
 *// play_shot_1
@@ -41,7 +41,7 @@ play_shot_1:
 play_shot_2:
        .proc
        li   r0,snd_shot_2
-       li   r1,snd_channel_1
+       li   r1,snd_channel_4
        bl   @play_snd
        .endproc
 *// play_shot_2
@@ -53,7 +53,7 @@ play_shot_2:
 play_shot_3:
        .proc
        li   r0,snd_shot_3
-       li   r1,snd_channel_1
+       li   r1,snd_channel_4
        bl   @play_snd
        .endproc
 *// play_shot_3
@@ -65,8 +65,8 @@ play_shot_3:
 play_deposit:
        .proc
        li   r0,snd_deposit
-       li   r1,snd_channel_1
-       li   r2,A5
+       li   r1,snd_channel_2
+       li   r2,C4
        bl   @play_snd
        .endproc
 *// play_deposit
