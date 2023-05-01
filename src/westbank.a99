@@ -438,7 +438,14 @@ next_life:
        bl   @draw_and_check_cashboxes  ; CALL $CC9B        ;
        bl   @draw_score                ; CALL $CD90        ;
        bl   @draw_cashbox_selections   ; CALL $D45E        ;
+       mov  @phase,tmp0
+       andi tmp0,>0100
+       jeq  !
+       li   tmp0,chrys_module
+       jmp  !!
+!:
        li   tmp0,bnwrag_module
+!:
        bl   @play_module
 **
 *      Game loop
@@ -637,6 +644,8 @@ bang_color:
 perform_duel:
        .proc
        movb a,@duel_counter           ; I think this was the intention - otherwise duel_counter is never updated
+       li   tmp0,duel_module
+       bl   @play_module
        bl   @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
                                        ; LD A,($C421)      ; Grab #R$C421.
        jnc  after_duel_1               ; JR NC,$C3C9       ;

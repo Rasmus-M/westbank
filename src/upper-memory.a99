@@ -12,3 +12,5 @@
        copy "sprites.a99"
        copy "sound-fx.a99"
        copy "bnwrag-music.a99"
+       copy "chrys-music.a99"
+       copy "duel-music.a99"

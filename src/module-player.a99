@@ -108,7 +108,7 @@ module_player_9:
 *      Next track
 module_player_11:
        ai   r5,snd_track_size
-       ci   r5,snd_track_3
+       ci   r5,snd_track_4
        jle  module_player_1
 module_player_12:
        bl   @snd_player
@@ -126,4 +126,6 @@ snd_track_1:
 snd_track_2:
        bss snd_track_size
 snd_track_3:
+       bss snd_track_size
+snd_track_4:
        bss snd_track_size

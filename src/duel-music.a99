@@ -1,0 +1,205 @@
+duel_module:
+       data >0004
+       data duel_track_00
+       data duel_track_01
+       data duel_track_02
+       data duel_track_03
+       data >0000
+duel_track_00:
+       data snd_channel_1
+duel_track_00_rpt:
+       data duel_seq_00A8
+       data duel_seq_00B2
+       data duel_seq_00BA
+       data duel_seq_00BA
+;       data >00FF
+;       data duel_track_00_rpt
+       data >0000
+duel_track_01:
+       data snd_channel_2
+duel_track_01_rpt:
+       data duel_seq_00BE
+       data duel_seq_00C7
+       data duel_seq_00BA
+       data duel_seq_00BA
+;       data >00FF
+;       data duel_track_01_rpt
+       data >0000
+duel_track_02:
+       data snd_channel_3
+duel_track_02_rpt:
+       data duel_seq_00CE
+       data duel_seq_00D5
+       data duel_seq_00BA
+       data duel_seq_00BA
+;       data >00FF
+;       data duel_track_02_rpt
+       data >0000
+duel_track_03:
+       data snd_channel_4
+duel_track_03_rpt:
+       data duel_seq_00DA
+       data duel_seq_00E1
+       data duel_seq_00BA
+       data duel_seq_00BA
+;       data >00FF
+;       data duel_track_03_rpt
+       data >0000
+duel_seq_00A8:
+       data duel_note_00E6
+       data >0001
+       data duel_note_00E9
+       data >0001
+       data duel_note_00E6
+       data >0001
+       data duel_note_00E9
+       data >0001
+       data duel_note_00EC
+       data >0013
+       data duel_note_00EF
+       data >0003
+       data >0000
+duel_seq_00BE:
+       data duel_note_00F8
+       data >0001
+       data duel_note_00FB
+       data >0001
+       data duel_note_00F8
+       data >0001
+       data duel_note_00FB
+       data >0001
+       data duel_note_00FE
+       data >0013
+       data duel_note_0101
+       data >0003
+       data >0000
+duel_seq_00CE:
+       data >001C
+       data duel_note_010A
+       data >0003
+       data >0000
+duel_seq_00DA:
+       data >001D
+       data duel_note_0110
+       data >0003
+       data >0000
+duel_seq_00B2:
+       data >0006
+       data duel_note_00F2
+       data >0009
+       data duel_note_00F5
+       data >000F
+       data >0000
+duel_seq_00C7:
+       data >0006
+       data duel_note_0104
+       data >0009
+       data duel_note_0107
+       data >000F
+       data >0000
+duel_seq_00D5:
+       data >0010
+       data duel_note_010D
+       data >000F
+       data >0000
+duel_seq_00E1:
+       data >0010
+       data duel_note_0110
+       data >000F
+       data >0000
+duel_seq_00BA:
+       data >0020
+       data >0000
+duel_note_00E6:
+       data duel_instr_00
+       data A3
+duel_note_00E9:
+       data duel_instr_00
+       data D3
+duel_note_00EC:
+       data duel_instr_03
+       data A3
+duel_note_00EF:
+       data duel_instr_05
+       data F2
+duel_note_00F8:
+       data duel_instr_01
+       data >00FF
+duel_note_00FB:
+       data duel_instr_01
+       data >00BF
+duel_note_00FE:
+       data duel_instr_04
+       data >00FF
+duel_note_0101:
+       data duel_instr_06
+       data >0141
+duel_note_010A:
+       data duel_instr_07
+       data E4
+duel_note_0110:
+       data duel_instr_02
+       data P3
+duel_note_00F2:
+       data duel_instr_03
+       data G2
+duel_note_00F5:
+       data duel_instr_03
+       data D2
+duel_note_0104:
+       data duel_instr_04
+       data >011E
+duel_note_0107:
+       data duel_instr_04
+       data >017E
+duel_note_010D:
+       data duel_instr_07
+       data C♯4
+duel_instr_00:
+       byte T1
+       byte 127
+       byte 0
+       byte 0
+       data >0000
+duel_instr_01:
+       byte T2
+       byte 127
+       byte 0
+       byte 0
+       data >0000
+duel_instr_02:
+       byte P3
+       byte 127
+       byte 0
+       byte 2
+       data >0000
+duel_instr_03:
+       byte T1
+       byte 127
+       byte 0
+       byte 2
+       data >0000
+duel_instr_04:
+       byte T2
+       byte 127
+       byte 0
+       byte 2
+       data >0000
+duel_instr_05:
+       byte T1
+       byte 64
+       byte 127
+       byte -2
+       data >0000
+duel_instr_06:
+       byte T2
+       byte 24
+       byte 95
+       byte -3
+       data >0000
+duel_instr_07:
+       byte T3
+       byte 127
+       byte 255
+       byte 0
+       data >0000
