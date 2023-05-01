@@ -1263,7 +1263,7 @@ julius_close_2:                        ; d9b8
        ; AND A                         ; AND A             ;
        jeq  julius_close_6             ; RET  Z            ; }
                                        ; INC A             ; {Else write #R$D8E6+1 to #R$D2FE, call #R$D8A1 and
-       movb one,@player_died_status    ; LD ($D2FE),A      ; return.
+       movb @bytes+2,@player_died_status ; LD ($D2FE),A      ; return.
        bl   @reset_door_routine        ; CALL $D8A1        ;
        jmp  julius_close_6             ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
@@ -1411,7 +1411,7 @@ bandit_draw_shot_2:                    ; daa7
        movb @bandit_draw,a             ; LD A,($DA0C)      ; {Return if #R$DA0C is zero.
        ; AND A                         ; AND A             ;
        jeq  bandit_draw_shot_return    ; RET Z             ; }
-       mov  one,@player_died_status    ; INC A             ; {Else write $01 to #R$D2FE and return.
+       mov  @bytes+2,@player_died_status ; INC A             ; {Else write $01 to #R$D2FE and return.
                                        ; LD ($D2FE),A      ;
        jmp  bandit_draw_shot_return    ; RET               ; }
 * Handle door frame 4 countdown/ transition to door frame 3.
