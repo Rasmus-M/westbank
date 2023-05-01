@@ -376,9 +376,11 @@ run_phase:                             ; ca81
        jnc  phase_completed            ; RET C             ;
        b    @return_with_carry         ;
 phase_completed:
+       bl   @mute_sound
 *      Flash cashboxes
        movb @bytes+16,b                ; LD B,$10          ;
 cashboxes_flash_loop:                  ; ca87
+       bl   @play_deposit
        .push bc                        ; PUSH BC           ;
        movb b,a                        ; LD A,B            ;
        andi a,1*256                    ; AND $01           ;
@@ -459,17 +461,25 @@ game_loop:                             ; cae7
 read_keys_2:                           ; cb03              ; Z pressed. Enter pause mode until X pressed.
        li   tmp0,KEY_X
        bl   @ti_check_key
-       jeq  read_keys_2               ; JR NZ,$CB03       ;
+       jeq  read_keys_2                ; JR NZ,$CB03       ;
 read_keys_3:                           ; cb0b
        bl   @check_input               ; CALL $D2CF        ;
+       bl   @module_player
        mov  @delay,bc                  ; LD BC,($CE1C)     ;
-delay_loop:                            ; cb12
-       dec  bc                         ; DEC BC            ;
+delay_loop_1:                          ; cb12
+       dect bc                         ; DEC BC            ;
                                        ; LD A,B            ;
                                        ; OR C              ;
-       jne  delay_loop                 ; JR NZ,$CB12       ;
+       jgt  delay_loop_1               ; JR NZ,$CB12       ;
        bl   @module_player
-       bl   @move_right_or_left       ; CALL $D411        ;
+       mov  @delay,bc                  ; LD BC,($CE1C)     ;
+delay_loop_2:                          ; cb12
+       dect bc                         ; DEC BC            ;
+                                       ; LD A,B            ;
+                                       ; OR C              ;
+       jgt  delay_loop_2               ; JR NZ,$CB12       ;
+       bl   @module_player
+       bl   @move_right_or_left        ; CALL $D411        ;
 * Door 1 handling
        li   ix,door_1_flags            ; LD IX,$D165       ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; clear count-down

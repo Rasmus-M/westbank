@@ -3,928 +3,1299 @@ chrys_module:
        data chrys_track_00
        data chrys_track_01
        data chrys_track_02
+       data chrys_track_03
        data >0000
 chrys_track_00:
        data snd_channel_1
 chrys_track_00_rpt:
-       data chrys_seq_00C8
-       data chrys_seq_00D7
-       data chrys_seq_00E6
-       data chrys_seq_00F7
-       data chrys_seq_0107
-       data chrys_seq_0119
-       data chrys_seq_00E6
-       data chrys_seq_0127
-       data chrys_seq_0137
        data chrys_seq_0148
-       data chrys_seq_0156
-       data chrys_seq_0167
+       data chrys_seq_0157
+       data chrys_seq_0166
        data chrys_seq_0177
-       data chrys_seq_0189
-       data chrys_seq_0197
-       data chrys_seq_01A8
-       data chrys_seq_01B8
-       data chrys_seq_01C9
+       data chrys_seq_0187
+       data chrys_seq_0199
+       data chrys_seq_0166
+       data chrys_seq_01A7
+       data chrys_seq_01B7
+       data chrys_seq_01C8
+       data chrys_seq_01D6
+       data chrys_seq_0177
+       data chrys_seq_0187
+       data chrys_seq_0199
+       data chrys_seq_0166
+       data chrys_seq_01A7
+       data chrys_seq_01B7
+       data chrys_seq_01E7
+       data chrys_seq_01F8
+       data chrys_seq_0203
+       data chrys_seq_0210
+       data chrys_seq_021A
+       data chrys_seq_0226
+       data chrys_seq_0231
+       data chrys_seq_0240
+       data chrys_seq_024E
+       data chrys_seq_01F8
+       data chrys_seq_0203
+       data chrys_seq_0210
+       data chrys_seq_021A
+       data chrys_seq_0226
+       data chrys_seq_025E
+       data chrys_seq_0240
+       data chrys_seq_026D
        data >00FF
        data chrys_track_00_rpt
        data >0000
 chrys_track_01:
        data snd_channel_2
 chrys_track_01_rpt:
-       data chrys_seq_01D9
-       data chrys_seq_01E7
-       data chrys_seq_01F1
-       data chrys_seq_01FD
-       data chrys_seq_01F1
-       data chrys_seq_0209
-       data chrys_seq_01F1
-       data chrys_seq_0213
-       data chrys_seq_021F
-       data chrys_seq_0229
-       data chrys_seq_01F1
-       data chrys_seq_01FD
-       data chrys_seq_01F1
-       data chrys_seq_0209
-       data chrys_seq_01F1
-       data chrys_seq_0233
-       data chrys_seq_021F
-       data chrys_seq_023F
+       data chrys_seq_027B
+       data chrys_seq_0289
+       data chrys_seq_0293
+       data chrys_seq_029F
+       data chrys_seq_0293
+       data chrys_seq_02AB
+       data chrys_seq_0293
+       data chrys_seq_02B5
+       data chrys_seq_02C1
+       data chrys_seq_02CB
+       data chrys_seq_02D5
+       data chrys_seq_029F
+       data chrys_seq_0293
+       data chrys_seq_02AB
+       data chrys_seq_0293
+       data chrys_seq_02B5
+       data chrys_seq_02C1
+       data chrys_seq_02E1
+       data chrys_seq_02ED
+       data chrys_seq_02F8
+       data chrys_seq_0303
+       data chrys_seq_030C
+       data chrys_seq_0318
+       data chrys_seq_0322
+       data chrys_seq_032E
+       data chrys_seq_0339
+       data chrys_seq_02ED
+       data chrys_seq_02F8
+       data chrys_seq_0303
+       data chrys_seq_030C
+       data chrys_seq_0318
+       data chrys_seq_0322
+       data chrys_seq_032E
+       data chrys_seq_0343
        data >00FF
        data chrys_track_01_rpt
        data >0000
 chrys_track_02:
        data snd_channel_3
 chrys_track_02_rpt:
-       data chrys_seq_024B
-       data chrys_seq_0251
-       data chrys_seq_025D
-       data chrys_seq_0267
-       data chrys_seq_0271
-       data chrys_seq_027B
-       data chrys_seq_025D
-       data chrys_seq_0288
-       data chrys_seq_0292
-       data chrys_seq_029C
-       data chrys_seq_025D
-       data chrys_seq_0267
-       data chrys_seq_0271
-       data chrys_seq_027B
-       data chrys_seq_025D
-       data chrys_seq_0288
-       data chrys_seq_0292
-       data chrys_seq_02A6
+       data chrys_seq_034F
+       data chrys_seq_0355
+       data chrys_seq_0361
+       data chrys_seq_036B
+       data chrys_seq_0375
+       data chrys_seq_037F
+       data chrys_seq_0361
+       data chrys_seq_038C
+       data chrys_seq_0396
+       data chrys_seq_03A0
+       data chrys_seq_0361
+       data chrys_seq_036B
+       data chrys_seq_0375
+       data chrys_seq_037F
+       data chrys_seq_0361
+       data chrys_seq_03AA
+       data chrys_seq_0396
+       data chrys_seq_03B4
+       data chrys_seq_03C0
+       data chrys_seq_03CA
+       data chrys_seq_03D6
+       data chrys_seq_03E0
+       data chrys_seq_03EA
+       data chrys_seq_03F4
+       data chrys_seq_03FE
+       data chrys_seq_0408
+       data chrys_seq_03C0
+       data chrys_seq_03CA
+       data chrys_seq_03D6
+       data chrys_seq_03E0
+       data chrys_seq_03EA
+       data chrys_seq_03F4
+       data chrys_seq_03FE
+       data chrys_seq_0412
        data >00FF
        data chrys_track_02_rpt
        data >0000
-chrys_seq_00C8:
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02B9
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02C2
-       data >0007
-       data chrys_note_02C5
-       data >0001
-       data chrys_note_02C8
-       data >0001
-       data chrys_note_02CB
-       data >0001
-       data chrys_note_02CE
-       data >0001
-       data chrys_note_02D1
-       data >0007
-       data >0000
-chrys_seq_01D9:
-       data chrys_note_02F2
-       data >0001
-       data chrys_note_02F5
-       data >0001
-       data chrys_note_02F8
-       data >0001
-       data chrys_note_02FB
-       data >0001
-       data chrys_note_02FE
-       data >0007
-       data chrys_note_0301
-       data >0001
-       data chrys_note_0304
-       data >0001
-       data chrys_note_0307
-       data >0001
-       data chrys_note_030A
-       data >0001
-       data chrys_note_030D
-       data >0007
-       data >0000
-chrys_seq_024B:
-       data >0020
-       data >0000
-chrys_seq_02B2:
-       data >0020
-       data >0000
-chrys_seq_00D7:
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02D7
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02C2
-       data >0003
-       data chrys_note_02DD
-       data >000B
-       data chrys_note_02BF
-       data >0003
-       data >0000
-chrys_seq_01E7:
-       data >0004
-       data chrys_note_030D
-       data >0007
-       data chrys_note_02F8
-       data >0003
-       data chrys_note_02FB
-       data >000F
-       data >0000
-chrys_seq_0251:
-       data chrys_note_031C
-       data >0003
-       data chrys_note_031F
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0328
-       data >0007
-       data >0000
-chrys_seq_00E6:
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DA
-       data >0003
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02DA
-       data >0003
-       data >0000
-chrys_seq_01F1:
-       data >0004
-       data chrys_note_02F8
-       data >0007
-       data chrys_note_02F8
-       data >0007
-       data chrys_note_02FB
-       data >0007
-       data chrys_note_02FB
-       data >0003
-       data >0000
-chrys_seq_025D:
-       data chrys_note_032B
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data >0000
-chrys_seq_00F7:
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02D7
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02E6
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02B6
-       data >0005
-       data chrys_note_02BF
-       data >0003
-       data >0000
-chrys_seq_01FD:
-       data chrys_note_02F8
-       data >0007
-       data chrys_note_02F8
-       data >000B
-       data chrys_note_02F2
-       data >0007
-       data chrys_note_0310
-       data >0003
-       data >0000
-chrys_seq_0267:
-       data chrys_note_0325
-       data >0007
-       data chrys_note_0322
-       data >0007
-       data chrys_note_0328
-       data >0003
-       data chrys_note_032E
-       data >0003
-       data chrys_note_0331
-       data >0003
-       data chrys_note_0334
-       data >0003
-       data >0000
-chrys_seq_0107:
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DA
-       data >0003
-       data chrys_note_02E9
-       data >0001
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data >0000
-chrys_seq_0271:
-       data chrys_note_032B
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0334
-       data >0003
-       data chrys_note_0337
-       data >0003
-       data >0000
-chrys_seq_0119:
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02B6
-       data >000B
-       data chrys_note_02BF
-       data >0003
-       data >0000
-chrys_seq_0209:
-       data >0004
-       data chrys_note_02FE
-       data >0007
-       data chrys_note_02F5
-       data >0003
-       data chrys_note_0313
-       data >000F
-       data >0000
-chrys_seq_027B:
-       data chrys_note_032B
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_032B
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0322
-       data >0002
-       data chrys_note_0334
-       data chrys_note_033A
-       data >0003
-       data chrys_note_0322
-       data >0007
-       data >0000
-chrys_seq_0127:
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02D7
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02E6
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02B6
-       data >0009
-       data >0000
-chrys_seq_0213:
-       data chrys_note_02F8
-       data >0007
-       data chrys_note_02F8
-       data >000B
-       data chrys_note_02F2
-       data >0007
-       data chrys_note_02F2
-       data >0003
-       data >0000
-chrys_seq_0288:
-       data chrys_note_0325
-       data >0007
-       data chrys_note_0322
-       data >0007
-       data chrys_note_0328
-       data >0003
-       data chrys_note_032E
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_032E
-       data >0003
-       data >0000
-chrys_seq_0137:
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0003
-       data chrys_note_02B9
-       data >0003
-       data >0000
-chrys_seq_021F:
-       data >0004
-       data chrys_note_02FB
-       data >0007
-       data chrys_note_02FB
-       data >000F
-       data chrys_note_0316
-       data >0003
-       data >0000
-chrys_seq_0292:
-       data chrys_note_031F
-       data >0003
-       data chrys_note_0334
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0334
-       data >0003
-       data chrys_note_031C
-       data >0003
-       data chrys_note_031F
-       data >0003
-       data chrys_note_033A
-       data >0003
-       data chrys_note_033D
-       data >0003
+chrys_track_03:
+       data snd_channel_4
+chrys_track_03_rpt:
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data chrys_seq_041E
+       data >00FF
+       data chrys_track_03_rpt
        data >0000
 chrys_seq_0148:
-       data chrys_note_02B6
+       data chrys_note_0422
        data >0001
-       data chrys_note_02EF
+       data chrys_note_0425
        data >0001
-       data chrys_note_02B6
+       data chrys_note_0428
        data >0001
-       data chrys_note_02BF
+       data chrys_note_042B
        data >0001
-       data chrys_note_02C2
+       data chrys_note_042E
+       data >0007
+       data chrys_note_0431
        data >0001
-       data chrys_note_02DA
+       data chrys_note_0434
        data >0001
-       data chrys_note_02C2
+       data chrys_note_0437
        data >0001
-       data chrys_note_02BF
+       data chrys_note_043A
        data >0001
-       data chrys_note_02DD
+       data chrys_note_043D
+       data >0007
+       data >0000
+chrys_seq_027B:
+       data chrys_note_045E
+       data >0001
+       data chrys_note_0461
+       data >0001
+       data chrys_note_0464
+       data >0001
+       data chrys_note_0467
+       data >0001
+       data chrys_note_046A
+       data >0007
+       data chrys_note_046D
+       data >0001
+       data chrys_note_0470
+       data >0001
+       data chrys_note_0473
+       data >0001
+       data chrys_note_0476
+       data >0001
+       data chrys_note_0479
+       data >0007
+       data >0000
+chrys_seq_034F:
+       data >0020
+       data >0000
+chrys_seq_041E:
+       data >0020
+       data >0000
+chrys_seq_0157:
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0443
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_042E
+       data >0003
+       data chrys_note_0449
        data >000B
-       data chrys_note_02BF
+       data chrys_note_042B
        data >0003
        data >0000
-chrys_seq_0229:
-       data chrys_note_02FB
-       data >000B
-       data chrys_note_02F8
+chrys_seq_0289:
+       data >0004
+       data chrys_note_0479
+       data >0007
+       data chrys_note_0464
        data >0003
-       data chrys_note_02FB
+       data chrys_note_0467
        data >000F
        data >0000
-chrys_seq_029C:
-       data chrys_note_0322
+chrys_seq_0355:
+       data chrys_note_0494
+       data >0003
+       data chrys_note_0497
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A0
        data >0007
-       data chrys_note_0322
+       data >0000
+chrys_seq_0166:
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0422
+       data >0001
+       data chrys_note_044C
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0446
        data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0334
+       data chrys_note_0449
+       data >0001
+       data chrys_note_0446
        data >0003
        data >0000
-chrys_seq_0156:
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DA
-       data >0003
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02DA
+chrys_seq_0293:
+       data >0004
+       data chrys_note_0464
+       data >0007
+       data chrys_note_0464
+       data >0007
+       data chrys_note_0467
+       data >0007
+       data chrys_note_0467
        data >0003
        data >0000
-chrys_seq_0167:
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02D7
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02E6
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02B6
-       data >0005
-       data chrys_note_02BF
+chrys_seq_0361:
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A0
        data >0003
        data >0000
 chrys_seq_0177:
-       data chrys_note_02BC
+       data chrys_note_0446
        data >0001
-       data chrys_note_02B6
+       data chrys_note_0443
        data >0001
-       data chrys_note_02E0
+       data chrys_note_0440
        data >0001
-       data chrys_note_02E3
+       data chrys_note_0428
        data >0001
-       data chrys_note_02C2
+       data chrys_note_0440
        data >0001
-       data chrys_note_02BF
+       data chrys_note_0452
        data >0001
-       data chrys_note_02BC
+       data chrys_note_044F
        data >0001
-       data chrys_note_02D4
+       data chrys_note_0428
        data >0001
-       data chrys_note_02DD
+       data chrys_note_042B
        data >0001
-       data chrys_note_02C2
+       data chrys_note_0449
        data >0001
-       data chrys_note_02BF
+       data chrys_note_042B
        data >0001
-       data chrys_note_02DA
+       data chrys_note_0422
+       data >0005
+       data chrys_note_042B
        data >0003
-       data chrys_note_02E9
-       data >0001
-       data chrys_note_02DA
-       data >0001
-       data chrys_note_02D4
-       data >0001
        data >0000
-chrys_seq_0189:
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02B6
+chrys_seq_029F:
+       data chrys_note_0464
+       data >0007
+       data chrys_note_0464
        data >000B
-       data chrys_note_02BF
+       data chrys_note_045E
+       data >0007
+       data chrys_note_047C
        data >0003
        data >0000
-chrys_seq_0197:
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02E0
-       data >0001
-       data chrys_note_02E3
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02DA
+chrys_seq_036B:
+       data chrys_note_049D
+       data >0007
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A0
        data >0003
-       data chrys_note_02DD
-       data >0001
-       data chrys_note_02DA
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_04A9
+       data >0003
+       data chrys_note_04AC
        data >0003
        data >0000
-chrys_seq_01A8:
-       data chrys_note_02DA
+chrys_seq_0187:
+       data chrys_note_0428
        data >0001
-       data chrys_note_02D7
+       data chrys_note_0422
        data >0001
-       data chrys_note_02D4
+       data chrys_note_044C
        data >0001
-       data chrys_note_02BC
+       data chrys_note_044F
        data >0001
-       data chrys_note_02D4
+       data chrys_note_042E
        data >0001
-       data chrys_note_02E6
+       data chrys_note_042B
        data >0001
-       data chrys_note_02E3
+       data chrys_note_0428
        data >0001
-       data chrys_note_02BC
+       data chrys_note_0440
        data >0001
-       data chrys_note_02BF
+       data chrys_note_0449
        data >0001
-       data chrys_note_02DD
+       data chrys_note_042E
        data >0001
-       data chrys_note_02BF
+       data chrys_note_042B
        data >0001
-       data chrys_note_02B6
+       data chrys_note_0446
+       data >0003
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data >0000
+chrys_seq_0375:
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04AC
+       data >0003
+       data chrys_note_04AF
+       data >0003
+       data >0000
+chrys_seq_0199:
+       data chrys_note_044F
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_0458
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_044C
+       data >0001
+       data chrys_note_0422
+       data >000B
+       data chrys_note_042B
+       data >0003
+       data >0000
+chrys_seq_02AB:
+       data >0004
+       data chrys_note_046A
+       data >0007
+       data chrys_note_0461
+       data >0003
+       data chrys_note_047F
+       data >000F
+       data >0000
+chrys_seq_037F:
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0002
+       data chrys_note_04AC
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_049A
+       data >0007
+       data >0000
+chrys_seq_01A7:
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0443
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0452
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0422
        data >0009
        data >0000
-chrys_seq_0233:
-       data chrys_note_02F8
+chrys_seq_02B5:
+       data chrys_note_0464
        data >0007
-       data chrys_note_02F8
+       data chrys_note_0464
        data >000B
-       data chrys_note_02F2
+       data chrys_note_045E
        data >0007
-       data chrys_note_02F2
+       data chrys_note_045E
        data >0003
        data >0000
-chrys_seq_01B8:
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
-       data >0001
-       data chrys_note_02B6
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02D4
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02EC
-       data >0001
-       data chrys_note_02C2
-       data >0001
-       data chrys_note_02BF
-       data >0001
-       data chrys_note_02BC
+chrys_seq_038C:
+       data chrys_note_049D
+       data >0007
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A0
        data >0003
-       data chrys_note_02B9
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A6
        data >0003
        data >0000
-chrys_seq_01C9:
-       data chrys_note_02B6
+chrys_seq_01B7:
+       data chrys_note_042B
        data >0001
-       data chrys_note_02EF
+       data chrys_note_0428
        data >0001
-       data chrys_note_02B6
+       data chrys_note_0422
        data >0001
-       data chrys_note_02BF
+       data chrys_note_0440
        data >0001
-       data chrys_note_02C2
+       data chrys_note_0458
        data >0001
-       data chrys_note_02DA
+       data chrys_note_042E
        data >0001
-       data chrys_note_02C2
+       data chrys_note_042B
        data >0001
-       data chrys_note_02BF
+       data chrys_note_0440
        data >0001
-       data chrys_note_02DD
-       data >0007
-       data chrys_note_02EF
-       data >0007
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0458
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0428
+       data >0003
+       data chrys_note_0425
+       data >0003
        data >0000
-chrys_seq_023F:
-       data chrys_note_02FB
+chrys_seq_02C1:
+       data >0004
+       data chrys_note_0467
+       data >0007
+       data chrys_note_0467
+       data >000F
+       data chrys_note_0482
+       data >0003
+       data >0000
+chrys_seq_0396:
+       data chrys_note_0497
+       data >0003
+       data chrys_note_04AC
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04AC
+       data >0003
+       data chrys_note_0494
+       data >0003
+       data chrys_note_0497
+       data >0003
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_04B5
+       data >0003
+       data >0000
+chrys_seq_01C8:
+       data chrys_note_0422
+       data >0001
+       data chrys_note_045B
+       data >0001
+       data chrys_note_0422
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0449
        data >000B
-       data chrys_note_02F8
+       data chrys_note_042B
        data >0003
-       data chrys_note_02FB
+       data >0000
+chrys_seq_02CB:
+       data chrys_note_0467
+       data >000B
+       data chrys_note_0464
+       data >0003
+       data chrys_note_0467
+       data >000F
+       data >0000
+chrys_seq_03A0:
+       data chrys_note_049A
        data >0007
-       data chrys_note_0319
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04AC
+       data >0003
+       data >0000
+chrys_seq_01D6:
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0422
+       data >0001
+       data chrys_note_044C
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0446
+       data >0003
+       data chrys_note_0449
+       data >0001
+       data chrys_note_0446
+       data >0003
+       data >0000
+chrys_seq_02D5:
+       data >0004
+       data chrys_note_0464
+       data >0007
+       data chrys_note_0464
+       data >0007
+       data chrys_note_0467
+       data >0007
+       data chrys_note_0467
+       data >0003
+       data >0000
+chrys_seq_03AA:
+       data chrys_note_049D
+       data >0007
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A6
+       data >0003
+       data >0000
+chrys_seq_01E7:
+       data chrys_note_0422
+       data >0001
+       data chrys_note_045B
+       data >0001
+       data chrys_note_0422
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0449
+       data >0007
+       data chrys_note_045B
        data >0007
        data >0000
-chrys_seq_02A6:
-       data chrys_note_0322
+chrys_seq_02E1:
+       data chrys_note_0467
+       data >000B
+       data chrys_note_0464
+       data >0003
+       data chrys_note_0467
        data >0007
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0325
-       data >0003
-       data chrys_note_0328
-       data >0003
-       data chrys_note_0322
-       data >0003
-       data chrys_note_0328
+       data chrys_note_0485
        data >0007
        data >0000
-chrys_note_02B6:
+chrys_seq_03B4:
+       data chrys_note_049A
+       data >0007
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A0
+       data >0007
+       data >0000
+chrys_seq_01F8:
+       data chrys_note_044F
+       data >0003
+       data chrys_note_042E
+       data >000B
+       data chrys_note_042B
+       data >0003
+       data chrys_note_0422
+       data >0007
+       data chrys_note_0422
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data >0000
+chrys_seq_02ED:
+       data chrys_note_045E
+       data >0003
+       data chrys_note_047F
+       data >000B
+       data chrys_note_0488
+       data >0003
+       data chrys_note_0485
+       data >000B
+       data >0000
+chrys_seq_03C0:
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_04A0
+       data >0007
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data >0000
+chrys_seq_0203:
+       data chrys_note_042E
+       data >0003
+       data chrys_note_044F
+       data >0001
+       data chrys_note_0449
+       data >0003
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0440
+       data >0003
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_044F
+       data >0009
+       data >0000
+chrys_seq_02F8:
+       data >0004
+       data chrys_note_045E
+       data >0007
+       data chrys_note_0461
+       data >0007
+       data chrys_note_046A
+       data >000B
+       data >0000
+chrys_seq_03CA:
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_0497
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04A3
+       data >0001
+       data chrys_note_04A3
+       data >0001
+       data chrys_note_04A9
+       data >0001
+       data chrys_note_04B8
+       data >0001
+       data >0000
+chrys_seq_0210:
+       data chrys_note_044F
+       data >0003
+       data chrys_note_042E
+       data >000B
+       data chrys_note_042B
+       data >0003
+       data chrys_note_0422
+       data >0007
+       data chrys_note_0422
+       data >0003
+       data >0000
+chrys_seq_0303:
+       data chrys_note_045E
+       data >0003
+       data chrys_note_047F
+       data >000B
+       data chrys_note_0488
+       data >0003
+       data chrys_note_0485
+       data >0007
+       data chrys_note_0467
+       data >0003
+       data >0000
+chrys_seq_03D6:
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_04A0
+       data >0007
+       data chrys_note_04A9
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data >0000
+chrys_seq_021A:
+       data chrys_note_0425
+       data >0003
+       data chrys_note_0428
+       data >0001
+       data chrys_note_0425
+       data >0003
+       data chrys_note_0422
+       data >0001
+       data chrys_note_0425
+       data >0003
+       data chrys_note_0425
+       data >0007
+       data chrys_note_042B
+       data >0003
+       data chrys_note_042E
+       data >0003
+       data >0000
+chrys_seq_030C:
+       data >0004
+       data chrys_note_046A
+       data >0007
+       data chrys_note_0467
+       data >0003
+       data chrys_note_046A
+       data >0007
+       data chrys_note_0461
+       data >0007
+       data >0000
+chrys_seq_03E0:
+       data chrys_note_04B8
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04B8
+       data >0003
+       data chrys_note_04AF
+       data >0003
+       data chrys_note_049D
+       data >0007
+       data chrys_note_04A3
+       data >0007
+       data >0000
+chrys_seq_0226:
+       data chrys_note_044F
+       data >0003
+       data chrys_note_042E
+       data >000B
+       data chrys_note_042B
+       data >0003
+       data chrys_note_0422
+       data >0005
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0449
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data >0000
+chrys_seq_0318:
+       data chrys_note_045E
+       data >0003
+       data chrys_note_047F
+       data >000B
+       data chrys_note_0488
+       data >0003
+       data chrys_note_0485
+       data >000B
+       data >0000
+chrys_seq_03EA:
+       data chrys_note_049A
+       data >0007
+       data chrys_note_04A6
+       data >0003
+       data chrys_note_04B2
+       data >0003
+       data chrys_note_04A0
+       data >0007
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A6
+       data >0003
+       data >0000
+chrys_seq_0231:
+       data chrys_note_044F
+       data >0001
+       data chrys_note_0452
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0449
+       data >000B
+       data chrys_note_0434
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data >0000
+chrys_seq_0322:
+       data >0004
+       data chrys_note_048B
+       data >0007
+       data chrys_note_048B
+       data >0007
+       data chrys_note_0485
+       data >0003
+       data chrys_note_0485
+       data >0007
+       data >0000
+chrys_seq_03F4:
+       data chrys_note_049A
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_04B5
+       data >0003
+       data chrys_note_049D
+       data >0003
+       data chrys_note_0497
+       data >0003
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A0
+       data >0007
+       data >0000
+chrys_seq_0240:
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0003
+       data chrys_note_0434
+       data >0003
+       data chrys_note_0437
+       data >0003
+       data chrys_note_044F
+       data >0007
+       data chrys_note_0449
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data >0000
+chrys_seq_032E:
+       data >0004
+       data chrys_note_0479
+       data >0007
+       data chrys_note_048E
+       data >0003
+       data chrys_note_0491
+       data >000B
+       data chrys_note_046A
+       data >0003
+       data >0000
+chrys_seq_03FE:
+       data chrys_note_04A0
+       data >0003
+       data chrys_note_04A9
+       data >0003
+       data chrys_note_04AC
+       data >0003
+       data chrys_note_04A9
+       data >0003
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A9
+       data >0003
+       data chrys_note_04B5
+       data >0003
+       data >0000
+chrys_seq_024E:
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0434
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0440
+       data >0003
+       data chrys_note_044F
+       data >0003
+       data chrys_note_0446
+       data >0003
+       data chrys_note_043A
+       data >0001
+       data chrys_note_0437
+       data >0001
+       data chrys_note_0434
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0440
+       data >0001
+       data >0000
+chrys_seq_0339:
+       data chrys_note_0476
+       data >0007
+       data chrys_note_0479
+       data >0007
+       data chrys_note_0491
+       data >000F
+       data >0000
+chrys_seq_0408:
+       data chrys_note_0497
+       data >0007
+       data chrys_note_04A3
+       data >0007
+       data chrys_note_049A
+       data >000F
+       data >0000
+chrys_seq_025E:
+       data chrys_note_044F
+       data >0001
+       data chrys_note_0452
+       data >0001
+       data chrys_note_044F
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_0428
+       data >0001
+       data chrys_note_042B
+       data >0001
+       data chrys_note_042E
+       data >0001
+       data chrys_note_0449
+       data >000B
+       data chrys_note_0434
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data >0000
+chrys_seq_026D:
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0434
+       data >0001
+       data chrys_note_0455
+       data >0001
+       data chrys_note_0446
+       data >0001
+       data chrys_note_0440
+       data >0003
+       data chrys_note_044F
+       data >0003
+       data chrys_note_0446
+       data >0007
+       data chrys_note_0422
+       data >0007
+       data >0000
+chrys_seq_0343:
+       data chrys_note_0476
+       data >0007
+       data chrys_note_0479
+       data >0007
+       data chrys_note_0491
+       data >0007
+       data chrys_note_045E
+       data >0007
+       data >0000
+chrys_seq_0412:
+       data chrys_note_0497
+       data >0007
+       data chrys_note_04A3
+       data >0007
+       data chrys_note_049A
+       data >0003
+       data chrys_note_04A3
+       data >0003
+       data chrys_note_049A
+       data >0007
+       data >0000
+chrys_note_0422:
        data chrys_instr_00
        data D3
-chrys_note_02B9:
+chrys_note_0425:
        data chrys_instr_00
        data C♯3
-chrys_note_02BC:
+chrys_note_0428:
        data chrys_instr_00
        data C3
-chrys_note_02BF:
+chrys_note_042B:
        data chrys_instr_00
        data B3
-chrys_note_02C2:
+chrys_note_042E:
        data chrys_instr_00
        data A3
-chrys_note_02C5:
+chrys_note_0431:
        data chrys_instr_00
        data C2
-chrys_note_02C8:
+chrys_note_0434:
        data chrys_instr_00
        data B2
-chrys_note_02CB:
+chrys_note_0437:
        data chrys_instr_00
        data A2
-chrys_note_02CE:
+chrys_note_043A:
        data chrys_instr_00
        data G♯1
-chrys_note_02D1:
+chrys_note_043D:
        data chrys_instr_00
        data G1
-chrys_note_02F2:
+chrys_note_045E:
        data chrys_instr_01
        data D2
-chrys_note_02F5:
+chrys_note_0461:
        data chrys_instr_01
        data C♯2
-chrys_note_02F8:
+chrys_note_0464:
        data chrys_instr_01
        data C2
-chrys_note_02FB:
+chrys_note_0467:
        data chrys_instr_01
        data B2
-chrys_note_02FE:
+chrys_note_046A:
        data chrys_instr_01
        data A2
-chrys_note_0301:
+chrys_note_046D:
        data chrys_instr_01
        data C1
-chrys_note_0304:
+chrys_note_0470:
        data chrys_instr_01
        data B1
-chrys_note_0307:
+chrys_note_0473:
        data chrys_instr_01
        data A1
-chrys_note_030A:
+chrys_note_0476:
        data chrys_instr_01
        data G♯1
-chrys_note_030D:
+chrys_note_0479:
        data chrys_instr_01
        data G1
-chrys_note_02D4:
+chrys_note_0440:
        data chrys_instr_00
        data E2
-chrys_note_02D7:
+chrys_note_0443:
        data chrys_instr_00
        data D♯2
-chrys_note_02DA:
+chrys_note_0446:
        data chrys_instr_00
        data D2
-chrys_note_02DD:
+chrys_note_0449:
        data chrys_instr_00
        data G2
-chrys_note_031C:
+chrys_note_0494:
        data chrys_instr_02
        data C1
-chrys_note_031F:
+chrys_note_0497:
        data chrys_instr_02
        data E1
-chrys_note_0322:
+chrys_note_049A:
        data chrys_instr_02
        data D1
-chrys_note_0325:
+chrys_note_049D:
        data chrys_instr_02
        data F♯1
-chrys_note_0328:
+chrys_note_04A0:
        data chrys_instr_02
        data G1
-chrys_note_02E0:
+chrys_note_044C:
        data chrys_instr_00
        data E3
-chrys_note_02E3:
+chrys_note_044F:
        data chrys_instr_00
        data F♯2
-chrys_note_032B:
+chrys_note_04A3:
        data chrys_instr_02
        data A1
-chrys_note_02E6:
+chrys_note_0452:
        data chrys_instr_00
        data F2
-chrys_note_0310:
+chrys_note_047C:
        data chrys_instr_01
        data F2
-chrys_note_032E:
+chrys_note_04A6:
        data chrys_instr_02
        data B2
-chrys_note_0331:
+chrys_note_04A9:
        data chrys_instr_02
        data B1
-chrys_note_0334:
+chrys_note_04AC:
        data chrys_instr_02
        data G♯1
-chrys_note_02E9:
+chrys_note_0455:
        data chrys_instr_00
        data C♯2
-chrys_note_0337:
+chrys_note_04AF:
        data chrys_instr_02
        data F1
-chrys_note_02EC:
+chrys_note_0458:
        data chrys_instr_00
        data G♯2
-chrys_note_0313:
+chrys_note_047F:
        data chrys_instr_01
        data F♯2
-chrys_note_033A:
+chrys_note_04B2:
        data chrys_instr_02
        data A2
-chrys_note_0316:
+chrys_note_0482:
        data chrys_instr_01
        data A♯2
-chrys_note_033D:
+chrys_note_04B5:
        data chrys_instr_02
        data D♯1
-chrys_note_02EF:
+chrys_note_045B:
        data chrys_instr_00
        data G3
-chrys_note_0319:
+chrys_note_0485:
        data chrys_instr_01
        data B3
+chrys_note_0488:
+       data chrys_instr_01
+       data G2
+chrys_note_04B8:
+       data chrys_instr_02
+       data C♯1
+chrys_note_048B:
+       data chrys_instr_01
+       data A3
+chrys_note_048E:
+       data chrys_instr_01
+       data F1
+chrys_note_0491:
+       data chrys_instr_01
+       data F♯1
 chrys_instr_00:
        byte T1
        byte 24
