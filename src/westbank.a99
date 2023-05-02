@@ -1,6 +1,7 @@
 *********************************************************************
 *      West bank for the TI-99/4A
 *
+start:
        limi 0
        lwpi wrksp
        bl   @ti_setup_environment
@@ -8,6 +9,9 @@
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)
        mov  hl,@random_seed            ; LD ($D8AC),HL     ; Write it to #R$D8AC.
+       bl   @ti_show_loading_screen
+       movb @bytes+120,b
+       bl   @halt_loop
 main_loop:
        bl   @ti_clear_screen
        bl   @title_screen              ; CALL $FE00        ; #REGhl=#R$CBB4.}
@@ -562,6 +566,7 @@ game_loop_2:
        jeq  !                          ; CALL NZ,$CBA0     ; }
        bl   @got_a_deposit                    ;
 !
+       bl   @ti_check_quit
        b    @game_loop                 ; JP $CAE7          ;
 
 *********************************************************************
@@ -2364,6 +2369,7 @@ ts_call_flash:                         ; fe66
        bl   @ti_check_key
        jne  title_screen_return
        bl   @module_player
+       bl   @ti_check_quit
        inc  @frame
        mov  @frame,tmp0
        andi tmp0,>0fff
