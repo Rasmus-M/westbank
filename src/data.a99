@@ -77,16 +77,16 @@ lives:                                 ; cc59
 level:                                 ; 5cb1
        byte >01
 
-* Game status buffer entry at D18F
-copy_char_data_flag:
+copy_char_data_flag:                   ; d18f
        byte >00
 
-* Game status buffer entry at D190
 deposit_flag:                          ; d190
        byte >00
 
-* Game status buffer entry at D191
-sheriff_star_flag:
+cashboxes_completed_flag:              ; ca80
+       byte >00                                                      ;
+
+sheriff_star_flag:                     ; d191
        byte >01
 
 phase:                                 ; ca4a

@@ -370,10 +370,6 @@ init_progress:                         ; ca6c
        rt                              ; RET               ; Return.
 
 *********************************************************************
-cashboxes_completed_flag:              ; ca80
-       byte >00                                                      ;
-
-*********************************************************************
 run_phase:                             ; ca81
        .proc
        bl   @init_and_run_game_loop    ; CALL $CAC8        ;
