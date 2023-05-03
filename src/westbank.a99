@@ -659,8 +659,6 @@ bang_color:
 perform_duel:
        .proc
        movb a,@duel_counter           ; I think this was the intention - otherwise duel_counter is never updated
-       li   tmp0,duel_module
-       bl   @play_module
        bl   @perform_duel_main        ; CALL $C3DD        ; Call #R$C3DD.
                                        ; LD A,($C421)      ; Grab #R$C421.
        jnc  after_duel_1               ; JR NC,$C3C9       ;
@@ -767,6 +765,8 @@ duel_clear_screen:                     ; c463
        bl   @duel_draw_bandit_prep    ; CALL $C661        ; }
 * Count down 5-4-3-2-1...0!
 * countdown_initialise                 ; c4c5
+       li   tmp0,duel_module
+       bl   @play_module
        movb @bytes+53,a                ; LD A,$35          ; {Initialise countdown to "5" seconds ($35 in ASCII),
 countdown_loop:                        ; c4c7
        .push af                        ; PUSH AF           ; hold this at #R$C6E0.
