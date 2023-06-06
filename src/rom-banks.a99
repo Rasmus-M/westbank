@@ -10,3 +10,27 @@
        bank 3
        copy "character-bank-3.a99"
 
+       bank 4
+       copy "character-bank-4.a99"
+
+       bank 5
+       copy "character-bank-5.a99"
+
+       bank 6
+       copy "character-bank-6.a99"
+
+       bank 7
+       copy "empty-bank.a99"
+
+       bank 8
+       copy "empty-bank.a99"
+
+       bank 9
+       copy "empty-bank.a99"
+
+       bank 10
+       copy "empty-bank.a99"
+
+       bank 11
+       copy "empty-bank.a99"
+

@@ -5,6 +5,9 @@
        copy "character-bank-1.a99"
        copy "character-bank-2.a99"
        copy "character-bank-3.a99"
+       copy "character-bank-4.a99"
+       copy "character-bank-5.a99"
+       copy "character-bank-6.a99"
 
        save >2000,>3fff
        copy "lower-memory.a99"

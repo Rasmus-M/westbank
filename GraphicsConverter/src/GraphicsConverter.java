@@ -143,7 +143,7 @@ public class GraphicsConverter {
                 }
             }
         }
-        ImageIO.write(image, "png", new File(fileName + ".png"));
+        ImageIO.write(image, "png", new File("graphics/images/" + fileName + ".png"));
     }
 
     private IndexColorModel createIndexColorModel() {

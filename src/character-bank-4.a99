@@ -1,0 +1,10 @@
+       aorg >6000
+       bss  >40
+
+       copy "images-color/gfx_character_15b.a99"
+       copy "images-color/gfx_character_16b.a99"
+       copy "images-color/gfx_character_17b.a99"
+       copy "images-color/gfx_character_18b.a99"
+       copy "images-color/gfx_character_19b.a99"
+       copy "images-color/gfx_character_1a2.a99"
+       copy "images-color/gfx_character_1b2.a99"

@@ -117,6 +117,12 @@ char_bank_2_select:
        equ  >600C
 char_bank_3_select:
        equ  >600E
+char_bank_4_select:
+       equ  >6010
+char_bank_5_select:
+       equ  >6012
+char_bank_6_select:
+       equ  >6014
 kscan:
        equ  >02b2
 

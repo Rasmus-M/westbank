@@ -5,6 +5,6 @@ public class ConvertToImages {
 
     public static void main(String[] args) throws IOException {
         GraphicsConverter converter = new GraphicsConverter();
-        converter.convertToImages(new File("graphics/characters-gfx.a99"));
+        converter.convertToImages(new File("graphics/door-gfx.a99"));
     }
 }

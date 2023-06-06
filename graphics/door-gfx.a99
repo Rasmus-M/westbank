@@ -369,3 +369,4 @@ gfx_door_frame_4:                          ; bfa8
        byte >40                                                      ;
        byte >40                                                      ;
        byte >7F                                                      ; }
+*
