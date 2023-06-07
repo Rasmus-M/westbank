@@ -6,19 +6,34 @@ start:
        lwpi wrksp
        bl   @ti_setup_environment
 
+*      Test
        bl   @ti_clear_screen
-       clr  hl
+       li   hl,test_frames
 test_loop:
        li   tmp0,4*32+13
-       mov  hl,tmp1
-       li   tmp2,4
-       bl   @ti_draw_partical_character
-       li   tmp0,16
+       mov  *hl+,tmp1
+       jlt  after_test
+       bl   @ti_draw_character
+       li   tmp0,32
        bl   @ti_delay
-       inc  hl
-       ci   hl,>27
-       jne  test_loop
-
+       jmp  test_loop
+test_frames:
+       data >00,>01,>02
+       data >03,>06,>07
+       data >03,>04,>05,>00,>01,>02
+       data >0a,>0d,>0e
+       data >0a,>0b,>0c,>00,>01,>02
+       data >08,>09,>02
+       data >10,>0f,>11,>02
+       data >12,>13,>14,>02
+       data >15,>16,>17,>02
+       data >18,>19,>1a,>02
+       data >1b,>1c,>1d,>1e,>1f,>20,>21,>22
+       data >1b,>1c,>1d,>1e,>1f,>20,>21,>23
+       data >24,>25,>26,>02
+       data -1
+after_test:
+       bl   @ti_clear_screen
 
        mov  @>83c0,hl                  ; LD HL,($5C78)     ; #HTML(Fetch <a
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
