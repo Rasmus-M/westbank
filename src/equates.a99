@@ -123,6 +123,8 @@ char_bank_5_select:
        equ  >6012
 char_bank_6_select:
        equ  >6014
+doors_bank_select:
+       equ  >6016
 kscan:
        equ  >02b2
 

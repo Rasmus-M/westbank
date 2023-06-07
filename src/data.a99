@@ -692,10 +692,10 @@ character_table:
        data char_bank_6_select,gfx_character_26b_patterns
 
 door_frame_table:
-       data gfx_door_frame_1
-       data gfx_door_frame_2
-       data gfx_door_frame_3
-       data gfx_door_frame_4
+       data gfx_door_frame_1b_patterns
+       data gfx_door_frame_2b_patterns
+       data gfx_door_frame_3b_patterns
+       data gfx_door_frame_4b_patterns
 
 bytes:
        byte >00,>01,>02,>03,>04,>05,>06,>07,>08,>09,>0a,>0b,>0c,>0d,>0e,>0f

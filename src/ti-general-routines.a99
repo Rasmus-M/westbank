@@ -240,6 +240,74 @@ ti_set_border_color:
 
 *********************************************************************
 *
+* Draw graphics and color
+*
+* tmp0 (r13): VDP address of patterns
+* tmp1 (r14): Source address of patterns (colors follow right after)
+* tmp2 (r15) MSB: width in characters
+* tmp2 (r15) LSB: height in characters
+*
+ti_draw_color_graphics:
+       .proc
+       lwpi ti_wrksp
+       mov  r13,r0                     ; VDP address
+       mov  r14,r1                     ; Source address (patterns)
+       mov  r15,r2                     ; Width and height
+       andi r2,>00ff                   ; Height
+       mov  r15,r4                     ; Width and height
+       srl  r4,8                       ; Width
+       mov  r4,r6                      ; Width in r6
+       sla  r6,3                       ; Width in bytes
+       a    @row_src_skip,r6           ; Total width
+       mpy  r2,r6                      ; Width * height in r7
+       a    r1,r7                      ; Color source address
+       mov  @row_src_skip,r5           ; Number of source bytes to skip after each row
+       li   r6,vdpwd
+       ori  r0,>4000                   ; Set read/write bits 14 and 15 to write (01)
+*      Patterns
+ti_draw_color_graphics_1:
+       movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
+       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
+       mov  r4,r3                      ; Width in characters
+ti_draw_color_graphics_2:
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       dec  r3
+       jne  ti_draw_color_graphics_2
+*      Colors
+       ai   r0,>2000                   ; To color table
+       movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
+       movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
+       mov  r4,r3                      ; Width in characters
+ti_draw_color_graphics_3:
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       dec  r3
+       jne  ti_draw_color_graphics_3
+       ai   r0,256->2000               ; Next character row
+       a    r5,r1                      ; Skip source bytes
+       a    r5,r7                      ; Skip source bytes
+       dec  r2
+       jne  ti_draw_color_graphics_1
+       lwpi wrksp
+       bl   @module_player
+       .endproc
+*// ti_draw_color_graphics
+
+*********************************************************************
+*
 * Draw graphics
 *
 * tmp0 (r13): VDP address

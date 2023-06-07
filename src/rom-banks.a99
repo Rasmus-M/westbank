@@ -20,7 +20,7 @@
        copy "character-bank-6.a99"
 
        bank 7
-       copy "empty-bank.a99"
+       copy "doors-bank.a99"
 
        bank 8
        copy "empty-bank.a99"

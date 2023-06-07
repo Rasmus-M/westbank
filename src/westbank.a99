@@ -5,6 +5,21 @@ start:
        limi 0
        lwpi wrksp
        bl   @ti_setup_environment
+
+       bl   @ti_clear_screen
+       clr  hl
+test_loop:
+       li   tmp0,4*32+13
+       mov  hl,tmp1
+       li   tmp2,4
+       bl   @ti_draw_partical_character
+       li   tmp0,16
+       bl   @ti_delay
+       inc  hl
+       ci   hl,>27
+       jne  test_loop
+
+
        mov  @>83c0,hl                  ; LD HL,($5C78)     ; #HTML(Fetch <a
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
                                                            ; as a random number seed.)

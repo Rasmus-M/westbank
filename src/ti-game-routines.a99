@@ -175,9 +175,7 @@ ti_draw_character:
        mov  *tmp1,tmp1                 ; Get source address
        sla  tmp0,3                     ; VDP address
        li   tmp2,>060b                 ; Width/height in characters
-       bl   @ti_draw_graphics          ; Draw graphics
-       mov  @character_attr,tmp1
-       bl   @ti_draw_color_area
+       bl   @ti_draw_color_graphics    ; Draw graphics
        .endproc
 *// ti_draw_character
 
@@ -224,10 +222,8 @@ ti_draw_partical_character:
        mov  a,@row_src_skip            ; Set source skip
        sla  tmp2,8                     ; Width to MSB
        ori  tmp2,>000b                 ; Set height
-       bl   @ti_draw_graphics          ; Draw graphics
+       bl   @ti_draw_color_graphics    ; Draw graphics
        clr  @row_src_skip
-       mov  @character_attr,tmp1
-       bl   @ti_draw_color_area
        .endproc
 *// ti_draw_partial_character
 
@@ -240,7 +236,7 @@ ti_draw_partical_character:
 *
 ti_draw_door:
        .proc
-       seto @graphics_bank_select
+       seto @doors_bank_select
        sla  tmp1,1                     ; X offset in characters
        a    tmp1,tmp0                  ; Add offset to screen position
        li   tmp2,7                     ; Full door width
@@ -249,9 +245,7 @@ ti_draw_door:
        sla  tmp0,3                     ; VDP address
        sla  tmp2,8                     ; Width to MSB
        ori  tmp2,>000b                 ; Set height
-       bl   @ti_draw_graphics          ; Draw graphics
-       li   tmp1,>0030
-       bl   @ti_draw_color_area
+       bl   @ti_draw_color_graphics    ; Draw graphics
        .endproc
 *// ti_draw_door
 

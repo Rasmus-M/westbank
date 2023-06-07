@@ -1,0 +1,8 @@
+       aorg >6000
+       bss  >40
+
+       copy "images-color/gfx_door_frame_1b.a99"
+       copy "images-color/gfx_door_frame_2b.a99"
+       copy "images-color/gfx_door_frame_3b.a99"
+       copy "images-color/gfx_door_frame_4b.a99"
+
