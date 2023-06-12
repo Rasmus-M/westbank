@@ -1142,7 +1142,7 @@ julius_open_1:                         ; d907
                                        ; LD ($D8E8),A      ;
        jne  julius_open_8              ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
+       movb @bytes+>24,a               ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        bl   @draw_door_frame_2         ; CALL $D6D1        ; #R$D6D1 and return.
        jmp  julius_open_8              ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 3.
@@ -1152,7 +1152,7 @@ julius_open_2:                         ; d916
                                        ; LD ($D8E9),A      ;
        jne  julius_open_8              ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
+       movb @bytes+>24,a               ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        bl   @draw_door_frame_3         ; CALL $D6DF        ; #R$D6DF and return.
        jmp  julius_open_8              ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 4.
@@ -1162,7 +1162,7 @@ julius_open_3:                         ; d925
                                        ; LD ($D8EA),A      ;
        jne  julius_open_8              ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
+       movb @bytes+>24,a               ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        bl   @draw_door_frame_4         ; CALL $D6ED        ; #R$D6ED and return.
        jmp  julius_open_8              ; RET               ; }
 * Handle door frame 4 countdown.
@@ -1179,12 +1179,12 @@ julius_open_4:                         ; d934
        jeq  julius_state_4_close       ; JR Z,$D951        ; }
 * Changes the frame to show Julius drawing his pistol.
        movb @bytes+7,*hl               ; LD (HL),$07       ; Writes "07" to #R$D8E7.
-       movb @bytes+37,a                ; LD A,$25          ; {Pass character index (#R$B450(draw | $25)) to #R$D6ED
+       movb @bytes+>25,a               ; LD A,$25          ; {Pass character index (#R$B450(draw | $25)) to #R$D6ED
        bl   @draw_door_frame_4         ; CALL $D6ED        ; and return.
        jmp  julius_open_8              ; RET               ; }
 * Set up (and begin) closing the door.
 julius_state_4_close:                  ; d951
-       movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
+       movb @bytes+>24,a               ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        bl   @draw_door_frame_3         ; CALL $D6DF        ; #R$D6DF.}
                                        ; LD A,$01          ; {Writes $01 to #R$D190 and #REGix+8. Writes $05 to
        movb one,@deposit_flag          ; LD ($D190),A      ; #REGix+6 and return.
@@ -1198,7 +1198,7 @@ julius_open_5:                         ; d963
                                        ; LD ($D8EC),A      ;
        jne  julius_open_8              ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+36,a                ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
+       movb @bytes+>24,a               ; LD A,$24          ; {Pass character index (#R$B240(stand off | $24)) to
        bl   @draw_door_frame_2         ; CALL $D6D1        ; #R$D6D1 and return.
        jmp  julius_open_8              ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.
@@ -1247,7 +1247,7 @@ julius_close_1:                        ; d9a9
                                        ; LD ($D8E8),A      ;
        jne  julius_close_6             ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+38,a                ; LD A,$26          ; {Pass character index #R$B660(shot | $26) to #R$D6ED
+       movb @bytes+>26,a               ; LD A,$26          ; {Pass character index #R$B660(shot | $26) to #R$D6ED
        bl   @draw_door_frame_4         ; CALL $D6ED        ; and return.
        jmp  julius_close_6             ; RET               ; }
 * Handles state countdown/ transition to character frame #R$B870($27).
@@ -1257,7 +1257,7 @@ julius_close_2:                        ; d9b8
                                        ; LD ($D8E9),A      ;
        jne  julius_close_6             ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+39,a                ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6ED.
+       movb @bytes+>27,a               ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6ED.
        bl   @draw_door_frame_4         ; CALL $D6ED        ; }
        movb @julius_flag,a             ; LD A,($D8E6)      ; {Return if #R$D8E6 is zero.
        ; AND A                         ; AND A             ;
@@ -1273,7 +1273,7 @@ julius_close_3:                        ; d9d3
                                        ; LD ($D8EA),A      ;
        jne  julius_close_6             ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+39,a                ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6DF
+       movb @bytes+>27,a               ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6DF
        bl   @draw_door_frame_3         ; CALL $D6DF        ; and return.
        jmp  julius_close_6             ; RET               ; }
 * Handle door frame 3 countdown/ transition to door frame 2.
@@ -1283,7 +1283,7 @@ julius_close_4:                        ; d9e2
                                        ; LD ($D8EB),A      ;
        jne  julius_close_6             ; RET NZ            ; }
        ab   one,*hl                    ; INC (HL)          ; Move onto next character state.
-       movb @bytes+39,a                ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6D1
+       movb @bytes+>27,a               ; LD A,$27          ; {Pass character index #R$B870(floor | $27) to #R$D6D1
        bl   @draw_door_frame_2         ; CALL $D6D1        ; and return.
        jmp  julius_close_6             ; RET               ; }
 * Handle door frame 2 countdown/ transition to door frame 1.

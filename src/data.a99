@@ -457,38 +457,38 @@ julius_close_source:                           ; Used in init_julius_close
        byte >0B                                ; }
 * Bandit 3.
 bandit_3_source:
-       byte >00,>10,>0F,>11,>02,>01,>08,>08    ; {Bandit 3 source data.
+       byte >00,>10,>0F,>11,>2a,>01,>08,>08    ; {Bandit 3 source data.
        byte >08,>40,>40                        ; }
 bandit_3_buffer:
-       byte >00,>10,>0F,>11,>02,>01,>0B,>0B    ; {Bandit 3 buffer.
+       byte >00,>10,>0F,>11,>2a,>01,>0B,>0B    ; {Bandit 3 buffer.
        byte >0B,>0B,>0B                        ; }
 * Bandit 4.
 bandit_4_source:
-       byte >00,>12,>13,>14,>02,>01,>08,>08    ; {Bandit 4 source data.
+       byte >00,>12,>13,>14,>2b,>01,>08,>08    ; {Bandit 4 source data.
        byte >08,>30,>40                        ; }
 bandit_4_buffer:
-       byte >00,>12,>13,>14,>02,>01,>0B,>0B    ; {Bandit 4 buffer.
+       byte >00,>12,>13,>14,>2b,>01,>0B,>0B    ; {Bandit 4 buffer.
        byte >0B,>0B,>0B                        ; }
 * Bandit 5.
 bandit_5_source:
-       byte >00,>15,>16,>17,>02,>01,>08,>08    ; {Bandit 5 source data.
+       byte >00,>15,>16,>17,>2c,>01,>08,>08    ; {Bandit 5 source data.
        byte >08,>20,>38                        ; }
 bandit_5_buffer:
-       byte >00,>15,>16,>17,>02,>01,>0B,>0B    ; {Bandit 5 buffer.
+       byte >00,>15,>16,>17,>2c,>01,>0B,>0B    ; {Bandit 5 buffer.
        byte >0B,>0B,>0B                        ; }
 * Bandit 6.
 bandit_6_source:
-       byte >00,>18,>19,>1A,>02,>01,>08,>08    ; {Bandit 6 source data.
+       byte >00,>18,>19,>1A,>28,>01,>08,>08    ; {Bandit 6 source data.
        byte >08,>10,>38                        ; }
 bandit_6_buffer:
-       byte >00,>18,>19,>1A,>02,>01,>0B,>0B    ; {Bandit 6 buffer.
+       byte >00,>18,>19,>1A,>28,>01,>0B,>0B    ; {Bandit 6 buffer.
        byte >0B,>0B,>0B                        ; }
 * Bandit 2.
 bandit_2_source:
-       byte >00,>08,>08,>09,>07,>01,>08,>08    ; {Bandit 2 source data.
+       byte >00,>08,>08,>09,>29,>01,>08,>08    ; {Bandit 2 source data.
        byte >08,>01,>30                        ; }
 bandit_2_buffer:
-       byte >00,>08,>08,>09,>07,>01,>0B,>0B    ; {Bandit 2 buffer.
+       byte >00,>08,>08,>09,>29,>01,>0B,>0B    ; {Bandit 2 buffer.
        byte >0B,>0B,>0B                        ; }
 
 * Door data/buffer?

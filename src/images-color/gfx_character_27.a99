@@ -49,22 +49,22 @@ gfx_character_27_patterns:
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>fc,>f8,>f0,>f2,>f2,>f8
-       byte >ff,>f8,>fe,>f8,>dd,>d8,>a7,>af
-       byte >ff,>ff,>ff,>ff,>80,>80,>80,>ff
+       byte >ff,>ff,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >ff,>fd,>fb,>83,>ba,>ee,>c6,>bb
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>f1
        byte >ff,>f0,>e5,>ea,>e5,>f2,>fc,>ef
-       byte >ff,>c0,>b0,>7f,>af,>4f,>39,>d5
-       byte >e0,>c2,>f8,>80,>f7,>c0,>e0,>e0
-       byte >aa,>d7,>b4,>ff,>fe,>ff,>8f,>f8
-       byte >e0,>f0,>f8,>f0,>f0,>c0,>fa,>f5
+       byte >ff,>c0,>b0,>fc,>af,>4f,>39,>d5
+       byte >f8,>e9,>f2,>c0,>80,>c0,>e0,>c0
+       byte >fe,>84,>b5,>8f,>ef,>f7,>8f,>fe
+       byte >80,>e0,>f8,>f2,>f4,>c0,>fa,>f5
        byte >ca,>84,>d5,>ab,>d6,>a4,>d8,>8f
        byte >d5,>ea,>fd,>fe,>ff,>ff,>ff,>ff
-       byte >c5,>ea,>8e,>b8,>df,>ea,>f5,>ff
-       byte >e0,>ba,>ca,>94,>df,>bf,>80,>ff
-       byte >ff,>ab,>aa,>fa,>ff,>ff,>ff,>ff
-       byte >85,>ca,>f4,>f9,>80,>d5,>ea,>ff
-       byte >c0,>80,>f5,>ea,>df,>80,>ff,>ff
+       byte >c5,>ea,>f0,>f8,>df,>ea,>ff,>f5
+       byte >e0,>c0,>c0,>eb,>df,>b7,>ef,>80
+       byte >ff,>ab,>aa,>fa,>ff,>fd,>fe,>ff
+       byte >85,>e2,>f8,>ff,>80,>aa,>d5,>eb
+       byte >c0,>80,>dd,>b7,>a0,>ff,>bf,>ff
 gfx_character_27_colors:
        byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
        byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
@@ -116,19 +116,19 @@ gfx_character_27_colors:
        byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
        byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
        byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
-       byte >7e,>7e,>71,>71,>71,>71,>71,>71
-       byte >7e,>17,>17,>91,>19,>91,>1a,>1a
-       byte >7e,>7e,>7e,>7e,>17,>17,>17,>7e
-       byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>71
-       byte >7e,>71,>71,>71,>71,>71,>71,>71
-       byte >7e,>17,>17,>1e,>1e,>1e,>1e,>1e
-       byte >71,>71,>28,>12,>2a,>12,>12,>12
-       byte >a1,>a1,>f6,>2e,>2b,>2e,>27,>72
-       byte >17,>17,>21,>21,>21,>21,>1e,>1e
-       byte >71,>71,>1e,>1e,>17,>17,>17,>71
+       byte >7e,>7e,>71,>71,>71,>71,>71,>79
+       byte >7e,>1e,>1e,>19,>91,>91,>91,>91
+       byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7e
+       byte >7e,>7e,>7e,>7e,>7e,>7e,>7e,>7f
+       byte >7e,>7f,>7f,>7f,>7f,>7f,>7f,>71
+       byte >7e,>f7,>f7,>f1,>fe,>fe,>fe,>fe
+       byte >71,>1f,>1f,>14,>14,>f4,>f4,>f4
+       byte >91,>f1,>1f,>4e,>45,>45,>47,>74
+       byte >17,>17,>1f,>4f,>4f,>4f,>fe,>fe
+       byte >7f,>7f,>fe,>fe,>f7,>f7,>f7,>7f
        byte >71,>71,>71,>71,>7e,>7e,>7e,>7e
-       byte >71,>71,>17,>71,>71,>71,>71,>7e
-       byte >17,>71,>17,>17,>71,>71,>17,>7e
-       byte >7e,>71,>17,>71,>7e,>7e,>7e,>7e
-       byte >71,>71,>71,>71,>17,>71,>71,>7e
-       byte >17,>17,>71,>71,>71,>17,>7e,>7e
+       byte >7f,>7f,>7f,>7f,>71,>71,>7e,>71
+       byte >f7,>f7,>f7,>71,>71,>71,>71,>17
+       byte >7e,>71,>17,>71,>7e,>71,>71,>7e
+       byte >7f,>7f,>7f,>7e,>17,>71,>71,>71
+       byte >f7,>f7,>71,>71,>17,>7e,>71,>7e
