@@ -1,0 +1,24 @@
+gfx_door_frame_4_patterns:
+       byte >81,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>bf
+       byte >bf,>bf,>bf,>bf,>bf,>bf,>bf,>80
+gfx_door_frame_4_colors:
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23
+       byte >23,>23,>23,>23,>23,>23,>23,>23

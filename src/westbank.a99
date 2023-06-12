@@ -8,6 +8,7 @@ start:
 
 *      Test
        bl   @ti_clear_screen
+;       bl   @perform_duel_main
        li   hl,test_frames
 test_loop:
        li   tmp0,4*32+13
@@ -23,14 +24,14 @@ test_frames:
        data >03,>04,>05,>00,>01,>02
        data >0a,>0d,>0e
        data >0a,>0b,>0c,>00,>01,>02
-       data >08,>09,>02
-       data >10,>0f,>11,>02
-       data >12,>13,>14,>02
-       data >15,>16,>17,>02
-       data >18,>19,>1a,>02
+       data >08,>09,>29
+       data >10,>0f,>11,>2a
+       data >12,>13,>14,>2b
+       data >15,>16,>17,>2c
+       data >18,>19,>1a,>28
        data >1b,>1c,>1d,>1e,>1f,>20,>21,>22
        data >1b,>1c,>1d,>1e,>1f,>20,>21,>23
-       data >24,>25,>26,>02
+       data >24,>25,>2e,>2f
        data -1
 after_test:
        bl   @ti_clear_screen
@@ -1091,7 +1092,7 @@ duel_draw_bandit_prep:                 ; c661
        clr  tmp1
        movb a,tmp1
        swpb tmp1
-       bl   @ti_draw_character_pattern
+       bl   @ti_draw_character
        .endproc                        ; RET               ; Return.
 
 *********************************************************************
@@ -2475,16 +2476,16 @@ ts_draw_bandits:                        ; fea4
        li   tmp0,>00d9
        clr  tmp1
        bl   @ti_draw_character
-*      Left bandit bottom colors
-       li   tmp0,(>00c1+(8*32))*8
-       li   tmp1,>0020
-       li   tmp2,>0603
-       bl   @ti_draw_color_area
-*      Right bandit bottom colors
-       li   tmp0,(>00d9+(8*32))*8
-       li   tmp1,>0020
-       li   tmp2,>0603
-       bl   @ti_draw_color_area
+;*      Left bandit bottom colors
+;       li   tmp0,(>00c1+(8*32))*8
+;       li   tmp1,>0020
+;       li   tmp2,>0603
+;       bl   @ti_draw_color_area
+;*      Right bandit bottom colors
+;       li   tmp0,(>00d9+(8*32))*8
+;       li   tmp1,>0020
+;       li   tmp2,>0603
+;       bl   @ti_draw_color_area
        .endproc
 
 *********************************************************************

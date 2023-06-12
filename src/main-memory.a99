@@ -8,6 +8,7 @@
        copy "character-bank-4.a99"
        copy "character-bank-5.a99"
        copy "character-bank-6.a99"
+       copy "character-bank-7.a99"
        copy "doors-bank.a99"
 
        save >2000,>3fff
