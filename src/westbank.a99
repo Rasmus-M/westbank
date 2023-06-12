@@ -7,7 +7,7 @@ start:
        bl   @ti_setup_environment
 
 *      Test
-       bl   @ti_clear_screen
+;       bl   @ti_clear_screen
 ;       bl   @perform_duel_main
 ;       li   hl,test_frames
 ;test_loop:
@@ -34,7 +34,7 @@ start:
 ;       data >24,>25,>26,>27
 ;       data -1
 after_test:
-       bl   @ti_clear_screen
+;       bl   @ti_clear_screen
 
        mov  @>83c0,hl                  ; LD HL,($5C78)     ; #HTML(Fetch <a
                                                            ; href="https://skoolkid.github.io/rom/asm/5C78.html">FRAMES</a>
