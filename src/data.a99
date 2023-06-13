@@ -187,6 +187,7 @@ dueller_1:                             ; 5bc0
        byte >00                        ; 14
        byte >00                        ; 15
        byte >00                        ; 16
+       byte >00                        ; 17 Character index frame 4.
 
 * Dueller Number 2.
 *
@@ -209,6 +210,7 @@ dueller_2:                             ; 5bd1
        byte >00
        byte >00
        byte >00
+       byte >00                        ; 17 Character index frame 4.
 
 * Dueller Number 3.
 *
@@ -231,6 +233,7 @@ dueller_3:                             ; 5be2
        byte >00
        byte >00
        byte >00
+       byte >00                        ; 17 Character index frame 4.
 
 * Duel Bonus Round Data.
 *
@@ -252,6 +255,8 @@ duel_data:                             ; c3ea
        byte >08                        ; 14 Timer
        byte >08                        ; 15 Timer
        byte >0A                        ; 16 Timer
+       byte >2b                        ; Dueller 1 frame 4.
+
 * Dueller 2 data.
        byte >00                        ; Dueller state ("0" is complete).
        byte >80                        ; Dueller timer.
@@ -266,6 +271,8 @@ duel_data:                             ; c3ea
        byte >15,>16,>17                ; Dueller 2 frames.
        byte >00                        ;
        byte >08,>08,>0A                ;
+       byte >2c                        ; Dueller 2 frame 4.
+
 * Dueller 3 data.
        byte >00                        ; Dueller state ("0" is complete).
        byte >80                        ; Dueller timer.
@@ -280,6 +287,7 @@ duel_data:                             ; c3ea
        byte >18,>19,>1A                ; Dueller 3 frames.
        byte >00                        ;
        byte >08,>08,>0A                ;
+       byte >28                        ; Dueller 3 frame 4.
 
 * Buffer holding bonus text.
 duel_bonus_text:                       ; c41d

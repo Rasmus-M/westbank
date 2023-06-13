@@ -725,7 +725,7 @@ perform_duel_main:                     ; c3dd
        .push de                        ; PUSH DE           ; }
        li   hl,duel_data               ; LD HL,$C3EA       ; {Copies $33 bytes of data from #R$C3EA to #R$5BC0 (and
        li   de,dueller_1               ; LD DE,$5BC0       ; across all three duellists).
-       li   bc,>0033                   ; LD BC,$0033       ; 
+       li   bc,>0036                   ; LD BC,$0033       ; RM added 3 bytes
        .ldir                           ; LDIR              ; }
        .pop de                         ; POP DE            ;
        .pop bc                         ; POP BC            ;
@@ -848,8 +848,8 @@ duel_inner_loop:                       ; c4fd
        bl   @update_dueller_status    ; CALL $C58B        ;
        li   ix,dueller_1               ; LD IX,$5BC0       ; 
        movb @8(ix),a                   ; LD A,(IX+$08)     ; Any duellers left?
-       socb @25(ix),a                  ; OR (IX+$19)       ; 
-       socb @42(ix),a                  ; OR (IX+$2A)       ; 
+       socb @26(ix),a                  ; OR (IX+$19)       ;
+       socb @44(ix),a                  ; OR (IX+$2A)       ;
        jne  !                          ; JP Z,$C690        ; 
        b    @duel_complete             ;                   
 !
@@ -988,7 +988,7 @@ update_dueller_status_4:               ; c5cf
 update_dueller_status_5:               ; c5dd
        sb   one,@15(ix)                ; DEC (IX+$0F)      ; Timer
        jne  update_dueller_status_6    ; RET NZ            ;
-       movb @bytes+2,a                 ; LD A,$02          ; Char frame
+       movb @17(ix),a                  ; LD A,$02          ; Char frame dueller 1
        bl   @duel_draw_bandit_prep     ; CALL $C661        ;
        sb   @8(ix),@8(ix)              ; LD (IX+$08),$00   ; Completed
 update_dueller_status_6:
