@@ -12,9 +12,10 @@ title_screen_level:                    ; ff11
        text 'N LEVEL',>ff
 * Credits.
 title_screen_author:                   ; ff19
-       text '    PROGRAM BY ALVARO MATEOS    ',>ff
-title_screen_ti_author:
-       text 'TI VERSION BY  RASMUS MOUSTGAARD',>ff
+       text '    PROGRAM BY ALVARO MATEOS   ',>ff
+       text 'TI VERSION BY RASMUS MOUSTGAARD',>ff
+       text '   TI GRAPHICS BY CIRO BARILE  ',>ff
+       text ' TI MUSIC BY RASMUS MOUSTGAARD ',>ff
 title_screen_copyright:                ; ff34
        text 'COPYRIGHT  DINAMIC SOFTWARE 1985',>ff
 

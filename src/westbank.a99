@@ -2453,14 +2453,15 @@ ts_flash_text:                         ; fe95
 *********************************************************************
 toggle_author:
        .proc
-       li   hl,title_screen_author
-       li   bc,>0705
-       mov  @frame,tmp0
-       andi tmp0,>1000
-       jeq  !
-       li   hl,title_screen_ti_author
-       li   bc,>0706
-!      li   de,zx_screen+>1080
+       mov  @frame,hl
+       andi hl,>3000
+       srl  hl,7
+       mov  hl,bc
+       ai   hl,title_screen_author
+       srl  bc,5
+       andi bc,1
+       ai   bc,>0705
+       li   de,zx_screen+>1080
        bl    @print_two_tone_text
        .endproc
 
