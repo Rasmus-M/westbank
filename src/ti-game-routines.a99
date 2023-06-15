@@ -539,3 +539,36 @@ title_screen_4:
        bl   @ti_display_on
        .endproc
 *// ti_show_loading_screen
+
+*********************************************************************************
+*
+* Draw attribute
+*
+* a: zx attribute
+* tmp1: address in zx attribute file
+*
+ti_draw_striped_attribute:
+*      VDP write address
+       ai   tmp1,-zx_attributes
+       sla  tmp1,3
+       ai   tmp1,color_table+>4000
+*      Set VDP write address
+       movb @r1lb,@vdpwa               ; Send low byte of VDP RAM write address
+       movb tmp1,@vdpwa                ; Send high byte of VDP RAM write address
+*      Color
+       swpb a
+       movb @ti_colors(a),tmp0
+       swpb a
+       li   tmp1,>f000
+*      Draw
+       li   tmp2,vdpwd
+       movb tmp0,*tmp2
+       movb tmp0,*tmp2
+       movb tmp0,*tmp2
+       movb tmp0,*tmp2
+       movb tmp1,*tmp2
+       movb tmp0,*tmp2
+       movb tmp0,*tmp2
+       movb tmp0,*tmp2
+       rt
+*// ti_draw_striped_attribute

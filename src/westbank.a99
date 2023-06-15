@@ -1348,7 +1348,7 @@ print_tt_text_4:                       ; cc1d
 ;       movb b,*hl                     ; LD (HL),B         ; #REGbc and write them to the screen.
        mov  hl,tmp1
        movb b,a
-       bl   @ti_draw_attribute
+       bl   @ti_draw_striped_attribute
 ;       li   de,>0020                   ; LD DE,$0020       ;
 ;       a    de,hl                      ; ADD HL,DE         ;
 ;       movb @c,*hl                     ; LD (HL),C         ; }
