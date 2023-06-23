@@ -665,7 +665,7 @@ bang:                                  ; c000
 *********************************************************************
 bang_copy:                             ; c061
        .proc
-       seto @graphics_bank_select      ; PUSH BC           ; {Sets the screen location and the
+       seto @graphics_bank_1_select      ; PUSH BC           ; {Sets the screen location and the
        li   tmp2,>0804                 ; LD BC,$2008       ; bang image frame sizing, then
        li   tmp0,>0860                 ; LD DE,$480C       ; calls #R$C071, issues a short
        mov  hl,tmp1                    ; EX DE,HL          ; pause and ...
@@ -2302,7 +2302,7 @@ explode_bomb_5:                        ; f8ae
 scroll_dollar_sign:                    ; f960
        .proc
        bl   @play_deposit
-       seto @graphics_bank_select
+       seto @graphics_bank_1_select
        li   de,gfx_dollar_image_2      ; LD DE,$F940       ; {Sends #R$F940 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
        li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.

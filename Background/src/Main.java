@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main {
 
-    static int[] colors = {7, 7, 7, 7, 7, 7, 7, 7, 12, 12, 12};
+    static int[] colors = {7, 7, 7, 7, 7, 7, 7, 7, 11, 11, 11};
 
     public static void main(String[] args) throws IOException {
 
@@ -14,7 +14,7 @@ public class Main {
         fis.read(buffer);
         fis.close();
 
-        for (int bank = 5; bank < 12; bank++) {
+        for (int bank = 4; bank < 11; bank++) {
             for (int ch = 0; ch < 7; ch++) {
                 int base = bank * 0x2000 + 0x40 + ch * 0x0420 + 0x210;
                 for (int row = 0; row < 11; row++) {

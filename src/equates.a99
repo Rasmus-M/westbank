@@ -109,25 +109,32 @@ zx_screen:
        equ  >4000
 zx_attributes:
        equ  >5800
-graphics_bank_select:
-       equ  >6008
-char_bank_1_select:
-       equ  >600A
-char_bank_2_select:
-       equ  >600C
-char_bank_3_select:
-       equ  >600E
-char_bank_4_select:
-       equ  >6010
-char_bank_5_select:
-       equ  >6012
-char_bank_6_select:
-       equ  >6014
-char_bank_7_select:
-       equ  >6016
-doors_bank_select:
-       equ  >6018
 kscan:
        equ  >02b2
+char_bank_1_select:
+       equ  >6008
+char_bank_2_select:
+       equ  >600A
+char_bank_3_select:
+       equ  >600C
+char_bank_4_select:
+       equ  >600E
+char_bank_5_select:
+       equ  >6010
+char_bank_6_select:
+       equ  >6012
+char_bank_7_select:
+       equ  >6014
+graphics_bank_1_select:
+       equ  >6016
+graphics_bank_2_select:
+       equ  >6018
+graphics_bank_3_select:
+       equ  >601A
+graphics_bank_4_select:
+       equ  >601C
+graphics_bank_5_select:
+       equ  >601E
+
 
        copy "sound-defs.a99"

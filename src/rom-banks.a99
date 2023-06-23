@@ -1,32 +1,32 @@
        bank 0
-       copy "graphics-bank-0.a99"
-
-       bank 1
        copy "character-bank-1.a99"
 
-       bank 2
+       bank 1
        copy "character-bank-2.a99"
 
-       bank 3
+       bank 2
        copy "character-bank-3.a99"
 
-       bank 4
+       bank 3
        copy "character-bank-4.a99"
 
-       bank 5
+       bank 4
        copy "character-bank-5.a99"
 
-       bank 6
+       bank 5
        copy "character-bank-6.a99"
 
-       bank 7
+       bank 6
        copy "character-bank-7.a99"
 
+       bank 7
+       copy "graphics-bank-1.a99"
+
        bank 8
-       copy "doors-bank.a99"
+       copy "graphics-bank-2.a99"
 
        bank 9
-       copy "empty-bank.a99"
+       copy "graphics-bank-3.a99"
 
        bank 10
        copy "empty-bank.a99"
