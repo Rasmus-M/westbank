@@ -54,17 +54,17 @@ gfx_character_07_patterns:
        byte >ff,>ff,>ff,>ff,>80,>c0,>c0,>c0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>e3
        byte >f1,>e4,>ca,>d5,>ee,>f3,>f9,>fe
-       byte >e0,>80,>e0,>f8,>5f,>af,>5f,>bb
+       byte >e0,>80,>e0,>f8,>a0,>af,>a0,>bb
        byte >f8,>f3,>f7,>ce,>ef,>cf,>ff,>f8
        byte >ab,>8c,>84,>f3,>ff,>ff,>c0,>ff
        byte >f0,>ec,>ff,>f0,>e0,>c0,>f5,>ea
        byte >95,>d6,>aa,>ab,>a8,>af,>a0,>c0
        byte >ff,>ff,>ff,>fd,>fe,>ff,>ff,>ff
-       byte >8a,>c5,>e2,>8f,>bf,>aa,>aa,>ff
-       byte >80,>82,>85,>f5,>fb,>a8,>af,>ff
-       byte >ff,>aa,>aa,>aa,>fe,>ff,>ff,>ff
-       byte >f5,>84,>c1,>9c,>ff,>aa,>aa,>ff
-       byte >80,>ff,>ff,>d7,>af,>a0,>bf,>ff
+       byte >8a,>c5,>e2,>f0,>bf,>aa,>aa,>ff
+       byte >80,>80,>eb,>d5,>aa,>a8,>af,>ff
+       byte >ff,>d5,>aa,>aa,>be,>ff,>ff,>ff
+       byte >f5,>84,>c1,>e3,>ff,>aa,>aa,>ff
+       byte >80,>ff,>ff,>a8,>af,>a0,>bf,>ff
 gfx_character_07_colors:
        byte >7a,>7a,>7a,>7a,>7a,>7a,>7a,>7a
        byte >7a,>7a,>7a,>7a,>7a,>7a,>7a,>7a
@@ -119,16 +119,16 @@ gfx_character_07_colors:
        byte >7a,>71,>71,>71,>71,>19,>19,>19
        byte >7a,>17,>17,>13,>19,>91,>19,>91
        byte >7a,>7a,>7a,>7a,>17,>17,>17,>17
-       byte >7a,>7a,>7a,>7a,>7a,>7a,>7a,>71
-       byte >71,>71,>71,>71,>71,>71,>71,>71
-       byte >7e,>1e,>1e,>1d,>1a,>1a,>1a,>1a
+       byte >7a,>7a,>7a,>7a,>7a,>7a,>7a,>76
+       byte >76,>76,>76,>76,>76,>76,>76,>76
+       byte >7e,>6e,>6e,>6d,>e6,>6e,>e6,>6e
        byte >e9,>ec,>ec,>3d,>df,>df,>da,>d7
        byte >19,>ce,>ce,>3d,>da,>da,>7d,>7a
-       byte >e7,>e7,>ea,>d1,>d1,>d1,>1a,>1a
-       byte >71,>17,>17,>71,>17,>71,>17,>17
+       byte >e7,>e7,>ea,>d6,>d6,>d6,>6e,>6e
+       byte >76,>67,>67,>76,>67,>76,>67,>67
        byte >7a,>7a,>7a,>71,>71,>7a,>7a,>7a
-       byte >71,>71,>71,>17,>71,>17,>71,>7a
-       byte >17,>17,>17,>71,>71,>17,>71,>7a
-       byte >7a,>17,>71,>17,>71,>7a,>7a,>7a
-       byte >1a,>71,>71,>17,>7a,>17,>71,>7a
-       byte >17,>7a,>7a,>71,>71,>17,>71,>7a
+       byte >76,>76,>76,>76,>71,>17,>71,>7a
+       byte >67,>67,>71,>71,>71,>17,>71,>7a
+       byte >7a,>71,>71,>17,>71,>7a,>7a,>7a
+       byte >6e,>76,>76,>76,>7a,>17,>71,>7a
+       byte >67,>7a,>7a,>17,>71,>17,>71,>7a
