@@ -2504,14 +2504,19 @@ title_screen_print:                    ; fee4
 * Used by the routine at #R$FE00.
 level_select:                          ; 6380
        bl   @ti_clear_screen
+;       li   tmp0,>0500
+;       li   tmp1,>0028
+;       li   tmp2,>2008
+;       bl   @ti_draw_color_area
+;       li   tmp0,>0d00
+;       li   tmp1,>0020
+;       li   tmp2,>2003
+;       bl   @ti_draw_color_area
+       seto @graphics_bank_6_select
        li   tmp0,>0500
-       li   tmp1,>0028
-       li   tmp2,>2008
-       bl   @ti_draw_color_area
-       li   tmp0,>0d00
-       li   tmp1,>0020
-       li   tmp2,>2003
-       bl   @ti_draw_color_area
+       li   tmp1,level_select_patterns
+       li   tmp2,>200b
+       bl   @ti_draw_color_graphics
 * Prints the labels to the screen.
        li   hl,level_select_one        ; LD HL,$64AC       ; {Pass #R$64AC to #R$647C (index "1").
        movb one,a                      ; LD A,$01          ;

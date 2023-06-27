@@ -33,3 +33,51 @@
 
        bank 11
        copy "graphics-bank-5.a99"
+
+       bank 12
+       copy "graphics-bank-6.a99"
+
+       bank 13
+       copy "graphics-bank-7.a99"
+
+       bank 14
+       copy "empty-bank.a99"
+
+       bank 15
+       copy "empty-bank.a99"
+
+       bank 16
+       copy "empty-bank.a99"
+
+       bank 17
+       copy "empty-bank.a99"
+
+       bank 18
+       copy "empty-bank.a99"
+
+       bank 19
+       copy "empty-bank.a99"
+
+       bank 20
+       copy "empty-bank.a99"
+
+       bank 21
+       copy "empty-bank.a99"
+
+       bank 22
+       copy "empty-bank.a99"
+
+       bank 23
+       copy "empty-bank.a99"
+
+       bank 24
+       copy "empty-bank.a99"
+
+       bank 25
+       copy "empty-bank.a99"
+
+       bank 26
+       copy "empty-bank.a99"
+
+       bank 27
+       copy "empty-bank.a99"

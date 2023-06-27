@@ -135,6 +135,10 @@ graphics_bank_4_select:
        equ  >601C
 graphics_bank_5_select:
        equ  >601E
+graphics_bank_6_select:
+       equ  >6020
+graphics_bank_7_select:
+       equ  >6022
 
 
        copy "sound-defs.a99"

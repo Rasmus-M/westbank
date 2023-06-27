@@ -13,6 +13,8 @@
        copy "graphics-bank-3.a99"
        copy "graphics-bank-4.a99"
        copy "graphics-bank-5.a99"
+       copy "graphics-bank-6.a99"
+       copy "graphics-bank-7.a99"
 
        save >2000,>3fff
        copy "lower-memory.a99"

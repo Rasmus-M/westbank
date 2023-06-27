@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        byte[] buffer = new byte[0x20000];
+        byte[] buffer = new byte[0x40000];
 
         FileInputStream fis = new FileInputStream("westbank8.bin");
         fis.read(buffer);
@@ -32,7 +32,7 @@ public class Main {
             }
         }
 
-        FileOutputStream fos = new FileOutputStream("westbankx8.bin");
+        FileOutputStream fos = new FileOutputStream("westbank8.bin");
         fos.write(buffer);
         fos.close();
     }
