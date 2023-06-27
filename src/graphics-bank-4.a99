@@ -1,0 +1,4 @@
+       aorg >6000
+       bss  >40
+
+       copy "images-color/splash-screen-top.a99"

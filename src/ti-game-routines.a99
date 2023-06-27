@@ -500,13 +500,6 @@ ti_hide_door_shots:
        .endproc
 *// ti_hide_door_shots
 
-       lwpi ti_wrksp
-       li   r0,loading_screen
-       li   r1,pattern_table
-       li   r2,>1800
-       bl   @vmbw
-       li   r0,c
-
 *********************************************************************
 *
 * Show loading creen
@@ -514,39 +507,16 @@ ti_hide_door_shots:
 ti_show_loading_screen:
        .proc
        bl   @ti_display_off
-       li   hl,loading_screen
-       clr  ix
-title_screen_1:
-       clr  iy
-title_screen_2:
-       li   de,pattern_table
-       a    ix,de
-       a    iy,de
-       li   bc,8*32
-title_screen_3:
-       mov  de,tmp0
-       bl   @vwad
-       movb *hl+,@vdpwd
-       ai   de,8
-       dec  bc
-       jne  title_screen_3
-       inc  iy
-       ci   iy,8
-       jne  title_screen_2
-       ai   ix,8*32*8
-       ci   ix,3*8*32*8
-       jne  title_screen_1
-*      Draw attributes
-       li   de,zx_attributes
-       li   bc,768
-title_screen_4:
-       movb *hl+,a
-       mov  de,tmp1
-       seto @graphics_bank_1_select
-       bl   @ti_draw_attribute
-       inc  de
-       dec  bc
-       jne  title_screen_4
+       seto @graphics_bank_4_select
+       li   tmp0,0
+       li   tmp1,splash_screen_patterns_top
+       li   tmp2,>200c
+       bl   @ti_draw_color_graphics
+       seto @graphics_bank_5_select
+       li   tmp0,>0c00
+       li   tmp1,splash_screen_patterns_bottom
+       li   tmp2,>200c
+       bl   @ti_draw_color_graphics
        bl   @ti_display_on
        .endproc
 *// ti_show_loading_screen

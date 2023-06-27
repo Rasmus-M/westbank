@@ -2,8 +2,5 @@
 
        b    @start
 
-loading_screen:
-       bcopy "loading-screen.scr"
-
 lower_memory_max:
        equ  $

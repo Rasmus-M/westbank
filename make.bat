@@ -9,5 +9,7 @@ copy /b bin\main8.bin ^
 
 java -jar tools/CopyHeader.jar westbank8.bin 60
 
+java -jar tools/Background.jar
+
 jar -cvf westbank.rpk westbank8.bin layout.xml > make.log
 

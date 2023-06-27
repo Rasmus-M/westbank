@@ -29,8 +29,7 @@
        copy "graphics-bank-3.a99"
 
        bank 10
-       copy "empty-bank.a99"
+       copy "graphics-bank-4.a99"
 
        bank 11
-       copy "empty-bank.a99"
-
+       copy "graphics-bank-5.a99"
