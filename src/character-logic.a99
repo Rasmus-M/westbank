@@ -268,7 +268,7 @@ init_customer_daisy:                   ; cf5e
                                        ; LD (HL),D         ; { #R$D173 | Door 2 | #R$CE16 }
                                                            ; { #R$D181 | Door 3 | #R$CE18 }
                                                            ; TABLE#}
-       bl   @random_number             ; CALL $D8B0        ;
+       bl   @random_number_x           ; CALL $D8B0        ;
        andi a,65*256                   ; AND $41           ;
        li   hl,daisy_source_2          ; LD HL,$D092       ;
        sb   *hl,*hl                    ; LD (HL),$00       ;

@@ -100,7 +100,7 @@ set_control_alias:                     ; c7f9
        bl   @cls_inc_display_day          ; CALL $CA64         ;
                                        ; LD A,$03          ; {Writes $03 to #R$CE1B.
        movb @bytes+3,@chooser_countdown_init ; LD ($CE1B),A      ; }
-       li   hl,>0400                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
+       li   hl,>0200                   ; LD HL,$0500       ; {Writes $0500 to #R$CE1C.
        mov  hl,@delay                  ; LD ($CE1C),HL     ; }
                                        ; LD A,$01          ; {Writes $01 to #R$D191.
        movb one,@sheriff_star_flag     ; LD ($D191),A      ; }
@@ -227,12 +227,12 @@ play_game_return:
        .endproc
 
 *********************************************************************
-* Reduce delay by 64
+* Reduce delay by 32
 reduce_delay:                          ; c941
                                        ; PUSH AF           ;
        .push hl                        ; PUSH HL           ;
        mov  @delay,hl                  ; LD HL,($CE1C)     ;
-       li   bc,>0040                   ; LD BC,$0040       ;
+       li   bc,>0020                   ; LD BC,$0040       ;
        ; AND A                         ; AND A             ;
        s    bc,hl                      ; SBC HL,BC         ;
                                        ; LD A,H            ;
@@ -761,18 +761,24 @@ duel_clear_screen:                     ; c463
 * Clears down the screen buffer.
        bl   @ti_clear_screen
 * Writes the attributes for the playfield (sky, grass, footer).
-       li   tmp0,>0400
-       li   tmp1,>0028
-       li   tmp2,>200c
-       bl   @ti_draw_color_area
-       li   tmp0,>1000
-       li   tmp1,>0020
-       li   tmp2,>2004
-       bl   @ti_draw_color_area
-       li   tmp0,>1400
-       li   tmp1,>0007
-       li   tmp2,>2004
-       bl   @ti_draw_color_area
+;       li   tmp0,>0400
+;       li   tmp1,>0028
+;       li   tmp2,>200c
+;       bl   @ti_draw_color_area
+;       li   tmp0,>1000
+;       li   tmp1,>0020
+;       li   tmp2,>2004
+;       bl   @ti_draw_color_area
+;       li   tmp0,>1400
+;       li   tmp1,>0007
+;       li   tmp2,>2004
+;       bl   @ti_draw_color_area
+       bl   @ti_display_off
+       seto @graphics_bank_7_select
+       li   tmp0,>400
+       li   tmp1,duel_patterns
+       li   tmp2,>2010
+       bl   @ti_draw_color_graphics
 * Creates the footer.
        li   hl,playfield_lives         ; LD HL,$C655       ; {Point to #R$C655 and print using #R$C6A7.
        bl   @duel_print_lives          ; CALL $C6A7        ; }
@@ -794,6 +800,7 @@ duel_clear_screen:                     ; c463
        li   ix,dueller_3               ; LD IX,$5BE2       ; {Initialise #R$5BE2 (draws frame 1).
        movb @10(ix),a                  ; LD A,(IX+$0A)     ; 
        bl   @duel_draw_bandit_prep    ; CALL $C661        ; }
+       bl   @ti_display_on
 * Count down 5-4-3-2-1...0!
 * countdown_initialise                 ; c4c5
        li   tmp0,duel_module
@@ -2512,6 +2519,7 @@ level_select:                          ; 6380
 ;       li   tmp1,>0020
 ;       li   tmp2,>2003
 ;       bl   @ti_draw_color_area
+       bl   @ti_display_off
        seto @graphics_bank_6_select
        li   tmp0,>0500
        li   tmp1,level_select_patterns
@@ -2543,7 +2551,7 @@ level_select:                          ; 6380
        movb @bytes+25,a                ; LD A,$19          ; {Calls #R$643A with (#R$9B90(draw | $19)) for index "3".
        movb @bytes+3,b                 ; LD B,$03          ;
        bl   @level_select_graphics    ; CALL $643A        ; }
-
+       bl   @ti_display_on
 * Loop for getting user keyboard input.
        li   hl,level                   ; LD HL,$5CB1       ; Used later for setting the current level at #R$5CB1.
 level_select_input:                    ; 63e5

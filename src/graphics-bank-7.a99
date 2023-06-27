@@ -1,4 +1,4 @@
        aorg >6000
-       bss  >40
+;      No header in this bank
 
        copy "images-color/duel.a99"

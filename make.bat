@@ -7,7 +7,7 @@ copy /b bin\main8.bin ^
     + bin\banks.bin ^
     westbank8.bin
 
-java -jar tools/CopyHeader.jar westbank8.bin 60
+java -jar tools/CopyHeader.jar westbank8.bin 60 17
 
 java -jar tools/Background.jar
 
