@@ -752,3 +752,14 @@ ti_colors:
 
 character_attr:
        data >0028
+
+scroll_position:
+       data 0
+scroll_amount_ptr:
+       data scroll_amounts
+scroll_amounts:
+       data 11
+       data 11
+       data 10
+scroll_amounts_end:
+       equ  $

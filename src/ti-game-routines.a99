@@ -5,54 +5,18 @@
 ti_draw_playfield:
        .proc
        bl   @ti_display_off
-       seto @graphics_bank_1_select
-       li   hl,playfield_data
-ti_draw_playfield_1:
-       mov  *hl+,tmp0
-       jeq  ti_draw_playfield_2
-       mov  *hl+,tmp1
-       mov  *hl+,tmp2
-       bl   @ti_draw_graphics
-       jmp  ti_draw_playfield_1
-ti_draw_playfield_2:
-       li   hl,attributes
-       li   de,zx_attributes
-       li   bc,768
-       clr  a
-ti_draw_playfield_3:
-       movb *hl+,a
-       mov  de,tmp1
-       bl   @ti_draw_attribute
-       inc  de
-       dec  bc
-       jne  ti_draw_playfield_3
-*      Draw 9918A graphics
-       seto @graphics_bank_3_select
-       li   tmp0,>0300
-       li   tmp1,bank_patterns
-       li   tmp2,>200e
-       bl   @ti_draw_color_graphics
        seto @graphics_bank_2_select
-       li   tmp0,>1100
-       li   tmp1,tellers_patterns
-       li   tmp2,>2004
-       bl   @ti_draw_color_graphics
+       li   tmp0,pattern_table
+       li   tmp1,bank_screen_patterns
+       li   tmp2,>1800
+       bl   @vmbw
+       seto @graphics_bank_3_select
+       li   tmp0,color_table
+       li   tmp1,bank_screen_colors
+       li   tmp2,>1800
+       bl   @vmbw
        bl   @ti_display_on
        .endproc
-playfield_data:
-       data (0*32+1)*8,gfx_slot_numbers_left,>0c01
-       data (0*32+14)*8,gfx_centrepiece,>0403
-       data (0*32+19)*8,gfx_slot_numbers_right,>0c01
-;       data (3*32+0)*8,gfx_doors_top,>2001
-;       data (4*32+0)*8,gfx_wall_left,>020b
-;       data (4*32+9)*8,gfx_wall_middle,>040b
-;       data (4*32+20)*8,gfx_wall_middle,>040b
-;       data (4*32+31)*8,gfx_door_frame_side,>010b
-;       data (15*32+0)*8,gfx_door_bottom,>2001
-;       data (17*32+0)*8,gfx_tellers,>2004
-       data (22*32+1)*8,gfx_score_text_image,>0602
-       data (21*32+16)*8,gfx_lives_text_image,>0603
-       data 0
 *// ti_draw_playfield
 
 *********************************************************************
@@ -192,27 +156,6 @@ ti_draw_character:
 
 *********************************************************************
 *
-* Draw a character pattern without colors
-*
-* tmp0: screen position in characters
-* tmp1: character index to draw
-*
-ti_draw_character_pattern:
-       .proc
-       sla  tmp1,2                     ; 4 bytes per entry
-       ai   tmp1,character_table       ; Add character table base
-       mov  *tmp1+,tmp2                ; Get ROM select address
-       seto *tmp2                      ; Select ROM bank
-       mov  *tmp1,tmp1                 ; Get source address
-       sla  tmp0,3                     ; VDP address
-       li   tmp2,>060b                 ; Width/height in characters
-       bl   @ti_draw_graphics          ; Draw graphics
-       .endproc
-*// ti_draw_character_pattern
-
-
-*********************************************************************
-*
 * Draw a partial character
 *
 * tmp0: screen position in characters
@@ -247,7 +190,7 @@ ti_draw_partical_character:
 *
 ti_draw_door:
        .proc
-       seto @graphics_bank_2_select
+       seto @graphics_bank_1_select
        sla  tmp1,1                     ; X offset in characters
        a    tmp1,tmp0                  ; Add offset to screen position
        li   tmp2,7                     ; Full door width
@@ -266,13 +209,24 @@ ti_draw_door:
 *
 ti_scroll_left:
        .proc
-       li   tmp0,1
+       mov  @scroll_position,tmp0
+       mov  @scroll_amount_ptr,tmp1
+       mov  *tmp1,tmp2
 ti_scroll_left_1:
-       bl   @ti_dbl_buffer_scroll_screen
        inc  tmp0
-       ci   tmp0,12
-       jlt  ti_scroll_left_1
+       bl   @ti_dbl_buffer_scroll_screen
+       dec  tmp2
+       jne  ti_scroll_left_1
        bl   @ti_scroll_cleanup
+;*      After
+;       mov  tmp0,@scroll_position
+;       mov  @scroll_amount_ptr,tmp1
+;       inct tmp1
+;       ci   tmp1,scroll_amounts_end
+;       jl   ti_scroll_left_2
+;       li   tmp1,scroll_amounts
+;ti_scroll_left_2:
+;       mov  tmp1,@scroll_amount_ptr
        .endproc
 *// ti_scroll_left
 
@@ -282,13 +236,23 @@ ti_scroll_left_1:
 *
 ti_scroll_right:
        .proc
-       li   tmp0,31
+       mov  @scroll_position,tmp0
+       mov  @scroll_amount_ptr,tmp1
+;       dect tmp1
+;       ci   tmp1,scroll_amounts
+;       jhe  ti_scroll_right_0
+;       li   tmp1,scroll_amounts_end-2
+;ti_scroll_right_0:
+;       mov  tmp1,@scroll_amount_ptr
+       mov  *tmp1,tmp2
 ti_scroll_right_1:
-       bl   @ti_dbl_buffer_scroll_screen
        dec  tmp0
-       ci   tmp0,20
-       jgt  ti_scroll_right_1
+       bl   @ti_dbl_buffer_scroll_screen
+       dec  tmp2
+       jne  ti_scroll_right_1
        bl   @ti_scroll_cleanup
+*      After
+;       mov  tmp0,@scroll_position
        .endproc
 *// ti_scroll_right
 
@@ -406,6 +370,19 @@ save_r6: data 0
 *
 ti_copy_routine:
        .proc
+       bl   @ti_copy_routine_init
+       bl   @ti_draw_graphics
+       .endproc
+*// ti_copy_routine
+
+ti_copy_routine_color:
+       .proc
+       bl   @ti_copy_routine_init
+       bl   @ti_draw_color_graphics
+       .endproc
+*// ti_copy_routine_color
+
+ti_copy_routine_init:
        seto @graphics_bank_1_select
 *      VDP address
        mov  hl,tmp0
@@ -424,9 +401,8 @@ ti_copy_routine:
        swpb tmp2
 *      Source
        mov  de,tmp1
-       bl   @ti_draw_graphics
-       .endproc
-*// ti_copy_routine
+       rt
+*// ti_copy_routine_init
 
 *********************************************************************
 *

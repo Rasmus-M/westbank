@@ -1,9 +1,4 @@
        aorg >6000
        bss  >40
 
-       copy "images-color/gfx_door_frame_1.a99"
-       copy "images-color/gfx_door_frame_2.a99"
-       copy "images-color/gfx_door_frame_3.a99"
-       copy "images-color/gfx_door_frame_4.a99"
-
-       copy "images-color/tellers.a99"
+       copy "images-color/bank-patterns.a99"

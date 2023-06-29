@@ -1,4 +1,4 @@
        aorg >6000
        bss  >40
 
-       copy "images-color/bank.a99"
+       copy "images-color/bank-colors.a99"

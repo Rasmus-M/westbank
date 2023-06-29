@@ -1442,15 +1442,15 @@ draw_life_images_end:
 *********************************************************************
 draw_life_image:                       ; cc81
        .proc
-       li   de,gfx_lives_image         ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
+       li   de,life_patterns           ; LD DE,$FFB8       ; {Point at the #R$FFB8 and call #R$D5E6.
        jmp  copy_life_image_1
 **
 copy_life_image:                       ; cc84
        .proc
 copy_life_image_1:
 ;      .push hl                        ; PUSH HL           ;
-       li   bc,>1802                   ; LD BC,$1802       ; 
-       bl   @ti_copy_routine             ; CALL $D5E6        ; }
+       li   bc,>1802                   ; LD BC,$1802       ;
+       bl   @ti_copy_routine_color     ; CALL $D5E6        ; }
 ;      .pop hl                         ; POP HL            ;
        .endproc                        ; RET               ; Return.
 *// draw_life_image
@@ -1521,7 +1521,7 @@ draw_cashbox:                          ; cce5
        li   de,gfx_dollar_box_image    ; LD DE,$FF98       ;
 draw_cashbox_1:                        ; ccf4
        li   bc,>1002                   ; LD BC,$1002       ; 
-       bl   @ti_copy_routine           ; CALL $D5E6        ; }
+       bl   @ti_copy_routine_color     ; CALL $D5E6        ; }
        .endproc                        ; RET               ; Return.
 
 *********************************************************************
@@ -2096,10 +2096,10 @@ draw_cashbox_selections:               ; _d45e
        .proc
        clr  a
        movb @cashbox_ref,a             ; LD A,($D45C)      ;
-       movb @bytes+56,@c               ; LD C,$38          ; Attribute black/grey
-       bl   @draw_cashbox_selections_1 ; CALL $D46B       ; Remove old selection
+       movb @bytes+>07,@c               ; LD C,$38         ; Attribute black/grey 00111000 -> 00000111
+       bl   @draw_cashbox_selections_1 ; CALL $D46B        ; Remove old selection
        movb @cashbox_ref_new,a         ; LD A,($D45D)      ;
-       movb @bytes+58,@c               ; LD C,$3A          ; Attribute red/grey
+       movb @bytes+>17,@c               ; LD C,$3A         ; Attribute red/grey 00111010 - > 00010111
        bl   @draw_cashbox_selections_1
        .endproc
 
@@ -2337,7 +2337,7 @@ dollar_scroll_draw:                    ; f9c3
        li   tmp0,(1*32+15)*8
        mov  de,tmp1
        li   tmp2,>0202
-       bl   @ti_draw_graphics
+       bl   @ti_draw_color_graphics
        bl   @ti_vsync
        bl   @ti_vsync
        .endproc                        ; RET               ; Return.
