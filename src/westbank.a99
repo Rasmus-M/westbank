@@ -577,17 +577,8 @@ after_door_3_routine:                  ; cb83
        bl   @module_player
 * Check status
        movb @player_died_status,a      ; LD A,($D2FE)      ; {If bit 0 of #R$D2FE is not zero
-       jeq  game_loop_2
-       movb a,tmp0                     ; BIT 0,A           ; then jump to #R$CD47.
-       andi tmp0,1*256                 ;
-       jeq  game_loop_1                ; JP NZ,$CD47       ; }
-       b    @died                      ;
-game_loop_1:
-       movb a,tmp0                     ; BIT 1,A           ; {Else if bit 1 is not zero, jump
-       andi tmp0,2*256                 ;
-       jeq  game_loop_2                ; JP NZ,$CD1B       ; to #R$CD1B.}
-       b    @flash_lives               ;
-game_loop_2:
+       jne  game_loop_died
+game_loop_continue:
        bl   @scoring                  ; CALL $CDC3        ; Call #R$CDC3.
        li   hl,deposit_flag            ; LD HL,$D190       ; {If #R$D190 is not zero then call
        movb *hl,a                      ; LD A,(HL)         ; #R$CBA0 (also, writes $00 to
@@ -595,10 +586,21 @@ game_loop_2:
        sb   *hl,*hl                    ; LD (HL),$00       ;
        movb a,a
        jeq  !                          ; CALL NZ,$CBA0     ; }
-       bl   @got_a_deposit                    ;
+       bl   @got_a_deposit             ;
 !
        bl   @ti_check_quit
        b    @game_loop                 ; JP $CAE7          ;
+game_loop_died:
+       bl   @ti_scroll_cleanup
+       movb @player_died_status,tmp0   ; BIT 0,A           ; then jump to #R$CD47.
+       andi tmp0,1*256                 ;
+       jeq  shot_good_guy              ; JP NZ,$CD47       ; }
+       b    @died                      ;                   ; Been shot or hit a bomb
+shot_good_guy:
+       movb a,tmp0                     ; BIT 1,A           ; {Else if bit 1 is not zero, jump
+       andi tmp0,2*256                 ;
+       jeq  game_loop_continue         ; JP NZ,$CD1B       ; to #R$CD1B.}
+       b    @flash_lives               ;
 
 *********************************************************************
 got_a_deposit:                         ; cba0
@@ -1095,7 +1097,7 @@ duel_draw_bandit_prep:                 ; c661
        dec  tmp2
        sla  tmp2,1
        mov  @ti_door_positions(tmp2),tmp0
-       ai   tmp0,>80
+       ai   tmp0,>100
        clr  tmp1
        movb a,tmp1
        swpb tmp1
@@ -2484,16 +2486,6 @@ ts_draw_bandits:                        ; fea4
        li   tmp0,>00d9
        clr  tmp1
        bl   @ti_draw_character
-;*      Left bandit bottom colors
-;       li   tmp0,(>00c1+(8*32))*8
-;       li   tmp1,>0020
-;       li   tmp2,>0603
-;       bl   @ti_draw_color_area
-;*      Right bandit bottom colors
-;       li   tmp0,(>00d9+(8*32))*8
-;       li   tmp1,>0020
-;       li   tmp2,>0603
-;       bl   @ti_draw_color_area
        .endproc
 
 *********************************************************************
@@ -2629,7 +2621,7 @@ level_select_graphics:                 ; 643a
        dec  tmp2
        sla  tmp2,1
        mov  @ti_door_positions(tmp2),tmp0
-       ai   tmp0,>20
+       ai   tmp0,>a0
        clr  tmp1
        movb a,tmp1
        swpb tmp1

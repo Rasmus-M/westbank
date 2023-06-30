@@ -763,3 +763,25 @@ scroll_amounts:
        data 10
 scroll_amounts_end:
        equ  $
+current_door_positions:
+       data ti_door_positions_1
+
+*********************************************************************
+*
+* Screen positions of the 3 doors
+*
+ti_door_positions:
+       equ  $
+ti_door_positions_1:
+       data 2
+       data 13
+       data 24
+ti_door_positions_2:
+       data 2
+       data 13
+       data 23
+ti_door_positions_3:
+       data 2
+       data 12
+       data 23
+

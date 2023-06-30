@@ -21,20 +21,7 @@ ti_draw_playfield:
 
 *********************************************************************
 *
-* Screen positions of the 3 doors
-*
-ti_door_positions:
-       equ  $
-ti_door_position_1:
-       data  4*32+2
-ti_door_position_2:
-       data  4*32+13
-ti_door_position_3:
-       data 4*32+24
-
-*********************************************************************
-*
-* Setup paramaters for calling ti_draw_door_frame_1-4
+* Setup parameters for calling ti_draw_door_frame_1-4
 *
 ti_setup_draw_door_params:
        clr  tmp1
@@ -57,7 +44,8 @@ ti_setup_draw_door_params:
 ti_draw_door_frame_1:
        .proc
        sla  tmp2,1
-       mov  @ti_door_positions(tmp2),tmp0
+       a    @current_door_positions,tmp2
+       mov  *tmp2,tmp0
        clr  tmp2
        bl   @ti_draw_character_and_door
        .endproc
@@ -73,7 +61,8 @@ ti_draw_door_frame_1:
 ti_draw_door_frame_2:
        .proc
        sla  tmp2,1
-       mov  @ti_door_positions(tmp2),tmp0
+       a    @current_door_positions,tmp2
+       mov  *tmp2,tmp0
        li   tmp2,1
        bl   @ti_draw_character_and_door
        .endproc
@@ -89,7 +78,8 @@ ti_draw_door_frame_2:
 ti_draw_door_frame_3:
        .proc
        sla  tmp2,1
-       mov  @ti_door_positions(tmp2),tmp0
+       a    @current_door_positions,tmp2
+       mov  *tmp2,tmp0
        li   tmp2,2
        bl   @ti_draw_character_and_door
        .endproc
@@ -105,7 +95,8 @@ ti_draw_door_frame_3:
 ti_draw_door_frame_4:
        .proc
        sla  tmp2,1
-       mov  @ti_door_positions(tmp2),tmp0
+       a    @current_door_positions,tmp2
+       mov  *tmp2,tmp0
        li   tmp2,3
        bl   @ti_draw_character_and_door
        .endproc
@@ -115,12 +106,15 @@ ti_draw_door_frame_4:
 *
 * Draw a character behind a door
 *
-* tmp0: screen position in characters
+* tmp0: x position in characters (0-31)
 * tmp1: character index to draw
 * tmp2: door frame 0-3
 *
 ti_draw_character_and_door:
        .proc
+       a    @scroll_position,tmp0
+       andi tmp0,31
+       ai   tmp0,4*32
        .push tmp2                      ; Save door frame
        mov  tmp2,tmp2                  ; Check door frame
        jeq  ti_draw_character_and_door_1 ; If door frame is 0 then don't draw any character
@@ -217,16 +211,19 @@ ti_scroll_left_1:
        bl   @ti_dbl_buffer_scroll_screen
        dec  tmp2
        jne  ti_scroll_left_1
-       bl   @ti_scroll_cleanup
-;*      After
-;       mov  tmp0,@scroll_position
-;       mov  @scroll_amount_ptr,tmp1
-;       inct tmp1
-;       ci   tmp1,scroll_amounts_end
-;       jl   ti_scroll_left_2
-;       li   tmp1,scroll_amounts
-;ti_scroll_left_2:
-;       mov  tmp1,@scroll_amount_ptr
+*      After
+       mov  tmp0,@scroll_position
+       mov  @current_door_positions,tmp2
+       ai   tmp2,6
+       mov  @scroll_amount_ptr,tmp1
+       inct tmp1
+       ci   tmp1,scroll_amounts_end
+       jl   ti_scroll_left_2
+       li   tmp1,scroll_amounts
+       li   tmp2,ti_door_positions_1
+ti_scroll_left_2:
+       mov  tmp1,@scroll_amount_ptr
+       mov  tmp2,@current_door_positions
        .endproc
 *// ti_scroll_left
 
@@ -237,22 +234,25 @@ ti_scroll_left_1:
 ti_scroll_right:
        .proc
        mov  @scroll_position,tmp0
+       mov  @current_door_positions,tmp2
+       ai   tmp2,-6
        mov  @scroll_amount_ptr,tmp1
-;       dect tmp1
-;       ci   tmp1,scroll_amounts
-;       jhe  ti_scroll_right_0
-;       li   tmp1,scroll_amounts_end-2
-;ti_scroll_right_0:
-;       mov  tmp1,@scroll_amount_ptr
+       dect tmp1
+       ci   tmp1,scroll_amounts
+       jhe  ti_scroll_right_0
+       li   tmp1,scroll_amounts_end-2
+       li   tmp2,ti_door_positions_3
+ti_scroll_right_0:
+       mov  tmp1,@scroll_amount_ptr
+       mov  tmp2,@current_door_positions
        mov  *tmp1,tmp2
 ti_scroll_right_1:
        dec  tmp0
        bl   @ti_dbl_buffer_scroll_screen
        dec  tmp2
        jne  ti_scroll_right_1
-       bl   @ti_scroll_cleanup
 *      After
-;       mov  tmp0,@scroll_position
+       mov  tmp0,@scroll_position
        .endproc
 *// ti_scroll_right
 
@@ -262,13 +262,19 @@ ti_scroll_right_1:
 *
 ti_scroll_cleanup:
        .proc
+       bl   @ti_select_name_table_2
        li   r0,name_table
        bl   @vwad
        bl   @ti_init_name_table
        bl   @ti_select_name_table_1
-       li   r2,name_table
+       li   r0,name_table_2
        bl   @vwad
        bl   @ti_init_name_table
+       clr  @scroll_position
+       li   r0,scroll_amounts
+       mov  r0,@scroll_amount_ptr
+       li   r0,ti_door_positions_1
+       mov  r0,@current_door_positions
        .endproc
 *// ti_scroll_cleanup
 
