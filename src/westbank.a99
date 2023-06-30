@@ -224,6 +224,7 @@ level_3_3:                             ; c936
        jeq  level_3_3
        jmp  level_3_1                  ; JR $C8F0          ;
 play_game_return:
+       bl   @ti_scroll_cleanup
        .endproc
 
 *********************************************************************
@@ -407,6 +408,7 @@ run_phase:                             ; ca81
        jnc  phase_completed            ; RET C             ;
        b    @return_with_carry         ;
 phase_completed:
+       bl   @ti_scroll_cleanup
        bl   @mute_sound
 *      Flash cashboxes
        movb @bytes+16,b                ; LD B,$10          ;
@@ -591,10 +593,10 @@ game_loop_continue:
        bl   @ti_check_quit
        b    @game_loop                 ; JP $CAE7          ;
 game_loop_died:
-       bl   @ti_scroll_cleanup
        movb @player_died_status,tmp0   ; BIT 0,A           ; then jump to #R$CD47.
        andi tmp0,1*256                 ;
        jeq  shot_good_guy              ; JP NZ,$CD47       ; }
+       bl   @ti_scroll_cleanup
        b    @died                      ;                   ; Been shot or hit a bomb
 shot_good_guy:
        movb a,tmp0                     ; BIT 1,A           ; {Else if bit 1 is not zero, jump
@@ -1583,6 +1585,7 @@ flash_lives_loop:                      ; cd25
        .pop bc                         ; POP BC            ; {Loop back until the counter is zero.
        sb   one,b                      ; DJNZ $CD25        ; }
        jne  flash_lives_loop           ;                   
+       bl   @ti_scroll_cleanup
                                        ; LD A,(HL)         ; {Finally decrease lives by one and if they are not zero
        sb   one,*hl                    ; DEC A             ; jump to #R$CACB.
                                        ; LD (HL),A         ;
@@ -2000,7 +2003,7 @@ check_no_doors_active:                 ; d3f0
 ;      bl   @check_cashboxes_flag      ; CALL $D407       ;
        li   hl,cashboxes_completed_flag
        movb *hl,a
-       jeq  check_ready_to_scroll_1    ; RET NC            ; Return move_right_or_left if cashboxes not completed
+       jeq  check_ready_to_scroll_1    ; RET NC            ; Return to move_right_or_left if cashboxes not completed
        sb   *hl,*hl
        .pop bc                         ; POP AF            ; Pop return address off stack
        .pop bc                         ; POP AF            ; Pop return address off stack
