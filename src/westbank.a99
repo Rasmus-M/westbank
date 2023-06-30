@@ -1041,7 +1041,7 @@ print_bonus_score:                     ; c607
        li   hl,duel_bonus_text         ; LD HL,$C41D       ; 1 + $30 = $31 (e.g. "1" in ASCII).
        ab   @bytes+48,a                ; ADD A,$30         ; 
        movb a,*hl                      ; LD (HL),A         ; }
-       li   bc,>2928                   ; LD BC,$2928       ; {Print using #R$5B80.
+       li   bc,>0706                   ; LD BC,$2928       ; {Print using #R$5B80.
        bl    @print_two_tone_text      ; CALL $5B80        ; #TABLE(default,centre,centre,centre,centre)
                                                            ; { =h Value | =h Ink | =h Paper | =h Bright }
                                                            ; { $29 | $01 | $05 | $00 }
@@ -1070,8 +1070,8 @@ duel_points:                           ; c628
        jhe  print_bonus_score          ; JR NC,$C607       ; }
        li   hl,extra_text_copy         ; LD HL,$C622       ; {Points to #R$C622 and sends it to #R$5B80.
        dec  de                         ; DEC DE            ; #TABLE(default,centre)
-       li   bc,>2a29                   ; LD BC,$2A29       ; { =h Value | =h Ink | =h Paper | =h Bright }
-       bl    @print_two_tone_text ; CALL $5B80        ; { $2A | $02 | $05 | $00 }
+       li   bc,>0705                   ; LD BC,$2A29       ; { =h Value | =h Ink | =h Paper | =h Bright }
+       bl    @print_two_tone_text      ; CALL $5B80        ; { $2A | $02 | $05 | $00 }
                                                            ; { $29 | $01 | $05 | $00 }
                                                            ; TABLE#}
        movb one,a                      ; LD A,$01          ; {Writes $01 to #R$C6E4.
@@ -1366,7 +1366,7 @@ print_tt_text_4:                       ; cc1d
        ai   hl,>20
        mov  hl,tmp1
        movb @c,a
-       bl   @ti_draw_attribute
+       bl   @ti_draw_striped_attribute
        .ret                            ; RET               ; Return.
 *// print_tt_text_space_check
 
@@ -1701,7 +1701,7 @@ draw_tt_char:                          ; cdae
        .ex_de_hl                       ; EX DE,HL          ; 
        .pop hl                         ; POP HL            ; 
        li   bc,>1001                   ; LD BC,$1001       ;
-       bl   @ti_copy_routine             ; CALL $D5E6        ; }
+       bl   @ti_copy_routine           ; CALL $D5E6        ; }
        .endproc                        ; RET               ; Return.
 *// draw_tt_char
 

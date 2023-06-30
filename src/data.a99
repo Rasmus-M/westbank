@@ -244,7 +244,7 @@ duel_data:                             ; c3ea
        byte >80                        ; 01 Dueller timer.
        byte >12                        ; 02 Timer (after draw?)
        byte >01                        ; 03 Dueller position (1).
-       byte >C3,>40                    ; 04 Screen position above dueller to display "EXTRA"
+       byte >44,>40                    ; 04 Screen position above dueller to display "EXTRA"
                                        ; 05 or points.
        byte >00                        ; 06
        byte >00                        ; 07 Bonus points (x100, e.g. "9" == "900").
@@ -262,7 +262,7 @@ duel_data:                             ; c3ea
        byte >80                        ; Dueller timer.
        byte >12                        ;
        byte >02                        ; Dueller position (2).
-       byte >CE,>40                    ; Screen position above dueller to display "EXTRA"
+       byte >4F,>40                    ; Screen position above dueller to display "EXTRA"
                                        ; or points.
        byte >00                        ;
        byte >00                        ; Bonus points (x100, e.g. "9" == "900").
@@ -278,7 +278,7 @@ duel_data:                             ; c3ea
        byte >80                        ; Dueller timer.
        byte >12                        ;
        byte >03                        ; Dueller position (3).
-       byte >D9,>40                    ; Screen position above dueller to display "EXTRA"
+       byte >59,>40                    ; Screen position above dueller to display "EXTRA"
                                        ; or points.
        byte >00                        ;
        byte >00                        ; Bonus points (x100, e.g. "9" == "900").

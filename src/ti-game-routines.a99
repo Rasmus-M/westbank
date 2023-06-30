@@ -519,19 +519,114 @@ ti_draw_striped_attribute:
        movb @r1lb,@vdpwa               ; Send low byte of VDP RAM write address
        movb tmp1,@vdpwa                ; Send high byte of VDP RAM write address
 *      Color
-       swpb a
-       movb @ti_colors(a),tmp0
-       swpb a
-       li   tmp1,>f000
+       mov  a,tmp2
+       swpb tmp2
+       andi tmp2,7
+       sla  tmp2,1
+       mov  @gradients(tmp2),tmp0
 *      Draw
        li   tmp2,vdpwd
-       movb tmp0,*tmp2
-       movb tmp0,*tmp2
-       movb tmp0,*tmp2
-       movb tmp0,*tmp2
-       movb tmp1,*tmp2
-       movb tmp0,*tmp2
-       movb tmp0,*tmp2
-       movb tmp0,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
+       movb *tmp0+,*tmp2
        rt
 *// ti_draw_striped_attribute
+
+* 0  Black,    1 D Blue,   2 D Red,     3 D Magenta
+* 4  D Green,  5 D Cyan,   6 D Yellow,  7 Grey
+gradients:
+       data gradient_black             ; Black
+       data gradient_blue              ; Blue
+       data gradient_red               ; Red
+       data gradient_magenta           ; Magenta
+       data gradient_green             ; Green
+       data gradient_cyan              ; Cyan
+       data gradient_yellow            ; Yellow
+       data gradient_grey              ; Grey
+
+gradient_black:
+       byte >10
+       byte >10
+       byte >10
+       byte >10
+       byte >10
+       byte >10
+       byte >10
+       byte >10
+
+gradient_blue:
+       byte >50
+       byte >50
+       byte >50
+       byte >40
+       byte >40
+       byte >40
+       byte >40
+       byte >40
+
+gradient_red:
+       byte >90
+       byte >90
+       byte >80
+       byte >80
+       byte >60
+       byte >60
+       byte >60
+       byte >60
+
+gradient_magenta:
+       byte >d0
+       byte >d0
+       byte >d0
+       byte >d0
+       byte >d0
+       byte >d0
+       byte >d0
+       byte >d0
+
+gradient_green:
+       byte >30
+       byte >30
+       byte >20
+       byte >20
+       byte >c0
+       byte >c0
+       byte >c0
+       byte >c0
+
+gradient_cyan:
+       byte >70
+       byte >70
+       byte >50
+       byte >50
+       byte >40
+       byte >40
+       byte >40
+       byte >40
+
+gradient_yellow:
+       byte >f0
+       byte >b0
+       byte >b0
+       byte >a0
+       byte >a0
+       byte >a0
+       byte >a0
+       byte >a0
+
+gradient_grey:
+       byte >e0
+       byte >e0
+       byte >e0
+       byte >e0
+       byte >f0
+       byte >f0
+       byte >e0
+       byte >e0
+
+
