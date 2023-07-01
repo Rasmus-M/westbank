@@ -40,44 +40,44 @@
        bank 13
        copy "graphics-bank-7.a99"
 
-       bank 14
+       bank 14                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 15
+       bank 15                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 16
+       bank 16                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 17
+       bank 17                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 18
+       bank 18                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 19
+       bank 19                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 20
+       bank 20                         ; Dusk
        copy "empty-bank.a99"
 
-       bank 21
+       bank 21                         ; Night
        copy "empty-bank.a99"
 
-       bank 22
+       bank 22                         ; Night
        copy "empty-bank.a99"
 
-       bank 23
+       bank 23                         ; Night
        copy "empty-bank.a99"
 
-       bank 24
+       bank 24                         ; Night
        copy "empty-bank.a99"
 
-       bank 25
+       bank 25                         ; Night
        copy "empty-bank.a99"
 
-       bank 26
+       bank 26                         ; Night
        copy "empty-bank.a99"
 
-       bank 27
+       bank 27                         ; Night
        copy "empty-bank.a99"

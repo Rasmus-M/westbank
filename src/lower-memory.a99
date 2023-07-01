@@ -2,5 +2,7 @@
 
        b    @start
 
+       copy "images-color/title-screen-top.a99"
+
 lower_memory_max:
        equ  $

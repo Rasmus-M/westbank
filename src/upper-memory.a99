@@ -14,3 +14,5 @@
        copy "bnwrag-music.a99"
        copy "chrys-music.a99"
        copy "duel-music.a99"
+       copy "images-color/title-screen-bottom.a99"
+

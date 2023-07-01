@@ -2355,30 +2355,30 @@ title_screen:                          ; fe00
        .proc
        movb one,a                      ; LD A,$01          ;
        bl   @ts_draw_bandits           ; CALL $FEA4        ;
-       li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
-       li   de,zx_screen+>002b         ; LD DE,$402B       ;
-       li   bc,>0703                   ; LD BC,$0703       ;
-       bl    @print_two_tone_text ; CALL $5B80        ; }
+;       li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
+;       li   de,zx_screen+>002b         ; LD DE,$402B       ;
+;       li   bc,>0703                   ; LD BC,$0703       ;
+;       bl    @print_two_tone_text ; CALL $5B80        ; }
        li   hl,title_screen_play       ; LD HL,$FEF4       ; {Points to #R$FEF4 and sends it to #R$FEE4.
-       li   de,zx_screen+>00cb         ; LD DE,$40CB       ;
-       bl   @title_screen_print       ; CALL $FEE4        ; }
+       li   de,zx_screen+>00cb+>21         ; LD DE,$40CB       ;
+       bl   @title_screen_print        ; CALL $FEE4        ; }
        li   hl,title_screen_keys       ; LD HL,$FEFC       ; Points to #R$FEFC and sends it to #R$FEE4.
-       li   de,zx_screen+>082b         ; LD DE,$482B       ;
-       bl   @title_screen_print       ; CALL $FEE4        ;
+       li   de,zx_screen+>082b+>21         ; LD DE,$482B       ;
+       bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_joystick   ; LD HL,$FF06       ; Points to #R$FF06 and sends it to #R$FEE4.
-       li   de,zx_screen+>088b         ; LD DE,$488B       ;
-       bl   @title_screen_print       ; CALL $FEE4        ;
+       li   de,zx_screen+>088b+>21         ; LD DE,$488B       ;
+       bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_level      ; LD HL,$FF11       ; Points to #R$FF11 and sends it to #R$FEE4.
-       li   de,zx_screen+>08eb         ; LD DE,$48EB       ;
-       bl   @title_screen_print       ; CALL $FEE4        ;
+       li   de,zx_screen+>08eb+>821     ; LD DE,$48EB       ;
+       bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
        li   de,zx_screen+>1080         ; LD DE,$5083       ;
        li   bc,>0705                   ; LD BC,$0705       ;
-       bl    @print_two_tone_text ; CALL $5B80        ;
+       bl    @print_two_tone_text      ; CALL $5B80        ;
        li   hl,title_screen_copyright  ; LD HL,$FF34       ; {Points to #R$FF34 and sends it to #R$5B80.
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
-       bl    @print_two_tone_text ; CALL $5B80        ; }
+       bl    @print_two_tone_text      ; CALL $5B80        ; }
        li   tmp0,bnwrag_module
        bl   @play_module
 * Act on input.
@@ -2438,7 +2438,7 @@ ts_select_level:                       ; fe8f
 ts_flash_text:                         ; fe95
        .proc
        li   bc,>0020                   ; LD BC,$0020       ; {ggg
-       li   hl,zx_attributes+>012b     ; LD HL,$592B       ;
+       li   hl,zx_attributes+>012b+>21     ; LD HL,$592B       ;
 *      Attributes for 1 Keys
        movb d,a
        mov  hl,tmp1
@@ -2481,14 +2481,14 @@ toggle_author:
 * Draw bandits.
 ts_draw_bandits:                        ; fea4
        .proc
-*      Left bandit
-       li   tmp0,>00c1
-       clr  tmp1
-       bl   @ti_draw_character
-*      Right bandit
-       li   tmp0,>00d9
-       clr  tmp1
-       bl   @ti_draw_character
+       li   tmp0,pattern_table
+       li   tmp1,title_screen_top_patterns
+       li   tmp2,>200f
+       bl   @ti_draw_color_graphics
+       li   tmp0,pattern_table+>0f00
+       li   tmp1,title_screen_bottom_patterns
+       li   tmp2,>2005
+       bl   @ti_draw_color_graphics
        .endproc
 
 *********************************************************************
