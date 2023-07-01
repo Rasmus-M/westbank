@@ -77,12 +77,8 @@ graphics_mode_1:
        li   r2,>1800
        bl   @vsmw
 *      Init name tables
-       li   r0,name_table
-       bl   @vwad
-       bl   @ti_init_name_table
-       li   r0,name_table_2
-       bl   @vwad
-       bl   @ti_init_name_table
+       bl   @ti_init_1st_name_table
+       bl   @ti_init_2nd_name_table
 *      Sprite patterns
        li   r0,sprite_pattern_table
        li   r1,SPR0
@@ -94,13 +90,38 @@ graphics_mode_1:
 vdp_registers:
        byte >02                        ; Graphics II mode
        byte >e2                        ; 16K, display on, interrupt enabled
-       byte name_table/>400            ; Name table
+       byte name_table_1/>400            ; Name table
        byte >ff                        ; Color table
        byte pattern_table/>800+>03     ; Pattern table
        byte sprite_attr_table/>80      ; Sprite attribute table
        byte sprite_pattern_table/>800  ; Sprite pattern table
        byte >00                        ; Backdrop color
 *// graphics_mode
+
+*********************************************************************************
+*
+* Initialize 1st name table for bitmap drawing
+*
+ti_init_1st_name_table:
+       mov  r11,r12
+       li   r0,name_table_1
+       bl   @vwad
+       bl   @ti_init_name_table
+       bl   *r12
+       .endproc
+*// ti_init_1st_name_table
+
+*********************************************************************************
+*
+* Initialize 2nd name table for bitmap drawing
+*
+ti_init_2nd_name_table:
+       mov  r11,r12
+       li   r0,name_table_2
+       bl   @vwad
+       bl   @ti_init_name_table
+       bl   *r12
+*// ti_init_2nd_name_table
 
 *********************************************************************************
 *

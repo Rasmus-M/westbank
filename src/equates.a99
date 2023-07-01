@@ -95,7 +95,7 @@ sprite_pattern_table:                  ; Sprite pattern table
        equ  >1800
 color_table:                           ; Color table
        equ  >2000
-name_table:                            ; Name table 1
+name_table_1:                          ; Name table 1
        equ  >3800
 sprite_attr_table:                     ; Sprite attribute table
        equ  >3b00

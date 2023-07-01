@@ -262,19 +262,24 @@ ti_scroll_right_1:
 *
 ti_scroll_cleanup:
        .proc
+       mov  @double_buffer_flag,r0
+       jne  ti_scroll_cleanup_1
+       bl   @ti_init_2nd_name_table
        bl   @ti_select_name_table_2
-       li   r0,name_table
-       bl   @vwad
-       bl   @ti_init_name_table
+       bl   @ti_init_1st_name_table
        bl   @ti_select_name_table_1
-       li   r0,name_table_2
-       bl   @vwad
-       bl   @ti_init_name_table
+       jmp  ti_scroll_cleanup_2
+ti_scroll_cleanup_1:
+       bl   @ti_init_1st_name_table
+       bl   @ti_select_name_table_1
+       bl   @ti_init_2nd_name_table
+ti_scroll_cleanup_2:
        clr  @scroll_position
        li   r0,scroll_amounts
        mov  r0,@scroll_amount_ptr
        li   r0,ti_door_positions_1
        mov  r0,@current_door_positions
+       clr  @double_buffer_flag
        .endproc
 *// ti_scroll_cleanup
 
@@ -290,13 +295,15 @@ ti_dbl_buffer_scroll_screen:
        andi tmp0,31
        bl   @ti_scroll_screen
        bl   @ti_vsync
+       mov  @double_buffer_flag,tmp0
        andi tmp0,1
-       jne  scroll_screen_1
+       jeq  scroll_screen_1
        bl   @ti_select_name_table_1
        jmp  scroll_screen_2
 scroll_screen_1:
        bl   @ti_select_name_table_2
 scroll_screen_2:
+       inv  @double_buffer_flag
        .pop tmp0
        .endproc
 *// scroll_screen
@@ -309,10 +316,11 @@ scroll_screen_2:
 *
 ti_scroll_screen:
        lwpi ti_wrksp
-       mov  r13,r0                     ; Offset
-       andi r0,1                       ; Odd or even
+       mov  @double_buffer_flag,r0     ; Double buffer flag
+       inv  r0
+       andi r0,1                       ; 0 or 1
        sla  r0,10                      ; 0 or >400
-       ai   r0,3*32+name_table+>4000   ; VDP address + write bit
+       ai   r0,3*32+name_table_1+>4000   ; VDP address + write bit
        movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
        li   r0,vdpwd

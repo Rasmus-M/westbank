@@ -765,6 +765,8 @@ scroll_amounts_end:
        equ  $
 current_door_positions:
        data ti_door_positions_1
+double_buffer_flag:
+       data 0
 
 *********************************************************************
 *
