@@ -249,26 +249,26 @@ reduce_delay_1:                        ; c953
 *********************************************************************
 * Sets the door attributes for the "time of day".
 set_day_attr:                          ; c959
-       li   hl,door_attr_day           ; LD HL,$C96F       ; {Call #R$C966 using #R$C96F.
+       li   hl,bank_offset_day         ; LD HL,$C96F       ; {Call #R$C966 using #R$C96F.
        jmp  set_door_attr              ; JR $C966          ; }
 set_dusk_attr:                         ; c95e
-       li   hl,door_attr_dusk          ; LD HL,$C987       ; {Call #R$C966 using #R$C987.
+       li   hl,bank_offset_dusk        ; LD HL,$C987       ; {Call #R$C966 using #R$C987.
        jmp  set_door_attr              ; JR $C966          ; }
 set_night_attr:                        ; c963
-       li   hl,door_attr_night         ; LD HL,$C99F       ; Call #R$C966 using #R$C99F.
+       li   hl,bank_offset_night       ; LD HL,$C99F       ; Call #R$C966 using #R$C99F.
 * Note this is for the opened door background hence it starts from frame 2 (as
 * frame 1 is a closed door).
 set_door_attr:                         ; c966
-       movb *hl,@character_attr+1
+       mov  hl,@character_bank_offset
        rt                              ; RET               ; }
 
 * Door frame attribute data for each day phase.
-door_attr_day:                         ; c96f
-       byte >28
-door_attr_dusk:                        ; c987
-       byte >0D                        ; cyan on blue
-door_attr_night:                       ; c99f
-       byte >05                        ; cyan on black
+bank_offset_day:                       ; c96f
+       equ 0*2
+bank_offset_dusk:                      ; c987
+       equ 14*2                        ; cyan on blue
+bank_offset_night:                     ; c99f
+       equ 21*2                        ; cyan on black
 
 *********************************************************************
 * Clears the cashbox flags, clears the screen and displays the phase number.

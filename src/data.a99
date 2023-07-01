@@ -750,8 +750,8 @@ ti_colors:
        byte >21,>25,>28,>2d,>22,>27,>2b,>2f,>71,>75,>78,>7d,>72,>77,>7b,>7f
        byte >b1,>b5,>b8,>bd,>b2,>b7,>bb,>bf,>f1,>f5,>f8,>fd,>f2,>f7,>fb,>ff
 
-character_attr:
-       data >0028
+character_bank_offset:
+       data >0000
 
 scroll_position:
        data 0

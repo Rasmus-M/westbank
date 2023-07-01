@@ -140,6 +140,7 @@ ti_draw_character:
        sla  tmp1,2                     ; 4 bytes per entry
        ai   tmp1,character_table       ; Add character table base
        mov  *tmp1+,tmp2                ; Get ROM select address
+       a    @character_bank_offset,tmp2
        seto *tmp2                      ; Select ROM bank
        mov  *tmp1,tmp1                 ; Get source address
        sla  tmp0,3                     ; VDP address
@@ -161,6 +162,7 @@ ti_draw_partical_character:
        sla  tmp1,2                     ; 4 bytes per entry
        ai   tmp1,character_table       ; Add character table base
        mov  *tmp1+,a                   ; Get ROM select address
+       a    @character_bank_offset,a
        seto *a                         ; Select ROM bank
        mov  *tmp1,tmp1                 ; Get source address
        sla  tmp0,3                     ; VDP address
