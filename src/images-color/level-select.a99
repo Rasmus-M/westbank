@@ -1,240 +1,240 @@
 level_select_patterns:
-       byte >cf,>f8,>e7,>80,>ae,>83,>bc,>ef
-       byte >f0,>f8,>fc,>fc,>fe,>fe,>fe,>fe
+       byte >cf,>f8,>e7,>80,>51,>7c,>43,>10
+       byte >0f,>07,>fc,>03,>01,>01,>01,>01
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>01
-       byte >00,>00,>00,>03,>3f,>ff,>7f,>f1
-       byte >00,>00,>00,>80,>ff,>df,>ff,>ff
-       byte >00,>00,>01,>03,>fb,>e7,>ff,>cf
-       byte >00,>f8,>fc,>fc,>f0,>e0,>fe,>f0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>fe
+       byte >ff,>ff,>ff,>fc,>c0,>ff,>80,>f1
+       byte >ff,>ff,>ff,>80,>ff,>df,>ff,>ff
+       byte >ff,>ff,>fe,>fc,>fb,>e7,>ff,>cf
+       byte >ff,>f8,>fc,>fc,>f0,>e0,>fe,>f0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>0f,>1f
-       byte >00,>00,>00,>00,>07,>3f,>f3,>ff
-       byte >e3,>e9,>ba,>bc,>94,>bf,>ff,>d0
-       byte >fe,>fe,>fe,>fe,>fc,>fc,>f8,>f0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>f0,>e0
+       byte >ff,>ff,>ff,>ff,>f8,>c0,>f3,>ff
+       byte >1c,>16,>45,>bc,>94,>bf,>ff,>d0
+       byte >fe,>01,>01,>01,>03,>03,>07,>f0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >0f,>0f,>3f,>00,>00,>00,>00,>00
-       byte >ff,>ff,>fe,>00,>00,>00,>00,>00
-       byte >ff,>e0,>00,>00,>00,>00,>00,>00
-       byte >ff,>fc,>ff,>0f,>00,>00,>00,>00
-       byte >c0,>00,>00,>80,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >0f,>00,>00,>00,>00,>00,>00,>00
-       byte >ff,>03,>00,>00,>00,>00,>00,>00
-       byte >9b,>fc,>fc,>00,>00,>00,>00,>00
-       byte >e0,>80,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f0,>f0,>c0,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>fe,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>e0,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>fc,>ff,>f0,>ff,>ff,>ff,>ff
+       byte >c0,>ff,>ff,>80,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>3f
-       byte >00,>00,>00,>00,>00,>18,>ff,>cf
-       byte >00,>00,>00,>00,>00,>00,>fc,>8e
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f0,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>fc,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >64,>03,>fc,>ff,>ff,>ff,>ff,>ff
+       byte >1f,>80,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>c0
+       byte >ff,>ff,>ff,>ff,>ff,>e7,>ff,>cf
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>fc,>8e
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >03,>03,>1f,>00,>00,>00,>00,>00
-       byte >ff,>c0,>fb,>00,>00,>00,>00,>00
-       byte >ff,>ff,>87,>00,>00,>00,>00,>00
-       byte >ff,>fb,>ff,>00,>00,>00,>00,>00
-       byte >80,>c0,>f0,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >04,>02,>03,>01,>01,>03,>0f,>1c
-       byte >06,>06,>1c,>f8,>e0,>e0,>20,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >fc,>fc,>e0,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>c0,>fb,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>87,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>fb,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >80,>c0,>f0,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>01,>1f
-       byte >00,>00,>00,>00,>00,>00,>7f,>ff
-       byte >00,>00,>00,>00,>00,>7f,>ff,>ff
-       byte >00,>00,>00,>00,>00,>ff,>ff,>f7
-       byte >00,>00,>00,>00,>00,>00,>80,>e0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >30,>00,>00,>00,>00,>20,>20,>3e
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >fb,>fd,>fc,>fe,>fe,>fc,>f0,>e3
+       byte >f9,>f9,>e3,>f8,>e0,>e0,>df,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >07,>00,>00,>00,>00,>00,>00,>00
-       byte >ff,>3f,>00,>00,>00,>00,>00,>00
-       byte >f7,>87,>00,>00,>00,>00,>00,>00
-       byte >f1,>f0,>00,>00,>00,>00,>00,>00
-       byte >80,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>fc
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>e0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >07,>07,>01,>00,>00,>00,>00,>00
-       byte >00,>c0,>f8,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>03,>0f
-       byte >00,>00,>00,>00,>00,>f8,>cf,>e0
-       byte >00,>00,>00,>00,>00,>00,>00,>80
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>fe,>e0
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>80,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>80,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>f7
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>80,>e0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >cf,>ff,>ff,>ff,>ff,>df,>df,>c1
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>01,>01
-       byte >00,>00,>c0,>e0,>f0,>f8,>f1,>f8
-       byte >00,>00,>00,>00,>00,>00,>00,>e0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>c3
+       byte >fc,>fd,>f8,>f0,>80,>ff,>fc,>fc
+       byte >e0,>e0,>8f,>f8,>ff,>ff,>f8,>f0
+       byte >ff,>ff,>ff,>ff,>c0,>e0,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>03,>0f
-       byte >00,>00,>03,>0f,>3f,>c0,>ff,>fc
-       byte >3f,>9f,>80,>ff,>ff,>ff,>ff,>80
-       byte >e0,>e0,>e0,>c0,>c0,>c0,>c0,>c0
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f8,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>c0,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f7,>87,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f1,>f0,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >80,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >f8,>f8,>fe,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>c0,>f8,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >c3,>c1,>c1,>c1,>c1,>c1,>c1,>c1
+       byte >fc,>fc,>fc,>fc,>fc,>fc,>fc,>fc
+       byte >f0,>f0,>f0,>f0,>f0,>f0,>f0,>f0
+       byte >ff,>ff,>ff,>ff,>c7,>f8,>f8,>f8
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>80
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>fe,>fe
+       byte >ff,>ff,>c0,>e0,>f0,>f8,>0e,>07
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>e0
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >c1,>c1,>c1,>c1,>c0,>c0,>c0,>c0
+       byte >fc,>fc,>fc,>f0,>ff,>bd,>ef,>bd
+       byte >f0,>f0,>f0,>f0,>f0,>f0,>f1,>f1
+       byte >f8,>f8,>f8,>f8,>f8,>f8,>f0,>f0
        byte >80,>c0,>c0,>e0,>f0,>f8,>fc,>fc
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
@@ -242,75 +242,75 @@ level_select_patterns:
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>01,>3f,>fc
-       byte >00,>00,>00,>1f,>7f,>e0,>c0,>ff
-       byte >00,>00,>00,>fe,>e9,>e6,>ff,>ff
-       byte >00,>00,>00,>00,>00,>80,>ff,>ff
-       byte >00,>00,>00,>00,>00,>00,>e0,>f3
+       byte >ff,>ff,>ff,>ff,>ff,>fe,>c0,>fc
+       byte >ff,>ff,>ff,>e0,>80,>e0,>c0,>00
+       byte >ff,>ff,>ff,>fe,>16,>19,>00,>00
+       byte >ff,>ff,>ff,>ff,>ff,>80,>00,>00
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>e0,>0c
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >00,>00,>00,>00,>00,>01,>07,>1f
-       byte >03,>03,>0f,>1f,>b8,>f0,>ef,>80
-       byte >b8,>ff,>ff,>c3,>fc,>fe,>91,>f4
+       byte >ff,>ff,>ff,>ff,>ff,>fe,>f8,>e0
+       byte >fc,>fc,>f0,>e0,>b8,>f0,>ef,>80
+       byte >47,>00,>00,>3c,>fc,>fe,>6e,>0b
+       byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >c1,>ff,>ff,>ff,>fc,>fc,>fc,>fc
-       byte >f8,>fa,>e0,>c0,>f8,>87,>87,>87
-       byte >80,>e0,>f8,>80,>80,>80,>80,>86
-       byte >c0,>c0,>fe,>f6,>ba,>cb,>f4,>f4
-       byte >fa,>fc,>ff,>bf,>80,>c0,>90,>e0
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>c0,>f0,>fc,>ff,>ff,>fe
-       byte >ff,>ff,>fe,>ff,>80,>cf,>9f,>f1
-       byte >ff,>ff,>ff,>fc,>f8,>ff,>ff,>80
-       byte >ff,>ff,>ff,>fb,>fb,>f9,>fc,>fc
-       byte >ff,>ff,>80,>90,>90,>a0,>ec,>b7
+       byte >3f,>0f,>00,>00,>00,>00,>00,>00
+       byte >de,>f7,>03,>03,>03,>01,>01,>01
+       byte >f1,>f9,>ff,>fb,>af,>fe,>fe,>f0
+       byte >f0,>f0,>f0,>f0,>e0,>00,>00,>00
+       byte >fa,>fc,>00,>00,>00,>00,>00,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >fb,>81,>ff,>fe,>fc,>ff,>f0,>ef
-       byte >c3,>f7,>c0,>8f,>c3,>9f,>bb,>fb
-       byte >fc,>fe,>ff,>fd,>fd,>fe,>f6,>f2
-       byte >c0,>f0,>e1,>ff,>df,>df,>bb,>88
+       byte >00,>00,>3f,>0f,>03,>00,>00,>01
+       byte >00,>00,>fe,>ff,>80,>30,>9f,>f1
+       byte >00,>00,>00,>fc,>07,>00,>00,>80
+       byte >00,>00,>00,>04,>04,>06,>03,>03
+       byte >00,>00,>80,>90,>90,>a0,>ec,>48
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >fe,>fc,>fd,>fc,>fc,>fe,>ff,>ff
-       byte >87,>87,>87,>fd,>bf,>f8,>f8,>f8
-       byte >8e,>8a,>8e,>8e,>9c,>9c,>fc,>fc
-       byte >f8,>f3,>ef,>ff,>ff,>ff,>ff,>ff
-       byte >e0,>cf,>cf,>f3,>e3,>ff,>ff,>ff
+       byte >fb,>7e,>00,>fe,>03,>00,>0f,>ef
+       byte >3c,>f7,>c0,>8f,>c3,>9f,>44,>fb
+       byte >03,>01,>00,>02,>02,>01,>09,>0d
+       byte >c0,>f0,>1e,>00,>20,>20,>44,>88
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >fe,>f8,>f0,>f8,>f0,>f1,>fe,>fe
-       byte >98,>9c,>fc,>fc,>f8,>fc,>ba,>a5
-       byte >8e,>9f,>c4,>c4,>d1,>f3,>f1,>c0
-       byte >f6,>fa,>fc,>f0,>b0,>f8,>fc,>cd
-       byte >d0,>f0,>e0,>fe,>ff,>ff,>ff,>e0
+       byte >00,>00,>00,>00,>00,>00,>00,>00
+       byte >01,>01,>01,>01,>01,>01,>01,>01
+       byte >f0,>f0,>f0,>f0,>f0,>f0,>f0,>f0
+       byte >00,>0c,>10,>00,>00,>00,>01,>09
+       byte >00,>30,>30,>0c,>1c,>00,>00,>40
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >01,>07,>0f,>07,>0f,>0e,>01,>01
+       byte >98,>9c,>fc,>fc,>f8,>fc,>45,>5a
+       byte >8e,>9f,>c4,>c4,>f3,>f3,>f1,>c0
+       byte >09,>05,>fc,>0f,>b0,>f8,>fc,>cd
+       byte >d0,>f0,>e0,>fe,>00,>00,>00,>e0
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
@@ -319,388 +319,388 @@ level_select_patterns:
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ef,>ef,>e4,>c0,>d1,>c0,>c0,>c0
        byte >f3,>e3,>f8,>f0,>e0,>e0,>c0,>80
-       byte >fc,>fc,>f6,>fa,>fc,>f0,>e0,>ff
-       byte >af,>90,>a0,>f0,>e0,>f8,>f8,>ff
+       byte >03,>03,>09,>05,>03,>0f,>1f,>00
+       byte >50,>90,>a0,>f0,>e0,>f8,>f8,>00
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >ff,>ff,>ff,>ff,>ff,>ff,>fe,>f8
-       byte >fc,>fc,>fc,>fc,>fc,>fc,>ff,>ff
-       byte >9f,>80,>80,>80,>80,>80,>80,>e0
-       byte >ff,>ff,>ff,>ff,>8c,>de,>c0,>c0
-       byte >ff,>ff,>df,>c0,>ff,>ff,>ff,>ff
+       byte >00,>00,>00,>00,>00,>00,>01,>07
+       byte >01,>01,>00,>00,>00,>00,>ff,>ff
+       byte >f0,>f0,>ff,>7f,>0f,>07,>03,>e0
+       byte >45,>34,>0b,>0b,>f8,>ff,>ff,>fc
+       byte >80,>c0,>90,>e0,>e0,>f0,>e0,>90
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >f7,>fb,>fd,>fe,>f0,>e0,>fe,>ff
-       byte >e1,>99,>a7,>fe,>fc,>ff,>fc,>ff
-       byte >ff,>f0,>ff,>ff,>80,>c0,>e0,>ff
-       byte >f8,>f0,>ff,>ff,>e0,>ff,>80,>ff
-       byte >9c,>fb,>fc,>ff,>80,>e0,>ff,>fd
+       byte >08,>04,>02,>01,>0f,>1f,>01,>00
+       byte >e1,>66,>58,>fe,>fc,>ff,>fc,>00
+       byte >ff,>0f,>00,>00,>80,>3f,>1f,>00
+       byte >f8,>0f,>00,>00,>1f,>ff,>80,>00
+       byte >9c,>04,>fc,>00,>80,>e0,>ff,>02
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
-       byte >d1,>c3,>e7,>ff,>80,>ff,>ff,>fc
-       byte >f2,>f2,>c0,>80,>ff,>ff,>80,>f0
+       byte >d1,>c3,>e7,>ff,>7f,>00,>00,>03
+       byte >f2,>f2,>c0,>80,>00,>00,>7f,>f0
 level_select_colors:
-       byte >ab,>ab,>ab,>ab,>ba,>ba,>ba,>ba
-       byte >b7,>b7,>a7,>b7,>b7,>b7,>b7,>b7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>f7
-       byte >77,>77,>77,>f7,>f7,>f7,>f7,>fe
-       byte >77,>77,>77,>f7,>f7,>fe,>f7,>f7
-       byte >77,>77,>f7,>f7,>f7,>f7,>f7,>fe
-       byte >77,>f7,>e7,>f7,>f7,>f7,>f7,>f7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>f7,>f7
-       byte >77,>77,>77,>77,>e7,>f7,>fe,>f7
-       byte >ba,>ba,>ba,>ab,>ab,>ab,>a7,>ab
-       byte >a7,>b7,>b7,>b7,>b7,>b7,>b7,>a7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >f7,>f7,>e7,>77,>77,>77,>77,>77
-       byte >f7,>f7,>f7,>77,>77,>77,>77,>77
-       byte >f7,>f7,>77,>77,>77,>77,>77,>77
-       byte >f7,>f7,>f7,>e7,>77,>77,>77,>77
-       byte >f7,>77,>77,>e7,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >e7,>77,>77,>77,>77,>77,>77,>77
-       byte >f7,>f7,>77,>77,>77,>77,>77,>77
-       byte >ba,>ba,>a7,>77,>77,>77,>77,>77
-       byte >b7,>a7,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>f7
-       byte >77,>77,>77,>77,>77,>f7,>f7,>fe
-       byte >77,>77,>77,>77,>77,>77,>f7,>fe
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >f7,>f7,>e7,>77,>77,>77,>77,>77
-       byte >f7,>ef,>f7,>77,>77,>77,>77,>77
-       byte >f7,>f7,>fe,>77,>77,>77,>77,>77
-       byte >f7,>fe,>f7,>77,>77,>77,>77,>77
-       byte >f7,>f7,>f7,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >47,>47,>17,>17,>17,>17,>17,>17
-       byte >47,>17,>17,>17,>17,>17,>47,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>f7,>f7
-       byte >77,>77,>77,>77,>77,>77,>f7,>f7
-       byte >77,>77,>77,>77,>77,>f7,>f7,>f7
-       byte >77,>77,>77,>77,>77,>f7,>f7,>f7
-       byte >77,>77,>77,>77,>77,>77,>f7,>e7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >47,>77,>77,>77,>77,>47,>47,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >e7,>77,>77,>77,>77,>77,>77,>77
-       byte >f7,>f7,>77,>77,>77,>77,>77,>77
-       byte >f7,>fe,>77,>77,>77,>77,>77,>77
-       byte >fe,>e7,>77,>77,>77,>77,>77,>77
-       byte >e7,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>47,>77,>77,>77,>77,>77
-       byte >77,>47,>17,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>a7,>a7
-       byte >77,>77,>77,>77,>77,>a7,>ab,>ba
-       byte >77,>77,>77,>77,>77,>77,>77,>a7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>77,>77
-       byte >77,>77,>77,>77,>77,>77,>a7,>a7
-       byte >77,>77,>a7,>a7,>a7,>a7,>ba,>ba
-       byte >77,>77,>77,>77,>77,>77,>77,>a7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>77,>a7,>a7
-       byte >77,>77,>a7,>a7,>a7,>ab,>b7,>b1
-       byte >b7,>ba,>ab,>b7,>b7,>b7,>b7,>1b
-       byte >ba,>ba,>ba,>ba,>ba,>ba,>ba,>ba
+       byte >ab,>ab,>ab,>ab,>ab,>ab,>ab,>ab
+       byte >7b,>7b,>a7,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7f
+       byte >7b,>7b,>7b,>7f,>7f,>fb,>7f,>fe
+       byte >7b,>7b,>7b,>f7,>fb,>fe,>fb,>fb
+       byte >7b,>7b,>7f,>7f,>f7,>f7,>fb,>fe
+       byte >7b,>f7,>e7,>f7,>f7,>f7,>f7,>f7
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7f,>7f
+       byte >7b,>7b,>7b,>7b,>7e,>7f,>fe,>fb
+       byte >ab,>ab,>ab,>ab,>ab,>ab,>ab,>ab
+       byte >a7,>7b,>7b,>7b,>7b,>7b,>7b,>a7
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7f,>7f,>7e,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>fb,>f7,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>f7,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>f7,>fb,>7e,>7b,>7b,>7b,>7b
+       byte >f7,>7b,>7b,>e7,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7e,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>7f,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >ab,>ab,>a7,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>a7,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7f
+       byte >7b,>7b,>7b,>7b,>7b,>7f,>fb,>fe
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>f7,>fe
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7f,>7f,>7e,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>ef,>f7,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>fb,>fe,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>fe,>fb,>7b,>7b,>7b,>7b,>7b
+       byte >f7,>f7,>f7,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >74,>74,>71,>71,>71,>71,>71,>71
+       byte >74,>71,>71,>17,>17,>17,>74,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>71
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>17
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7f,>7f
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7f,>fb
+       byte >7b,>7b,>7b,>7b,>7b,>7f,>fb,>fb
+       byte >7b,>7b,>7b,>7b,>7b,>fb,>fb,>f7
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>f7,>e7
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >74,>7b,>7b,>7b,>7b,>74,>74,>71
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7c
+       byte >71,>71,>71,>71,>71,>1b,>7c,>7c
+       byte >17,>17,>71,>17,>1b,>1b,>17,>c7
+       byte >7b,>7b,>7b,>7b,>17,>17,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7e,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >fb,>7f,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >f7,>fe,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >fe,>e7,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >e7,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >71,>71,>74,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>47,>17,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >72,>73,>7c,>7c,>73,>72,>7c,>7c
+       byte >73,>7c,>72,>7c,>73,>7c,>7c,>7c
+       byte >c7,>37,>c7,>c7,>37,>27,>c7,>3a
+       byte >7b,>7b,>7b,>7b,>7c,>37,>2a,>ca
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>a7
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>7b
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7a,>7a
+       byte >7b,>7b,>a7,>a7,>a7,>a7,>ab,>ab
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>7b,>a7
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7c,>72,>7c,>7c,>73,>7c,>7c,>72
+       byte >73,>7c,>7c,>7c,>cb,>c2,>c2,>c2
+       byte >2b,>cb,>cb,>2b,>cb,>cb,>3b,>cb
+       byte >2a,>ca,>2a,>ca,>ca,>ca,>ca,>2a
        byte >a7,>a7,>a7,>a7,>a7,>a7,>a7,>ab
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>a7,>a7,>ab
-       byte >77,>77,>77,>a7,>a7,>ab,>ab,>b7
-       byte >77,>77,>77,>a7,>ba,>ba,>b7,>b7
-       byte >77,>77,>77,>77,>77,>a7,>b7,>b7
-       byte >77,>77,>77,>77,>77,>77,>a7,>ba
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >77,>77,>77,>77,>77,>a7,>a7,>a7
-       byte >a7,>a7,>a7,>a7,>ab,>ab,>ab,>ab
-       byte >ba,>b7,>b7,>ba,>ab,>ab,>ba,>ba
-       byte >b7,>b7,>b7,>b7,>b7,>b7,>b7,>b7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >ba,>b7,>b7,>b7,>b2,>bc,>b2,>b2
-       byte >b1,>b1,>b1,>b1,>bc,>2b,>cb,>2b
-       byte >1b,>1b,>1b,>cb,>cb,>cb,>cb,>cb
-       byte >ba,>ba,>b3,>b3,>b3,>b2,>b2,>b2
-       byte >ab,>ab,>b7,>b3,>2b,>2b,>cb,>cb
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >b7,>b7,>ba,>ba,>ba,>b7,>b7,>b9
-       byte >b7,>b7,>ab,>a7,>ab,>b8,>69,>69
-       byte >b7,>b7,>b7,>ab,>ba,>b7,>b7,>6b
-       byte >b7,>b7,>b7,>b3,>b2,>b3,>b2,>b2
-       byte >b7,>b7,>3b,>3b,>3b,>2b,>3b,>bc
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >ab,>ba,>b7,>af,>bf,>b7,>ba,>af
-       byte >bf,>fa,>fa,>fb,>af,>af,>bf,>af
-       byte >ba,>ba,>b7,>b3,>b3,>b2,>b3,>b2
-       byte >ab,>ab,>ba,>b7,>b3,>b3,>b3,>2b
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >bc,>b2,>bc,>b2,>b2,>b2,>b7,>b7
-       byte >2b,>cb,>2b,>2e,>2e,>c2,>b2,>bc
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7a,>7a,>ab
+       byte >7b,>7b,>7b,>7a,>7a,>ab,>ab,>bb
+       byte >7b,>7b,>7b,>a7,>ab,>ab,>bb,>bb
+       byte >7b,>7b,>7b,>7b,>7b,>a7,>bb,>bb
+       byte >7b,>7b,>7b,>7b,>7b,>7b,>a7,>ab
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >7b,>7b,>7b,>7b,>7b,>7a,>7a,>7a
+       byte >7a,>7a,>7a,>7a,>ab,>ab,>ab,>ab
+       byte >ab,>bb,>bb,>ab,>ab,>ab,>ab,>ab
+       byte >bb,>bb,>bb,>bb,>bb,>bb,>bb,>bb
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >cb,>2b,>bb,>bb,>bb,>bb,>bb,>bb
+       byte >c2,>c2,>2b,>2b,>2b,>cb,>cb,>cb
+       byte >cb,>2b,>cb,>c2,>c3,>cb,>cb,>cb
+       byte >ca,>ca,>2b,>cb,>cb,>bb,>bb,>bb
+       byte >ab,>ab,>bb,>bb,>bb,>bb,>bb,>bb
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >bb,>bb,>ab,>ab,>ab,>bb,>bb,>9b
+       byte >bb,>bb,>ab,>ab,>ab,>8b,>69,>69
+       byte >bb,>bb,>bb,>ab,>ab,>bb,>bb,>6b
+       byte >bb,>bb,>bb,>3b,>2b,>3b,>2b,>2b
+       byte >bb,>bb,>3b,>3b,>3b,>2b,>3b,>cb
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >ab,>ab,>bb,>af,>fb,>bb,>ab,>af
+       byte >fb,>fa,>fa,>fb,>af,>af,>fb,>af
+       byte >ab,>ab,>bb,>3b,>3b,>2b,>3b,>2b
+       byte >ab,>ab,>ab,>bb,>3b,>3b,>3b,>2b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >bb,>bb,>bb,>bb,>bb,>bb,>bb,>bb
+       byte >2b,>2b,>2b,>2b,>2b,>2b,>2b,>2b
        byte >cb,>cb,>cb,>cb,>cb,>cb,>cb,>cb
-       byte >bc,>ba,>ba,>b7,>b7,>b7,>b7,>b7
-       byte >cb,>ba,>ba,>ba,>ba,>b7,>b7,>b7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >b9,>ba,>ba,>ba,>ba,>ba,>bc,>b3
-       byte >69,>a8,>a6,>a6,>a8,>a6,>b3,>b2
+       byte >bb,>ab,>ab,>bb,>bb,>bb,>3b,>3b
+       byte >bb,>ab,>ab,>ab,>ab,>bb,>bb,>2b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >9b,>ab,>ab,>ab,>ab,>ab,>cb,>3b
+       byte >69,>a8,>a6,>a6,>a8,>a6,>3b,>2b
        byte >6b,>9b,>a8,>a6,>9a,>6a,>9a,>6a
-       byte >b2,>bc,>ac,>ba,>9b,>8b,>6b,>6a
-       byte >2b,>cb,>cb,>ab,>b7,>b7,>b7,>8b
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
+       byte >2b,>cb,>ac,>ab,>9b,>8b,>6b,>6a
+       byte >2b,>cb,>cb,>ab,>bb,>bb,>bb,>8b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
        byte >af,>af,>af,>af,>af,>af,>af,>af
        byte >af,>af,>fb,>fa,>fa,>fa,>fa,>fa
-       byte >b2,>bc,>b3,>bc,>bc,>ba,>ba,>b7
-       byte >b2,>2b,>cb,>cb,>ca,>ab,>ab,>b7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >b7,>b7,>b7,>b7,>b7,>b7,>ba,>ba
-       byte >b2,>b2,>b2,>b2,>b2,>b2,>a7,>a7
-       byte >bc,>cb,>cb,>cb,>cb,>cb,>cb,>ab
-       byte >b7,>b7,>b7,>b7,>ba,>ab,>ab,>ab
-       byte >b7,>b7,>ba,>ab,>b7,>b7,>b7,>b7
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >b3,>b2,>bc,>bc,>ba,>ba,>ba,>b7
-       byte >3b,>b2,>b2,>c3,>ca,>a7,>ab,>b7
-       byte >a7,>ba,>b7,>b7,>ab,>ba,>ba,>b7
-       byte >a8,>ba,>b7,>b7,>ba,>a7,>ab,>b7
-       byte >9b,>b9,>ab,>b7,>ab,>ab,>a7,>ba
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >17,>17,>17,>17,>17,>17,>17,>17
-       byte >af,>af,>af,>a7,>ba,>b7,>b7,>ba
-       byte >ab,>ab,>ab,>ab,>b7,>b7,>ba,>ab
+       byte >2b,>cb,>3b,>cb,>cb,>ab,>ab,>bb
+       byte >2b,>2b,>cb,>cb,>ca,>ab,>ab,>bb
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >bb,>bb,>bb,>bb,>bb,>bb,>ab,>ab
+       byte >2b,>1b,>bb,>bb,>bb,>bb,>ab,>ab
+       byte >cb,>c1,>1b,>1b,>1b,>1b,>1b,>ab
+       byte >3b,>2b,>2b,>2b,>1c,>1b,>1b,>1b
+       byte >2b,>2b,>2b,>cb,>cb,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >3b,>2b,>cb,>cb,>ab,>ab,>ab,>bb
+       byte >3b,>2b,>2b,>c3,>ca,>ab,>ab,>bb
+       byte >ab,>ab,>bb,>bb,>ab,>ab,>ab,>bb
+       byte >a8,>ab,>bb,>bb,>ab,>ab,>ab,>bb
+       byte >9b,>9b,>ab,>bb,>ab,>ab,>ab,>ab
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >1b,>1b,>1b,>1b,>1b,>1b,>1b,>1b
+       byte >af,>af,>af,>ab,>ab,>bb,>bb,>ab
+       byte >ab,>ab,>ab,>ab,>bb,>bb,>ab,>ab

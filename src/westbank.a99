@@ -2360,16 +2360,16 @@ title_screen:                          ; fe00
 ;       li   bc,>0703                   ; LD BC,$0703       ;
 ;       bl    @print_two_tone_text ; CALL $5B80        ; }
        li   hl,title_screen_play       ; LD HL,$FEF4       ; {Points to #R$FEF4 and sends it to #R$FEE4.
-       li   de,zx_screen+>00cb+>21         ; LD DE,$40CB       ;
+       li   de,zx_screen+>00cb+>20         ; LD DE,$40CB       ;
        bl   @title_screen_print        ; CALL $FEE4        ; }
        li   hl,title_screen_keys       ; LD HL,$FEFC       ; Points to #R$FEFC and sends it to #R$FEE4.
-       li   de,zx_screen+>082b+>21         ; LD DE,$482B       ;
+       li   de,zx_screen+>082b+>20         ; LD DE,$482B       ;
        bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_joystick   ; LD HL,$FF06       ; Points to #R$FF06 and sends it to #R$FEE4.
-       li   de,zx_screen+>088b+>21         ; LD DE,$488B       ;
+       li   de,zx_screen+>088b+>20         ; LD DE,$488B       ;
        bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_level      ; LD HL,$FF11       ; Points to #R$FF11 and sends it to #R$FEE4.
-       li   de,zx_screen+>08eb+>821     ; LD DE,$48EB       ;
+       li   de,zx_screen+>08eb+>820     ; LD DE,$48EB       ;
        bl   @title_screen_print        ; CALL $FEE4        ;
        li   hl,title_screen_author     ; LD HL,$FF19       ; Points to #R$FF19 and sends it to #R$5B80.
        li   de,zx_screen+>1080         ; LD DE,$5083       ;
@@ -2438,7 +2438,7 @@ ts_select_level:                       ; fe8f
 ts_flash_text:                         ; fe95
        .proc
        li   bc,>0020                   ; LD BC,$0020       ; {ggg
-       li   hl,zx_attributes+>012b+>21     ; LD HL,$592B       ;
+       li   hl,zx_attributes+>012b+>20     ; LD HL,$592B       ;
 *      Attributes for 1 Keys
        movb d,a
        mov  hl,tmp1
