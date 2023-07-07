@@ -746,6 +746,10 @@ duel_clear_screen:                     ; c463
        li   tmp1,>0007
        li   tmp2,>2004
        bl   @ti_draw_color_area
+       li   tmp0,>1740
+       li   tmp1,>002
+       li   tmp2,>0601
+       bl   @ti_draw_color_area
        bl   @ti_display_off
        seto @graphics_bank_7_select
        li   tmp0,>400
