@@ -2349,6 +2349,7 @@ dollar_scroll_draw:                    ; f9c3
 * Used by the routine at #R$C7C0.
 title_screen:                          ; fe00
        .proc
+       bl   @ti_display_off
        movb one,a                      ; LD A,$01          ;
        bl   @ts_draw_bandits           ; CALL $FEA4        ;
 ;       li   hl,title_screen_game_name  ; LD HL,$FEEA       ; {Points to #R$FEEA and sends it to #R$5B80.
@@ -2375,6 +2376,7 @@ title_screen:                          ; fe00
        li   de,zx_screen+>10c0         ; LD DE,$50C0       ;
        li   bc,>0704                   ; LD BC,$0704       ;
        bl    @print_two_tone_text      ; CALL $5B80        ; }
+       bl   @ti_display_on
        li   tmp0,bnwrag_module
        bl   @play_module
 * Act on input.

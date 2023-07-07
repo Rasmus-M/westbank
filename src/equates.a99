@@ -56,7 +56,7 @@ kscan_key:
 kscan_status:
        equ  >837c
 vdp_copy_1_pad:
-       equ  >8380
+       equ  >8388
 vdp_copy_2_pad:
        equ  >83a0
 gplws:
