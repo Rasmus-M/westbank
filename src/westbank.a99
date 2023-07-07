@@ -2309,7 +2309,9 @@ dollar_scroll_draw:                    ; f9c3
        li   tmp2,>0202
        bl   @ti_draw_color_graphics
        bl   @ti_vsync
+       bl   @execute_control_method
        bl   @ti_vsync
+       bl   @execute_control_method
        .endproc                        ; RET               ; Return.
 
 *********************************************************************
