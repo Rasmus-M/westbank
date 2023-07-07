@@ -55,9 +55,12 @@ kscan_key:
        equ  >8375
 kscan_status:
        equ  >837c
+vdp_copy_1_pad:
+       equ  >8380
+vdp_copy_2_pad:
+       equ  >83a0
 gplws:
        equ  >83e0
-
 
 **
 * Z80 register mapping

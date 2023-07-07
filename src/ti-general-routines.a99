@@ -37,13 +37,20 @@ init_bits_1:
 * Copy routines to pad
 *
 copy_to_pad:
-;       li   tmp0,draw_display_buffer_start
-;       li   tmp1,draw_display_buffer_pad
-;       li   tmp2,draw_display_buffer_end-draw_display_buffer_start
-;copy_to_pad_1:
-;       mov  *tmp0+,*tmp1+
-;       dect tmp2
-;       jne  copy_to_pad_1
+       li   tmp0,vdp_copy_1
+       li   tmp1,vdp_copy_1_pad
+       li   tmp2,vdp_copy_1_end-vdp_copy_1
+copy_to_pad_1:
+       mov  *tmp0+,*tmp1+
+       dect tmp2
+       jne  copy_to_pad_1
+       li   tmp0,vdp_copy_2
+       li   tmp1,vdp_copy_2_pad
+       li   tmp2,vdp_copy_2_end-vdp_copy_2
+copy_to_pad_2:
+       mov  *tmp0+,*tmp1+
+       dect tmp2
+       jne  copy_to_pad_2
        rt
 *// copy_to_pad
 
@@ -290,33 +297,13 @@ ti_draw_color_graphics_1:
        movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
        mov  r4,r3                      ; Width in characters
-ti_draw_color_graphics_2:
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       dec  r3
-       jne  ti_draw_color_graphics_2
+       bl   @vdp_copy_1_pad
 *      Colors
        ai   r0,>2000                   ; To color table
        movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
        mov  r4,r3                      ; Width in characters
-ti_draw_color_graphics_3:
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       movb *r7+,*r6
-       dec  r3
-       jne  ti_draw_color_graphics_3
+       bl   @vdp_copy_2_pad
        ai   r0,256->2000               ; Next character row
        a    r5,r1                      ; Skip source bytes
        a    r5,r7                      ; Skip source bytes
@@ -325,6 +312,37 @@ ti_draw_color_graphics_3:
        lwpi wrksp
        bl   @module_player
        .endproc
+
+vdp_copy_1:
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       movb *r1+,*r6
+       dec  r3
+       jne  vdp_copy_1
+       rt
+vdp_copy_1_end:
+       equ  $
+
+vdp_copy_2:
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       movb *r7+,*r6
+       dec  r3
+       jne  vdp_copy_2
+       rt
+vdp_copy_2_end:
+       equ  $
+
 *// ti_draw_color_graphics
 
 *********************************************************************
@@ -352,17 +370,7 @@ ti_draw_graphics_1:
        movb @ti_r0lb,@vdpwa            ; Send low byte of VDP RAM write address
        movb r0,@vdpwa                  ; Send high byte of VDP RAM write address
        mov  r4,r3                      ; Width in characters
-ti_draw_graphics_2:
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       movb *r1+,*r6
-       dec  r3
-       jne  ti_draw_graphics_2
+       bl   @vdp_copy_1_pad
        ai   r0,256                     ; Next character row
        a    r5,r1                      ; Skip source bytes
        dec  r2
