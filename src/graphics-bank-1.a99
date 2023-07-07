@@ -226,10 +226,6 @@ gfx_dollar_box_image:
 gfx_dollar_image:
        equ  $
        copy "images-color/dollar.a99"
-gfx_dollar_image_1:
-       equ  gfx_dollar_image+64
-gfx_dollar_image_2:
-       equ  gfx_dollar_image+128
 *
 * Sheriffs Badge
 *

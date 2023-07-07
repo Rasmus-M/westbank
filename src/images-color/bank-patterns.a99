@@ -32,68 +32,68 @@ bank_screen_patterns:
        byte >78,>cc,>cc,>18,>30,>60,>fc,>00
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >1e,>1e,>1e,>1e,>1e,>1e,>1e,>1e
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >78,>78,>78,>78,>78,>78,>78,>78
        byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
-       byte >ff,>80,>80,>80,>80,>80,>80,>80
+       byte >80,>80,>80,>80,>80,>80,>80,>80
        byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >1e,>1e,>1e,>1e,>1e,>1e,>1e,>1e
-       byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >00,>00,>00,>00,>00,>00,>00,>00
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
+       byte >ff,>ff,>ff,>ff,>ff,>ff,>ff,>ff
        byte >78,>78,>78,>78,>78,>78,>78,>78
        byte >00,>00,>00,>00,>00,>00,>00,>00
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
-       byte >80,>80,>80,>80,>80,>80,>80,>ff
-       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>ff
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
+       byte >80,>80,>80,>80,>80,>80,>80,>80
+       byte >fe,>fe,>fe,>fe,>fe,>fe,>fe,>fe
        byte >00,>00,>00,>00,>00,>00,>00,>00
        byte >81,>c3,>99,>c3,>e3,>c9,>9c,>c1
        byte >81,>ff,>9f,>cf,>e7,>f3,>fc,>fc

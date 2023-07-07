@@ -823,18 +823,18 @@ ti_vsync_1:
        .endproc
 *// ti_vsync
 
-*********************************************************************
-*
-* Wait for tmp0 frames
-*
-ti_delay:
-       .proc
-ti_delay_1:
-       bl   @ti_vsync
-       dec  tmp0
-       jne  ti_delay_1
-       .endproc
-*// ti_delay
+;*********************************************************************
+;*
+;* Wait for tmp0 frames
+;*
+;ti_delay:
+;       .proc
+;ti_delay_1:
+;       bl   @ti_vsync
+;       dec  tmp0
+;       jne  ti_delay_1
+;       .endproc
+;*// ti_delay
 
 *********************************************************************
 *

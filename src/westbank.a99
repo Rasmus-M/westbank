@@ -2315,22 +2315,18 @@ scroll_dollar_sign:                    ; f960
        .proc
        bl   @play_deposit
        seto @graphics_bank_1_select
-       li   de,gfx_dollar_image_2      ; LD DE,$F940       ; {Sends #R$F940 to #R$F9C3.
+       li   de,dollar_patterns_3       ; LD DE,$F940       ; {Sends #R$F940 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-       li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
+       li   de,dollar_patterns_1       ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-       li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
+       li   de,dollar_patterns_2       ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-       li   de,gfx_dollar_image        ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
-       nop                             ; NOP               ; 
-       nop                             ; NOP               ; 
+       li   de,dollar_patterns_1       ; LD DE,$F900       ; {Sends #R$F900 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
-       li   de,gfx_dollar_image_1      ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
+       li   de,dollar_patterns_2       ; LD DE,$F920       ; {Sends #R$F920 to #R$F9C3.
        bl   @dollar_scroll_draw        ; CALL $F9C3        ; }
 *      Clear
-       li   de,gfx_empty_space         ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
+       li   de,dollar_patterns_empty   ; LD DE,$5B00       ; {Sends #R$5B00 to #R$F9C3 (blanks the centrepiece).
        bl   @dollar_scroll_draw        ; CALL $F9C3        ;  Needs 32 zeros }
        .ret                            ; RET               ; Return.
 
