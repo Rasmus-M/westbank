@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         byte[] buffer = new byte[0x40000];
-        readFile("westbank8.bin", buffer);
+        readFile("westbank-v2-8.bin", buffer);
 
         byte[] day = new byte[0x420];
         readFile("graphics/day.bin", day);
@@ -103,7 +103,7 @@ public class Main {
         applyBackgroundsToBanks(startBankDusk, duskBackgrounds, buffer);
         applyBackgroundsToBanks(startBankNight, nightBackgrounds, buffer);
 
-        FileOutputStream fos = new FileOutputStream("westbank8.bin");
+        FileOutputStream fos = new FileOutputStream("westbank-v2-8.bin");
         fos.write(buffer);
         fos.close();
     }
