@@ -1921,35 +1921,50 @@ controls_keyboard:                     ; d39b
 * controls_keyboard_1                  ; d39f
        li   tmp0,KEY_1                 ; BIT 0,A           ; {If "1" isn't being pressed then jump to #R$D3A6.
        bl   @ti_check_key              ;
+       jne  !
+       li   tmp0,KEY_7
+       bl   @ti_check_key
        jeq  controls_keyboard_2        ; JR NZ,$D3A6       ; }
-       movb @bytes+18,a                ; LD A,$12          ; {Set #REGa=$12 and return.
+!      movb @bytes+18,a                ; LD A,$12          ; {Set #REGa=$12 and return.
        jmp  controls_keyboard_6                            ; RET               ; }
 controls_keyboard_2:                   ; d3a6
        li   tmp0,KEY_2                 ; BIT 1,A           ; {If "2" isn't being pressed then jump to #R$D3AD.
        bl   @ti_check_key              ;
+       jne  !
+       li   tmp0,KEY_8
+       bl   @ti_check_key
        jeq  controls_keyboard_3        ; JR NZ,$D3AD       ; }
-       movb @bytes+16,a                ; LD A,$10          ; {Set #REGa=$10 and return.
+!      movb @bytes+16,a                ; LD A,$10          ; {Set #REGa=$10 and return.
        jmp  controls_keyboard_6                            ; RET               ; }
 controls_keyboard_3:                   ; d3ad
        li   tmp0,KEY_3                 ; BIT 2,A           ; {If "3" isn't being pressed then jump to #R$D3E2.
        bl   @ti_check_key              ;
+       jne  !
+       li   tmp0,KEY_9
+       bl   @ti_check_key
        jeq  controls_input_o_p         ; JR NZ,$D3E2       ; }
-       movb @bytes+17,a                ; LD A,$11          ; {Set #REGa=$11 and return.
+!      movb @bytes+17,a                ; LD A,$11          ; {Set #REGa=$11 and return.
        jmp  controls_keyboard_6                            ; RET               ; }
 * Reads In-Game Controls (Left + Right).
 * Used by the routine at #R$D39B.
 controls_input_o_p:                    ; d3e2
        li   tmp0,KEY_O                 ; LD A,$DF          ; {Read keys P-O-I-U-Y.
        bl   @ti_check_key              ; IN A,($FE)        ; }
+       jne  !
+       li   tmp0,KEY_S
+       bl   @ti_check_key
        jeq  controls_keyboard_5        ; CPL               ; Invert all the bits of #REGa.
-       movb @bytes+2,a                 ; AND $03           ; Keep only bits 0 and 1 (i.e. we only care about "P" and
+!      movb @bytes+2,a                 ; AND $03           ; Keep only bits 0 and 1 (i.e. we only care about "P" and
                                                            ; "O" for left and right).
        jmp  controls_keyboard_6                            ; RET               ; Return.
 controls_keyboard_5:
       li   tmp0,KEY_P
        bl   @ti_check_key
+       jne  !
+       li   tmp0,KEY_D
+       bl   @ti_check_key
        jeq  controls_keyboard_6
-       movb one,a
+!      movb one,a
 controls_keyboard_6:
        .endproc
 
@@ -2529,14 +2544,23 @@ level_select_input:                    ; 63e5
 ;       ; IN A,($FE)                    ; IN A,($FE)        ; }
 ;       ; RRA                           ; RRA               ; {If "1" is pressed, jump to #R$63F4.
        jne  level_select_level_1       ; JR NC,$63F4        ; }
+       li   tmp0,KEY_7
+       bl   @ti_check_key
+       jne  level_select_level_1
        li   r0,KEY_2
        bl   @ti_check_key
 ;       ; RRA                           ; RRA               ; {If "2" is pressed, jump to #R$6405.
        jne  level_select_level_3       ; JR NC,$6405        ; }
+       li   tmp0,KEY_8
+       bl   @ti_check_key
+       jne  level_select_level_3
        li   r0,KEY_3
        bl   @ti_check_key
 ;       ; RRA                           ; RRA               ; {If "3" is pressed, jump to #R$6416.
        jne  level_select_level_6       ; JR NC,$6416       ; }
+       li   tmp0,KEY_9
+       bl   @ti_check_key
+       jne  level_select_level_6
        bl   @module_player
        jmp  level_select_input         ; JR $63E5          ; Cycle back to #R$63E5.
 * Act on level being selected.
